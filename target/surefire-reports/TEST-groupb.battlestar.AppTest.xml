@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="groupb.battlestar.AppTest" time="0.014" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="groupb.battlestar.AppTest" time="0.016" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="gnome"/>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
@@ -14,9 +14,9 @@
     <property name="java.vm.specification.version" value="11"/>
     <property name="os.name" value="Linux"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
-    <property name="user.country" value="US"/>
+    <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/jdk-11.0.2/lib"/>
-    <property name="sun.java.command" value="/home/lao8n/Documents/Bristol Software Group/battlestar/target/surefire/surefirebooter13732604493619911988.jar /home/lao8n/Documents/Bristol Software Group/battlestar/target/surefire 2019-02-09T00-36-02_788-jvmRun1 surefire8914466231692887712tmp surefire_014921179132157722929tmp"/>
+    <property name="sun.java.command" value="/home/lao8n/Documents/Bristol Software Group/battlestar/target/surefire/surefirebooter1455646639118041195.jar /home/lao8n/Documents/Bristol Software Group/battlestar/target/surefire 2019-02-09T00-51-03_156-jvmRun1 surefire18128178238240031421tmp surefire_010041172637411927295tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/lao8n/Documents/Bristol Software Group/battlestar/target/test-classes:/home/lao8n/Documents/Bristol Software Group/battlestar/target/classes:/home/lao8n/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/lao8n/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -32,7 +32,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/home/lao8n/Documents/Bristol Software Group/battlestar/target/surefire/surefirebooter13732604493619911988.jar"/>
+    <property name="surefire.real.class.path" value="/home/lao8n/Documents/Bristol Software Group/battlestar/target/surefire/surefirebooter1455646639118041195.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.2+9"/>
     <property name="user.name" value="lao8n"/>
@@ -51,7 +51,7 @@
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
     <property name="sun.os.patch.level" value="unknown"/>
-    <property name="java.library.path" value="/opt/google/chrome:/opt/google/chrome/lib:/usr/local/cuda-10.0/lib64:/usr/local/cuda-10.0/lib:/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.library.path" value="/usr/local/cuda-10.0/lib64:/usr/local/cuda-10.0/lib:/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="java.vendor" value="Oracle Corporation"/>
     <property name="java.vm.info" value="mixed mode"/>
     <property name="java.vm.version" value="11.0.2+9"/>
