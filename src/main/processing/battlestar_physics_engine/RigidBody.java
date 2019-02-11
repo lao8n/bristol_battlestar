@@ -1,13 +1,7 @@
-import processing.core.*; 
-
-
 class RigidBody {
-	public Vector2D location;
-  	public Vector2D scale;
 	public Vector2D velocity;
 	public Vector2D acceleration;
 
-	public double angle;
 	public double aVelocity;
 	public double aAcceleration;
 
@@ -16,13 +10,10 @@ class RigidBody {
 
 	public double mass;
 
-	RigidBody(double x_, double y_){
-		location = new Vector2D(x_, y_);
-    	scale = new Vector2D(1, 1);
+	RigidBody(){
 		velocity = new Vector2D(0, 0);
 		acceleration = new Vector2D(0, 0);
 
-		angle = 0;
 		aVelocity = 0;
 		aAcceleration = 0;
 
@@ -32,7 +23,7 @@ class RigidBody {
 		mass = 1;
 	}
 
-	void update() {
+	void update(Vector2D location, double heading) {
 		velocity.add(acceleration);
 		velocity.limit(maxSpeed);
 		location.add(velocity);
@@ -46,7 +37,7 @@ class RigidBody {
 			aVelocity = -maxAngSpeed;
 		}
 
-		angle += (aVelocity);
+		heading += (aVelocity);
 		aAcceleration = 0;
 	}
 
@@ -65,17 +56,17 @@ class RigidBody {
 		acceleration.add(force);
 	}
 
-	void applyRelativeFore(Vector2D force) {
+	void applyRelativeFore(Vector2D force, double heading) {
 		Vector2D relForce = new Vector2D(0, 0);
-		relForce.x = force.mag() * Math.cos(force.heading() + angle);
-		relForce.y = force.mag() * Math.sin(force.heading() + angle);
+		relForce.x = force.mag() * Math.cos(force.heading() + heading);
+		relForce.y = force.mag() * Math.sin(force.heading() + heading);
 		applyForce(relForce);
 	}
 
-	/* ----r----- TESTS --------- */
+	/* ---------- TESTS --------- */
 
 	public static void main(String[] args) {
-		RigidBody program = new RigidBody(0, 0);
+		RigidBody program = new RigidBody();
 		program.run();
 	}
 
@@ -89,7 +80,7 @@ class RigidBody {
 	}
 
 	private void testApplyForce() {
-		RigidBody rb = new RigidBody(0, 0);
+		RigidBody rb = new RigidBody();
 		rb.mass = 1;
 		rb.applyForce(new Vector2D(1, 1));
 		assert(rb.acceleration.x == 1);
@@ -97,10 +88,10 @@ class RigidBody {
 	}
 
 	private void testApplyRelativeForce(){
-		RigidBody rb = new RigidBody(0, 0);
+		RigidBody rb = new RigidBody();
+		double angle = Math.PI / 2;
 		rb.mass = 1;
-		rb.angle += Math.PI / 2;
-		rb.applyRelativeFore(new Vector2D(1, 0));
+		rb.applyRelativeFore(new Vector2D(1, 0), angle);
 		assert(rb.acceleration.x < 0.0001);
 		assert(rb.acceleration.y == 1);
 	}
