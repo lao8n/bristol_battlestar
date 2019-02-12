@@ -17,7 +17,7 @@ class Mover extends GameObject {
 	private void run() {
 		boolean testing = false;
 		assert(testing = true);
-		if (! testing) throw new Error("Use java -ea Vector2D");
+		if (! testing) throw new Error("Use java -ea Mover");
 		testConstructor();
 	}
 

@@ -1,13 +1,28 @@
 class GameObject {
+	/* boundingLength needs to change with scale */
+
 	Vector2D location;
 	Vector2D scale;
 	double heading;
+	double boundingLength;
+
 
 	GameObject(Vector2D location_){
 		location = location_;
 		scale = new Vector2D(1, 1);
 		heading = 0;
+		setBoundingLength();
 	}
+
+	public void setScale(int x, int y){
+		scale.x = x;
+		scale.y = y;
+		setBoundingLength();
+	}
+
+	private void setBoundingLength(){
+		boundingLength = Math.sqrt(scale.x * scale.x / 4 + scale.y * scale.y / 4);
+	};
 
 	/* ---------- TESTS --------- */
 
@@ -19,7 +34,7 @@ class GameObject {
 	private void run() {
 		boolean testing = false;
 		assert(testing = true);
-		if (! testing) throw new Error("Use java -ea Vector2D");
+		if (! testing) throw new Error("Use java -ea GameObject");
 		testConstructor();
 	}
 

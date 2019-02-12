@@ -72,7 +72,7 @@ class Vector2D {
 		}
 	}
 	
-	Vector2D normal() {
+	Vector2D unit() {
 		Vector2D v2 = new Vector2D(x, y);
 		v2.normalise();
 		return v2;
@@ -119,7 +119,7 @@ class Vector2D {
 		testMag();
 		testSetMag();
 		testNomalise();
-		testNormal();
+		testUnit();
 		testLimt();
 		testHeading();
 		testRandom2D();
@@ -200,10 +200,10 @@ class Vector2D {
 		assert(p.y == 1);
 	}
 
-	private void testNormal() {
+	private void testUnit() {
 		Vector2D p = new Vector2D(0, 5);
-		assert(p.normal().x == 0);
-		assert(p.normal().y == 1);
+		assert(p.unit().x == 0);
+		assert(p.unit().y == 1);
 
 	}
 

@@ -1,11 +1,14 @@
 Player p;
 int moveForce = 10;
+EnvObject g;
 
 
 void setup() {  
-  size(800, 800, JAVA2D);
+  size(300, 300, JAVA2D);
   p = new Player(new Vector2D(width/2, height/2));
-  p.scale.x = 30; p.scale.y = 20;
+  p.setScale(30, 20);
+  g = new EnvObject(new Vector2D(100, 100));
+  g.setScale(50, 40);
 }
 
 void draw(){
@@ -13,8 +16,15 @@ void draw(){
   background(255);
 
   p.update();
-
+  g.display();
   p.display();
+  if(!BoxCollider.boundingCheck(p, g)){
+    p.c = color(0, 0, 0);
+    g.c = color(0, 0, 0);
+  } else {
+    p.c = color(random(0, 255), random(0, 255), random(0, 255));
+    g.c = color(random(0, 255), random(0, 255), random(0, 255));
+  }
 
 }
 
@@ -30,11 +40,33 @@ void keyReleased() {
   p.setMove(keyCode, false);
 }
 
+
+/* ------ ENV CLASS ------ */
+
+class EnvObject extends GameObject {
+  color c = color(random(0, 255), random(0, 255), random(0, 255));
+  EnvObject(Vector2D location_) {
+    super(location_);
+  }
+
+  void display(){
+    pushMatrix();
+    rectMode(CENTER);
+    stroke(0);
+    fill(c);
+    translate((float)location.x, (float)location.y);
+    rotate((float)heading);
+    rect(0, 0, (float)scale.x, (float)scale.y);
+    popMatrix();
+  }
+}
+
 /* ------ PLAYER CLASS ------ */
 
 class Player extends Mover {
   boolean moveLeft, moveRight, moveUp, moveDown;
   int moveForce = 10;
+  color c = color(random(0, 255), random(0, 255), random(0, 255));
 
   Player(Vector2D location_) {
     super(location_);
@@ -45,14 +77,20 @@ class Player extends Mover {
     location.x += moveForce * (int(moveRight) - int(moveLeft));
     location.y += 0.8 * moveForce * (int(moveDown) - int(moveUp));
 
+    heading = Math.atan2(mouseY - location.y, mouseX -location.x);
+
     rb.update(location, heading);
   }
 
   void display(){
+    pushMatrix();
     rectMode(CENTER);
     stroke(0);
-    fill(100);
-    rect((float)location.x, (float)location.y, (float)scale.x, (float)scale.y);
+    fill(c);
+    translate((float)location.x, (float)location.y);
+    rotate((float)heading);
+    rect(0, 0, (float)scale.x, (float)scale.y);
+    popMatrix();
   }
 
   boolean setMove(int k, boolean b){
