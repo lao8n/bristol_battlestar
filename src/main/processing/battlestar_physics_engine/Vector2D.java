@@ -96,6 +96,11 @@ class Vector2D {
 		y = Math.random();
 	}
 
+	void lerp(Vector2D v, double i){
+		x = (v.x - x) * i;
+		y = (v.y - y) * i;
+	}
+
 
 	/* -------   TESTS  -------- */
 
