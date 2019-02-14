@@ -1,14 +1,49 @@
-# battlestar
-University of Bristol MSc Computer Science Software and Engineer Group Project
+# processing-library-template-gradle
 
-### Suggested github branch structure
+Processing library template using gradle.
 
-    .
-    └── master                      # Master branch
-                                    #   must pass 1. pull request 
-                                    #             2. status checks
-        └── week_3                  # Development branch for each sprint
-                                    #   must pass 1. status checks
-            ├── feature_xxx         # Each coder can develop on feature 
-                                    # branches
-            └── feature_xxx         
+## Development
+
+### Download template
+
+```bash
+mkdir YOUR_LIBRARY_NAME
+cd YOUR_LIBRARY_NAME
+git clone https://github.com/endoh0509/processing-library-template-gradle.git .
+``` 
+
+### Edit settings.gradle
+
+```settings.gradle
+rootProject.name='YOUR_LIBRARY_NAME'
+```
+
+### Edit build.gradle
+
+```build.gradle
+group 'YOUR_LIBRARY_NAME'
+```
+
+### Write library source code
+
+Edit `src/main/java/*`
+
+## Build
+
+```bash
+gradle -q
+```
+
+## Generate JavaDoc
+
+```bash
+gradle javadoc
+```
+
+## Installation
+
+Copy this directory into `processing/libraries`
+
+## License
+
+MIT License
