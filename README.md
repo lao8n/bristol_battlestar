@@ -28,7 +28,8 @@ Atom - Pending
 Processing - Pending
 
 # Workflow
-1. Open text editor in folder `~/Documents/processing/libraries/battlestar/`
+1. Open text editor in folder `~/Documents/processing/libraries/battlestar/` e.g. Atom, VisualStudio Code etc.
+  Atom - File - Add Project folder /Documents/processing/libraries/battlestar/
 2. Write java code in `~/Documents/processing/libraries/battlestar/src/main/java/processing/swarm_wars_library/` and the four folder in there for `engine`, `network`, `scene`, `ui`. 
 3. Write processing graphics code in `~/Documents/processing/libraries/battlestar/SwarmWars`
 4. Open terminal and type `cd ~/Documents/processing/libraries/battlestar/`, then `gradle build`
