@@ -1,4 +1,4 @@
-group 'processingLibraryTemplate'
+group 'battlestar'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'

@@ -14,6 +14,35 @@
             "type": "shell",
             "command": "mvn -B test",
             "group": "test"
+        },
+        {
+            "label": "Run Sketch",
+            "type": "shell",
+            "group": {
+            "kind": "build",
+            "isDefault": true
+            },
+            "command": "${config:processing.path}",
+            "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "dedicated"
+            },
+            "args": [
+            "--force",
+            "--sketch=${workspaceRoot}/SwarmWars",
+            "--output=${workspaceRoot}/out",
+            "--run"
+            ],
+            "windows": {
+            "args": [
+                "--force",
+                "--sketch=${workspaceRoot}\\SwarmWars",
+                "--output=${workspaceRoot}\\out",
+                "--run"
+            ]
+            }
         }
     ]
 }
