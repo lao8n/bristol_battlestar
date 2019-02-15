@@ -12,7 +12,13 @@ public class BoxCollider {
 		return false;
 	}
 
-	/* Advanced collision detection using Seperating Axis Theorem */
+	/* A
+18
+4. You have 3 options for working with github:
+19
+  1. Work in the terminal
+20
+  2. dvanced collision detection using Seperating Axis Theorem */
 	boolean SATCheck(){
 		return false;
 	}

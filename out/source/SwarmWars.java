@@ -36,11 +36,14 @@ public class SwarmWars extends PApplet {
 
 
 	public void setup() {  
-		size(300, 300, JAVA2D);
 		p = new Player(new Vector2D(width/2, height/2));
 		p.setScale(30, 20);
 		g = new EnvObject(new Vector2D(100, 100));
 		g.setScale(50, 40);
+	}
+
+	public void settings(){
+		size(300, 300, "processing.awt.PGraphicsJava2D");
 	}
 
 	public void draw(){
