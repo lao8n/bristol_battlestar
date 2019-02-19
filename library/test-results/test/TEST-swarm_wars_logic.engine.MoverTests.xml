@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="swarm_wars_logic.engine.MoverTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-02-19T12:08:57" hostname="lao8n" time="0.0">
+<testsuite name="swarm_wars_logic.engine.MoverTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-02-19T12:31:04" hostname="lao8n" time="0.001">
   <properties/>
-  <testcase name="ConstructorTest()" classname="swarm_wars_logic.engine.MoverTests" time="0.0"/>
+  <testcase name="ConstructorTest()" classname="swarm_wars_logic.engine.MoverTests" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
