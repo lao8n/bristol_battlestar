@@ -5,6 +5,7 @@ import swarm_wars_library.engine.GameObject;
 import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.SwarmBot;
+import swarm_wars_library.engine.CommsChannel;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -21,12 +22,13 @@ public class SwarmWars extends PApplet {
 	Display display = new Display();
 	Player p;
 	GameObject gameObj, gameObjNext;
-
+	CommsChannel comms = new CommsChannel();
 
 	void setup() {
 		objectList.add(new EnvObject(new Vector2D(100, 100)));
-		p = new Player(new Vector2D(width/2, height/2));
+		p = new Player(new Vector2D(width/2, height/2), comms);
 		objectList.add(p);
+		objectList.add(new SwarmBot(new Vector2D(50, 50), comms));
 	}
 
 	public void settings(){
@@ -191,11 +193,21 @@ public class SwarmWars extends PApplet {
 	class Player extends Mover {
 		boolean moveLeft, moveRight, moveUp, moveDown;
 		int moveForce = 10;
+		CommsChannel comms;
 
-		Player(Vector2D location_) {
+		Player(Vector2D location_, CommsChannel comms) {
 			super(location_);
+			this.comms = comms;
 			setMoverTag("PLAYER");
 		}
+
+		/* ------- MOTHER SHIP FCNS -------*/
+
+		public void broadcastLocation(){
+			comms.setMotherLocation(getLocation());
+		}
+
+		/* ------- PLAYER FCNS -------*/
 
 		@Override
 		void update(){
@@ -208,6 +220,7 @@ public class SwarmWars extends PApplet {
 			setHeading(Math.atan2(mouseY - getLocationY(),
 														mouseX - getLocationX()));
 
+			broadcastLocation();
 			updateMover(getLocation(), getHeading());
 		}
 
