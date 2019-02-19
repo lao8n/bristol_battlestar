@@ -3,11 +3,11 @@ package swarm_wars_library.engine;
 public class GameObject {
 	/* boundingLength needs to change with scale */
 
-	public Vector2D location;
-	public Vector2D scale;
-	public double heading;
-	double boundingLength;
-	public String tag = "Empty";
+	private Vector2D location;
+	private Vector2D scale;
+	private double heading;
+	private double boundingLength;
+	private String tag = "Empty";
 	private boolean hasCollision = false;
 
 
@@ -27,16 +27,15 @@ public class GameObject {
 	}
 
 	public void setScale(int x, int y){
-		scale.x = x;
-		scale.y = y;
+		scale.setXY(x, y);
 		setBoundingLength();
 	}
 
-  public String getTag(){
+  public String getGOTag(){
 		return tag;
 	}
 
-	public void setTag(String tag_){
+	public void setGOTag(String tag_){
 		tag = tag_;
 	}
 
@@ -44,16 +43,24 @@ public class GameObject {
 		return heading;
 	}
 
+	public void setHeading(double h){
+		this.heading = h;
+	}
+
 	public Vector2D getLocation(){
 		return location;
 	}
 
 	public double getLocationX(){
-		return location.x;
+		return location.getX();
 	}
 
 	public double getLocationY(){
-		return location.y;
+		return location.getY();
+	}
+
+	public void setLocationXY(double x, double y){
+		location.setXY(x, y);
 	}
 
 	public Vector2D getScale(){
@@ -61,15 +68,21 @@ public class GameObject {
 	}
 
 	public double getScaleX(){
-		return scale.x;
+		return scale.getX();
 	}
 
 	public double getScaleY(){
-		return scale.y;
+		return scale.getY();
+	}
+
+	public double getBoundingLength(){
+		return boundingLength;
 	}
 
 	private void setBoundingLength(){
-		boundingLength = Math.sqrt(scale.x * scale.x / 4 + scale.y * scale.y / 4);
+		double x = scale.getX();
+		double y = scale.getY();
+		boundingLength = Math.sqrt(x * x / 4 + y * y / 4);
 	};
 
 }
