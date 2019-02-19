@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="swarm_wars_logic.engine.RigidBodyTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2019-02-19T12:08:57" hostname="lao8n" time="0.002">
+<testsuite name="swarm_wars_logic.engine.RigidBodyTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2019-02-19T12:31:04" hostname="lao8n" time="0.003">
   <properties/>
-  <testcase name="ApplyRelativeForceTest()" classname="swarm_wars_logic.engine.RigidBodyTests" time="0.001"/>
+  <testcase name="ApplyRelativeForceTest()" classname="swarm_wars_logic.engine.RigidBodyTests" time="0.002"/>
   <testcase name="ApplyForceTest()" classname="swarm_wars_logic.engine.RigidBodyTests" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

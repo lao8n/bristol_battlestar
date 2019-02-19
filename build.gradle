@@ -39,6 +39,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    dependsOn 'cleanTest'
     testLogging {
 		events "passed", "skipped", "failed"
 	}
