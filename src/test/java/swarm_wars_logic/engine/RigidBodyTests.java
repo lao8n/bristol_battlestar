@@ -3,7 +3,6 @@ package swarm_wars_logic.engine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.beans.Transient;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +31,5 @@ class RigidBodyTests {
     assertEquals(true, rb.getAccelerationX() < 0.0001, 
     "rb x acceleration is less than 0.0001");
     assertEquals(1, rb.getAccelerationY(), "rb y acceleration is 1");
-
   }
 }
