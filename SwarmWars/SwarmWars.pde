@@ -5,16 +5,22 @@ import swarm_wars_library.engine.GameObject;
 import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
 
+/*control which screen is active by setting/updating gameScreen var
+0: initial screen
+1: game screen
+2: game-over screen
+*/
 
 public class SwarmWars extends PApplet {
-
+  int MAXSCREENS = 2;
+  int gameScreen = 0;
 	Display display = new Display();
 	Player p;
 	int moveForce = 10;
 	EnvObject g;
 
 
-	void setup() {  
+	void setup() {
 		p = new Player(new Vector2D(width/2, height/2));
 		g = new EnvObject(new Vector2D(100, 100));
 	}
@@ -24,23 +30,57 @@ public class SwarmWars extends PApplet {
 	}
 
 	void draw(){
-		int i = 0;
-		background(25, 25, 76);
-
-		p.update();
-		display.display(g);
-		display.display(p);
-		//loop over all objects and set hasCollisions to false at start of loop
-		BoxCollider.clearCollision(p); BoxCollider.clearCollision(g);
-    //this will loop over all game objects as needed to check for collisions
-		BoxCollider.boundingCheck(p, g);
+	//display contents of the current screen
+   if (gameScreen == 0){
+	    initScreen();
+    } else if (gameScreen == 1){
+	    gameScreen();
+    } else if (gameScreen == 2){
+	    gameOverScreen();
+    }
 	}
 
+	/*--------GAME SCREENS ----*/
 
+ void initScreen(){
+    background(0);
+    textAlign(CENTER);
+    text("BATTLESTAR \n\nClick to n to start", height/2, width/2);
+ }
+
+  void gameScreen(){
+	   int i = 0;
+	   background(25, 25, 76);
+
+   	 p.update();
+	   display.display(g);
+	   display.display(p);
+	   //loop over all objects and set hasCollisions to false at start of loop
+	   BoxCollider.clearCollision(p); BoxCollider.clearCollision(g);
+	   //this will loop over all game objects as needed to check for collisions
+	   BoxCollider.boundingCheck(p, g);
+	}
+
+  void gameOverScreen(){
+	    background(0, 0, 0);
+	}
+
+	void changeScreen(int k){
+	   //TODO add more checks here, only change screens in certain cases
+	   if (k == 'n' || k == 'N'){
+		    gameScreen++;
+				if (gameScreen > MAXSCREENS){
+				   gameScreen = 0;
+				}
+		 }
+
+		 //add pause screen on 'p'
+	}
 
 	/* ------ EVENT LISTENERS ------ */
 
 	void keyPressed() {
+	  changeScreen(keyCode);
 		p.setMove(keyCode, true);
 	}
 
@@ -48,6 +88,7 @@ public class SwarmWars extends PApplet {
 		p.setMove(keyCode, false);
 	}
 
+	/* ------ DISPLAY CLASS ------ */
 	class Display {
 		 public void display(GameObject go){
 		    //drawBackground();
@@ -93,15 +134,15 @@ public class SwarmWars extends PApplet {
 			 rect(0, 0, (float)go.getScaleX()*1.2, (float)go.getScaleY()*1.2);
 			 //wing shadows
 			 fill(33, 11, 232, 70);
-			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5, 
+			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5, 
+			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
 			 //wings
 			 fill(33, 11, 232);
-			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2, 
+			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2, 
+			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
 			 //ship head
 			 fill(77, 77, 255);
@@ -143,9 +184,9 @@ public class SwarmWars extends PApplet {
 		void update(){
 			/* I THINK WE SHOULD MOVE IN THE Y DIRECTION SLIGHTLY SLOWER THAN X -
 			 FOR ORTHO APPEARANCE */
-			setLocationXY(getLocationX() + 
+			setLocationXY(getLocationX() +
 										moveForce * (int(moveRight) - int(moveLeft)),
-										getLocationY() + 
+										getLocationY() +
 										0.8 * moveForce * (int(moveDown) - int(moveUp)));
 			setHeading(Math.atan2(mouseY - getLocationY(),
 														mouseX - getLocationX()));
@@ -153,6 +194,8 @@ public class SwarmWars extends PApplet {
 			updateMover(getLocation(), getHeading());
 		}
 
+    //TODO move these to Java methods to access keyboard input, to move
+		//this whole class to a .java file
 		boolean setMove(int k, boolean b){
 			switch(k) {
 				case 'W':
@@ -177,10 +220,9 @@ public class SwarmWars extends PApplet {
 			}
 		}
 	}
-  
+
 	public static void main(String[] passedArgs) {
 		String[] appletArgs = new String[] { "SwarmWars" };
 		PApplet.main(appletArgs);
     }
 }
-
