@@ -8,15 +8,17 @@ import swarm_wars_library.engine.Vector2D;
 
 public class SwarmWars extends PApplet {
 
+	ArrayList<GameObject> objectList = new ArrayList<GameObject>();
+
 	Display display = new Display();
 	Player p;
-	int moveForce = 10;
-	EnvObject g;
+	GameObject gameObj, gameObjNext;
 
-
-	void setup() {  
+	void setup() {
+		objectList.add(new EnvObject(new Vector2D(100, 100)));
 		p = new Player(new Vector2D(width/2, height/2));
-		g = new EnvObject(new Vector2D(100, 100));
+		objectList.add(p);
+		
 	}
 
 	public void settings(){
@@ -24,16 +26,28 @@ public class SwarmWars extends PApplet {
 	}
 
 	void draw(){
-		int i = 0;
+		int i, j;
 		background(25, 25, 76);
-
-		p.update();
-		display.display(g);
-		display.display(p);
+		for(i = 0; i < objectList.size(); i++){
+			gameObj = objectList.get(i);
+			gameObj.update();
+			display.display(gameObj);
+		}
+		
 		//loop over all objects and set hasCollisions to false at start of loop
-		BoxCollider.clearCollision(p); BoxCollider.clearCollision(g);
-    //this will loop over all game objects as needed to check for collisions
-		BoxCollider.boundingCheck(p, g);
+		for(i = 0; i < objectList.size(); i++){
+			gameObj = objectList.get(i);			
+			BoxCollider.clearCollision(gameObj);
+
+			//this will loop over all game objects as needed to check for collisions
+			for(j = i + 1; j < objectList.size(); j++){
+				
+				if(i != j){
+					gameObjNext = objectList.get(j);
+					BoxCollider.boundingCheck(gameObj, gameObjNext);
+				}
+			}
+		}
 	}
 
 
@@ -140,6 +154,7 @@ public class SwarmWars extends PApplet {
 			setMoverTag("PLAYER");
 		}
 
+		@Override
 		void update(){
 			/* I THINK WE SHOULD MOVE IN THE Y DIRECTION SLIGHTLY SLOWER THAN X -
 			 FOR ORTHO APPEARANCE */
