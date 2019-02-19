@@ -88,9 +88,9 @@ public class SwarmWars extends PApplet {
 		 }
 
 		 private void drawObject(GameObject go){
-			 if (go.getTag() == "Player"){
+			 if (go.getGOTag() == "PLAYER"){
 				 drawShip(go);
-			 } else if (go.getTag() == "Env"){
+			 } else if (go.getGOTag() == "ENV"){
 				 drawEnv(go);
 
 				//will add drawBullet, drawEnemy, drawBase etc
@@ -146,9 +146,9 @@ public class SwarmWars extends PApplet {
 	class EnvObject extends GameObject {
 		EnvObject(Vector2D location_) {
 			super(location_);
-			this.tag = "Env";
-
+			setGOTag("ENV");
 		}
+
 	}
 
 	/* ------ PLAYER CLASS ------ */
@@ -159,18 +159,20 @@ public class SwarmWars extends PApplet {
 
 		Player(Vector2D location_) {
 			super(location_);
-			this.tag = "Player";
+			setMoverTag("PLAYER");
 		}
 
 		public void update(){
 			/* I THINK WE SHOULD MOVE IN THE Y DIRECTION SLIGHTLY SLOWER THAN X -
 			 FOR ORTHO APPEARANCE */
-			location.x += moveForce * (PApplet.parseInt(moveRight) - PApplet.parseInt(moveLeft));
-			location.y += 0.8f * moveForce * (PApplet.parseInt(moveDown) - PApplet.parseInt(moveUp));
+			setLocationXY(getLocationX() + 
+										moveForce * (PApplet.parseInt(moveRight) - PApplet.parseInt(moveLeft)),
+										getLocationY() + 
+										0.8f * moveForce * (PApplet.parseInt(moveDown) - PApplet.parseInt(moveUp)));
+			setHeading(Math.atan2(mouseY - getLocationY(),
+														mouseX - getLocationX()));
 
-			heading = Math.atan2(mouseY - location.y, mouseX -location.x);
-
-			rb.update(location, heading);
+			updateMover(getLocation(), getHeading());
 		}
 
 		public boolean setMove(int k, boolean b){

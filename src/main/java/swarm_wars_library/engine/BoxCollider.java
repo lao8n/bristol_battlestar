@@ -6,8 +6,8 @@ public class BoxCollider {
 	}
 
 	public static boolean boundingCheck(GameObject first, GameObject second){
-		if(Vector2D.sub(first.location, second.location).mag() 
-				<= (first.boundingLength + second.boundingLength)){
+		if(Vector2D.sub(first.getLocation(), second.getLocation()).mag() 
+				<= (first.getBoundingLength() + second.getBoundingLength())){
 			second.setHasCollision(true);
 			return true;
 		}

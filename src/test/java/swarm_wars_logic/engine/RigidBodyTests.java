@@ -16,10 +16,10 @@ class RigidBodyTests {
 	@DisplayName("RigidBody ApplyForceTest")
 	void ApplyForceTest() {
     RigidBody rb = new RigidBody();
-    rb.mass = 1;
+    rb.setMass(1);
     rb.applyForce(new Vector2D(1, 1));
-		assertEquals(1, rb.acceleration.x, "rb x acceleration should equal 1");
-		assertEquals(1, rb.acceleration.y, "rb y acceleration should equal 1");
+		assertEquals(1, rb.getAccelerationX(), "rb x acceleration should equal 1");
+		assertEquals(1, rb.getAccelerationY(), "rb y acceleration should equal 1");
   }
   
   @Test 
@@ -27,11 +27,11 @@ class RigidBodyTests {
   void ApplyRelativeForceTest(){
     RigidBody rb = new RigidBody();
     double angle = Math.PI / 2;
-    rb.mass = 1;
+    rb.setMass(1);
     rb.applyRelativeForce(new Vector2D(1, 0), angle);
-    assertEquals(true, rb.acceleration.x < 0.0001, 
+    assertEquals(true, rb.getAccelerationX() < 0.0001, 
     "rb x acceleration is less than 0.0001");
-    assertEquals(1, rb.acceleration.y, "rb y acceleration is 1");
+    assertEquals(1, rb.getAccelerationY(), "rb y acceleration is 1");
 
   }
 }

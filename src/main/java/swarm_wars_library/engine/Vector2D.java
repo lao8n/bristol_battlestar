@@ -2,15 +2,28 @@ package swarm_wars_library.engine;
 
 public class Vector2D {
 	
-	public double x;
-	public double y;
+	private double x;
+	private double y;
 
 	public Vector2D(double x_, double y_){
 		x = x_;
 		y = y_;
 	}
 
-	void add(Vector2D v) {
+	public double getX(){
+		return this.x;
+	}
+	
+	public double getY(){
+		return this.y;
+	}
+
+	public void setXY(double x, double y){
+		this.x = x;
+		this.y = y;
+	}
+
+	public void add(Vector2D v) {
 		x = x + v.x;
 		y = y + v.y;
 	}
