@@ -14,6 +14,7 @@
 ### 
 /library/reports/
 /library/test-results/
+/library/battlestar.jar
 
 # Ignore Gradle GUI config
 gradle-app.setting
