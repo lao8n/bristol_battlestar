@@ -4,6 +4,7 @@ import swarm_wars_library.engine.BoxCollider;
 import swarm_wars_library.engine.GameObject;
 import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.engine.SwarmBot;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -59,15 +60,15 @@ public class SwarmWars extends PApplet {
 			gameObj.update();
 			display.display(gameObj);
 		}
-		
+
 		//loop over all objects and set hasCollisions to false at start of loop
 		for(i = 0; i < objectList.size(); i++){
-			gameObj = objectList.get(i);			
+			gameObj = objectList.get(i);
 			BoxCollider.clearCollision(gameObj);
 
 			//this will loop over all game objects as needed to check for collisions
 			for(j = i + 1; j < objectList.size(); j++){
-				
+
 				if(i != j){
 					gameObjNext = objectList.get(j);
 					BoxCollider.boundingCheck(gameObj, gameObjNext);
