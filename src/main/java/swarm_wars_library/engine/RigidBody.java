@@ -43,9 +43,6 @@ public class RigidBody {
 		aAcceleration = 0;
 	}
 
-	/*  DISPLAY FUNCTION HERE */
-
-
 	/*  EDGE WRAPPING / WALL FUNCTIONS HERE */
 
 

@@ -6,26 +6,21 @@ public class BoxCollider {
 	}
 
 	public static boolean boundingCheck(GameObject first, GameObject second){
-		if(Vector2D.sub(first.location, second.location).mag() <= (first.boundingLength + second.boundingLength)){
+		if(Vector2D.sub(first.location, second.location).mag() 
+				<= (first.boundingLength + second.boundingLength)){
+			second.setHasCollision(true);
 			return true;
 		}
 		return false;
+	}
+
+	//to use (in a loop) at start of the game loop, to clear set all hasCollisions to false
+	public static void clearCollision(GameObject go){
+		go.setHasCollision(false);
 	}
 
 	/* Advanced collision detection using Seperating Axis Theorem */
 	boolean SATCheck(){
 		return false;
 	}
-
-	public static void main(String[] args) {
-		BoxCollider program = new BoxCollider();
-		program.run();
-	}
-
-	private void run() {
-		boolean testing = false;
-		assert(testing = true);
-		if (! testing) throw new Error("Use java -ea BoxCollider");
-	}
-
 }
