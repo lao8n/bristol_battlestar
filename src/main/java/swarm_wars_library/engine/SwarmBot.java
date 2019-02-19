@@ -52,6 +52,7 @@ public class SwarmBot extends Mover {
       desired.sub(orbitTarget);
     }
 
+    @Override
     public void update() {
       setHeading(rb.getVelocity().heading());
       rb.update(getLocation(), getHeading());

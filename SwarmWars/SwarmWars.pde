@@ -4,6 +4,7 @@ import swarm_wars_library.engine.BoxCollider;
 import swarm_wars_library.engine.GameObject;
 import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.engine.SwarmBot;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
