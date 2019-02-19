@@ -29,7 +29,7 @@ public class SwarmWars extends PApplet {
 	}
 
 	public void settings(){
-		size(300, 300, "processing.awt.PGraphicsJava2D");
+		size(500, 500, "processing.awt.PGraphicsJava2D");
 	}
 
 	void draw(){
@@ -59,15 +59,15 @@ public class SwarmWars extends PApplet {
 			gameObj.update();
 			display.display(gameObj);
 		}
-		
+
 		//loop over all objects and set hasCollisions to false at start of loop
 		for(i = 0; i < objectList.size(); i++){
-			gameObj = objectList.get(i);			
+			gameObj = objectList.get(i);
 			BoxCollider.clearCollision(gameObj);
 
 			//this will loop over all game objects as needed to check for collisions
 			for(j = i + 1; j < objectList.size(); j++){
-				
+
 				if(i != j){
 					gameObjNext = objectList.get(j);
 					BoxCollider.boundingCheck(gameObj, gameObjNext);
