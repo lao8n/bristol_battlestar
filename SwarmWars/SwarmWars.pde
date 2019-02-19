@@ -4,7 +4,7 @@ import swarm_wars_library.engine.BoxCollider;
 import swarm_wars_library.engine.GameObject;
 import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
-
+import swarm_wars_library.engine.SwarmBot;
 
 public class SwarmWars extends PApplet {
 
@@ -12,15 +12,16 @@ public class SwarmWars extends PApplet {
 	Player p;
 	int moveForce = 10;
 	EnvObject g;
+	SwarmBot sb;
 
-
-	void setup() {  
+	void setup() {
 		p = new Player(new Vector2D(width/2, height/2));
 		g = new EnvObject(new Vector2D(100, 100));
+		sb = new SwarmBot(new Vector2D(25, 25));
 	}
 
 	public void settings(){
-		size(300, 300, "processing.awt.PGraphicsJava2D");
+		size(500, 500, "processing.awt.PGraphicsJava2D");
 	}
 
 	void draw(){
@@ -28,8 +29,11 @@ public class SwarmWars extends PApplet {
 		background(25, 25, 76);
 
 		p.update();
+		sb.seek(p.getLocation());
+		sb.update();
 		display.display(g);
 		display.display(p);
+		display.display(sb);
 		//loop over all objects and set hasCollisions to false at start of loop
 		BoxCollider.clearCollision(p); BoxCollider.clearCollision(g);
     //this will loop over all game objects as needed to check for collisions
@@ -93,15 +97,15 @@ public class SwarmWars extends PApplet {
 			 rect(0, 0, (float)go.getScaleX()*1.2, (float)go.getScaleY()*1.2);
 			 //wing shadows
 			 fill(33, 11, 232, 70);
-			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5, 
+			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5, 
+			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
 			 //wings
 			 fill(33, 11, 232);
-			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2, 
+			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2, 
+			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
 			 //ship head
 			 fill(77, 77, 255);
@@ -143,9 +147,9 @@ public class SwarmWars extends PApplet {
 		void update(){
 			/* I THINK WE SHOULD MOVE IN THE Y DIRECTION SLIGHTLY SLOWER THAN X -
 			 FOR ORTHO APPEARANCE */
-			setLocationXY(getLocationX() + 
+			setLocationXY(getLocationX() +
 										moveForce * (int(moveRight) - int(moveLeft)),
-										getLocationY() + 
+										getLocationY() +
 										0.8 * moveForce * (int(moveDown) - int(moveUp)));
 			setHeading(Math.atan2(mouseY - getLocationY(),
 														mouseX - getLocationX()));
@@ -177,10 +181,9 @@ public class SwarmWars extends PApplet {
 			}
 		}
 	}
-  
+
 	public static void main(String[] passedArgs) {
 		String[] appletArgs = new String[] { "SwarmWars" };
 		PApplet.main(appletArgs);
     }
 }
-
