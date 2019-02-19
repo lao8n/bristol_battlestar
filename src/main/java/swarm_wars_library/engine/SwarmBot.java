@@ -6,8 +6,9 @@ public class SwarmBot extends Mover {
   private double stopDistance;
   private double orbitDistance;
   private RigidBody rb;
+  private CommsChannel comms;
 
-    public SwarmBot(Vector2D location_) {
+    public SwarmBot(Vector2D location_, CommsChannel comms) {
       super(location_);
       rb = getRigidBody();
 
@@ -16,6 +17,7 @@ public class SwarmBot extends Mover {
       stopDistance = 100;
       orbitDistance = 70;
       this.setGOTag("PLAYER");
+      this.comms = comms;
     }
 
     public void seek(Vector2D target) {
@@ -54,6 +56,7 @@ public class SwarmBot extends Mover {
 
     @Override
     public void update() {
+      seek(comms.getMotherLocation());
       setHeading(rb.getVelocity().heading());
       rb.update(getLocation(), getHeading());
     }
