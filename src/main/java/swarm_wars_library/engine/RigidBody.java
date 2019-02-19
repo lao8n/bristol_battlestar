@@ -1,16 +1,16 @@
 package swarm_wars_library.engine;
 
 public class RigidBody {
-	public Vector2D velocity;
-	public Vector2D acceleration;
+	private Vector2D velocity;
+	private Vector2D acceleration;
 
-	public double aVelocity;
-	public double aAcceleration;
+	private double aVelocity;
+	private double aAcceleration;
 
-	public double maxSpeed;
-	public double maxAngSpeed;
+	private double maxSpeed;
+	private double maxAngSpeed;
 
-	public double mass;
+	private double mass;
 
 	public RigidBody(){
 		velocity = new Vector2D(0, 0);
@@ -23,6 +23,30 @@ public class RigidBody {
 		maxAngSpeed = 10;
 
 		mass = 1;
+	}
+
+	public double getMass(){
+		return mass;
+	}
+
+	public void setMass(double mass_value){
+		this.mass = mass_value;
+	}
+
+	public double getVelocityX(){
+		return velocity.getX();
+	}
+
+	public double getVelocityY(){
+		return velocity.getY();
+	}
+
+	public double getAccelerationX(){
+		return acceleration.getX();
+	}
+
+	public double getAccelerationY(){
+		return acceleration.getY();
 	}
 
 	public void update(Vector2D location, double heading) {
@@ -43,9 +67,6 @@ public class RigidBody {
 		aAcceleration = 0;
 	}
 
-	/*  DISPLAY FUNCTION HERE */
-
-
 	/*  EDGE WRAPPING / WALL FUNCTIONS HERE */
 
 
@@ -60,8 +81,8 @@ public class RigidBody {
 
 	public void applyRelativeForce(Vector2D force, double heading) {
 		Vector2D relForce = new Vector2D(0, 0);
-		relForce.x = force.mag() * Math.cos(force.heading() + heading);
-		relForce.y = force.mag() * Math.sin(force.heading() + heading);
+		relForce.setXY(force.mag() * Math.cos(force.heading() + heading),
+									 force.mag() * Math.sin(force.heading() + heading));
 		applyForce(relForce);
 	}
 
