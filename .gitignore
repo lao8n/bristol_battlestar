@@ -11,6 +11,10 @@
 .gradle
 /build/
 
+### 
+/library/reports/
+/library/test-results/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
