@@ -1,0 +1,46 @@
+group 'battlestar'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+defaultTasks 'clean', 'build'
+
+sourceCompatibility = 1.8
+
+rootProject.version=''
+buildDir='library'
+libsDirName='./'
+docsDirName='../reference'
+
+javadoc {
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+dependencies {
+    provided group: 'org.processing', name: 'core', version: '3.3.6'
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.1')
+}
+
+test {
+    useJUnitPlatform()
+    dependsOn 'cleanTest'
+    testLogging {
+		events "passed", "skipped", "failed"
+	}
+}

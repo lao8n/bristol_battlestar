@@ -1,0 +1,26 @@
+### Java ###
+*.class
+
+# Package Files #
+*.jar
+
+# Images
+*.png
+
+### Gradle ###
+.gradle
+/build/
+
+### 
+/library/
+/library/classes/
+/library/tmp/
+/library/reports/
+/library/test-results/
+/library/battlestar.jar
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
