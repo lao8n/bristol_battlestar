@@ -49,12 +49,29 @@ public class RigidBody {
 		return acceleration.getY();
 	}
 
+	public double getMaxSpeed(){
+		return maxSpeed;
+	}
+
+	public void setMaxSpeed(double maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public Vector2D getVelocity() {
+		Vector2D velocityCopy = new Vector2D(velocity.getX(), velocity.getY());
+		return velocityCopy;
+	}
+
+	public void setVelocity(Vector2D velocity) {
+		this.velocity = velocity;
+	}
+
 	public void update(Vector2D location, double heading) {
 		velocity.add(acceleration);
 		velocity.limit(maxSpeed);
 		location.add(velocity);
 		acceleration.mult(0);
-		
+
 
 		aVelocity += (aAcceleration);
 		if(aVelocity >= maxAngSpeed){
@@ -65,6 +82,7 @@ public class RigidBody {
 
 		heading += (aVelocity);
 		aAcceleration = 0;
+
 	}
 
 	/*  EDGE WRAPPING / WALL FUNCTIONS HERE */
@@ -75,8 +93,8 @@ public class RigidBody {
 	/*	RIGID BODY FORCES */
 
 	public void applyForce(Vector2D force) {
-		force.div(mass);
-		acceleration.add(force);
+		Vector2D f = Vector2D.div(force, mass);
+		acceleration.add(f);
 	}
 
 	public void applyRelativeForce(Vector2D force, double heading) {
