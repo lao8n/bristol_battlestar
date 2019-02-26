@@ -11,4 +11,16 @@ public class CommsChannel {
   public void setMotherLocation (Vector2D motherLocation) {
     this.motherLocation = motherLocation;
   }
+
+  public double getMotherLocationX(){
+    return motherLocation.getX();
+  }
+
+  public double getMotherLocationY(){
+    return motherLocation.getY();
+  }
+
+  /*public double getMotherheading(){
+    return motherLocation.getY();
+  }*/
 }
