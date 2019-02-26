@@ -9,6 +9,7 @@ public class Entity {
   private Tag tag;
   private Render render;
   private Vector2D position; 
+  private  Vector2D velocity; 
   private int scale, points;
   private double heading; 
   public Input input;
@@ -27,6 +28,7 @@ public class Entity {
     hasInput = i;
     hasShooter = s; 
     hasHealth = h;
+    velocity = new Vector2D(0,0);
     
     position = new Vector2D(30,30); 
     if (hasRender){
@@ -76,6 +78,15 @@ public class Entity {
       health.update();
     }
     
+  }
+
+  public void setVelocity(double x, double y){
+      velocity.setX(x);
+      velocity.setY(y);
+  }
+
+  public Vector2D getVelocity(){
+      return velocity;
   }
   
   //set if visible
