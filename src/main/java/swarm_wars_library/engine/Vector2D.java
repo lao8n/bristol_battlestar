@@ -10,6 +10,19 @@ public class Vector2D {
 		y = y_;
 	}
 
+	public void setAll(Vector2D new_vect){
+		x = new_vect.getX();
+		y = new_vect.getY();
+	}
+
+	public void setX(double x){
+		this.x = x;
+	}
+
+	public void setY(double y){
+		this.y = y;
+	}
+
 	public double getX(){
 		return this.x;
 	}
