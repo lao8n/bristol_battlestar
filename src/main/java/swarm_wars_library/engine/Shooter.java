@@ -51,7 +51,7 @@ class Shooter {
         
         //set bullet position of entity
         currPos = magazine.get(i).getPosition();
-        magazine.get(i).setPosition(currPos.add(currPos, velocity));
+        magazine.get(i).setPosition(currPos.add(currPos, velocity), magazine.get(i).getHeading());
         
         //update bullet to render it
         magazine.get(i).update();
@@ -64,9 +64,11 @@ class Shooter {
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
       magazine.get(magCount).setRender(true);
+      //set bullet heading
+      magazine.get(magCount).setHeading(heading);
     
       //sets its location to location
-      magazine.get(magCount++).setPosition(location);
+      magazine.get(magCount++).setPosition(location, heading);
       if (magCount >= magazine.size()){
         magCount = 0;
       }   

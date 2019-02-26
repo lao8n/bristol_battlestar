@@ -34,7 +34,7 @@ public class Input {
       return location;
   }
 
-  public double heading(){
+  public double getHeading(){
       return heading; 
   }
 

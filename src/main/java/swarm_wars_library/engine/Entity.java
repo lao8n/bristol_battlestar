@@ -52,7 +52,7 @@ public class Entity {
   public void update(){
     //draw it
     if (hasRender){
-      render.update(position, tag);
+      render.update(position, tag, heading);
     }
     
     //set position with either Input or AI
@@ -60,6 +60,7 @@ public class Entity {
       input.update();
       position.setAll(input.getLocation());
       heading = input.getHeading();
+      System.out.println(heading);
     } 
     //else if (hasAI) {
     //  ai.update(); 
@@ -86,10 +87,19 @@ public class Entity {
   public boolean isRendering(){
     return hasRender; 
   }
+
+  public void setHeading(double heading){
+      this.heading = heading;
+  }
+
+  public double getHeading(){
+      return heading;
+  }
   
-  //for use by shooter class to set bullet position
-  public void setPosition(Vector2D pos){
-    position = pos; 
+  //for use by shooter class to set bullet position & heading
+  public void setPosition(Vector2D position, double heading){
+    this.heading = heading;
+    this.position = position; 
     //if (hasAI){
     //  ai.setLocation(pos);
     //}
