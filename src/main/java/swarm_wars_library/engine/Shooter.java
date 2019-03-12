@@ -34,8 +34,8 @@ class Shooter {
     
     //add bullets
     for (int i = 0; i < numBullets; i++){
-      //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth)
-      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false);
+  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
+      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, false, true);
       magazine.add(bullet); 
     }
   }

@@ -2,13 +2,24 @@ package swarm_wars_library.engine;
 
 public class CommsChannel {
 
-  private Vector2D motherLocation;
+  private int numberOfReceivers;
+  private CommsPacket[] currentPackets;
 
-  public Vector2D getMotherLocation () {
-    return motherLocation;
+  public CommsChannel(int numberOfReceivers) {
+    this.numberOfReceivers = numberOfReceivers;
+    this.currentPackets = new CommsPacket[numberOfReceivers];
   }
 
-  public void setMotherLocation (Vector2D motherLocation) {
-    this.motherLocation = motherLocation;
+  public CommsPacket getPacket(int i) {
+    return currentPackets[i];
   }
+
+  public void setPacket(CommsPacket packet, int i) {
+    currentPackets[i] = packet;
+  }
+
+  public int getNumberOfReceivers() {
+    return numberOfReceivers;
+  }
+
 }
