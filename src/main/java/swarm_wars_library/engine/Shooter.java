@@ -7,7 +7,6 @@ class Shooter {
 
   Vector2D location; 
   Vector2D currPos; //temp for bullets
-  Vector2D velocity; 
   //has list of bullets entities
   List<Entity> magazine;
   int numBullets = 20;
@@ -28,17 +27,15 @@ class Shooter {
     //use P_BULLET for PLAYER and E_BULLET for ENEMY
     if (t.equals(Tag.PLAYER)){
       bulletTag = Tag.P_BULLET;
-      velocity = new Vector2D(0, -bulletForce - 3);
     } else if (t.equals(Tag.ENEMY)){
       bulletTag = Tag.E_BULLET;
-      velocity = new Vector2D(0, bulletForce - enemyHandicap);
       shootTimer += 50;
     }
     
     //add bullets
     for (int i = 0; i < numBullets; i++){
-      //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth)
-      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false);
+  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
+      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, false, true);
       magazine.add(bullet); 
     }
   }
@@ -47,11 +44,9 @@ class Shooter {
     //loops over its list of bullets and renders them if visible
     for(int i = 0; i < magazine.size(); i++){
       if (magazine.get(i).isRendering()){
-        //update bullet position with velocity
-        
-        //set bullet position of entity
+ 
         currPos = magazine.get(i).getPosition();
-        magazine.get(i).setPosition(currPos.add(currPos, velocity));
+        magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
         
         //update bullet to render it
         magazine.get(i).update();
@@ -64,9 +59,18 @@ class Shooter {
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
       magazine.get(magCount).setRender(true);
+      //set bullet heading
+        if (heading < 0){
+            heading = heading + 2 * Math.PI; 
+        }
+        magazine.get(magCount).setVelocity(location.getX() + bulletForce * Math.cos(heading), 
+                                    location.getY() + bulletForce * Math.sin(heading));
+        //set bullet position of entity
+
+      magazine.get(magCount).setHeading(heading);
     
       //sets its location to location
-      magazine.get(magCount++).setPosition(location);
+      magazine.get(magCount++).setPosition(location, heading);
       if (magCount >= magazine.size()){
         magCount = 0;
       }   
