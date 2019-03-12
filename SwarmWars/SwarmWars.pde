@@ -28,36 +28,32 @@ public class SwarmWars extends PApplet {
 
 
 	//MAKE SOME BOTS
-	//ArrayList<Entity> playerBotList = new ArrayList<Entity>();
+	ArrayList<Entity> entityList = new ArrayList<Entity>();
 
 	int MAXSCREENS = 3;
 	int gameScreen = 2;
 	int initScreenTimer = 120;
-	int numBots = 2;
+	int numBots = 100;
 	CommsChannel comms = new CommsChannel(numBots+1);
-	EnVar envar;
+	// EnVar envar;
 	Entity bot; 
 
 	void setup() {
 	
-		envar = new EnVar();
-
-		bot1.setSwarmLogic();
-		bot2.setSwarmLogic();
+		// envar = new EnVar();
+		// entityList.add(envar);
 
 		player.setComms(comms);
-		bot1.setComms(comms);
-		bot2.setComms(comms);
-
-
+		entityList.add(player);
 
 		//add bots
-		//for (int i = 0; i < numBots; i++){
-	//		bot = new Entity(this, Tag.P_BOT, 5, true, true, true, false, true, true);	
-	//		bot.setSwarmLogic(comms);
-	//		playerBotList.add(bot);
-	//		System.out.println("bot created: " + i);
-	//	}
+		for (int i = 0; i < numBots; i++){
+			bot = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true);
+			bot.setSwarmLogic();
+			bot.setComms(comms);
+			entityList.add(bot);
+			System.out.println("bot created: " + i);
+		}
 	}
 
 	public void settings(){
@@ -66,13 +62,13 @@ public class SwarmWars extends PApplet {
 
 	void draw(){
 	//display contents of the current screen
-   if (gameScreen == 0){
-	    initScreen();
-    } else if (gameScreen == 1){
-	    gameScreen();
-    } else if (gameScreen == 2){
+	   	if (gameScreen == 0){
+		    initScreen();
+	    } else if (gameScreen == 1){
+		    gameScreen();
+	    } else if (gameScreen == 2){
 			gameScreenEntity();
-    } else {
+	    } else {
 			gameOverScreen();
 		}
 	}
@@ -91,20 +87,16 @@ public class SwarmWars extends PApplet {
  	}
 
 	void gameScreen(){
-			background(25, 25, 76);		
+		background(25, 25, 76);		
 	}
 
 	void gameScreenEntity(){
-			background(25, 25, 76);
-			player.update();
-			
-			bot1.update();
-			bot2.update();
+		background(25, 25, 76);
 
-			//update all bots
-		  //for (int j = 0; j < playerBotList.size(); j++){
-			//	playerBotList.get(j).update();
-			//}
+		// update all bots
+	  	for (int j = 0; j < entityList.size(); j++){
+			entityList.get(j).update();
+		}
 	}
 
   void gameOverScreen(){
