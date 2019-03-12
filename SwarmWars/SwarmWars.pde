@@ -6,6 +6,7 @@ import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.SwarmBot;
 import swarm_wars_library.engine.CommsChannel;
+import swarm_wars_library.engine.Bullet;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -19,6 +20,7 @@ public class SwarmWars extends PApplet {
 
 	int MAXSCREENS = 2;
 	int gameScreen = 0;
+	int contbulletnum = 0;
 	Display display = new Display();
 	Player p;
 	GameObject gameObj, gameObjNext;
@@ -57,25 +59,34 @@ public class SwarmWars extends PApplet {
   void gameScreen(){
 		int i, j;
 		background(25, 25, 76);
+			if(mousePressed){
+				contbulletnum++; 
+				if (contbulletnum % 5 == 0){
+				objectList.add(new Bullet(p.getLocationX(),p.getLocationY(),p.getHeading()));
+				}
+		}
 		for(i = 0; i < objectList.size(); i++){
 			gameObj = objectList.get(i);
 			gameObj.update();
 			display.display(gameObj);
-		}
+			}
 
 		//loop over all objects and set hasCollisions to false at start of loop
 		for(i = 0; i < objectList.size(); i++){
 			gameObj = objectList.get(i);
 			BoxCollider.clearCollision(gameObj);
-
-			//this will loop over all game objects as needed to check for collisions
-			for(j = i + 1; j < objectList.size(); j++){
-
+			//this will loop over all game objects as needed to check for collisions,if bullet has collision than delete it
+			for(j = i+1; j < objectList.size(); j++){
 				if(i != j){
 					gameObjNext = objectList.get(j);
 					BoxCollider.boundingCheck(gameObj, gameObjNext);
+					if(gameObjNext.getGOTag()=="BULLET"){
+							if(gameObjNext.getTimer()>5||gameObjNext.getHasCollision()==true){
+						objectList.remove(j);
+					}
+					}
 				}
-			}
+			}	
 		}
 	}
 
@@ -129,7 +140,8 @@ public class SwarmWars extends PApplet {
 				 drawShip(go);
 			 } else if (go.getGOTag() == "ENV"){
 				 drawEnv(go);
-
+			 } else if (go.getGOTag() == "BULLET"){
+					 drawBullet(go);
 				//will add drawBullet, drawEnemy, drawBase etc
 			 } else {
 				 //do nothing
@@ -175,6 +187,11 @@ public class SwarmWars extends PApplet {
 					fill(random(0, 255),random(0, 255),random(0, 255));
 			 }
 			 rect(0, 0, (float)go.getScaleX(), (float)go.getScaleY());
+		 }
+
+		 private void drawBullet(GameObject go){
+					ellipse(0,0, 5.0, 5.0);
+			    fill(255,255,255);
 		 }
 	}
 
@@ -222,6 +239,7 @@ public class SwarmWars extends PApplet {
 
 			broadcastLocation();
 			updateMover(getLocation(), getHeading());
+		
 		}
 
     //TODO move these to Java methods to access keyboard input, to move
