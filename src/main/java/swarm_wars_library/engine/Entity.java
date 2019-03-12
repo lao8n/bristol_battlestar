@@ -41,9 +41,6 @@ public class Entity {
       isBot = true; 
       //NOTICE: must call method to init swarmLogic in main loop
     }
-    if (hasComms){
-      commsPacket = new CommsPacket();
-    }
     if (hasRender){
       render = new Render(sketch, (int) transform.getScale().getX());
     }
@@ -80,16 +77,15 @@ public class Entity {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
-      System.out.println(transform.getHeading());
     } 
 
     //else if (hasAI) {
     //  ai.update(); 
     //  position.setAll(ai.getLocation());
     //}
-    if (isMothership){
-      sendPacket();
-    }
+    // if (isMothership){
+    //   sendPacket();
+    // }
     
     if (hasShooter){
       shooter.shoot(transform.getPosition(), transform.getHeading()); 
@@ -99,11 +95,15 @@ public class Entity {
     if (hasHealth){
       health.update();
     }
+
+    if (hasComms){
+      sendPacket();
+    }
    
     if (isBot){
       //update bot based on swarm/bot logic using the swarm component
       swarmLogic.setTransform(transform);
-      swarmLogic.update(); 
+      swarmLogic.update();
       transform = swarmLogic.getTransform();
     }
   }
@@ -177,22 +177,28 @@ public class Entity {
   public void setComms(CommsChannel comms){
     commsChannel = comms;
     commsPacket = new CommsPacket();
+    if(isBot){
+      swarmLogic.setComms(comms);
+    }
     sendPacket();
   }
 
   //BOT methods
-  public void setSwarmLogic(CommsChannel comms){
+  public void setSwarmLogic(){
     //init swarm logic
-    commsChannel = comms; 
-    swarmLogic = new SwarmLogic(transform, comms, rb);
+    swarmLogic = new SwarmLogic(transform, rb);
   }
 
-  //MOTHERSHIP
+  //ALLL COMMS
   public void sendPacket(){
       //update this logic
       commsPacket.setLocation(transform.getPosition());
       commsPacket.setIsAlive(true);
-      commsChannel.setPacket(commsPacket, 0);
+      if(isMothership){
+        commsChannel.setPacket(commsPacket, 0);  
+      } else {
+        commsChannel.setPacket(commsPacket, swarmLogic.getId());
+      }
   }
 
   //will need to get and set state here for FSM

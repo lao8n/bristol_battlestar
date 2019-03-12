@@ -21,7 +21,7 @@ import swarm_wars_library.engine.EnVar;
 public class SwarmWars extends PApplet {
 
   //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
-	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, false, false, false, true);
+	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, false, false, true, true);
 
 	Entity bot1 = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true);
 	Entity bot2 = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true);
@@ -33,7 +33,7 @@ public class SwarmWars extends PApplet {
 	int MAXSCREENS = 3;
 	int gameScreen = 2;
 	int initScreenTimer = 120;
-	int numBots = 100;
+	int numBots = 2;
 	CommsChannel comms = new CommsChannel(numBots+1);
 	EnVar envar;
 	Entity bot; 
@@ -42,9 +42,14 @@ public class SwarmWars extends PApplet {
 	
 		envar = new EnVar();
 
+		bot1.setSwarmLogic();
+		bot2.setSwarmLogic();
+
 		player.setComms(comms);
-		bot1.setSwarmLogic(comms);
-		bot2.setSwarmLogic(comms);
+		bot1.setComms(comms);
+		bot2.setComms(comms);
+
+
 
 		//add bots
 		//for (int i = 0; i < numBots; i++){
@@ -94,7 +99,7 @@ public class SwarmWars extends PApplet {
 			player.update();
 			
 			bot1.update();
-			//bot2.update();
+			bot2.update();
 
 			//update all bots
 		  //for (int j = 0; j < playerBotList.size(); j++){

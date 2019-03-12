@@ -8,14 +8,14 @@ public class SwarmLogic {
   private double orbitDistance;
   private RigidBody rb;
   private CommsChannel comms;
-  private CommsPacket commsPack;
+  // private CommsPacket commsPack;
   private boolean isAlive;
   private int id;
   private double desiredSeparation;
   public static int counter = 1;
   private Transform transform; 
 
-    public SwarmLogic(Transform transform, CommsChannel comms, RigidBody rb){
+    public SwarmLogic(Transform transform, RigidBody rb){
       this.rb = rb; 
       this.transform = transform;
 
@@ -23,12 +23,12 @@ public class SwarmLogic {
       maxForce = 10;
       stopDistance = 100;
       orbitDistance = 70;
-      this.comms = comms;
-      commsPack = new CommsPacket();
+      // this.comms = comms;
+      // commsPack = new CommsPacket();
       isAlive = true;
       id = counter;
       counter++;
-      sendPacket();
+      // sendPacket();
     }
 
     public void setTransform(Transform transform){
@@ -52,7 +52,7 @@ public class SwarmLogic {
               Vector2D diff = Vector2D.sub(transform.getPosition(), otherBot.getLocation());
               diff.normalise();
               diff.div(dist);
-             sum.add(diff);
+              sum.add(diff);
               neighbourCount++;
             }
           }
@@ -99,11 +99,19 @@ public class SwarmLogic {
       desired.sub(orbitTarget);
     }
 
-    public void sendPacket() {
-      commsPack.setIsAlive(isAlive);
-      commsPack.setLocation(transform.getPosition()); 
-      comms.setPacket(commsPack, id);
+    public int getId() {
+      return id;
     }
+
+    public void setComms(CommsChannel comms) {
+      this.comms = comms;
+    }
+
+    // public void sendPacket() {
+    //   commsPack.setIsAlive(isAlive);
+    //   commsPack.setLocation(transform.getPosition()); 
+    //   comms.setPacket(commsPack, id);
+    // }
 
     private void applyBehaviours() {
       Vector2D seek = seek(comms.getPacket(0).getLocation());
@@ -124,7 +132,7 @@ public class SwarmLogic {
       applyBehaviours();
       transform.setHeading(rb.getVelocity().heading());
       rb.update(transform.getPosition(), transform.getHeading());
-      sendPacket();
+      // sendPacket();
     }
 
 
