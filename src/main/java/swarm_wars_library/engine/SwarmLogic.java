@@ -120,6 +120,7 @@ public class SwarmLogic {
       // seek based on MS
       // update myself
       // send my packet
+      
       applyBehaviours();
       transform.setHeading(rb.getVelocity().heading());
       rb.update(transform.getPosition(), transform.getHeading());

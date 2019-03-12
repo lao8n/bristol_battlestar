@@ -20,22 +20,39 @@ import swarm_wars_library.engine.EnVar;
 
 public class SwarmWars extends PApplet {
 
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
-	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, false, false, true);
+  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
+	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, false, false, false, true);
+
+	Entity bot1 = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true);
+	Entity bot2 = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true);
+
+
+	//MAKE SOME BOTS
+	//ArrayList<Entity> playerBotList = new ArrayList<Entity>();
 
 	int MAXSCREENS = 3;
 	int gameScreen = 2;
 	int initScreenTimer = 120;
-	//CommsChannel comms = new CommsChannel();
+	int numBots = 100;
+	CommsChannel comms = new CommsChannel(numBots+1);
 	EnVar envar;
+	Entity bot; 
 
 	void setup() {
 	
 		envar = new EnVar();
-		//objectList.add(new EnvObject(new Vector2D(100, 100)));
-		//p = new Player(new Vector2D(width/2, height/2), comms);
-		//objectList.add(p);
-		//objectList.add(new SwarmBot(new Vector2D(50, 50), comms));
+
+		player.setComms(comms);
+		bot1.setSwarmLogic(comms);
+		bot2.setSwarmLogic(comms);
+
+		//add bots
+		//for (int i = 0; i < numBots; i++){
+	//		bot = new Entity(this, Tag.P_BOT, 5, true, true, true, false, true, true);	
+	//		bot.setSwarmLogic(comms);
+	//		playerBotList.add(bot);
+	//		System.out.println("bot created: " + i);
+	//	}
 	}
 
 	public void settings(){
@@ -74,7 +91,15 @@ public class SwarmWars extends PApplet {
 
 	void gameScreenEntity(){
 			background(25, 25, 76);
-		  player.update();
+			player.update();
+			
+			bot1.update();
+			//bot2.update();
+
+			//update all bots
+		  //for (int j = 0; j < playerBotList.size(); j++){
+			//	playerBotList.get(j).update();
+			//}
 	}
 
   void gameOverScreen(){
@@ -89,7 +114,6 @@ public class SwarmWars extends PApplet {
 				   gameScreen = 0;
 				}
 		 }
-
 		 //add pause screen on 'p'
 	}
 
@@ -164,12 +188,6 @@ public class SwarmWars extends PApplet {
 			 //rect(0, 0, (float)go.getScaleX(), (float)go.getScaleY());
 		// }
 	//}
-
-		/* ------- MOTHER SHIP FCNS -------*/
-
-		private void sendPacket(){
-			//update this logic
-		}
 
 	public static void main(String[] passedArgs) {
 		String[] appletArgs = new String[] { "SwarmWars" };

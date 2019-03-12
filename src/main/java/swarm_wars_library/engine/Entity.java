@@ -21,29 +21,26 @@ public class Entity {
   private CommsPacket commsPacket; 
   //private State state;
   private SwarmLogic swarmLogic; 
-  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, isBot, hasRb; 
+  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership; 
   
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
-  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean state, boolean rb){
-    
+  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
+  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod){
+
     this.sketch = sketch; 
-    //heading = 0; 
     tag = t; 
-    //scale = sc; 
     transform = new Transform();
     hasRender = r;
     hasInput = i;
     hasShooter = s; 
     hasHealth = h;
     hasComms = coms;
-    hasState = state; 
-    hasRb = rb; 
+    hasRb = rigbod; 
+    isMothership = false;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))){
       isBot = true; 
-      //must call method to init swarmLogic
+      //NOTICE: must call method to init swarmLogic in main loop
     }
-
     if (hasComms){
       commsPacket = new CommsPacket();
     }
@@ -59,9 +56,14 @@ public class Entity {
     if (hasHealth){
       health = new Health(tag);
     }
-    
+    if (hasRb){
+      rb = new RigidBody();
+    }
+
     if (tag.equals(Tag.PLAYER) || tag.equals(Tag.ENEMY)){
+      isMothership = true;
       transform.setScale(30, 30); 
+
     } else if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)){
       transform.setScale(5,5);
     }
@@ -85,6 +87,9 @@ public class Entity {
     //  ai.update(); 
     //  position.setAll(ai.getLocation());
     //}
+    if (isMothership){
+      sendPacket();
+    }
     
     if (hasShooter){
       shooter.shoot(transform.getPosition(), transform.getHeading()); 
@@ -169,11 +174,25 @@ public class Entity {
     return (int) transform.getScale().getX();
   }
 
+  public void setComms(CommsChannel comms){
+    commsChannel = comms;
+    commsPacket = new CommsPacket();
+    sendPacket();
+  }
+
   //BOT methods
-  public void setSwarmLogic(Transform transform, CommsChannel comms){
+  public void setSwarmLogic(CommsChannel comms){
     //init swarm logic
     commsChannel = comms; 
     swarmLogic = new SwarmLogic(transform, comms, rb);
+  }
+
+  //MOTHERSHIP
+  public void sendPacket(){
+      //update this logic
+      commsPacket.setLocation(transform.getPosition());
+      commsPacket.setIsAlive(true);
+      commsChannel.setPacket(commsPacket, 0);
   }
 
   //will need to get and set state here for FSM
