@@ -11,7 +11,7 @@ import swarm_wars_library.engine.Transition;
 import swarm_wars_library.engine.State;
 
 
-class TemplateTests {
+class FSMTests {
 
   @Test
   @DisplayName("FSM Set state test")
