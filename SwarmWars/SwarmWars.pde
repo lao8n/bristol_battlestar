@@ -4,50 +4,95 @@ import swarm_wars_library.engine.BoxCollider;
 import swarm_wars_library.engine.GameObject;
 import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.engine.SwarmBot;
+import swarm_wars_library.engine.CommsChannel;
+import swarm_wars_library.engine.Entity; 
+import swarm_wars_library.engine.Tag; 
+import swarm_wars_library.engine.EnVar;
 
+/*control which screen is active by setting/updating gameScreen var
+0: initial screen
+1: game screen - game object
+2: Game screen - entity
+3: game-over screen
+*/
 
 public class SwarmWars extends PApplet {
 
-	Display display = new Display();
-	Player p;
-	int moveForce = 10;
-	EnvObject g;
+  //Entity(this, tag, scale, hasRender, hasInput, hasShooter, hasHealth)
+	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, true, false);
 
+	int MAXSCREENS = 3;
+	int gameScreen = 2;
+	int initScreenTimer = 120;
+	//CommsChannel comms = new CommsChannel();
+	EnVar envar;
 
-	void setup() {  
-		p = new Player(new Vector2D(width/2, height/2));
-		g = new EnvObject(new Vector2D(100, 100));
+	void setup() {
+	
+		envar = new EnVar();
+		//objectList.add(new EnvObject(new Vector2D(100, 100)));
+		//p = new Player(new Vector2D(width/2, height/2), comms);
+		//objectList.add(p);
+		//objectList.add(new SwarmBot(new Vector2D(50, 50), comms));
 	}
 
 	public void settings(){
-		size(300, 300, "processing.awt.PGraphicsJava2D");
+		size(500, 500, "processing.awt.PGraphicsJava2D");
 	}
 
 	void draw(){
-		int i = 0;
-		background(25, 25, 76);
-
-		p.update();
-		display.display(g);
-		display.display(p);
-		//loop over all objects and set hasCollisions to false at start of loop
-		BoxCollider.clearCollision(p); BoxCollider.clearCollision(g);
-    //this will loop over all game objects as needed to check for collisions
-		BoxCollider.boundingCheck(p, g);
+	//display contents of the current screen
+   if (gameScreen == 0){
+	    initScreen();
+    } else if (gameScreen == 1){
+	    gameScreen();
+    } else if (gameScreen == 2){
+			gameScreenEntity();
+    } else {
+			gameOverScreen();
+		}
 	}
 
+	/*--------GAME SCREENS ----*/
 
+ void initScreen(){
+    background(0);
+    textAlign(CENTER);
+  	text("welcome to\n\nSWARM WARS\n\n\nMove: WASD", width/2, height/2);
+  
+  	//after timer, switch to game
+  	if (initScreenTimer-- < 0){
+    	gameScreen = 1;
+  	}
+ 	}
 
-	/* ------ EVENT LISTENERS ------ */
-
-	void keyPressed() {
-		p.setMove(keyCode, true);
+	void gameScreen(){
+			background(25, 25, 76);		
 	}
 
-	void keyReleased() {
-		p.setMove(keyCode, false);
+	void gameScreenEntity(){
+			background(25, 25, 76);
+		  player.update();
 	}
 
+  void gameOverScreen(){
+	    background(0, 0, 0);
+	}
+
+	void changeScreen(int k){
+	   //TODO add more checks here, only change screens in certain cases
+	   if (k == 'n' || k == 'N'){
+		    gameScreen++;
+				if (gameScreen > MAXSCREENS){
+				   gameScreen = 0;
+				}
+		 }
+
+		 //add pause screen on 'p'
+	}
+
+	/* ------ DISPLAY CLASS ------ */
 	class Display {
 		 public void display(GameObject go){
 		    //drawBackground();
@@ -93,15 +138,15 @@ public class SwarmWars extends PApplet {
 			 rect(0, 0, (float)go.getScaleX()*1.2, (float)go.getScaleY()*1.2);
 			 //wing shadows
 			 fill(33, 11, 232, 70);
-			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5, 
+			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5, 
+			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
 			 //wings
 			 fill(33, 11, 232);
-			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2, 
+			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2, 
+			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2,
 			 			(float)go.getScaleX(), (float)go.getScaleY());
 			 //ship head
 			 fill(77, 77, 255);
@@ -119,68 +164,25 @@ public class SwarmWars extends PApplet {
 		 }
 	}
 
-	/* ------ ENV CLASS ------ */
+		/* ------- MOTHER SHIP FCNS -------*/
 
-	class EnvObject extends GameObject {
-		EnvObject(Vector2D location_) {
-			super(location_);
-			setGOTag("ENV");
-		}
+		//public void broadcastLocation(){
+		//	comms.setMotherLocation(getLocation());
+		//}
 
-	}
-
-	/* ------ PLAYER CLASS ------ */
-
-	class Player extends Mover {
-		boolean moveLeft, moveRight, moveUp, moveDown;
-		int moveForce = 10;
-
-		Player(Vector2D location_) {
-			super(location_);
-			setMoverTag("PLAYER");
-		}
-
-		void update(){
-			/* I THINK WE SHOULD MOVE IN THE Y DIRECTION SLIGHTLY SLOWER THAN X -
-			 FOR ORTHO APPEARANCE */
-			setLocationXY(getLocationX() + 
-										moveForce * (int(moveRight) - int(moveLeft)),
-										getLocationY() + 
-										0.8 * moveForce * (int(moveDown) - int(moveUp)));
-			setHeading(Math.atan2(mouseY - getLocationY(),
-														mouseX - getLocationX()));
-
-			updateMover(getLocation(), getHeading());
-		}
-
-		boolean setMove(int k, boolean b){
-			switch(k) {
-				case 'W':
-				case 'w':
-				case UP:
-					return moveUp = b;
-				case 'A':
-				case 'a':
-				case LEFT:
-					return moveLeft = b;
-				case 'S':
-				case 's':
-				case DOWN:
-					return moveDown = b;
-				case 'D':
-				case 'd':
-				case RIGHT:
-					return moveRight = b;
-
-				default:
-					return b;
-			}
-		}
-	}
-  
 	public static void main(String[] passedArgs) {
 		String[] appletArgs = new String[] { "SwarmWars" };
 		PApplet.main(appletArgs);
     }
+
+	/* ------ EVENT LISTENERS ------ */
+	void keyPressed() {
+	  //changeScreen(keyCode);
+		player.input.setMove(keyCode, 1);
+	}
+
+	void keyReleased() {
+		player.input.setMove(keyCode, 0);
+	}
 }
 
