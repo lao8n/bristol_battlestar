@@ -88,4 +88,9 @@ public class GameObject {
 	public void update(){
 	}
 
+	public int getTimer(){
+		return 0;
+	}
+
+
 }

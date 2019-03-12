@@ -11,6 +11,7 @@ import swarm_wars_library.engine.Entity;
 import swarm_wars_library.engine.Tag;
 import swarm_wars_library.engine.EnVar;
 
+
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
 1: game screen - game object
@@ -22,7 +23,6 @@ public class SwarmWars extends PApplet {
 
   //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
   Entity player;
-
 
   //MAKE SOME BOTS
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
