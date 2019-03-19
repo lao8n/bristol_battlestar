@@ -34,12 +34,14 @@ public class SwarmWars extends PApplet {
   int gameScreen = 2;
   int initScreenTimer = 120;
   int numBots = 100;
+
   CommsGlobal comms = new CommsGlobal();
 
   // EnVar envar;
   Entity bot;
 
   void setup() {
+
     comms.add("PLAYER", new CommsChannel(numBots + 1));
 
     // envar = new EnVar();

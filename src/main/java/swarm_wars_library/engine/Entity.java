@@ -28,16 +28,16 @@ public class Entity {
   public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod, boolean hai) {
 
     this.sketch = sketch;
-    tag = t;
-    transform = new Transform();
-    hasRender = r;
-    hasInput = i;
-    hasShooter = s;
-    hasHealth = h;
-    hasComms = coms;
-    hasRb = rigbod;
-    isMothership = false;
-    hasAI = hai;
+    this.tag = t;
+    this.transform = new Transform();
+    this.hasRender = r;
+    this.hasInput = i;
+    this.hasShooter = s;
+    this.hasHealth = h;
+    this.hasComms = coms;
+    this.hasRb = rigbod;
+    this.isMothership = false;
+    this.hasAI = hai;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -62,7 +62,6 @@ public class Entity {
       ai = new AI();
       System.out.println("AI created");
     }
-
     if (tag.equals(Tag.PLAYER) || tag.equals(Tag.ENEMY)) {
       isMothership = true;
       transform.setScale(30, 30);
@@ -104,6 +103,11 @@ public class Entity {
 
     if (hasHealth) {
       health.update();
+
+    }
+
+    if (hasComms) {
+      sendPacket();
     }
 
     if (isBot) {
@@ -153,6 +157,7 @@ public class Entity {
   public void setPosition(Vector2D position, double heading) {
     transform.setHeading(heading);
     transform.setPosition(position);
+
   }
 
   //for setting position of stationary enemies/entities
@@ -163,6 +168,14 @@ public class Entity {
   //for use by shooter to get bullet position
   public Vector2D getPosition() {
     return transform.getPosition();
+  }
+
+  public void setBoundingLength(){
+    transform.setBoundingLength();
+  }
+
+  public double getBoundingLength(){
+    return transform.getBoundingLength();
   }
 
   public void kill() {

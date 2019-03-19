@@ -6,6 +6,7 @@ class Transform {
     private Vector2D scale;
     private double heading; 
     private Vector2D velocity; 
+    private double boundingLength;
 
     Transform(){
         position = new Vector2D(0,0);
@@ -59,5 +60,15 @@ class Transform {
 
     public double getHeading(){
         return heading;
+    }
+
+    public double getBoundingLength(){
+        return boundingLength;
+    }
+
+    public void setBoundingLength(){
+        double x = position.getX();
+        double y = position.getY();
+        this.boundingLength = Math.sqrt(x * x / 4 + y * y / 4);
     }
 }
