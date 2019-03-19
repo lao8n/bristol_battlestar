@@ -17,7 +17,7 @@ class Shooter {
   int bulletForce = 5;
   int enemyHandicap = 2;
   PApplet sketch;
-   
+  
   Shooter(PApplet sketch, Tag t){
     this.sketch = sketch; 
     location = new Vector2D(0,0);
@@ -31,11 +31,11 @@ class Shooter {
       bulletTag = Tag.E_BULLET;
       shootTimer += 50;
     }
-    
+
     //add bullets
     for (int i = 0; i < numBullets; i++){
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
-      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, true);
+      //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
+      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, true, false);
       magazine.add(bullet); 
     }
   }
@@ -73,13 +73,35 @@ class Shooter {
       //sets its location to location
       if(this.sketch.mousePressed){
            magazine.get(magCount++).setPosition(location, heading);
-      if (magCount >= magazine.size()){
-        magCount = 0;
-      }   
+        if (magCount >= magazine.size()){
+          magCount = 0;
+        }   
       }
-   
     }
   }
+
+    void shoot(Vector2D location, double heading, boolean ai){
+      //add delay between shooting
+      if (shooterCount++ % shootTimer == 0){
+        //makes a bullet visible
+        magazine.get(magCount).setRender(true);
+        //set bullet heading
+          if (heading < 0){
+              heading = heading + 2 * Math.PI; 
+          }
+          magazine.get(magCount).setVelocity(bulletForce * Math.cos(heading), 
+                                       bulletForce * Math.sin(heading));
+          //set bullet position of entity
+  
+        magazine.get(magCount).setHeading(heading);
+      
+        //sets its location to location
+        magazine.get(magCount++).setPosition(location, heading);
+        if (magCount >= magazine.size()){
+          magCount = 0;
+        }   
+      }
+    }
   
   //used by main game loop to check for collisions
   List<Entity> getMagazine(){
