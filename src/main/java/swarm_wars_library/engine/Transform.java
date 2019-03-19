@@ -6,12 +6,14 @@ class Transform {
     private Vector2D scale;
     private double heading; 
     private Vector2D velocity; 
+    private int health;
 
     Transform(){
         position = new Vector2D(0,0);
         scale = new Vector2D(10, 10);
         velocity = new Vector2D(0,0);
         heading = 0;
+        health=0;
     }
 
     public void setPosition(double x, double y){
@@ -59,5 +61,13 @@ class Transform {
 
     public double getHeading(){
         return heading;
+    }
+
+    public void setHealth(int h){
+        health=h;
+    }
+
+    public int getHealth(){
+        return health;
     }
 }

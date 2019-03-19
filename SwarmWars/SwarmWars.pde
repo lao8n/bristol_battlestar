@@ -21,7 +21,7 @@ import swarm_wars_library.engine.EnVar;
 public class SwarmWars extends PApplet {
 
   //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
-	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, false, false, true);
+	Entity player = new Entity(this, Tag.PLAYER, 30, true, true, true, true, false, false, true);
 
 	int MAXSCREENS = 3;
 	int gameScreen = 2;

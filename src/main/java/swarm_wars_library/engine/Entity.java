@@ -78,7 +78,8 @@ public class Entity {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
-      System.out.println(transform.getHeading());
+      transform.setHealth(health.getHealth());
+      //System.out.println(transform.getHeading());
     } 
 
     //else if (hasAI) {
@@ -93,6 +94,7 @@ public class Entity {
     
     if (hasHealth){
       health.update();
+      render.drawHealth(transform.getHealth());
     }
    
     if (isBot){
