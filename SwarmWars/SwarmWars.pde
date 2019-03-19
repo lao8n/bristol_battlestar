@@ -47,12 +47,34 @@ public class SwarmWars extends PApplet {
     // envar = new EnVar();
     // entityList.add(envar);
 
-    player = new Entity(this, Tag.PLAYER, 30, true, true, true, true, true, true, false);
+    player = new Entity(
+      this, 
+      Tag.PLAYER, 
+      30, 
+      true, 
+      true, 
+      true, 
+      true, 
+      true, 
+      true, 
+      false
+    );
+
     player.setComms(comms);
     entityList.add(player);
     //add bots
     for (int i = 0; i < numBots; i++) {
-      bot = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true, false);
+      bot = new Entity(this, 
+                         Tag.P_BOT, 
+                         5, 
+                         true, 
+                         false, 
+                         false, 
+                         false, 
+                         true, 
+                         true, 
+                         false
+      );
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
@@ -60,9 +82,24 @@ public class SwarmWars extends PApplet {
     }
 
 
-    turret = new Entity(this, Tag.ENEMY, 40, true, false, true, true, true, true, true);
+    turret = new Entity(
+      this, 
+      Tag.ENEMY, 
+      40, 
+      true, 
+      false, 
+      true, 
+      true, 
+      true, 
+      true, 
+      true);
     turret.setPosition(200, 200);
-    turret.setComms(comms);
+    try{
+      turret.setComms(comms);
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
     entityList.add(turret);
 
     // import to do at end of setup - sets all initial packets to current
@@ -107,10 +144,15 @@ public class SwarmWars extends PApplet {
     background(25, 25, 76);
 
     // update all bots
-    for (int j = 0; j < entityList.size(); j++) {
-      entityList.get(j).update();
+    for (int j = 0; j < entityList.size(); j++){
+      this.entityList.get(j).update();
+      // try{
+      //   this.entityList.get(j).update();
+      // }
+      // catch(Exception e){
+      //   e.printStackTrace();
+      // }
     }
-
     // sets future comms to current for next loop
     comms.update();
 

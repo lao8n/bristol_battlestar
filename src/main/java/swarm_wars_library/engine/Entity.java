@@ -25,7 +25,16 @@ public class Entity {
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
-  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod, boolean hai) {
+  public Entity(PApplet sketch, 
+                Tag t, 
+                int sc, 
+                boolean r, 
+                boolean i, 
+                boolean s, 
+                boolean h, 
+                boolean coms, 
+                boolean rigbod, 
+                boolean hai) {
 
     this.sketch = sketch;
     this.tag = t;
@@ -62,11 +71,14 @@ public class Entity {
       ai = new AI();
       System.out.println("AI created");
     }
-    if (tag.equals(Tag.PLAYER) || tag.equals(Tag.ENEMY)) {
+    if (tag.equals(Tag.PLAYER)) {
       isMothership = true;
       transform.setScale(30, 30);
 
-    } else if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
+    } else if(tag.equals(Tag.ENEMY)){
+      transform.setScale(30, 30);
+    }
+    else if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
       transform.setScale(5, 5);
     }
   }
@@ -77,7 +89,7 @@ public class Entity {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
-      transform.setHealth(health.getHealth());
+      // transform.setHealth(health.getHealth());
       //System.out.println(transform.getHeading());
     } 
 
@@ -108,10 +120,6 @@ public class Entity {
       render.drawHealth(transform.getHealth());
     }
 
-    if (hasComms) {
-      sendPacket();
-    }
-
     if (isBot) {
       //update bot based on swarm/bot logic using the swarm component
       swarmLogic.setTransform(transform);
@@ -127,6 +135,14 @@ public class Entity {
     if (hasRender) {
       render.update(transform.getPosition(), tag, transform.getHeading());
     }
+  }
+
+  public Tag getTag(){
+    return this.tag;
+  }
+
+  public void takeDamage(int d){
+    this.health.takeDamage(d);
   }
 
   public void setVelocity(double x, double y) {
@@ -226,7 +242,7 @@ public class Entity {
     //update this logic
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setIsAlive(true);
-    if (isMothership) {
+    if (this.isMothership) {
       comms.get("PLAYER").setPacket(commsPacket, 0);
     } else {
       comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
