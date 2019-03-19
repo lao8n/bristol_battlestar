@@ -5,23 +5,30 @@ public class BoxCollider {
 	BoxCollider(){
 	}
 
-	public static boolean boundingCheck(GameObject first, GameObject second){
-		if(Vector2D.sub(first.getLocation(), second.getLocation()).mag() 
-				<= (first.getBoundingLength() + second.getBoundingLength())){
-			first.setHasCollision(true);
-			second.setHasCollision(true);
-			return true;
+	public static boolean boundingCheck(Entity first, Entity second){
+		System.out.println("get here");
+		if(Vector2D.sub(first.getPosition(), second.getPosition()).mag() 
+			<= (first.getBoundingLength() + second.getBoundingLength())){
+			//bullet collision
+			if(second.getTag().equals(Tag.E_BULLET)){
+				if(first.getTag().equals(Tag.PLAYER)){
+					first.takeDamage(5);
+					second.kill();
+					return true;
+				}
+				if(first.getTag().equals(Tag.P_BOT)){
+					return true;
+				}
+			}
+			if(first.getTag().equals(Tag.P_BULLET)){
+				if(second.getTag().equals(Tag.P_BOT)){
+					System.out.println("Friendly fire");
+					second.takeDamage(5);
+					first.kill();
+					return true;
+				}
+			}
 		}
-		return false;
-	}
-
-	//to use (in a loop) at start of the game loop, to clear set all hasCollisions to false
-	public static void clearCollision(GameObject go){
-		go.setHasCollision(false);
-	}
-
-	/* Advanced collision detection using Seperating Axis Theorem */
-	boolean SATCheck(){
 		return false;
 	}
 }

@@ -3,22 +3,23 @@ package swarm_wars_library.engine;
 class Health {
 
   int currentHealth;
+  int maxHealth;
   int damage;
   
   Health (Tag tag) {
       if (tag.equals(Tag.PLAYER)){
-        currentHealth = 100;
+        maxHealth = 100;
       } else {
-        currentHealth = 5; 
+        maxHealth = 5; 
       }
-      damage = 0;
+      currentHealth = maxHealth;
   }
   
   void update(){
     currentHealth -= damage;
   }
 
-  void setDamage(int d){
+  void takeDamage(int d){
     damage = d;
   }
   
@@ -27,7 +28,7 @@ class Health {
   }
   
   boolean isDead(){
-    if (currentHealth < 0){
+    if (currentHealth <= 0){
       return true;
     }
     return false;

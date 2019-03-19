@@ -21,12 +21,11 @@ public class Input {
   }
   
   public void update(){
-	this.location.setXY(this.location.getX() + (int) this.moveForce *
-                                        (this.moveRight - this.moveLeft),
-                        this.location.getY() + (int) this.moveForce * 0.8 * 
-                                        (this.moveForce * (this.moveDown - this.moveUp)));
-    this.heading = Math.atan2( this.sketch.mouseY - this.location.getY(),
-                               this.sketch.mouseX - this.location.getX());
+	  location.setXY(location.getX() + (int) moveForce * (moveRight - moveLeft),
+                   location.getY() + (int) moveForce * 0.8 * (moveDown - moveUp));
+   
+    heading = Math.atan2(sketch.mouseY - location.getY(),
+                        sketch.mouseX - location.getX());
     edgeCheck();
   }
 

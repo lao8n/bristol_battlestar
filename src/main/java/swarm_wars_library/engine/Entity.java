@@ -3,78 +3,77 @@ package swarm_wars_library.engine;
 
 import javax.swing.text.Position;
 
-import processing.core.PApplet; 
+import processing.core.PApplet;
 
 public class Entity {
 
-  private PApplet sketch; 
+  private PApplet sketch;
   private Tag tag;
-  private Transform transform; 
+  private Transform transform;
   private Render render;
   public Input input;
   private int points;
   private Shooter shooter;
   private Health health;
-  private RigidBody rb; 
+  private RigidBody rb;
+  private AI ai;
   //BOT Specific comps
-  private CommsChannel commsChannel; 
-  private CommsPacket commsPacket; 
+  private CommsGlobal comms;
+  private CommsPacket commsPacket;
   //private State state;
-  private SwarmLogic swarmLogic; 
-  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, isBot, hasRb; 
-  
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
-  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean state, boolean rb){
-    
-    this.sketch = sketch; 
-    //heading = 0; 
-    tag = t; 
-    //scale = sc; 
-    transform = new Transform();
-    hasRender = r;
-    hasInput = i;
-    hasShooter = s; 
-    hasHealth = h;
-    hasComms = coms;
-    hasState = state; 
-    hasRb = rb; 
+  private SwarmLogic swarmLogic;
+  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
 
-    if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))){
-      isBot = true; 
-      //must call method to init swarmLogic
-    }
+  //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
+  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod, boolean hai) {
 
-    if (hasComms){
-      commsPacket = new CommsPacket();
+    this.sketch = sketch;
+    this.tag = t;
+    this.transform = new Transform();
+    this.hasRender = r;
+    this.hasInput = i;
+    this.hasShooter = s;
+    this.hasHealth = h;
+    this.hasComms = coms;
+    this.hasRb = rigbod;
+    this.isMothership = false;
+    this.hasAI = hai;
+
+    if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
+      isBot = true;
+      //NOTICE: must call method to init swarmLogic in main loop
     }
-    if (hasRender){
+    if (hasRender) {
       render = new Render(sketch, (int) transform.getScale().getX());
     }
     if (hasInput) {
       input = new Input(sketch);
     }
-    if (hasShooter){
+    if (hasShooter) {
       shooter = new Shooter(sketch, tag);
     }
-    if (hasHealth){
+    if (hasHealth) {
       health = new Health(tag);
     }
-    
-    if (tag.equals(Tag.PLAYER) || tag.equals(Tag.ENEMY)){
-      transform.setScale(30, 30); 
-    } else if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)){
-      transform.setScale(5,5);
+    if (hasRb) {
+      rb = new RigidBody();
+    }
+    if (hasAI) {
+      ai = new AI();
+      System.out.println("AI created");
+    }
+    if (tag.equals(Tag.PLAYER) || tag.equals(Tag.ENEMY)) {
+      isMothership = true;
+      transform.setScale(30, 30);
+
+    } else if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
+      transform.setScale(5, 5);
     }
   }
 
-  public void update(){
-    //draw it
-    if (hasRender){
-      render.update(transform.getPosition(), tag, transform.getHeading());
-    }
-    
+  public void update() {
     //set position with either Input or AI
-    if (hasInput){
+    if (hasInput) {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
@@ -82,82 +81,118 @@ public class Entity {
       //System.out.println(transform.getHeading());
     } 
 
-    //else if (hasAI) {
-    //  ai.update(); 
-    //  position.setAll(ai.getLocation());
-    //}
-    
-    if (hasShooter){
-      shooter.shoot(transform.getPosition(), transform.getHeading()); 
+    if (hasAI) {
+
+      //pass it current player position, its own transform
+      //ERROR this is giving a null pointer:
+      Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
+      // Vector2D playerLoc = new Vector2D(0,0);
+      ai.update(playerLoc, transform);
+      //shooter uses this info below to target player
+    }
+
+    if (hasShooter && hasInput) {
+      shooter.shoot(transform.getPosition(), transform.getHeading());
       shooter.update();
     }
-    
-    if (hasHealth){
+
+    if (hasShooter && hasAI){
+      //need to set heading as direction to player
+      // System.out.println("AI SHOOT");
+      shooter.shoot(transform.getPosition(), ai.getHeading(), true);
+      shooter.update();
+    }
+
+    if (hasHealth) {
       health.update();
       render.drawHealth(transform.getHealth());
     }
-   
-    if (isBot){
+
+    if (hasComms) {
+      sendPacket();
+    }
+
+    if (isBot) {
       //update bot based on swarm/bot logic using the swarm component
       swarmLogic.setTransform(transform);
-      swarmLogic.update(); 
+      swarmLogic.update();
       transform = swarmLogic.getTransform();
+    }
+
+    if (hasComms && !hasAI) {
+      sendPacket();
+    }
+
+    //draw it
+    if (hasRender) {
+      render.update(transform.getPosition(), tag, transform.getHeading());
     }
   }
 
-  public void setVelocity(double x, double y){
-      transform.setVelocity(x, y);
+  public void setVelocity(double x, double y) {
+    transform.setVelocity(x, y);
   }
 
-  public Vector2D getVelocity(){
-      return transform.getVelocity();
+  public Vector2D getVelocity() {
+    return transform.getVelocity();
   }
-  
+
   //set if visible
-  public void setRender(boolean value){
+  public void setRender(boolean value) {
     hasRender = value;
   }
-  
+
   //to check if entity is visible
-  public boolean isRendering(){
-    return hasRender; 
+  public boolean isRendering() {
+    return hasRender;
   }
 
-  public void setHeading(double heading){
-      transform.setHeading(heading);
-  }
-
-  public double getHeading(){
-      return transform.getHeading();
-  }
-  
-  //for use by shooter class to set bullet position & heading
-  public void setPosition(Vector2D position, double heading){
+  public void setHeading(double heading) {
     transform.setHeading(heading);
-    transform.setPosition(position); 
-    //if (hasAI){
-    //  ai.setLocation(pos);
-    //}
   }
-  
+
+  public double getHeading() {
+    return transform.getHeading();
+  }
+
+  //for use by shooter class to set bullet position & heading
+  public void setPosition(Vector2D position, double heading) {
+    transform.setHeading(heading);
+    transform.setPosition(position);
+
+  }
+
+  //for setting position of stationary enemies/entities
+  public void setPosition(double x, double y){
+    transform.setPosition(x, y);
+  }
+
   //for use by shooter to get bullet position
-  public Vector2D getPosition(){
+  public Vector2D getPosition() {
     return transform.getPosition();
   }
-  
-  public void kill(){
+
+  public void setBoundingLength(){
+    transform.setBoundingLength();
+  }
+
+  public double getBoundingLength(){
+    return transform.getBoundingLength();
+  }
+
+  public void kill() {
     hasRender = false;
     hasShooter = false;
   }
-  
-  public boolean isDead(){
-    if (hasHealth){
+
+  public boolean isDead() {
+    if (hasHealth) {
       return health.isDead();
     }
     return false;
   }
-  
-  public void setAlive(){
+
+  public void setAlive() {
     //reset velocity to 0
     //if (hasAI){
     //  ai.reset();
@@ -166,16 +201,36 @@ public class Entity {
     hasShooter = true;
     //add something for health
   }
-  
-  public int getScale(){
+
+  public int getScale() {
     return (int) transform.getScale().getX();
   }
 
+  public void setComms(CommsGlobal comms) {
+    this.comms = comms;
+    commsPacket = new CommsPacket();
+    if (isBot) {
+      swarmLogic.setComms(this.comms);
+    }
+    sendPacket();
+  }
+
   //BOT methods
-  public void setSwarmLogic(Transform transform, CommsChannel comms){
+  public void setSwarmLogic() {
     //init swarm logic
-    commsChannel = comms; 
-    swarmLogic = new SwarmLogic(transform, comms, rb);
+    swarmLogic = new SwarmLogic(transform, rb);
+  }
+
+  //ALLL COMMS
+  public void sendPacket() {
+    //update this logic
+    commsPacket.setLocation(transform.getPosition());
+    commsPacket.setIsAlive(true);
+    if (isMothership) {
+      comms.get("PLAYER").setPacket(commsPacket, 0);
+    } else {
+      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
+    }
   }
 
   //will need to get and set state here for FSM
