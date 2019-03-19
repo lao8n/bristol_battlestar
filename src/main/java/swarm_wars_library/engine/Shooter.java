@@ -16,6 +16,7 @@ class Shooter {
   Tag bulletTag;
   int bulletForce = 5;
   int enemyHandicap = 2;
+  int bulletdemage=10;
   PApplet sketch;
 
   Shooter(PApplet sketch, Tag t){

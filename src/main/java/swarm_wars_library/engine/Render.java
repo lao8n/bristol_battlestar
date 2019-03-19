@@ -22,7 +22,7 @@ public class Render {
 		this.sketch.stroke(0);
 		this.sketch.translate((float)loc.getX(), (float)loc.getY());
 		this.sketch.rotate((float) heading);
-		drawEntity(loc, tag);
+    drawEntity(loc, tag);
 		this.sketch.popMatrix();
 	 }
   
@@ -73,6 +73,18 @@ public class Render {
     }
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(0,0, this.scale, this.scale); 
+  }
+  public void drawHealth(int health){
+    //draw boreder
+    this.sketch.rectMode(1);
+    this.sketch.stroke(204, 102, 0);
+    this.sketch.fill(25, 25, 76);
+    this.sketch.rect(5, 5,100 ,30);
+    //draw health
+    this.sketch.stroke(25, 25, 76);
+    this.sketch.fill(255); 
+    this.sketch.rect(5, 5,health ,30);
+    
   }
 }
 

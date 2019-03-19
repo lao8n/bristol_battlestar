@@ -47,7 +47,7 @@ public class SwarmWars extends PApplet {
     // envar = new EnVar();
     // entityList.add(envar);
 
-    player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, true, true, false);
+    player = new Entity(this, Tag.PLAYER, 30, true, true, true, true, true, true, false);
     player.setComms(comms);
     entityList.add(player);
     //add bots
