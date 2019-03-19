@@ -17,7 +17,7 @@ public class Entity {
   private Health health;
   private RigidBody rb;
   //BOT Specific comps
-  private CommsChannel commsChannel;
+  private CommsGlobal comms;
   private CommsPacket commsPacket;
   //private State state;
   private SwarmLogic swarmLogic;
@@ -174,11 +174,11 @@ public class Entity {
     return (int) transform.getScale().getX();
   }
 
-  public void setComms(CommsChannel comms) {
-    commsChannel = comms;
+  public void setComms(CommsGlobal comms) {
+    this.comms = comms;
     commsPacket = new CommsPacket();
     if (isBot) {
-      swarmLogic.setComms(comms);
+      swarmLogic.setComms(this.comms);
     }
     sendPacket();
   }
@@ -195,9 +195,9 @@ public class Entity {
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setIsAlive(true);
     if (isMothership) {
-      commsChannel.setPacket(commsPacket, 0);
+      comms.get("PLAYER").setPacket(commsPacket, 0);
     } else {
-      commsChannel.setPacket(commsPacket, swarmLogic.getId());
+      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
     }
   }
 
