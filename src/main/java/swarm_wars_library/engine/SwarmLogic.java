@@ -7,7 +7,8 @@ public class SwarmLogic {
   private double stopDistance;
   private double orbitDistance;
   private RigidBody rb;
-  private CommsChannel comms;
+  private CommsGlobal comms;
+  // private CommsChannel comms;
   // private CommsPacket commsPack;
   private boolean isAlive;
   private int id;
@@ -43,9 +44,9 @@ public class SwarmLogic {
     desiredSeparation = 20;
     int neighbourCount = 0;
     Vector2D sum = new Vector2D(0, 0);
-    for (int i = 1; i < comms.getNumberOfReceivers(); i++) {
+    for (int i = 1; i < comms.get("PLAYER").getNumberOfReceivers(); i++) {
       if (i != id) {
-        CommsPacket otherBot = comms.getPacket(i);
+        CommsPacket otherBot = comms.get("PLAYER").getPacket(i);
         if (otherBot.getIsAlive()) {
           double dist = Vector2D.sub(transform.getPosition(), otherBot.getLocation()).mag();
           if (dist > 0 && dist < desiredSeparation) {
@@ -102,7 +103,7 @@ public class SwarmLogic {
     return id;
   }
 
-  public void setComms(CommsChannel comms) {
+  public void setComms(CommsGlobal comms) {
     this.comms = comms;
   }
 
@@ -113,7 +114,7 @@ public class SwarmLogic {
   // }
 
   private void applyBehaviours() {
-    Vector2D seek = seek(comms.getPacket(0).getLocation());
+    Vector2D seek = seek(comms.get("PLAYER").getPacket(0).getLocation());
     Vector2D seperate = separate();
     seek.mult(1.5);
     seperate.mult(0.2);
