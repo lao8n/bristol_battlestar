@@ -21,5 +21,4 @@ public class CommsChannel {
   public int getNumberOfReceivers() {
     return numberOfReceivers;
   }
-
 }

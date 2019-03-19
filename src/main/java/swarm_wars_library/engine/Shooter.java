@@ -38,6 +38,7 @@ class Shooter {
       Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, false, true);
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);
+
     }
   }
   
@@ -72,7 +73,7 @@ class Shooter {
     
       //sets its location to location
       if(this.sketch.mousePressed){
-           magazine.get(magCount++).setPosition(location, heading);
+        magazine.get(magCount++).setPosition(location, heading);
       if (magCount >= magazine.size()){
         magCount = 0;
       }   
