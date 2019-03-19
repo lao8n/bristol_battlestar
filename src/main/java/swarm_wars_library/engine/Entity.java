@@ -77,6 +77,7 @@ public class Entity {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
+
     }
 
     //else if (hasAI) {
