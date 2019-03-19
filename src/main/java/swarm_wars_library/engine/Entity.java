@@ -16,7 +16,7 @@ public class Entity {
   private Shooter shooter;
   private Health health;
   private RigidBody rb;
-  private AI ai; 
+  private AI ai;
   //BOT Specific comps
   private CommsGlobal comms;
   private CommsPacket commsPacket;
@@ -37,7 +37,7 @@ public class Entity {
     hasComms = coms;
     hasRb = rigbod;
     isMothership = false;
-    hasAI = hai; 
+    hasAI = hai;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -83,7 +83,7 @@ public class Entity {
     if (hasAI) {
 
       //pass it current player position, its own transform
-      //ERROR this is giving a null pointer: 
+      //ERROR this is giving a null pointer:
       Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
       // Vector2D playerLoc = new Vector2D(0,0);
       ai.update(playerLoc, transform);
