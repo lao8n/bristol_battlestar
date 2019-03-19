@@ -20,7 +20,7 @@ class Shooter {
    
   Shooter(PApplet sketch, Tag t){
     this.sketch = sketch; 
-    location = new Vector2D(0,0);
+    location = new Vector2D(-1000,-1000);
     currPos = new Vector2D(0,0);
     magazine = new ArrayList<Entity>(); 
     
@@ -36,7 +36,8 @@ class Shooter {
     for (int i = 0; i < numBullets; i++){
   //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasState, hasRb)
       Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, false, true);
-      magazine.add(bullet); 
+      magazine.add(bullet);
+      magazine.get(i).setPosition(location, 1.50);
     }
   }
   
@@ -44,7 +45,6 @@ class Shooter {
     //loops over its list of bullets and renders them if visible
     for(int i = 0; i < magazine.size(); i++){
       if (magazine.get(i).isRendering()){
- 
         currPos = magazine.get(i).getPosition();
         //magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
         magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
@@ -59,7 +59,7 @@ class Shooter {
     //add delay between shooting
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
-      magazine.get(magCount).setRender(true);
+     // magazine.get(magCount).setRender(true);
       //set bullet heading
         if (heading < 0){
             heading = heading + 2 * Math.PI; 
@@ -76,6 +76,7 @@ class Shooter {
       if (magCount >= magazine.size()){
         magCount = 0;
       }   
+      magazine.get(magCount).setRender(true);
       }
    
     }
