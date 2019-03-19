@@ -94,7 +94,7 @@ public class Entity {
       //pass it current player position, its own transform
       //ERROR this is giving a null pointer: 
       Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
-      // Vector2D test = new Vector2D(0,0);
+      // Vector2D playerLoc = new Vector2D(0,0);
       ai.update(playerLoc, transform);
       //shooter uses this info below to target player
     }
