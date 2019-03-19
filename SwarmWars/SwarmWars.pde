@@ -105,10 +105,6 @@ public class SwarmWars extends PApplet {
     for (int j = 0; j < entityList.size(); j++) {
       entityList.get(j).update();
     }
-
-    // update enemies
-    turret.update();
-
     
   }
 
