@@ -69,7 +69,7 @@ public class SwarmWars extends PApplet {
 
   public void setup() {
 
-    comms.add("PLAYER", new CommsChannel(numBots + 2));
+    comms.add("PLAYER", new CommsChannel(numBots + 1));
 
     // envar = new EnVar();
     // entityList.add(envar);
