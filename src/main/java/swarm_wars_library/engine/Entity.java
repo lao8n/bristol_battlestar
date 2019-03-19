@@ -16,15 +16,16 @@ public class Entity {
   private Shooter shooter;
   private Health health;
   private RigidBody rb;
+  private AI ai; 
   //BOT Specific comps
   private CommsGlobal comms;
   private CommsPacket commsPacket;
   //private State state;
   private SwarmLogic swarmLogic;
-  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership;
+  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
 
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
-  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod) {
+  //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
+  public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod, boolean hai) {
 
     this.sketch = sketch;
     tag = t;
@@ -36,6 +37,7 @@ public class Entity {
     hasComms = coms;
     hasRb = rigbod;
     isMothership = false;
+    hasAI = hai; 
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -55,6 +57,10 @@ public class Entity {
     }
     if (hasRb) {
       rb = new RigidBody();
+    }
+    if (hasAI) {
+      ai = new AI();
+      System.out.println("AI created");
     }
 
     if (tag.equals(Tag.PLAYER) || tag.equals(Tag.ENEMY)) {
@@ -79,25 +85,34 @@ public class Entity {
       transform.setHeading(input.getHeading());
     }
 
-    //else if (hasAI) {
-    //  ai.update(); 
-    //  position.setAll(ai.getLocation());
-    //}
-    // if (isMothership){
-    //   sendPacket();
-    // }
+    if (hasComms && !hasAI) {
+      sendPacket();
+    }
 
-    if (hasShooter) {
+    if (hasAI) {
+
+      //pass it current player position, its own transform
+      //ERROR this is giving a null pointer: 
+      Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
+      // Vector2D test = new Vector2D(0,0);
+      ai.update(playerLoc, transform);
+      //shooter uses this info below to target player
+    }
+
+    if (hasShooter && hasInput) {
       shooter.shoot(transform.getPosition(), transform.getHeading());
+      shooter.update();
+    }
+
+    if (hasShooter && hasAI){
+      //need to set heading as direction to player
+      // System.out.println("AI SHOOT");
+      shooter.shoot(transform.getPosition(), ai.getHeading(), true);
       shooter.update();
     }
 
     if (hasHealth) {
       health.update();
-    }
-
-    if (hasComms) {
-      sendPacket();
     }
 
     if (isBot) {
@@ -138,9 +153,11 @@ public class Entity {
   public void setPosition(Vector2D position, double heading) {
     transform.setHeading(heading);
     transform.setPosition(position);
-    //if (hasAI){
-    //  ai.setLocation(pos);
-    //}
+  }
+
+  //for setting position of stationary enemies/entities
+  public void setPosition(double x, double y){
+    transform.setPosition(x, y);
   }
 
   //for use by shooter to get bullet position

@@ -22,8 +22,10 @@ import swarm_wars_library.engine.EnVar;
 
 public class SwarmWars extends PApplet {
 
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
+  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, hasAI)
   Entity player;
+
+  Entity turret; 
 
   //MAKE SOME BOTS
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
@@ -43,22 +45,27 @@ public class SwarmWars extends PApplet {
     // envar = new EnVar();
     // entityList.add(envar);
 
-    player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, true, true);
+    player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, true, true, false);
     player.setComms(comms);
     entityList.add(player);
-
     //add bots
     for (int i = 0; i < numBots; i++) {
-      bot = new Entity(this, Tag.P_BOT, 5, true, false, false, false, true, true);
+      bot = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true, false);
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
-      System.out.println("bot created: " + i);
+      //System.out.println("bot created: " + i);
     }
+
+
+    turret = new Entity(this, Tag.ENEMY, 40, true, false, true, true, true, true, true);
+    turret.setPosition(200, 200);
+    turret.setComms(comms);
+    entityList.add(turret);
   }
 
   public void settings() {
-    size(500, 500, "processing.awt.PGraphicsJava2D");
+    size(700, 900, "processing.awt.PGraphicsJava2D");
   }
 
   void draw() {
@@ -98,6 +105,11 @@ public class SwarmWars extends PApplet {
     for (int j = 0; j < entityList.size(); j++) {
       entityList.get(j).update();
     }
+
+    // update enemies
+    turret.update();
+
+    
   }
 
   void gameOverScreen() {

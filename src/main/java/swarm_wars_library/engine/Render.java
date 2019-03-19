@@ -76,7 +76,6 @@ public class Render {
   }
 }
 
-
 /* ------ DISPLAY CLASS ------ */
 //class Display {
 //   public void display(GameObject go){
