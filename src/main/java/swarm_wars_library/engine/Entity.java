@@ -128,7 +128,7 @@ public class Entity {
     }
 
     if (hasComms && !hasAI) {
-      sendPacket();
+      this.sendPacket();
     }
 
     //draw it
@@ -245,7 +245,17 @@ public class Entity {
     if (this.isMothership) {
       comms.get("PLAYER").setPacket(commsPacket, 0);
     } else {
-      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
+      try{
+        // System.out.println(comms.get("PLAYER"));
+        // System.out.println(swarmLogic);
+        comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
+      }
+      catch(Exception e){
+        System.out.println(comms.get("PLAYER"));
+        System.out.println(this.tag);
+        System.out.println(swarmLogic);
+        e.printStackTrace();
+      }
     }
   }
 

@@ -69,7 +69,7 @@ public class SwarmWars extends PApplet {
 
   public void setup() {
 
-    comms.add("PLAYER", new CommsChannel(numBots + 1));
+    comms.add("PLAYER", new CommsChannel(numBots + 2));
 
     // envar = new EnVar();
     // entityList.add(envar);
@@ -116,17 +116,13 @@ public class SwarmWars extends PApplet {
       true, 
       false, 
       true, 
-      true, 
+      false, 
       true, 
       true, 
       true);
     turret.setPosition(200, 200);
-    try{
-      turret.setComms(comms);
-    }
-    catch(Exception e){
-      e.printStackTrace();
-    }
+    turret.setSwarmLogic();
+    turret.setComms(comms);
     entityList.add(turret);
 
     // import to do at end of setup - sets all initial packets to current
