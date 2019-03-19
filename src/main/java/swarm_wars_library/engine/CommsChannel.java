@@ -4,10 +4,12 @@ public class CommsChannel {
 
   private int numberOfReceivers;
   private CommsPacket[] currentPackets;
+  private CommsPacket[] futurePackets;
 
   public CommsChannel(int numberOfReceivers) {
     this.numberOfReceivers = numberOfReceivers;
-    this.currentPackets = new CommsPacket[numberOfReceivers];
+    currentPackets = new CommsPacket[numberOfReceivers];
+    futurePackets = new CommsPacket[numberOfReceivers];
   }
 
   public CommsPacket getPacket(int i) {
@@ -15,10 +17,14 @@ public class CommsChannel {
   }
 
   public void setPacket(CommsPacket packet, int i) {
-    currentPackets[i] = packet;
+    futurePackets[i] = packet;
   }
 
   public int getNumberOfReceivers() {
     return numberOfReceivers;
+  }
+
+  public void update() {
+    currentPackets = futurePackets.clone();
   }
 }

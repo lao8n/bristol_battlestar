@@ -62,6 +62,9 @@ public class SwarmWars extends PApplet {
     turret.setPosition(200, 200);
     turret.setComms(comms);
     entityList.add(turret);
+
+    // import to do at end of setup - sets all initial packets to current
+    comms.update();
   }
 
   public void settings() {
@@ -105,7 +108,10 @@ public class SwarmWars extends PApplet {
     for (int j = 0; j < entityList.size(); j++) {
       entityList.get(j).update();
     }
-    
+
+    // sets future comms to current for next loop
+    comms.update();
+
   }
 
   void gameOverScreen() {

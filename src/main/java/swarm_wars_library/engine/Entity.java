@@ -73,20 +73,11 @@ public class Entity {
   }
 
   public void update() {
-    //draw it
-    if (hasRender) {
-      render.update(transform.getPosition(), tag, transform.getHeading());
-    }
-
     //set position with either Input or AI
     if (hasInput) {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
-    }
-
-    if (hasComms && !hasAI) {
-      sendPacket();
     }
 
     if (hasAI) {
@@ -120,6 +111,15 @@ public class Entity {
       swarmLogic.setTransform(transform);
       swarmLogic.update();
       transform = swarmLogic.getTransform();
+    }
+
+    if (hasComms && !hasAI) {
+      sendPacket();
+    }
+
+    //draw it
+    if (hasRender) {
+      render.update(transform.getPosition(), tag, transform.getHeading());
     }
   }
 

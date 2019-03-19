@@ -1,6 +1,7 @@
 package swarm_wars_library.engine;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CommsGlobal {
     private HashMap<String, CommsChannel> commsMap;
@@ -18,5 +19,11 @@ public class CommsGlobal {
     public CommsChannel get(String channelName) {
         if(!commsMap.containsKey(channelName)) throw new Error("Channel doesn't exist");
         return commsMap.get(channelName);
+    }
+
+    public void update() {
+        for(Map.Entry<String, CommsChannel> entry: commsMap.entrySet()){
+            entry.getValue().update();
+        }
     }
 }
