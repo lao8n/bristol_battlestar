@@ -5,6 +5,7 @@ import swarm_wars_library.engine.SwarmLogic;
 //import swarm_wars_library.engine.GameObject;
 //import swarm_wars_library.engine.Mover;
 import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.engine.CommsGlobal;
 import swarm_wars_library.engine.CommsChannel;
 import swarm_wars_library.engine.CommsPacket;
 import swarm_wars_library.engine.Entity;
@@ -21,8 +22,10 @@ import swarm_wars_library.engine.EnVar;
 
 public class SwarmWars extends PApplet {
 
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb)
+  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, hasAI)
   Entity player;
+
+  Entity turret; 
 
   //MAKE SOME BOTS
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
@@ -31,31 +34,43 @@ public class SwarmWars extends PApplet {
   int gameScreen = 2;
   int initScreenTimer = 120;
   int numBots = 100;
-  CommsChannel comms = new CommsChannel(numBots + 1);
+
+  CommsGlobal comms = new CommsGlobal();
+
   // EnVar envar;
   Entity bot;
 
   void setup() {
 
+    comms.add("PLAYER", new CommsChannel(numBots + 1));
+
     // envar = new EnVar();
     // entityList.add(envar);
 
-    player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, true, true);
+    player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, true, true, false);
     player.setComms(comms);
     entityList.add(player);
-
     //add bots
     for (int i = 0; i < numBots; i++) {
-      bot = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true);
+      bot = new Entity(this, Tag.P_BOT, 5, true, true, false, false, true, true, false);
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
-      System.out.println("bot created: " + i);
+      //System.out.println("bot created: " + i);
     }
+
+
+    turret = new Entity(this, Tag.ENEMY, 40, true, false, true, true, true, true, true);
+    turret.setPosition(200, 200);
+    turret.setComms(comms);
+    entityList.add(turret);
+
+    // import to do at end of setup - sets all initial packets to current
+    comms.update();
   }
 
   public void settings() {
-    size(500, 500, "processing.awt.PGraphicsJava2D");
+    size(700, 900, "processing.awt.PGraphicsJava2D");
   }
 
   void draw() {
@@ -66,7 +81,6 @@ public class SwarmWars extends PApplet {
       gameScreen();
     } else if (gameScreen == 2) {
       gameScreenEntity();
-      collisionDetector();
     } else {
       gameOverScreen();
     }
@@ -89,21 +103,17 @@ public class SwarmWars extends PApplet {
     background(25, 25, 76);
   }
 
-  void collisionDetector(){
-    for(int i = 0; i < entityList.size(); i++){
-      for(int j = 0; j < entityList.size(); j++){
-        BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
-      }
-    }
-  }
-
   void gameScreenEntity() {
     background(25, 25, 76);
-    
+
     // update all bots
     for (int j = 0; j < entityList.size(); j++) {
       entityList.get(j).update();
     }
+
+    // sets future comms to current for next loop
+    comms.update();
+
   }
 
   void gameOverScreen() {
