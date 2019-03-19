@@ -27,15 +27,15 @@ public class Entity {
   public Entity(PApplet sketch, Tag t, int sc, boolean r, boolean i, boolean s, boolean h, boolean coms, boolean rigbod) {
 
     this.sketch = sketch;
-    tag = t;
-    transform = new Transform();
-    hasRender = r;
-    hasInput = i;
-    hasShooter = s;
-    hasHealth = h;
-    hasComms = coms;
-    hasRb = rigbod;
-    isMothership = false;
+    this.tag = t;
+    this.transform = new Transform();
+    this.hasRender = r;
+    this.hasInput = i;
+    this.hasShooter = s;
+    this.hasHealth = h;
+    this.hasComms = coms;
+    this.hasRb = rigbod;
+    this.isMothership = false;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -94,6 +94,7 @@ public class Entity {
 
     if (hasHealth) {
       health.update();
+
     }
 
     if (hasComms) {
@@ -106,6 +107,10 @@ public class Entity {
       swarmLogic.update();
       transform = swarmLogic.getTransform();
     }
+  }
+
+  public Tag getTag(){
+    return this.tag;
   }
 
   public void setVelocity(double x, double y) {
@@ -146,6 +151,14 @@ public class Entity {
   //for use by shooter to get bullet position
   public Vector2D getPosition() {
     return transform.getPosition();
+  }
+
+  public void setBoundingLength(){
+    transform.setBoundingLength();
+  }
+
+  public double getBoundingLength(){
+    return transform.getBoundingLength();
   }
 
   public void kill() {
@@ -199,6 +212,10 @@ public class Entity {
     } else {
       commsChannel.setPacket(commsPacket, swarmLogic.getId());
     }
+  }
+
+  public void takeDamage(int d){
+    health.takeDamage(d);
   }
 
   //will need to get and set state here for FSM

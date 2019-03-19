@@ -72,7 +72,7 @@ class Shooter {
     
       //sets its location to location
       if(this.sketch.mousePressed){
-           magazine.get(magCount++).setPosition(location, heading);
+        magazine.get(magCount++).setPosition(location, heading);
       if (magCount >= magazine.size()){
         magCount = 0;
       }   

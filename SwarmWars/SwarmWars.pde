@@ -40,7 +40,7 @@ public class SwarmWars extends PApplet {
     // envar = new EnVar();
     // entityList.add(envar);
 
-    player = new Entity(this, Tag.PLAYER, 30, true, true, false, false, true, true);
+    player = new Entity(this, Tag.PLAYER, 30, true, true, true, false, true, true);
     player.setComms(comms);
     entityList.add(player);
 
@@ -66,6 +66,7 @@ public class SwarmWars extends PApplet {
       gameScreen();
     } else if (gameScreen == 2) {
       gameScreenEntity();
+      collisionDetector();
     } else {
       gameOverScreen();
     }
@@ -88,9 +89,17 @@ public class SwarmWars extends PApplet {
     background(25, 25, 76);
   }
 
+  void collisionDetector(){
+    for(int i = 0; i < entityList.size(); i++){
+      for(int j = 0; j < entityList.size(); j++){
+        BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
+      }
+    }
+  }
+
   void gameScreenEntity() {
     background(25, 25, 76);
-
+    
     // update all bots
     for (int j = 0; j < entityList.size(); j++) {
       entityList.get(j).update();
