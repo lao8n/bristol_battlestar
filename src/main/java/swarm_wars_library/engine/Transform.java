@@ -5,8 +5,7 @@ class Transform {
     private Vector2D position;
     private Vector2D scale;
     private double heading; 
-    private Vector2D velocity; 
-    private int health;
+    private Vector2D velocity;
     private double boundingLength;
 
     Transform(){
@@ -14,7 +13,6 @@ class Transform {
         scale = new Vector2D(10, 10);
         velocity = new Vector2D(0,0);
         heading = 0;
-        health=0;
     }
 
     public void setPosition(double x, double y){
@@ -64,14 +62,6 @@ class Transform {
         return heading;
     }
 
-    public void setHealth(int h){
-        health=h;
-    }
-
-    public int getHealth(){
-        return health;
-    }
-  
     public double getBoundingLength(){
         return boundingLength;
     }

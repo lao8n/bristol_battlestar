@@ -90,7 +90,6 @@ public class Entity {
       input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
-      transform.setHealth(health.getHealth());
     }
     if (hasAI) {
       //pass it current player position, its own transform
@@ -113,7 +112,7 @@ public class Entity {
 
     if (hasHealth) {
       health.update();
-      render.drawHealth(transform.getHealth());
+      render.drawHealth(health.getHealth());
     }
 
     if (isBot) {
