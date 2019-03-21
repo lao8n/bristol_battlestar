@@ -25,28 +25,29 @@ public class Entity {
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
-  public Entity(PApplet sketch, 
-                Tag t, 
-                int sc, 
-                boolean r, 
-                boolean i, 
-                boolean s, 
-                boolean h, 
-                boolean coms, 
-                boolean rigbod, 
-                boolean hai) {
+  public Entity(
+          PApplet sketch,
+          Tag t,
+          int sc,
+          boolean r,
+          boolean i,
+          boolean s,
+          boolean h,
+          boolean coms,
+          boolean rigbod,
+          boolean hai) {
 
     this.sketch = sketch;
-    this.tag = t;
-    this.transform = new Transform();
-    this.hasRender = r;
-    this.hasInput = i;
-    this.hasShooter = s;
-    this.hasHealth = h;
-    this.hasComms = coms;
-    this.hasRb = rigbod;
-    this.isMothership = false;
-    this.hasAI = hai;
+    tag = t;
+    transform = new Transform();
+    hasRender = r;
+    hasInput = i;
+    hasShooter = s;
+    hasHealth = h;
+    hasComms = coms;
+    hasRb = rigbod;
+    isMothership = false;
+    hasAI = hai;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -69,16 +70,16 @@ public class Entity {
     }
     if (hasAI) {
       ai = new AI();
-      System.out.println("AI created");
     }
     if (tag.equals(Tag.PLAYER)) {
       isMothership = true;
       transform.setScale(30, 30);
 
-    } else if(tag.equals(Tag.ENEMY)){
+    }
+    if(tag.equals(Tag.ENEMY)){
       transform.setScale(30, 30);
     }
-    else if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
+    if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
       transform.setScale(5, 5);
     }
   }
@@ -90,15 +91,10 @@ public class Entity {
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
       transform.setHealth(health.getHealth());
-      //System.out.println(transform.getHeading());
-    } 
-
+    }
     if (hasAI) {
-
       //pass it current player position, its own transform
-      //ERROR this is giving a null pointer:
       Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
-      // Vector2D playerLoc = new Vector2D(0,0);
       ai.update(playerLoc, transform);
       //shooter uses this info below to target player
     }
@@ -127,8 +123,8 @@ public class Entity {
       transform = swarmLogic.getTransform();
     }
 
-    if (hasComms && !hasAI) {
-      this.sendPacket();
+    if (hasComms) {
+      sendPacket();
     }
 
     //draw it
@@ -242,20 +238,17 @@ public class Entity {
     //update this logic
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setIsAlive(true);
-    if (this.isMothership) {
+    if (isMothership) {
       comms.get("PLAYER").setPacket(commsPacket, 0);
-    } else {
-      try{
-        // System.out.println(comms.get("PLAYER"));
-        // System.out.println(swarmLogic);
-        comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
-      }
-      catch(Exception e){
-        System.out.println(comms.get("PLAYER"));
-        System.out.println(this.tag);
-        System.out.println(swarmLogic);
-        e.printStackTrace();
-      }
+    }
+
+    if (isBot) {
+      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
+    }
+
+    if (tag.equals(Tag.ENEMY)) {
+      comms.get("ENEMY").setPacket(commsPacket, 0);
+
     }
   }
 

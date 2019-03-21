@@ -1,17 +1,6 @@
 import processing.core.PApplet;
 
-import swarm_wars_library.engine.BoxCollider;
-import swarm_wars_library.engine.SwarmLogic;
-//import swarm_wars_library.engine.GameObject;
-//import swarm_wars_library.engine.Mover;
-import swarm_wars_library.engine.Vector2D;
-import swarm_wars_library.engine.CommsGlobal;
-import swarm_wars_library.engine.CommsChannel;
-import swarm_wars_library.engine.CommsPacket;
-import swarm_wars_library.engine.Entity;
-import swarm_wars_library.engine.Tag;
-import swarm_wars_library.engine.EnVar;
-
+import swarm_wars_library.engine.*;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -22,12 +11,10 @@ import swarm_wars_library.engine.EnVar;
 
 public class SwarmWars extends PApplet {
 
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, hasAI)
+  // Player must be here so that event listeners can access it
   Entity player;
 
-  Entity turret; 
-
-  //MAKE SOME BOTS
+  // Entity list that has all our game things.
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
 
   int MAXSCREENS = 3;
@@ -35,70 +22,42 @@ public class SwarmWars extends PApplet {
   int initScreenTimer = 120;
   int numBots = 100;
 
+  // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
 
-  // EnVar envar;
-  Entity bot;
-
   void setup() {
+    frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
-    comms.add("PLAYER", new CommsChannel(numBots + 2));
+    /* GUIDE TO ADDING NEW THINGS
+      create new entity - set alls it's components
+      optional - if has comms. add a space for it in a CommsChannel and set it's comms to the global comms
+      add the entity to the entityList
+    */
 
-    // envar = new EnVar();
-    // entityList.add(envar);
+    // set up comms before entities
+    comms.add("PLAYER", new CommsChannel(numBots + 1));
+    comms.add("ENEMY", new CommsChannel(1)); // we will add 1 turret therefore we have 1 item in enemy comms channel
 
-    player = new Entity(
-      this, 
-      Tag.PLAYER, 
-      30, 
-      true, 
-      true, 
-      true, 
-      true, 
-      true, 
-      true, 
-      false
-    );
-
+    // add a player
+    player = new Entity(this, Tag.PLAYER, 30, true, true, true, true, true, true, false);
     player.setComms(comms);
     entityList.add(player);
-    //add bots
+
+    //add player bots
     for (int i = 0; i < numBots; i++) {
-      bot = new Entity(this, 
-                         Tag.P_BOT, 
-                         5, 
-                         true, 
-                         false, 
-                         false, 
-                         false, 
-                         true, 
-                         true, 
-                         false
-      );
+      Entity bot = new Entity(this, Tag.P_BOT, 5, true, false, false, true, true, true, false);
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
-      //System.out.println("bot created: " + i);
     }
 
-
-    turret = new Entity(
-      this, 
-      Tag.ENEMY, 
-      40, 
-      true, 
-      false, 
-      true, 
-      false, 
-      true, 
-      true, 
-      true);
+    // add an Enemy
+    Entity turret = new Entity(this, Tag.ENEMY, 40, true, false, true, true, true, true, true);
     turret.setPosition(200, 200);
-    turret.setSwarmLogic();
     turret.setComms(comms);
     entityList.add(turret);
 
-    // import to do at end of setup - sets all initial packets to current
+    // IMPORTANT to do at end of setup - sets all initial packets to current
     comms.update();
   }
 
@@ -136,19 +95,15 @@ public class SwarmWars extends PApplet {
     background(25, 25, 76);
   }
 
+  // >>>>>> MAIN GAME LOOP <<<<<<<<<<
   void gameScreenEntity() {
     background(25, 25, 76);
 
-    // update all bots
-    for (int j = 0; j < entityList.size(); j++){
-      this.entityList.get(j).update();
-      // try{
-      //   this.entityList.get(j).update();
-      // }
-      // catch(Exception e){
-      //   e.printStackTrace();
-      // }
+    // update all game things
+    for (int j = 0; j < entityList.size(); j++) {
+      entityList.get(j).update();
     }
+
     // sets future comms to current for next loop
     comms.update();
 

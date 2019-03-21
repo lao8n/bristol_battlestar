@@ -22,7 +22,7 @@ public class Render {
 		this.sketch.stroke(0);
 		this.sketch.translate((float)loc.getX(), (float)loc.getY());
 		this.sketch.rotate((float) heading);
-    drawEntity(loc, tag);
+        drawEntity(loc, tag);
 		this.sketch.popMatrix();
 	 }
   
