@@ -7,6 +7,9 @@
 # Images
 *.png
 
+# Intellij
+*.idea
+
 ### Gradle ###
 .gradle
 /build/
