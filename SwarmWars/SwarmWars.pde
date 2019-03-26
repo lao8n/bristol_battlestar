@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.*;
+import java.util.Random;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -23,6 +24,7 @@ public class SwarmWars extends PApplet {
   int gameScreen = 2;
   int initScreenTimer = 120;
   int numBots = 100;
+  int numTurrets = 5;
 
   // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
@@ -54,11 +56,13 @@ public class SwarmWars extends PApplet {
       entityList.add(bot);
     }
 
-    // add an Enemy
-    Entity turret = eb.newTurret();
-    turret.setPosition(200, 200);
-    turret.setComms(comms);
-    entityList.add(turret);
+    // add an Enemies
+    for (int i = 0; i < numTurrets; i++){
+      Entity turret = eb.newTurret();
+      turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
+      turret.setComms(comms);
+      entityList.add(turret);
+    }
 
     // IMPORTANT to do at end of setup - sets all initial packets to current
     comms.update();
