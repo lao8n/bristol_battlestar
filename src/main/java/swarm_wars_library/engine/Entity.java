@@ -54,7 +54,7 @@ public class Entity {
       //NOTICE: must call method to init swarmLogic in main loop
     }
     if (hasRender) {
-      render = new Render(sketch, (int) transform.getScale().getX());
+      render = new Render(sketch, sc);
     }
     if (hasInput) {
       input = new Input(sketch);
