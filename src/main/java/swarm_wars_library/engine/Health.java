@@ -8,7 +8,7 @@ class Health {
   
   Health (Tag tag) {
     if (tag.equals(Tag.PLAYER)){
-      maxHealth = 100;
+      maxHealth = 1000;
     } else {
       maxHealth = 5; 
     }

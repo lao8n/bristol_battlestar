@@ -111,15 +111,20 @@ public class SwarmWars extends PApplet {
   void gameScreenEntity() {
     background(25, 25, 76);
 
-    // update all game things
+    // Update all game things
     for (int i = entityList.size()-1; i >= 0; i--) {
       entityList.get(i).update();
-      //collision detection - avoid double checking
+
+      // Collision detection - avoid double checking
       for(int j = entityList.size()-1; j > i; j--){
-        //all responses to collisions handled in BoxCollider
+        // Stop checking i if entity dies
+        if (entityList.get(i).isDead()){j = i;}
+
+        // All responses to collisions handled in BoxCollider
         BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
       }
-      //remove if entity dead
+      
+      // Remove if entity dead
       if (entityList.get(i).isDead()){
         entityList.remove(i);
       }

@@ -39,6 +39,7 @@ class Shooter {
     for (int i = 0; i < numBullets; i++){
       // Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
       Entity bullet = eb.newBullet(bulletTag);
+      bullet.kill();
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);
     }
@@ -47,6 +48,7 @@ class Shooter {
   void update(){
     //loops over its list of bullets and renders them if visible
     for(int i = 0; i < magazine.size(); i++){
+      //should this be isAlive instead of rendering?
       if (magazine.get(i).isRendering()){
         currPos = magazine.get(i).getPosition();
         //magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
@@ -89,6 +91,8 @@ class Shooter {
       if (shooterCount++ % shootTimer == 0){
         //makes a bullet visible
         magazine.get(magCount).setRender(true);
+        magazine.get(magCount).setAlive();
+
         //set bullet heading
           if (heading < 0){
               heading = heading + 2 * Math.PI;
