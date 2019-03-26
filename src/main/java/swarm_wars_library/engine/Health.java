@@ -8,7 +8,7 @@ class Health {
   
   Health (Tag tag) {
     if (tag.equals(Tag.PLAYER)){
-      maxHealth = 1000;
+      maxHealth = 100;
     } else {
       maxHealth = 5; 
     }
@@ -17,6 +17,7 @@ class Health {
   
   void update(){
     currentHealth -= damage;
+    damage = 0;
   }
 
   void takeDamage(int d){

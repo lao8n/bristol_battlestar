@@ -97,7 +97,7 @@ public class SwarmWars extends PApplet {
     textAlign(CENTER);
     text("welcome to\n\nSWARM WARS\n\n\nMove: WASD", width / 2, height / 2);
 
-    //after timer, switch to game
+    // After timer, switch to game
     if (initScreenTimer-- < 0) {
       gameScreen = 1;
     }
@@ -115,22 +115,23 @@ public class SwarmWars extends PApplet {
     for (int i = entityList.size()-1; i >= 0; i--) {
       entityList.get(i).update();
 
-      // Collision detection - avoid double checking
+      // Collision detection - avoids double checking
       for(int j = entityList.size()-1; j > i; j--){
+
         // Stop checking i if entity dies
         if (entityList.get(i).isDead()){j = i;}
 
         // All responses to collisions handled in BoxCollider
         BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
       }
-      
+
       // Remove if entity dead
       if (entityList.get(i).isDead()){
         entityList.remove(i);
       }
     }
 
-    // sets future comms to current for next loop
+    // Sets future comms to current for next loop
     comms.update();
 
   }
