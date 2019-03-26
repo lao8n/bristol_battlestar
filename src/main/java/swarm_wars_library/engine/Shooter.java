@@ -18,13 +18,15 @@ class Shooter {
   int enemyHandicap = 2;
   int bulletdemage=10;
   PApplet sketch;
+  EntityBuilder eb;
 
   Shooter(PApplet sketch, Tag t){
     this.sketch = sketch;
     location = new Vector2D(-1000,-1000);
     currPos = new Vector2D(0,0);
     magazine = new ArrayList<Entity>();
-
+    eb = new EntityBuilder(sketch);
+    
     //use P_BULLET for PLAYER and E_BULLET for ENEMY
     if (t.equals(Tag.PLAYER)){
       bulletTag = Tag.P_BULLET;
@@ -36,8 +38,7 @@ class Shooter {
     //add bullets
     for (int i = 0; i < numBullets; i++){
       // Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
-      Entity bullet = new Entity(sketch, bulletTag, 5, true, false, false, false, false, true, false);
-
+      Entity bullet = eb.newBullet(bulletTag);
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);
 
