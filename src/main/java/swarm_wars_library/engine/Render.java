@@ -48,15 +48,19 @@ public class Render {
   public void drawPlayer(Vector2D loc){ 
     this.sketch.fill(70, 102, 255); 
     //this.sketch.ellipse((int)loc.getX(), (int)loc.getY(), this.scale-10, this.scale); 
-    this.sketch.rectMode(2);
-    this.sketch.rect(0, 0, this.scale, this.scale);
+    //this.sketch.rectMode(2);
+    //this.sketch.rect(0, 0, this.scale, this.scale);
+    this.sketch.ellipseMode(2);
+    this.sketch.ellipse(0, 0, this.scale, this.scale); 
   }
   
   public void drawBot(Vector2D loc){ 
     this.sketch.fill(50, 50, 255); 
     //this.sketch.ellipse((int)loc.getX(), (int)loc.getY(), this.scale-10, this.scale); 
-    this.sketch.rectMode(2);
-    this.sketch.rect(0, 0, this.scale, this.scale);
+    //this.sketch.rectMode(2);
+    //this.sketch.rect(0, 0, this.scale, this.scale);
+    this.sketch.ellipseMode(2);
+    this.sketch.ellipse(0, 0, this.scale, this.scale); 
   }
 
   public void drawEnemy(Vector2D loc){

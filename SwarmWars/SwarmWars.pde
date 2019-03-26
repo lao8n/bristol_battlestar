@@ -41,7 +41,7 @@ public class SwarmWars extends PApplet {
 
     // set up comms before entities
     comms.add("PLAYER", new CommsChannel(numBots + 1));
-    comms.add("ENEMY", new CommsChannel(1)); // we will add 1 turret therefore we have 1 item in enemy comms channel
+    comms.add("ENEMY", new CommsChannel(numTurrets)); // we will add 1 turret therefore we have 1 item in enemy comms channel
 
     // add a player
     player = eb.newPlayer();
