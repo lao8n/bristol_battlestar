@@ -3,6 +3,10 @@ package swarm_wars_library.engine;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+    CommsGlobal is a collection of CommsChannels that allows shared information across all the Entities
+    There are different groups, i.e CommsChannels. so that there is a PLAYER comms or ENEMY comms
+ */
 public class CommsGlobal {
     private HashMap<String, CommsChannel> commsMap;
 
@@ -16,6 +20,7 @@ public class CommsGlobal {
         commsMap.put(channelName, commsChannel);
     }
 
+    // returns LIVE CommsChannel
     public CommsChannel get(String channelName) {
         if(!commsMap.containsKey(channelName)) throw new Error("Channel doesn't exist");
         return commsMap.get(channelName);
