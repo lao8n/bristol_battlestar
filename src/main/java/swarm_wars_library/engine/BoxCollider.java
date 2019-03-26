@@ -2,33 +2,67 @@ package swarm_wars_library.engine;
 
 public class BoxCollider {
 
-	BoxCollider(){
-	}
+	BoxCollider(){}
 
-	public static boolean boundingCheck(Entity first, Entity second){
-		System.out.println("get here");
-		if(Vector2D.sub(first.getPosition(), second.getPosition()).mag() 
-			<= (first.getBoundingLength() + second.getBoundingLength())){
-			//bullet collision
-			if(second.getTag().equals(Tag.E_BULLET)){
-				if(first.getTag().equals(Tag.PLAYER)){
-					first.takeDamage(5);
-					second.kill();
-					return true;
-				}
-				if(first.getTag().equals(Tag.P_BOT)){
-					return true;
-				}
+	//checks for tags first and only check collisions that matter
+	public static void boundingCheck(Entity first, Entity second){
+		// Player - Enemy bullet
+        if (first.getTag().equals(Tag.PLAYER)){
+          if (second.getTag().equals(Tag.E_BULLET)){
+            if (hasCollision(first, second)){
+				first.takeDamage(5);
+				second.kill();
 			}
-			if(first.getTag().equals(Tag.P_BULLET)){
-				if(second.getTag().equals(Tag.P_BOT)){
-					System.out.println("Friendly fire");
+		  } // any other collisions we care about involving player: 
+		  
+        } else if (first.getTag().equals(Tag.E_BULLET)){
+			if (second.getTag().equals(Tag.PLAYER)){
+				if (hasCollision(first, second)){
 					second.takeDamage(5);
 					first.kill();
-					return true;
+				}
+			} else if (second.getTag().equals(Tag.P_BOT)){
+				if (hasCollision(first, second)){
+					first.kill();
+					second.kill();
+				}
+			}	
+
+		} else if (first.getTag().equals(Tag.P_BOT)){
+			if (second.getTag().equals(Tag.E_BULLET)){
+				if (hasCollision(first, second)){
+					first.kill();
+					second.kill();
 				}
 			}
+		
+		// Enemy - Player bullet
+		} else if (first.getTag().equals(Tag.ENEMY)){
+			if(second.getTag().equals(Tag.P_BULLET)){
+				if (hasCollision(first, second)){
+					first.takeDamage(5);
+					second.kill();
+				}	
+			}
+		} else if (first.getTag().equals(Tag.P_BULLET)){
+			if(second.getTag().equals(Tag.ENEMY)){
+				if (hasCollision(first, second)){
+					second.takeDamage(5);
+					first.kill();
+				}	
+			}
+		}
+
+	}
+
+	public static boolean hasCollision(Entity first, Entity second){
+		// reaching here okay, but never finding a collision
+		if(Vector2D.sub(first.getPosition(), second.getPosition()).mag() 
+		< //(first.getBoundingLength() + second.getBoundingLength())){
+			(first.getScale() + second.getScale())){
+			return true;
 		}
 		return false;
 	}
+
 }

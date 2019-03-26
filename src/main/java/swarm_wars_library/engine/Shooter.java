@@ -8,7 +8,7 @@ class Shooter {
   Vector2D location;
   Vector2D currPos; //temp for bullets
   //has list of bullets entities
-  List<Entity> magazine;
+  ArrayList<Entity> magazine;
   int numBullets = 20;
   int magCount = 0;
   int shooterCount = 0;
@@ -41,7 +41,6 @@ class Shooter {
       Entity bullet = eb.newBullet(bulletTag);
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);
-
     }
   }
 
@@ -109,7 +108,7 @@ class Shooter {
     }
 
   //used by main game loop to check for collisions
-  List<Entity> getMagazine(){
+  ArrayList<Entity> getMagazine(){
     return magazine;
   }
 }

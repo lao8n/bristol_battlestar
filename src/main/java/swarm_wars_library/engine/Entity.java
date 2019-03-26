@@ -2,6 +2,7 @@
 package swarm_wars_library.engine;
 
 import javax.swing.text.Position;
+import java.util.*;
 
 import processing.core.PApplet;
 
@@ -248,6 +249,14 @@ public class Entity {
     if (tag.equals(Tag.ENEMY)) {
       comms.get("ENEMY").setPacket(commsPacket, 0);
 
+    }
+  }
+
+  public ArrayList<Entity> getMagazine(){
+    if (shooter != null){
+      return shooter.getMagazine();
+    } else {
+      return null;
     }
   }
 
