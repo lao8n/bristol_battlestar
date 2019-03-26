@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.*;
+import java.util.Random;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -16,11 +17,14 @@ public class SwarmWars extends PApplet {
 
   // Entity list that has all our game things.
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
+  // Entity builder class
+  EntityBuilder eb = new EntityBuilder(this);
 
   int MAXSCREENS = 3;
   int gameScreen = 2;
   int initScreenTimer = 120;
   int numBots = 100;
+  int numTurrets = 5;
 
   // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
@@ -29,7 +33,8 @@ public class SwarmWars extends PApplet {
     frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
     /* GUIDE TO ADDING NEW THINGS
-      create new entity - set alls it's components
+      Use the EntityBuilder, for example: player = eb.newPlayer()
+      this creates new entity - and automatically sets alls it's components
       optional - if has comms. add a space for it in a CommsChannel and set it's comms to the global comms
       add the entity to the entityList
     */
@@ -39,23 +44,25 @@ public class SwarmWars extends PApplet {
     comms.add("ENEMY", new CommsChannel(1)); // we will add 1 turret therefore we have 1 item in enemy comms channel
 
     // add a player
-    player = new Entity(this, Tag.PLAYER, 30, true, true, true, true, true, true, false);
+    player = eb.newPlayer();
     player.setComms(comms);
     entityList.add(player);
 
     //add player bots
     for (int i = 0; i < numBots; i++) {
-      Entity bot = new Entity(this, Tag.P_BOT, 5, true, false, false, true, true, true, false);
+      Entity bot = eb.newBot();
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
     }
 
-    // add an Enemy
-    Entity turret = new Entity(this, Tag.ENEMY, 40, true, false, true, true, true, true, true);
-    turret.setPosition(200, 200);
-    turret.setComms(comms);
-    entityList.add(turret);
+    // add an Enemies
+    for (int i = 0; i < numTurrets; i++){
+      Entity turret = eb.newTurret();
+      turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
+      turret.setComms(comms);
+      entityList.add(turret);
+    }
 
     // IMPORTANT to do at end of setup - sets all initial packets to current
     comms.update();
