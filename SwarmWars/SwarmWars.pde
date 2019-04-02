@@ -76,7 +76,7 @@ public class SwarmWars extends PApplet {
   }
 
   public void settings() {
-    size(700, 900, "processing.awt.PGraphicsJava2D");
+    size(900, 700, "processing.awt.PGraphicsJava2D");
   }
 
   void draw() {

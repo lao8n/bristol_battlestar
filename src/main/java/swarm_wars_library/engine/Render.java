@@ -2,6 +2,8 @@ package swarm_wars_library.engine;
 
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.Tag;
+import swarm_wars_library.engine.Particle;
+import java.util.*;
 
 import processing.core.PApplet;
 
@@ -9,6 +11,7 @@ public class Render {
 
   private PApplet sketch;
   private int scale;
+  private int numParticles = 20;
 
   public Render(PApplet sketch, int s){
     this.sketch = sketch;
@@ -68,6 +71,13 @@ public class Render {
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(0, 0, this.scale, this.scale); 
   }
+
+  public void drawEnemyVoid(Vector2D loc){
+    this.sketch.fill(0, 0, 0); 
+    this.sketch.noStroke();
+    this.sketch.ellipseMode(2);
+    this.sketch.ellipse(0, 0, this.scale, this.scale); 
+  }
   
   public void drawBullet(Vector2D loc, boolean p){
     if (p){
@@ -97,6 +107,68 @@ public class Render {
     this.sketch.textAlign(this.sketch.LEFT, this.sketch.TOP);
     this.sketch.text("Points: " + points, 0, 0);
   }
+
+  public void drawExplosion(Vector2D loc, Tag tag){
+
+    // Bigger entities have longer explosions
+    int frames = 5;
+    if (tag.equals(Tag.ENEMY)){
+      frames = 10;
+      // To put a black hole briefly where enemy was
+      drawEnemyVoid(loc);
+    }
+
+    this.sketch.fill(242, 227, 6, 50); 
+    this.sketch.noStroke();
+    this.sketch.ellipseMode(2);
+
+    List<Particle> list = new ArrayList<Particle>();
+;
+    for (int i = 0; i < numParticles; i++){
+      // Create particle in randomised circle around entity
+      float startX = (float) (loc.getX() + (-1 + (1 - - 1) * (float) Math.random()));
+      float startY = (float) (loc.getY() + (-1 + (1 - - 1) * (float) Math.random()));
+      Vector2D start = new Vector2D(startX, startY);
+
+      Particle p = new Particle(startX, startY);
+
+      // Set force for each particle to move away from entity
+      Vector2D temp = Vector2D.sub(start, loc);
+      p.setForce(temp);
+
+      // Add to particle list
+      list.add(p);
+    }
+
+    // draw explosion
+    for (int j = 0; j < frames; j++){
+      this.sketch.fill(242, 227, 6, 50); 
+      int alpha = 20;
+      for (Particle p : list){
+        if (tag.equals(Tag.ENEMY)){drawEnemyParticle(p, alpha);}
+        else if (tag.equals(Tag.P_BOT)){drawPlayerBotParticle(p, alpha);}
+        else {drawBulletParticle(p, alpha);}
+        alpha += 10;
+        p.update();
+      }
+    }
+  }
+
+  private void drawEnemyParticle(Particle p, int alpha){
+    this.sketch.fill(168, 5, 6, alpha); 
+    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 6, 6);
+  }
+
+  private void drawPlayerBotParticle(Particle p, int alpha){
+    this.sketch.fill(5, 37, 168, alpha); 
+    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 4, 4);
+  }
+
+  private void drawBulletParticle(Particle p, int alpha){
+    this.sketch.fill(242, 227, 6, alpha); 
+    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 3, 3);
+  }
+
 }
 
 /* ------ DISPLAY CLASS ------ */

@@ -126,6 +126,10 @@ public class Entity {
          // TODO render call should not be in update
          render.drawHealth(health.getCurrentHealth());
       }
+      // draw explosion if dead
+      if (health.getCurrentHealth() <= 0){
+        render.drawExplosion(transform.getPosition(), tag);
+      }
     }
 
     if (isBot) {
@@ -205,6 +209,7 @@ public class Entity {
   }
 
   public void kill() {
+    render.drawExplosion(transform.getPosition(), tag);
     hasRender = false;
     hasShooter = false;
     isAlive = false;
