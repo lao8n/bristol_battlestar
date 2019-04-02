@@ -127,7 +127,14 @@ public class SwarmWars extends PApplet {
 
       // Remove if entity dead
       if (entityList.get(i).isDead()){
-        entityList.remove(i);
+        //respawn if turret
+        if (entityList.get(i).getTag().equals(Tag.ENEMY)){
+          entityList.get(i).setPosition(Math.random() * width +1, Math.random() * height + 1);
+          entityList.get(i).setAlive();
+          entityList.get(i).setAlive(true);
+        } else {
+          entityList.remove(i);
+        }
       }
     }
 

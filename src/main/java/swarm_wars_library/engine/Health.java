@@ -38,4 +38,8 @@ public class Health {
     }
     return false;
   }
+
+  public void reset(){
+    currentHealth = maxHealth; 
+  }
 }

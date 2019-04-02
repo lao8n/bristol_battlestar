@@ -217,7 +217,17 @@ public class Entity {
     //}
     hasRender = true;
     hasShooter = true;
+    //isAlive = true; <-- this breaks collision detection, why? 
     //add something for health
+  }
+
+  public void setAlive(boolean value){
+    hasRender = value;
+    hasShooter = value;
+    isAlive = value;
+    if (isAlive){
+      health.reset();
+    }
   }
 
   public int getScale() {
@@ -269,6 +279,12 @@ public class Entity {
   public int getHealth(){
     if (health == null){return -1;}
     return health.getCurrentHealth();
+  }
+
+  public void resetHealth(){
+    if (hasHealth){
+      health.reset();
+    }
   }
 
   //will need to get and set state here for FSM
