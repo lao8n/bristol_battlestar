@@ -2,6 +2,7 @@
 package swarm_wars_library.engine;
 
 import javax.swing.text.Position;
+import java.util.*;
 
 import processing.core.PApplet;
 
@@ -23,6 +24,7 @@ public class Entity {
   //private State state;
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
+  private boolean isAlive = true;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -48,6 +50,7 @@ public class Entity {
     hasRb = rigbod;
     isMothership = false;
     hasAI = hai;
+    points = 0;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -85,7 +88,12 @@ public class Entity {
   }
 
   public void update() {
-    //set position with either Input or AI
+    // Update points
+    if (tag.equals(Tag.PLAYER)){
+      render.drawPoints(points);
+    }
+
+    // Set position with either Input or AI
     if (hasInput) {
       input.update();
       transform.setPosition(input.getLocation());
@@ -201,11 +209,16 @@ public class Entity {
   public void kill() {
     hasRender = false;
     hasShooter = false;
+    isAlive = false;
   }
 
   public boolean isDead() {
     if (hasHealth) {
       return health.isDead();
+    
+    // Bots and some entities don't have health
+    } else if (isAlive){
+      return true;
     }
     return false;
   }
@@ -217,7 +230,17 @@ public class Entity {
     //}
     hasRender = true;
     hasShooter = true;
+    //isAlive = true; <-- this breaks collision detection, why? 
     //add something for health
+  }
+
+  public void setAlive(boolean value){
+    hasRender = value;
+    hasShooter = value;
+    isAlive = value;
+    if (isAlive){
+      health.reset();
+    }
   }
 
   public int getScale() {
@@ -256,6 +279,29 @@ public class Entity {
       comms.get("ENEMY").setPacket(commsPacket, 0);
 
     }
+  }
+
+  public ArrayList<Entity> getMagazine(){
+    if (shooter != null){
+      return shooter.getMagazine();
+    } else {
+      return null;
+    }
+  }
+
+  public int getHealth(){
+    if (health == null){return -1;}
+    return health.getCurrentHealth();
+  }
+
+  public void resetHealth(){
+    if (hasHealth){
+      health.reset();
+    }
+  }
+
+  public void addPoints(int p){
+    points += p;
   }
 
   //will need to get and set state here for FSM

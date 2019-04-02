@@ -15,16 +15,16 @@ public class Render {
     this.scale = s;
   }
 
-    public void update(Vector2D loc, Tag tag, double heading){
-		//drawBackground();
-		this.sketch.pushMatrix();
-        //this.sketch.ellipseMode(0);
-		this.sketch.stroke(0);
-		this.sketch.translate((float)loc.getX(), (float)loc.getY());
-		this.sketch.rotate((float) heading);
-        drawEntity(loc, tag);
-		this.sketch.popMatrix();
-	 }
+  public void update(Vector2D loc, Tag tag, double heading){
+      //drawBackground();
+      this.sketch.pushMatrix();
+      //this.sketch.ellipseMode(0);
+      this.sketch.stroke(0);
+      this.sketch.translate((float)loc.getX(), (float)loc.getY());
+      this.sketch.rotate((float) heading);
+      drawEntity(loc, tag);
+      this.sketch.popMatrix();
+   }
   
   public void drawEntity(Vector2D loc, Tag tag){
     switch(tag){
@@ -103,7 +103,13 @@ public class Render {
       this.sketch.fill(255);
       this.sketch.rect(550, 5, health, 30);
     }
+  }
 
+  public void drawPoints(int points){
+    this.sketch.fill(100, 100, 100);
+    this.sketch.textSize(20);
+    this.sketch.textAlign(this.sketch.LEFT, this.sketch.TOP);
+    this.sketch.text("Points: " + points, 0, 0);
   }
 }
 
