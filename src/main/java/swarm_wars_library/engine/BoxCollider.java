@@ -16,9 +16,7 @@ public class BoxCollider {
 			if (second.getTag().equals(Tag.E_BULLET)){
 				if (hasCollision(first, second)){
 					first.takeDamage(5);
-					System.out.println("Player health: " + first.getHealth());
 					second.kill();
-					System.out.println(second);
 				}
 		  } // any other collisions we care about involving player: 
 		  
