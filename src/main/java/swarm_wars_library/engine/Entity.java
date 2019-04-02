@@ -99,7 +99,7 @@ public class Entity {
     }
 
     if (hasShooter && hasInput) {
-      shooter.shoot(transform.getPosition(), transform.getHeading());
+      shooter.shoot(transform.getPosition(), transform.getHeading(),input.getMouse());
       shooter.update();
     }
 
@@ -112,7 +112,13 @@ public class Entity {
 
     if (hasHealth) {
       health.update();
-      render.drawHealth(health.getCurrentHealth());
+      if(tag.equals(Tag.ENEMY)){
+        render.drawHealth(health.getCurrentHealth(),false);
+      }
+      if(tag.equals(Tag.PLAYER)){
+         render.drawHealth(health.getCurrentHealth(),true);
+      }
+     
     }
 
     if (isBot) {

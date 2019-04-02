@@ -30,6 +30,7 @@ class Shooter {
     //use P_BULLET for PLAYER and E_BULLET for ENEMY
     if (t.equals(Tag.PLAYER)){
       bulletTag = Tag.P_BULLET;
+      bulletForce=10;
     } else if (t.equals(Tag.ENEMY)){
       bulletTag = Tag.E_BULLET;
       shootTimer += 50;
@@ -59,7 +60,7 @@ class Shooter {
     }
   }
 
-  void shoot(Vector2D location, double heading){
+  void shoot(Vector2D location, double heading,int mouse){
     //add delay between shooting
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
@@ -75,7 +76,7 @@ class Shooter {
       magazine.get(magCount).setHeading(heading);
 
       //sets its location to location
-      if(this.sketch.mousePressed){
+      if(mouse==1){
         magazine.get(magCount++).setPosition(location, heading);
       if (magCount >= magazine.size()){
         magCount = 0;
