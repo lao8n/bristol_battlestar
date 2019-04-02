@@ -30,6 +30,7 @@ class Shooter {
     //use P_BULLET for PLAYER and E_BULLET for ENEMY
     if (t.equals(Tag.PLAYER)){
       bulletTag = Tag.P_BULLET;
+      bulletForce=10;
     } else if (t.equals(Tag.ENEMY)){
       bulletTag = Tag.E_BULLET;
       shootTimer += 50;
@@ -64,25 +65,24 @@ class Shooter {
     //add delay between shooting
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
-     // magazine.get(magCount).setRender(true);
+      // magazine.get(magCount).setRender(true);
       //set bullet heading
-        if (heading < 0){
-            heading = heading + 2 * Math.PI;
-        }
-        magazine.get(magCount).setVelocity(bulletForce * Math.cos(heading),
-                                     bulletForce * Math.sin(heading));
-        //set bullet position of entity
+      if (heading < 0){
+          heading = heading + 2 * Math.PI;
+      }
+      magazine.get(magCount).setVelocity(bulletForce * Math.cos(heading),
+                                   bulletForce * Math.sin(heading));
+      //set bullet position of entity
 
       magazine.get(magCount).setHeading(heading);
-
       //sets its location to location
-      if(this.sketch.mousePressed){
-        magazine.get(magCount++).setPosition(location, heading);
+      magazine.get(magCount++).setPosition(location, heading);
+
       if (magCount >= magazine.size()){
         magCount = 0;
       }
+
       magazine.get(magCount).setRender(true);
-      }
     }
   }
 

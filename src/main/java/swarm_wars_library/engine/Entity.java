@@ -107,20 +107,25 @@ public class Entity {
     }
 
     if (hasShooter && hasInput) {
-      shooter.shoot(transform.getPosition(), transform.getHeading());
+      if(input.getMouse() == 1) {
+        shooter.shoot(transform.getPosition(), transform.getHeading());
+      }
       shooter.update();
     }
 
     if (hasShooter && hasAI){
       //need to set heading as direction to player
       // System.out.println("AI SHOOT");
-      shooter.shoot(transform.getPosition(), ai.getHeading(), true);
+      shooter.shoot(transform.getPosition(), ai.getHeading());
       shooter.update();
     }
 
     if (hasHealth) {
       health.update();
-      render.drawHealth(health.getCurrentHealth());
+      if(tag.equals(Tag.PLAYER)){
+         // TODO render call should not be in update
+         render.drawHealth(health.getCurrentHealth());
+      }
     }
 
     if (isBot) {
