@@ -7,7 +7,7 @@ public class BoxCollider {
 	//checks for tags first and only check collisions that matter
 	public static void boundingCheck(Entity first, Entity second){
 		// Prevents any dead entity having impact
-		if (first.isDead() || second.isDead()){
+		if (first.isDead() || !first.isRendering() || second.isDead() || !second.isRendering()){
 			return;
 		}
 
