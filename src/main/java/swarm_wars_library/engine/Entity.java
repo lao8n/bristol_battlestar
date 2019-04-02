@@ -122,11 +122,9 @@ public class Entity {
 
     if (hasHealth) {
       health.update();
-      if(tag.equals(Tag.ENEMY)){
-        render.drawHealth(health.getCurrentHealth(),false);
-      }
       if(tag.equals(Tag.PLAYER)){
-         render.drawHealth(health.getCurrentHealth(),true);
+         // TODO render call should not be in update
+         render.drawHealth(health.getCurrentHealth());
       }
     }
 
