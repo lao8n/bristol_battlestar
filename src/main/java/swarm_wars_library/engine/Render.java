@@ -218,6 +218,32 @@ public class Render {
     this.sketch.ellipse((float) p.getX(), (float) p.getY(), 3, 3);
   }
 
+  public void drawInitScreen(float width, float height){
+    this.sketch.background(56,1,9);
+    this.sketch.fill(25, 0, 255);
+    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textSize(50);
+    this.sketch.text("BATTLESTAR\n\nsurvive the swarm", width / 2, height / 2);
+  }
+
+  public void drawGameOverScreen(float width, float height){
+    this.sketch.background(17, 0, 2);
+    // Pink Glow
+    this.sketch.fill(255, 0, 89); 
+    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textSize(81);
+    this.sketch.text("GAME OVER", width / 2, height / 2);
+    //DARK BLUE
+    this.sketch.fill(19, 0, 232); 
+    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textSize(80);
+    this.sketch.text("GAME OVER", width / 2, height / 2);
+
+    // random particle explosion
+    Vector2D v = new Vector2D(Math.random() * width +1, Math.random() * height + 1);
+    drawExplosion(v, Tag.ENEMY);
+  }
+
 }
 
 /* ------ DISPLAY CLASS ------ */

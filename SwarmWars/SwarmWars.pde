@@ -6,8 +6,7 @@ import java.util.Random;
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
 1: game screen - game object
-2: Game screen - entity
-3: game-over screen
+2: game-over screen
 */
 
 public class SwarmWars extends PApplet {
@@ -20,8 +19,11 @@ public class SwarmWars extends PApplet {
   // Entity builder class
   EntityBuilder eb = new EntityBuilder(this);
 
+  // To render UI / Game screens
+  Render render = new Render(this, width);
+
   int MAXSCREENS = 3;
-  int gameScreen = 2;
+  int gameScreen = 0;
   int initScreenTimer = 120;
   int numBots = 100;
   int numTurrets = 5;
@@ -85,8 +87,6 @@ public class SwarmWars extends PApplet {
       initScreen();
     } else if (gameScreen == 1) {
       gameScreen();
-    } else if (gameScreen == 2) {
-      gameScreenEntity();
     } else {
       gameOverScreen();
     }
@@ -95,9 +95,7 @@ public class SwarmWars extends PApplet {
   /*--------GAME SCREENS ----*/
 
   void initScreen() {
-    background(0);
-    textAlign(CENTER);
-    text("welcome to\n\nSWARM WARS\n\n\nMove: WASD", width / 2, height / 2);
+    render.drawInitScreen((float) width, (float) height);
 
     // After timer, switch to game
     if (initScreenTimer-- < 0) {
@@ -105,12 +103,8 @@ public class SwarmWars extends PApplet {
     }
   }
 
-  void gameScreen() {
-    background(25, 25, 76);
-  }
-
   // >>>>>> MAIN GAME LOOP <<<<<<<<<<
-  void gameScreenEntity() {
+  void gameScreen() {
     background(22, 0, 8);
 
     // Points player earns in a loop
@@ -158,22 +152,7 @@ public class SwarmWars extends PApplet {
   }
 
   void gameOverScreen() {
-    Render r = new Render(this, 10);
-    background(17, 0, 2);
-    // Pink Glow
-    fill(255, 0, 89); 
-    textAlign(CENTER);
-    textSize(81);
-    text("GAME OVER", width / 2, height / 2);
-    //DARK BLUE
-    fill(19, 0, 232); 
-    textAlign(CENTER);
-    textSize(80);
-    text("GAME OVER", width / 2, height / 2);
-
-    // random particle explosion
-    Vector2D v = new Vector2D(Math.random() * width +1, Math.random() * height + 1);
-    r.drawExplosion(v, Tag.ENEMY);
+    render.drawGameOverScreen(width, height);
   }
 
   void changeScreen(int k) {
