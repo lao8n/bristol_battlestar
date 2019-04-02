@@ -8,7 +8,7 @@ public class Constants {
 
     public static int ServerSleep = 1;
 
-    public static int ClientSleep = 1;
+    public static int ClientSleep = 0;
 
     public static final String TYPE = "type";
 

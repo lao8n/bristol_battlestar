@@ -54,6 +54,22 @@ public class Input {
       return b;
     }
   }
+
+  public int getMove(int k) {
+    if(k == 'W'){
+      return moveUp;
+    }
+    if (k == 'A'){
+      return moveLeft;
+    }
+    if (k == 'S'){
+      return moveDown;
+    }
+    if (k == 'D'){
+      return moveRight;
+    }
+    return 0;
+  }
   
   public void edgeCheck(){
     if (this.location.getX() < 0){
