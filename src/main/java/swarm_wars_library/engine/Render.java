@@ -82,30 +82,28 @@ public class Render {
   public void drawHealth(int health,boolean p){
     if(p){
       //draw player health
-    //draw border
-    this.sketch.rectMode(0);
-    this.sketch.stroke(98, 16, 6);
-    this.sketch.fill(25, 25, 76);
-    this.sketch.rect(50, 5, 100 ,30);
-    //draw health
-    this.sketch.stroke(25, 25, 76);
-    this.sketch.fill(255); 
-    this.sketch.rect(50, 5, health, 30);
-    System.out.println();
+      //draw border
+      this.sketch.rectMode(0);
+      this.sketch.stroke(98, 16, 6);
+      this.sketch.fill(25, 25, 76);
+      this.sketch.rect(50, 5, 100 ,30);
+      //draw health
+      this.sketch.stroke(25, 25, 76);
+      this.sketch.fill(255);
+      this.sketch.rect(50, 5, health, 30);
     }
     else{
-       //draw border
-    this.sketch.rectMode(0);
-    this.sketch.stroke(20, 100, 0);
-    this.sketch.fill(25, 25, 76);
-    this.sketch.rect(550, 5, 100 ,30);
-    //draw health
-    this.sketch.stroke(25, 25, 76);
-    this.sketch.fill(255); 
-    this.sketch.rect(550, 5, health, 30);
-
+      //draw border
+      this.sketch.rectMode(0);
+      this.sketch.stroke(20, 100, 0);
+      this.sketch.fill(25, 25, 76);
+      this.sketch.rect(550, 5, 100 ,30);
+      //draw health
+      this.sketch.stroke(25, 25, 76);
+      this.sketch.fill(255);
+      this.sketch.rect(550, 5, health, 30);
     }
-   
+
   }
 }
 

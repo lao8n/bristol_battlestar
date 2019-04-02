@@ -99,14 +99,16 @@ public class Entity {
     }
 
     if (hasShooter && hasInput) {
-      shooter.shoot(transform.getPosition(), transform.getHeading(),input.getMouse());
+      if(input.getMouse() == 1) {
+        shooter.shoot(transform.getPosition(), transform.getHeading());
+      }
       shooter.update();
     }
 
     if (hasShooter && hasAI){
       //need to set heading as direction to player
       // System.out.println("AI SHOOT");
-      shooter.shoot(transform.getPosition(), ai.getHeading(), true);
+      shooter.shoot(transform.getPosition(), ai.getHeading());
       shooter.update();
     }
 
@@ -118,7 +120,6 @@ public class Entity {
       if(tag.equals(Tag.PLAYER)){
          render.drawHealth(health.getCurrentHealth(),true);
       }
-     
     }
 
     if (isBot) {

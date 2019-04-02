@@ -60,29 +60,28 @@ class Shooter {
     }
   }
 
-  void shoot(Vector2D location, double heading,int mouse){
+  void shoot(Vector2D location, double heading){
     //add delay between shooting
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
-     // magazine.get(magCount).setRender(true);
+      // magazine.get(magCount).setRender(true);
       //set bullet heading
-        if (heading < 0){
-            heading = heading + 2 * Math.PI;
-        }
-        magazine.get(magCount).setVelocity(bulletForce * Math.cos(heading),
-                                     bulletForce * Math.sin(heading));
-        //set bullet position of entity
+      if (heading < 0){
+          heading = heading + 2 * Math.PI;
+      }
+      magazine.get(magCount).setVelocity(bulletForce * Math.cos(heading),
+                                   bulletForce * Math.sin(heading));
+      //set bullet position of entity
 
       magazine.get(magCount).setHeading(heading);
-
       //sets its location to location
-      if(mouse==1){
-        magazine.get(magCount++).setPosition(location, heading);
+      magazine.get(magCount++).setPosition(location, heading);
+
       if (magCount >= magazine.size()){
         magCount = 0;
       }
+
       magazine.get(magCount).setRender(true);
-      }
     }
   }
 
