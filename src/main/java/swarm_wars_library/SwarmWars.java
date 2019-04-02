@@ -29,9 +29,10 @@ public class SwarmWars extends PApplet {
     private int initScreenTimer = 120;
     private int numBots = 30;
     private int numTurrets = 5;
-    private int playerId = 1;
-    private int frameNumber = 0;
-    private int networkFrame = 0;
+    private int playerId;
+    private int enemyId;
+    private int frameNumber = 1;
+    private int networkFrame = 1;
     private int networkRate = 1;
     private Map<String, Object> m = new HashMap<String, Object>();
 
@@ -40,6 +41,7 @@ public class SwarmWars extends PApplet {
 
     public void setup() {
         frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
+        setPlayerId();
 
         // NETWORK setup - put empty package?
         m.put(Headers.TYPE, Constants.SETUP);
@@ -57,7 +59,9 @@ public class SwarmWars extends PApplet {
         // set up comms before entities
         comms.add("PLAYER" + playerId, new CommsChannel(numBots + 1));
         comms.add("ENEMY", new CommsChannel(numTurrets)); // we will add 1 turret therefore we have 1 item in enemy comms channel
-        comms.add("PLAYER" + "2", new CommsChannel(numBots + 1));
+
+        enemyId = playerId == 1 ? 2 : 1;
+        comms.add("PLAYER" + enemyId, new CommsChannel(numBots + 1));
 
         // add a player
         player = eb.newPlayer(playerId);
@@ -78,14 +82,14 @@ public class SwarmWars extends PApplet {
         // TODO set playerId of enemy player to a variable, also above in comms
 
         // add a player
-        enemyPlayer = eb.newPlayer(2);
+        enemyPlayer = eb.newPlayer(enemyId);
         enemyPlayer.setComms(comms);
         entityList.add(enemyPlayer);
 
         SwarmLogic.resetCounter();
         //add player bots
         for (int i = 0; i < numBots; i++) {
-            Entity bot = eb.newBot(2);
+            Entity bot = eb.newBot(enemyId);
             bot.setSwarmLogic();
             bot.setComms(comms);
             entityList.add(bot);
@@ -146,7 +150,7 @@ public class SwarmWars extends PApplet {
         // NETWORK need to set player inputs in this game
 
         try {
-            Map<String, Object> messageIn = MessageHandlerMulti.getPackage(playerId, frameNumber);
+            Map<String, Object> messageIn = MessageHandlerMulti.getPackage(enemyId, frameNumber);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -169,14 +173,18 @@ public class SwarmWars extends PApplet {
             m.put(Headers.A, player.input.getMove('A'));
             m.put(Headers.S, player.input.getMove('S'));
             m.put(Headers.D, player.input.getMove('D'));
-            m.put(Headers.FRAME, networkFrame);
+            m.put(Headers.FRAME, networkFrame++);
             // TODO how is mouseX and mouseY translated between different machines
             MessageHandlerMulti.putPackage(m);
         }
 
-        // Map<String, Object> message = MessageHandlerMulti.getPackage(playerId, networkFrame);
+        // TODO: delete this - used for development to slow down game
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
 
-        networkFrame++;
+        }
+
     }
 
     void gameOverScreen() {
@@ -194,9 +202,14 @@ public class SwarmWars extends PApplet {
         //add pause screen on 'p'
     }
 
+    public void setPlayerId(){
+        System.out.println("Enter your id");
+        Scanner scanner = new Scanner(System.in);
+        playerId = scanner.nextInt();
+    }
+
     public static void main(String[] passedArgs) {
         // TODO need check if these inputs are correct
-        // this.playerId = Integer.parseInt(passedArgs[0]);
 
         // NETWORK main - TODO should this be here
 
