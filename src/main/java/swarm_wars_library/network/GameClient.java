@@ -65,8 +65,8 @@ public class GameClient {
     }
 
     public static void getIP(){
-        System.out.println("Please enter server IP address");
-        ip = scanner.nextLine();
+        // System.out.println("Please enter server IP address");
+        // ip = scanner.nextLine();
         System.out.println("Connecting to " + ip);
     }
 

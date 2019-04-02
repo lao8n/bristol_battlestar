@@ -32,11 +32,11 @@ public class Logger {
         outputStream.write(":");
         outputStream.write(msg);
         outputStream.write("\n");
-        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + ": " + msg);
+        // System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + ": " + msg);
     }
 
     public void log(String msg, String side) throws IOException{
-        System.out.println(path);
+        // System.out.println(path);
         File Logfile = new File(path + " " + side + ".txt");
         if (!Logfile.exists()){
             Logfile.createNewFile();
@@ -47,7 +47,7 @@ public class Logger {
         outputStream.write(msg);
         outputStream.write("\n");
         outputStream.flush();
-        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + ": " + msg);
+        // System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + ": " + msg);
     }
 
 }

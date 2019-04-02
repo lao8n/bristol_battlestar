@@ -27,7 +27,7 @@ public class SwarmWars extends PApplet {
     private int initScreenTimer = 120;
     private int numBots = 100;
     private int numTurrets = 5;
-    private int playerId = 0;
+    private int playerId = 1;
     private int frameNumber = 0;
     private int networkFrame = 0;
     private int networkRate = 1;
@@ -122,6 +122,8 @@ public class SwarmWars extends PApplet {
         // NETWORK need to get other players inputs from server
         // NETWORK need to set player inputs in this game
 
+
+
         // update all game things
         for (int j = 0; j < entityList.size(); j++) {
             entityList.get(j).update();
@@ -132,7 +134,6 @@ public class SwarmWars extends PApplet {
 
         // NETWORK need to send my input to server
         if(frameNumber++ % networkRate == 0){
-
             m = new HashMap<String, Object>();
             m.put(Headers.TYPE, Constants.OPERATION);
             m.put(Headers.PLAYER, playerId);
@@ -140,10 +141,14 @@ public class SwarmWars extends PApplet {
             m.put(Headers.A, player.input.getMove('A'));
             m.put(Headers.S, player.input.getMove('S'));
             m.put(Headers.D, player.input.getMove('D'));
-            m.put(Headers.FRAME, networkFrame++);
+            m.put(Headers.FRAME, networkFrame);
             // TODO how is mouseX and mouseY translated between different machines
             MessageHandlerMulti.putPackage(m);
         }
+
+        // Map<String, Object> message = MessageHandlerMulti.getPackage(playerId, networkFrame);
+
+        networkFrame++;
     }
 
     void gameOverScreen() {
