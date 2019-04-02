@@ -20,7 +20,7 @@ class Shooter {
   PApplet sketch;
   EntityBuilder eb;
 
-  Shooter(PApplet sketch, Tag t){
+  Shooter(PApplet sketch, Tag t, int playerId){
     this.sketch = sketch;
     location = new Vector2D(-1000,-1000);
     currPos = new Vector2D(0,0);
@@ -38,7 +38,7 @@ class Shooter {
     //add bullets
     for (int i = 0; i < numBullets; i++){
       // Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
-      Entity bullet = eb.newBullet(bulletTag);
+      Entity bullet = eb.newBullet(bulletTag, playerId);
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);
 

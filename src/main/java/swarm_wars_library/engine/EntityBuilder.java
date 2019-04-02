@@ -10,23 +10,23 @@ public class EntityBuilder {
         this.sketch = sketch;
     }
 
-    public Entity newPlayer(){
-        Entity p = new Entity(sketch, Tag.PLAYER, 10, true, true, true, true, true, true, false);
+    public Entity newPlayer(int playerId){
+        Entity p = new Entity(sketch, Tag.PLAYER, 10, true, true, true, true, true, true, false, playerId);
         return p;
     }
 
-    public Entity newBot(){
-        Entity b = new Entity(sketch, Tag.P_BOT, 7, true, false, false, true, true, true, false);
+    public Entity newBot(int playerId){
+        Entity b = new Entity(sketch, Tag.P_BOT, 7, true, false, false, true, true, true, false, playerId);
         return b;
     }
 
-    public Entity newTurret(){
-        Entity t = new Entity(sketch, Tag.ENEMY, 15, true, false, true, true, true, true, true);
+    public Entity newTurret(int playerId){
+        Entity t = new Entity(sketch, Tag.ENEMY, 15, true, false, true, true, true, true, true, playerId);
         return t;
     }
 
-    public Entity newBullet(Tag bulletTag){
-        Entity b = new Entity(sketch, bulletTag, 5, true, false, false, false, false, true, false);
+    public Entity newBullet(Tag bulletTag, int playerId){
+        Entity b = new Entity(sketch, bulletTag, 5, true, false, false, false, false, true, false, playerId);
         return b;
     }
 

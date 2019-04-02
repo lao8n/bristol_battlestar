@@ -15,10 +15,12 @@ public class SwarmLogic {
   private double desiredSeparation;
   public static int counter = 1;
   private Transform transform;
+  private int playerId;
 
-  public SwarmLogic(Transform transform, RigidBody rb) {
+  public SwarmLogic(Transform transform, RigidBody rb, int playerId) {
     this.rb = rb;
     this.transform = transform;
+    this.playerId = playerId;
 
     rb.setMaxSpeed(15);
     maxForce = 10;
@@ -40,13 +42,17 @@ public class SwarmLogic {
     return transform;
   }
 
+  public static void resetCounter(){
+    counter = 1;
+  }
+
   public Vector2D separate() {
     desiredSeparation = 20;
     int neighbourCount = 0;
     Vector2D sum = new Vector2D(0, 0);
-    for (int i = 1; i < comms.get("PLAYER").getNumberOfReceivers(); i++) {
+    for (int i = 1; i < comms.get("PLAYER" + playerId).getNumberOfReceivers(); i++) {
       if (i != id) {
-        CommsPacket otherBot = comms.get("PLAYER").getPacket(i);
+        CommsPacket otherBot = comms.get("PLAYER"  + playerId).getPacket(i);
         if (otherBot.getIsAlive()) {
           double dist = Vector2D.sub(transform.getPosition(), otherBot.getLocation()).mag();
           if (dist > 0 && dist < desiredSeparation) {
@@ -114,7 +120,7 @@ public class SwarmLogic {
   // }
 
   private void applyBehaviours() {
-    Vector2D seek = seek(comms.get("PLAYER").getPacket(0).getLocation());
+    Vector2D seek = seek(comms.get("PLAYER" + playerId).getPacket(0).getLocation());
     Vector2D seperate = separate();
     seek.mult(1.5);
     seperate.mult(0.2);

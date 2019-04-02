@@ -17,6 +17,8 @@ public class SwarmWars extends PApplet {
     // Player must be here so that event listeners can access it
     private Entity player;
 
+    private Entity enemyPlayer;
+
     // Entity list that has all our game things.
     private ArrayList <Entity> entityList = new ArrayList < Entity > ();
     // Entity builder class
@@ -25,7 +27,7 @@ public class SwarmWars extends PApplet {
     private int MAXSCREENS = 3;
     private int gameScreen = 2;
     private int initScreenTimer = 120;
-    private int numBots = 100;
+    private int numBots = 30;
     private int numTurrets = 5;
     private int playerId = 1;
     private int frameNumber = 0;
@@ -53,25 +55,46 @@ public class SwarmWars extends PApplet {
         */
 
         // set up comms before entities
-        comms.add("PLAYER", new CommsChannel(numBots + 1));
+        comms.add("PLAYER" + playerId, new CommsChannel(numBots + 1));
         comms.add("ENEMY", new CommsChannel(numTurrets)); // we will add 1 turret therefore we have 1 item in enemy comms channel
+        comms.add("PLAYER" + "2", new CommsChannel(numBots + 1));
 
         // add a player
-        player = eb.newPlayer();
+        player = eb.newPlayer(playerId);
         player.setComms(comms);
         entityList.add(player);
 
         //add player bots
         for (int i = 0; i < numBots; i++) {
-            Entity bot = eb.newBot();
+            Entity bot = eb.newBot(playerId);
             bot.setSwarmLogic();
             bot.setComms(comms);
             entityList.add(bot);
         }
 
-        // add an Enemies
+
+
+
+        // TODO set playerId of enemy player to a variable, also above in comms
+
+        // add a player
+        enemyPlayer = eb.newPlayer(2);
+        enemyPlayer.setComms(comms);
+        entityList.add(enemyPlayer);
+
+        SwarmLogic.resetCounter();
+        //add player bots
+        for (int i = 0; i < numBots; i++) {
+            Entity bot = eb.newBot(2);
+            bot.setSwarmLogic();
+            bot.setComms(comms);
+            entityList.add(bot);
+        }
+
+
+        // add Enemies
         for (int i = 0; i < numTurrets; i++){
-            Entity turret = eb.newTurret();
+            Entity turret = eb.newTurret(0);
             turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
             turret.setComms(comms);
             entityList.add(turret);
@@ -122,6 +145,11 @@ public class SwarmWars extends PApplet {
         // NETWORK need to get other players inputs from server
         // NETWORK need to set player inputs in this game
 
+        try {
+            Map<String, Object> messageIn = MessageHandlerMulti.getPackage(playerId, frameNumber);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
 
         // update all game things

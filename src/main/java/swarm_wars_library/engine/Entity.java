@@ -23,6 +23,7 @@ public class Entity {
   //private State state;
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
+  private int playerId;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -35,7 +36,8 @@ public class Entity {
           boolean h,
           boolean coms,
           boolean rigbod,
-          boolean hai) {
+          boolean hai,
+          int playerId) {
 
     this.sketch = sketch;
     tag = t;
@@ -48,6 +50,7 @@ public class Entity {
     hasRb = rigbod;
     isMothership = false;
     hasAI = hai;
+    this.playerId = playerId;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -60,7 +63,7 @@ public class Entity {
       input = new Input(sketch);
     }
     if (hasShooter) {
-      shooter = new Shooter(sketch, tag);
+      shooter = new Shooter(sketch, tag, playerId);
     }
     if (hasHealth) {
       health = new Health(tag);
@@ -93,7 +96,7 @@ public class Entity {
     }
     if (hasAI) {
       //pass it current player position, its own transform
-      Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
+      Vector2D playerLoc = comms.get("PLAYER" + "1").getPacket(0).getLocation();
       ai.update(playerLoc, transform);
       //shooter uses this info below to target player
     }
@@ -229,7 +232,7 @@ public class Entity {
   //BOT methods
   public void setSwarmLogic() {
     //init swarm logic
-    swarmLogic = new SwarmLogic(transform, rb);
+    swarmLogic = new SwarmLogic(transform, rb, playerId);
   }
 
   //ALLL COMMS
@@ -238,11 +241,11 @@ public class Entity {
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setIsAlive(true);
     if (isMothership) {
-      comms.get("PLAYER").setPacket(commsPacket, 0);
+      comms.get("PLAYER" + playerId).setPacket(commsPacket, 0);
     }
 
     if (isBot) {
-      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
+      comms.get("PLAYER" + playerId).setPacket(commsPacket, swarmLogic.getId());
     }
 
     if (tag.equals(Tag.ENEMY)) {
