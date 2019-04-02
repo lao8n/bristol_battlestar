@@ -111,7 +111,7 @@ public class SwarmWars extends PApplet {
 
   // >>>>>> MAIN GAME LOOP <<<<<<<<<<
   void gameScreenEntity() {
-    background(25, 25, 76);
+    background(22, 0, 8);
 
     // Points player earns in a loop
     pointsToAdd = 0;
@@ -158,10 +158,22 @@ public class SwarmWars extends PApplet {
   }
 
   void gameOverScreen() {
-    background(0);
+    Render r = new Render(this, 10);
+    background(17, 0, 2);
+    // Pink Glow
+    fill(255, 0, 89); 
     textAlign(CENTER);
-    textSize(50);
+    textSize(81);
     text("GAME OVER", width / 2, height / 2);
+    //DARK BLUE
+    fill(19, 0, 232); 
+    textAlign(CENTER);
+    textSize(80);
+    text("GAME OVER", width / 2, height / 2);
+
+    // random particle explosion
+    Vector2D v = new Vector2D(Math.random() * width +1, Math.random() * height + 1);
+    r.drawExplosion(v, Tag.ENEMY);
   }
 
   void changeScreen(int k) {
