@@ -17,6 +17,7 @@ public class Health {
 
   public void update(){
     currentHealth -= damage;
+    damage = 0;
   }
 
   public void takeDamage(int d){

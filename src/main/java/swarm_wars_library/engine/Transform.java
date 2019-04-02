@@ -71,4 +71,5 @@ class Transform {
         double y = position.getY();
         this.boundingLength = Math.sqrt(x * x / 4 + y * y / 4);
     }
+
 }

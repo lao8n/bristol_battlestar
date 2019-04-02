@@ -2,6 +2,7 @@
 package swarm_wars_library.engine;
 
 import javax.swing.text.Position;
+import java.util.*;
 
 import processing.core.PApplet;
 
@@ -23,6 +24,7 @@ public class Entity {
   //private State state;
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
+  private boolean isAlive = true;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -194,11 +196,16 @@ public class Entity {
   public void kill() {
     hasRender = false;
     hasShooter = false;
+    isAlive = false;
   }
 
   public boolean isDead() {
     if (hasHealth) {
       return health.isDead();
+    
+    // Bots and some entities don't have health
+    } else if (isAlive){
+      return true;
     }
     return false;
   }
@@ -249,6 +256,19 @@ public class Entity {
       comms.get("ENEMY").setPacket(commsPacket, 0);
 
     }
+  }
+
+  public ArrayList<Entity> getMagazine(){
+    if (shooter != null){
+      return shooter.getMagazine();
+    } else {
+      return null;
+    }
+  }
+
+  public int getHealth(){
+    if (health == null){return -1;}
+    return health.getCurrentHealth();
   }
 
   //will need to get and set state here for FSM

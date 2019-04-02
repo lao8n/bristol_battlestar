@@ -47,6 +47,8 @@ public class SwarmWars extends PApplet {
     player = eb.newPlayer();
     player.setComms(comms);
     entityList.add(player);
+    //add player bullets
+    entityList.addAll(player.getMagazine());
 
     //add player bots
     for (int i = 0; i < numBots; i++) {
@@ -54,14 +56,17 @@ public class SwarmWars extends PApplet {
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
+      // Note: if bots later get shooters: need to add magazines here
     }
 
-    // add an Enemies
+    // add an Enemy Turrets
     for (int i = 0; i < numTurrets; i++){
       Entity turret = eb.newTurret();
       turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
       turret.setComms(comms);
       entityList.add(turret);
+      // Add enemy shooter magazines (bullets)
+      entityList.addAll(turret.getMagazine());
     }
 
     // IMPORTANT to do at end of setup - sets all initial packets to current
@@ -92,7 +97,7 @@ public class SwarmWars extends PApplet {
     textAlign(CENTER);
     text("welcome to\n\nSWARM WARS\n\n\nMove: WASD", width / 2, height / 2);
 
-    //after timer, switch to game
+    // After timer, switch to game
     if (initScreenTimer-- < 0) {
       gameScreen = 1;
     }
@@ -106,12 +111,27 @@ public class SwarmWars extends PApplet {
   void gameScreenEntity() {
     background(25, 25, 76);
 
-    // update all game things
-    for (int j = 0; j < entityList.size(); j++) {
-      entityList.get(j).update();
+    // Update all game things
+    for (int i = entityList.size()-1; i >= 0; i--) {
+      entityList.get(i).update();
+
+      // Collision detection - avoids double checking
+      for(int j = entityList.size()-1; j > i; j--){
+
+        // Stop checking i if entity dies
+        if (entityList.get(i).isDead()){j = i;}
+
+        // All responses to collisions handled in BoxCollider
+        BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
+      }
+
+      // Remove if entity dead
+      if (entityList.get(i).isDead()){
+        entityList.remove(i);
+      }
     }
 
-    // sets future comms to current for next loop
+    // Sets future comms to current for next loop
     comms.update();
 
   }

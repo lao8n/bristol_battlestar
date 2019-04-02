@@ -30,5 +30,4 @@ public class EntityBuilder {
         return b;
     }
 
-
 }
