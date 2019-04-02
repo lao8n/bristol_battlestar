@@ -50,6 +50,7 @@ public class Entity {
     hasRb = rigbod;
     isMothership = false;
     hasAI = hai;
+    points = 0;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -87,7 +88,12 @@ public class Entity {
   }
 
   public void update() {
-    //set position with either Input or AI
+    // Update points
+    if (tag.equals(Tag.PLAYER)){
+      render.drawPoints(points);
+    }
+
+    // Set position with either Input or AI
     if (hasInput) {
       input.update();
       transform.setPosition(input.getLocation());
@@ -285,6 +291,10 @@ public class Entity {
     if (hasHealth){
       health.reset();
     }
+  }
+
+  public void addPoints(int p){
+    points += p;
   }
 
   //will need to get and set state here for FSM

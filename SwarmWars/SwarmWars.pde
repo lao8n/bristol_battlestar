@@ -26,6 +26,8 @@ public class SwarmWars extends PApplet {
   int numBots = 100;
   int numTurrets = 5;
 
+  int pointsToAdd = 0;
+
   // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
 
@@ -111,6 +113,9 @@ public class SwarmWars extends PApplet {
   void gameScreenEntity() {
     background(25, 25, 76);
 
+    // Points player earns in a loop
+    pointsToAdd = 0;
+
     // Update all game things
     for (int i = entityList.size()-1; i >= 0; i--) {
       entityList.get(i).update();
@@ -127,16 +132,25 @@ public class SwarmWars extends PApplet {
 
       // Remove if entity dead
       if (entityList.get(i).isDead()){
-        //respawn if turret
+        // Respawn if turret
         if (entityList.get(i).getTag().equals(Tag.ENEMY)){
+          // Give player points for kill
+          pointsToAdd += 10;
+
           entityList.get(i).setPosition(Math.random() * width +1, Math.random() * height + 1);
           entityList.get(i).setAlive();
           entityList.get(i).setAlive(true);
-        } else {
+        // If player, move to game over
+        } else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
+          gameScreen = 3;
+        }else {
           entityList.remove(i);
         }
-      }
+      }      
     }
+
+    // Add points player earned for enemies killed this loop
+    player.addPoints(pointsToAdd);
 
     // Sets future comms to current for next loop
     comms.update();
@@ -144,7 +158,10 @@ public class SwarmWars extends PApplet {
   }
 
   void gameOverScreen() {
-    background(0, 0, 0);
+    background(0);
+    textAlign(CENTER);
+    textSize(50);
+    text("GAME OVER", width / 2, height / 2);
   }
 
   void changeScreen(int k) {
