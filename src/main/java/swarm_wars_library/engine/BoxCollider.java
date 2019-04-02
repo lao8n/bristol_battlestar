@@ -46,7 +46,7 @@ public class BoxCollider {
 			if(second.getTag().equals(Tag.P_BULLET)){
 				if (hasCollision(first, second)){
 					first.takeDamage(5);
-					second.kill();
+					second.kill();					
 				}	
 			}
 		} else if (first.getTag().equals(Tag.P_BULLET)){

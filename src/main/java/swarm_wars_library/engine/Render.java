@@ -89,7 +89,13 @@ public class Render {
     this.sketch.stroke(25, 25, 76);
     this.sketch.fill(255); 
     this.sketch.rect(550, 5, health, 30);
+  }
 
+  public void drawPoints(int points){
+    this.sketch.fill(100, 100, 100);
+    this.sketch.textSize(20);
+    this.sketch.textAlign(this.sketch.LEFT, this.sketch.TOP);
+    this.sketch.text("Points: " + points, 0, 0);
   }
 }
 
