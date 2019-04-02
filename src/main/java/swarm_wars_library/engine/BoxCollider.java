@@ -12,23 +12,23 @@ public class BoxCollider {
 		}
 
 		// Player - Enemy bullet
-        if (first.getTag().equals(Tag.PLAYER)){
-          if (second.getTag().equals(Tag.E_BULLET)){
-            if (hasCollision(first, second)){
-				first.takeDamage(5);
-				System.out.println("Player health: " + first.getHealth());
-				second.kill();
-				System.out.println(second);
-			}
+		if (first.getTag().equals(Tag.PLAYER)){
+			if (second.getTag().equals(Tag.E_BULLET)){
+				if (hasCollision(first, second)){
+					first.takeDamage(5);
+					System.out.println("Player health: " + first.getHealth());
+					second.kill();
+					System.out.println(second);
+				}
 		  } // any other collisions we care about involving player: 
 		  
-        } else if (first.getTag().equals(Tag.E_BULLET)){
-			//if (second.getTag().equals(Tag.PLAYER)){
-			//	if (hasCollision(first, second)){
-			//		second.takeDamage(5);
-			//		first.kill();
-			//	} else
-			 if (second.getTag().equals(Tag.P_BOT)){
+		} else if (first.getTag().equals(Tag.E_BULLET)){
+		//if (second.getTag().equals(Tag.PLAYER)){
+		//	if (hasCollision(first, second)){
+		//		second.takeDamage(5);
+		//		first.kill();
+		//	} else
+			if (second.getTag().equals(Tag.P_BOT)){
 				if (hasCollision(first, second)){
 					first.kill();
 					second.kill();

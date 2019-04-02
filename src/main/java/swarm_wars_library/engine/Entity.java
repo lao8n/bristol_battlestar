@@ -268,7 +268,7 @@ public class Entity {
 
   public int getHealth(){
     if (health == null){return -1;}
-    return health.getHealth();
+    return health.getCurrentHealth();
   }
 
   //will need to get and set state here for FSM
