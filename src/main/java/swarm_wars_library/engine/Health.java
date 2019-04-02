@@ -1,34 +1,38 @@
 package swarm_wars_library.engine;
 
-class Health {
+public class Health {
 
-  int currentHealth;
-  int maxHealth;
-  int damage;
-  
-  Health (Tag tag) {
+  private int currentHealth;
+  private int maxHealth;
+  private int damage;
+
+  public Health (Tag tag) {
     if (tag.equals(Tag.PLAYER)){
       maxHealth = 100;
     } else {
-      maxHealth = 5; 
+      maxHealth = 5;
     }
     currentHealth = maxHealth;
 }
-  
-  void update(){
+
+  public void update(){
     currentHealth -= damage;
     damage = 0;
   }
 
-  void takeDamage(int d){
+  public void takeDamage(int d){
     damage = d;
   }
-  
-  int getHealth(){
+
+  public int getCurrentHealth(){
     return currentHealth;
   }
-  
-  boolean isDead(){
+
+  public int getMaxHealth(){
+    return maxHealth;
+  }
+
+  public boolean isDead(){
     if (currentHealth <= 0){
       return true;
     }

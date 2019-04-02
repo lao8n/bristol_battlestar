@@ -114,7 +114,7 @@ public class Entity {
 
     if (hasHealth) {
       health.update();
-      render.drawHealth(health.getHealth());
+      render.drawHealth(health.getCurrentHealth());
     }
 
     if (isBot) {
