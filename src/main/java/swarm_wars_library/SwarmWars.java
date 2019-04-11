@@ -186,12 +186,4 @@ public class SwarmWars extends PApplet {
     player.input.setMove(keyCode, 0);
   }
 
-  // public void mousePressed(MouseEvent e) {
-  //   player.input.setMouse(1);
-    
-  // }
-  // public void mouseReleased(MouseEvent e) {
-  //   player.input.setMouse(0);
-    
-  // }
 }
