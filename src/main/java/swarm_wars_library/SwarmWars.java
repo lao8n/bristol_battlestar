@@ -62,6 +62,9 @@ public class SwarmWars extends PApplet {
       Entity bot = eb.newBot();
       bot.setSwarmLogic();
       bot.setComms(comms);
+      // bot.setPosition(player.getPosition().getX() + Math.random() * 5, 
+      //                 player.getPosition().getY() + Math.random() * 5);
+      // bot.selectStartingSwarmAlgorithm("boids_flock");
       bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
       // Note: if bots later get shooters: need to add magazines here

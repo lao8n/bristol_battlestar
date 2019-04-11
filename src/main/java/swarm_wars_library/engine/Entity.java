@@ -56,8 +56,9 @@ public class Entity {
       isBot = true;
       //NOTICE: must call method to init swarmLogic in main loop
     }
-    if (hasRender) {
-      render = new Render(sketch, sc);
+    if (tag.equals(Tag.P_BOT)){
+      transform.setPosition(this.sketch.width / 2 + Math.random() * 5,
+                            this.sketch.height /2 + Math.random() * 5);
     }
     if (hasInput) {
       input = new Input(sketch);
@@ -84,6 +85,9 @@ public class Entity {
     }
     if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
       transform.setScale(5, 5);
+    }
+    if (hasRender) {
+      render = new Render(sketch, sc);
     }
   }
 
@@ -266,7 +270,7 @@ public class Entity {
   }
 
   public void selectStartingSwarmAlgorithm(String swarm_algorithm){
-    swarmLogic.selectSwarmAlgorithm("defensive_shell");
+    swarmLogic.selectSwarmAlgorithm(swarm_algorithm);
   }
 
   //ALLL COMMS
@@ -274,6 +278,7 @@ public class Entity {
     //update this logic
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setIsAlive(true);
+    commsPacket.setVelocity(transform.getVelocity());
     if (isMothership) {
       comms.get("PLAYER").setPacket(commsPacket, 0);
     }
@@ -284,7 +289,6 @@ public class Entity {
 
     if (tag.equals(Tag.ENEMY)) {
       comms.get("ENEMY").setPacket(commsPacket, 0);
-
     }
   }
 
