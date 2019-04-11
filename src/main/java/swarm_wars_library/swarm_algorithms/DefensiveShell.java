@@ -6,6 +6,7 @@ import swarm_wars_library.engine.RigidBody;
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.CommsPacket;
 import swarm_wars_library.engine.CommsGlobal;
+import swarm_wars_library.engine.CommsChannel;
 
 public class DefensiveShell implements SwarmAlgorithm {
 
@@ -27,7 +28,9 @@ public class DefensiveShell implements SwarmAlgorithm {
   }
 
   public void applySwarmAlgorithm(){
-    Vector2D seek_v2d = this.seek(comms.get("PLAYER").getPacket(0).getLocation());
+    CommsChannel x = this.comms.get("PLAYER");
+    CommsPacket y = x.getPacket(0);
+    Vector2D seek_v2d = this.seek(this.comms.get("PLAYER").getPacket(0).getLocation());
     Vector2D separate_v2d = this.separate();
     seek_v2d.mult(1.5);
     separate_v2d.mult(0.2);

@@ -263,6 +263,9 @@ public class Entity {
   public void setSwarmLogic() {
     //init swarm logic
     swarmLogic = new SwarmLogic(transform, rb);
+  }
+
+  public void selectStartingSwarmAlgorithm(String swarm_algorithm){
     swarmLogic.selectSwarmAlgorithm("defensive_shell");
   }
 

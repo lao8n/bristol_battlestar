@@ -62,6 +62,7 @@ public class SwarmWars extends PApplet {
       Entity bot = eb.newBot();
       bot.setSwarmLogic();
       bot.setComms(comms);
+      bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
       // Note: if bots later get shooters: need to add magazines here
     }
@@ -186,4 +187,12 @@ public class SwarmWars extends PApplet {
     player.input.setMove(keyCode, 0);
   }
 
+  public void mousePressed() {
+    player.input.setMouse(1);
+    
+  }
+  public void mouseReleased() {
+    player.input.setMouse(0);
+    
+  }
 }
