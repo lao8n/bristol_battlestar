@@ -1,7 +1,10 @@
+package swarm_wars_library;
+
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.*;
 import java.util.Random;
+import java.util.*;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -33,7 +36,7 @@ public class SwarmWars extends PApplet {
   // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
 
-  void setup() {
+  public void setup() {
     frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
     /* GUIDE TO ADDING NEW THINGS
@@ -81,7 +84,7 @@ public class SwarmWars extends PApplet {
     size(900, 700, "processing.awt.PGraphicsJava2D");
   }
 
-  void draw() {
+  public void draw() {
     //display contents of the current screen
     if (gameScreen == 0) {
       initScreen();
@@ -94,7 +97,7 @@ public class SwarmWars extends PApplet {
 
   /*--------GAME SCREENS ----*/
 
-  void initScreen() {
+  public void initScreen() {
     render.drawInitScreen((float) width, (float) height);
 
     // After timer, switch to game
@@ -104,7 +107,7 @@ public class SwarmWars extends PApplet {
   }
 
   // >>>>>> MAIN GAME LOOP <<<<<<<<<<
-  void gameScreen() {
+  public void gameScreen() {
     background(22, 0, 8);
 
     // Points player earns in a loop
@@ -151,11 +154,11 @@ public class SwarmWars extends PApplet {
 
   }
 
-  void gameOverScreen() {
+  public void gameOverScreen() {
     render.drawGameOverScreen(width, height);
   }
 
-  void changeScreen(int k) {
+  public void changeScreen(int k) {
     //TODO add more checks here, only change screens in certain cases
     if (k == 'n' || k == 'N') {
       gameScreen++;
@@ -168,27 +171,27 @@ public class SwarmWars extends PApplet {
 
   public static void main(String[] passedArgs) {
     String[] appletArgs = new String[] {
-      "SwarmWars"
+      "swarm_wars_library.SwarmWars"
     };
     PApplet.main(appletArgs);
   }
 
   /* ------ EVENT LISTENERS ------ */
-  void keyPressed() {
+  public void keyPressed() {
     //changeScreen(keyCode);
     player.input.setMove(keyCode, 1);
   }
 
-  void keyReleased() {
+  public void keyReleased() {
     player.input.setMove(keyCode, 0);
   }
 
-  public void mousePressed(MouseEvent e) {
-    player.input.setMouse(1);
+  // public void mousePressed(MouseEvent e) {
+  //   player.input.setMouse(1);
     
-  }
-  public void mouseReleased(MouseEvent e) {
-    player.input.setMouse(0);
+  // }
+  // public void mouseReleased(MouseEvent e) {
+  //   player.input.setMouse(0);
     
-  }
+  // }
 }

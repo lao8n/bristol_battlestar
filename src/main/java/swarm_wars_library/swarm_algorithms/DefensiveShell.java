@@ -12,7 +12,6 @@ public class DefensiveShell implements SwarmAlgorithm {
   private CommsGlobal comms;
   private double desiredSeparation;
   private int id;
-  private boolean isAlive = true;
   private double maxForce = 10;
   private double orbitDistance = 70;
   public RigidBody rb;

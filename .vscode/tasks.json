@@ -31,14 +31,14 @@
             },
             "args": [
             "--force",
-            "--sketch=${workspaceRoot}/SwarmWars",
+            "--sketch=${workspaceRoot}/src/main/java/swarm_wars_library/SwarmWars.java",
             "--output=${workspaceRoot}/out",
             "--run"
             ],
             "windows": {
             "args": [
                 "--force",
-                "--sketch=${workspaceRoot}\\SwarmWars",
+                "--sketch=${workspaceRoot}\\src",
                 "--output=${workspaceRoot}\\out",
                 "--run"
             ]
