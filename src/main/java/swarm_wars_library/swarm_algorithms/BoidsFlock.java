@@ -6,7 +6,7 @@ import swarm_wars_library.engine.RigidBody;
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.CommsGlobal;
 
-public class BoidsFlock implements SwarmAlgorithm {
+public class BoidsFlock extends SwarmAlgorithm {
   private CommsGlobal comms;
   private int id;
   public RigidBody rb;
@@ -16,6 +16,7 @@ public class BoidsFlock implements SwarmAlgorithm {
   private CoheseRule cohese_rule;
 
   public BoidsFlock(CommsGlobal comms, int id, Transform transform, RigidBody rb){
+    super(transform);
     this.comms = comms;
     this.id = id;
     this.rb = rb;
@@ -28,6 +29,7 @@ public class BoidsFlock implements SwarmAlgorithm {
       this.transform);
   }
 
+  @Override
   public void applySwarmAlgorithm(){
 
     Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(20);
@@ -38,13 +40,13 @@ public class BoidsFlock implements SwarmAlgorithm {
                                                             .getPacket(0)
                                                             .getLocation());
 
-    separate_v2d.mult(0.1);
+    separate_v2d.mult(0.05);
     align_v2d.mult(0.004);
     cohese_v2d.mult(0.003);
     random_v2d.mult(0.001);
     seek_mothership_v2d.mult(0.1);  
 
-    this.avoidEdge(0.1);
+    this.avoidEdge(0.2);
     this.rb.applyForce(separate_v2d);
     this.rb.applyForce(align_v2d);
     this.rb.applyForce(cohese_v2d);
@@ -53,24 +55,9 @@ public class BoidsFlock implements SwarmAlgorithm {
     this.transform.setHeading(this.rb.getVelocity().heading());
     this.rb.update(this.transform.getPosition(), this.transform.getHeading());
   }
-
-  public void avoidEdge(double scale){
-    if(transform.getPosition().getX() < 0){
-      this.transform.setPosition(0, transform.getPosition().getY());
-      this.transform.setVelocity(new Vector2D(scale, 0.0));
-    } else if (transform.getPosition().getX() > 900){
-      this.transform.setPosition(900, transform.getPosition().getY());
-      this.transform.setVelocity(new Vector2D(-scale, 0.0));
-    }
-    if(transform.getPosition().getY() < 0){
-      this.transform.setPosition(transform.getPosition().getX(), 0);
-      this.transform.setVelocity(new Vector2D(0, scale));
-    } else if (transform.getPosition().getY() > 700){
-      this.transform.setPosition(transform.getPosition().getX(), 700);
-      this.transform.setVelocity(new Vector2D(0, -scale));
-    }
-  }
-  private Vector2D seekMotherShip(Vector2D mothership_location) {
+  
+  @Override
+  public Vector2D seekMotherShip(Vector2D mothership_location) {
     Vector2D target = Vector2D.sub(mothership_location, transform.getPosition());
     target.normalise();
     target.mult(rb.getMaxSpeed());
@@ -84,6 +71,7 @@ public class BoidsFlock implements SwarmAlgorithm {
       super(rule_comms, rule_id, rule_rb, rule_transform);
     }
 
+    @Override
     public void swarmRule(){
       Vector2D diff = Vector2D.sub(this.rule_transform.getPosition(), 
                                         this.rule_otherBot.getLocation());
@@ -93,6 +81,7 @@ public class BoidsFlock implements SwarmAlgorithm {
       this.rule_neighbourCount++;
     }
 
+    @Override
     public void neighbourCountRule(){
       this.rule_v2d.div(this.rule_neighbourCount);
       this.rule_v2d.normalise();
@@ -106,11 +95,13 @@ public class BoidsFlock implements SwarmAlgorithm {
       super(rule_comms, rule_id, rule_rb, rule_transform);
     }
 
+    @Override
     public void swarmRule(){
       this.rule_v2d.add(this.rule_otherBot.getVelocity());
       this.rule_neighbourCount++;
     }
 
+    @Override
     public void neighbourCountRule(){
       this.rule_v2d.div(this.rule_neighbourCount);
       this.rule_v2d.normalise();
@@ -126,11 +117,13 @@ public class BoidsFlock implements SwarmAlgorithm {
       super(rule_comms, rule_id, rule_rb, rule_transform);
     }
 
+    @Override
     public void swarmRule(){
       this.rule_v2d.add(this.rule_otherBot.getLocation());
       this.rule_neighbourCount++;
     }
 
+    @Override
     public void neighbourCountRule(){
       this.rule_v2d.div(this.rule_neighbourCount);
       this.rule_v2d.sub(this.rule_transform.getPosition());
@@ -140,6 +133,4 @@ public class BoidsFlock implements SwarmAlgorithm {
       this.rule_v2d.limit(rb.getMaxForce());
     }
   }
-
-
 }

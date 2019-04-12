@@ -36,8 +36,8 @@ public abstract class SwarmRule{
         this.rule_otherBot = this.rule_comms.get("PLAYER").getPacket(i);
         if (this.rule_otherBot.getIsAlive()){
           this.rule_dist = Vector2D.sub(this.rule_transform.getPosition(),
-                                   this.rule_otherBot.getLocation())
-                              .mag();
+                                        this.rule_otherBot.getLocation())
+                                   .mag();
           if (this.rule_dist > 0 && this.rule_dist < desiredDistance){
             swarmRule();
           }
