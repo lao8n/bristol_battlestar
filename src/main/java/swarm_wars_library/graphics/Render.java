@@ -60,6 +60,8 @@ public class Render {
       case P_BOT:
       case E_BOT: drawBot(loc);
         break;
+      case STAR: drawStar();
+        break;
     }
   }
     
@@ -143,6 +145,15 @@ public class Render {
     }
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(0,0, this.scale, this.scale); 
+  }
+
+  public void drawStar(){
+    this.sketch.noStroke();
+    this.sketch.fill(255, 255, 204); 
+    this.sketch.ellipse((float) 0, 
+                        (float) 0, 
+                        (float) 1, 
+                        (float) 1); 
   }
 
   public void drawHealth(int health){

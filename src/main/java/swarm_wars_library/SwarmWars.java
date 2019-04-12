@@ -42,13 +42,14 @@ public class SwarmWars extends PApplet {
   int map_width = 2000;
   int map_height = 2000;
   int pointsToAdd = 0;
+  Map map = Map.getInstance();
 
   public void setup() {
     frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
     // use singleton pattern for map - not sure how this works with networking however.
-    Map map = Map.getInstance();
     map.setMapDimensions(this.map_width, this.map_height);
+    map.setMapStars();
     /* GUIDE TO ADDING NEW THINGS
       Use the EntityBuilder, for example: player = eb.newPlayer()
       this creates new entity - and automatically sets alls it's components
@@ -73,8 +74,8 @@ public class SwarmWars extends PApplet {
       bot.setSwarmLogic();
       bot.setComms(comms);
       // bot.selectStartingSwarmAlgorithm("scout_shell");
-      // bot.selectStartingSwarmAlgorithm("boids_flock");
-      bot.selectStartingSwarmAlgorithm("defensive_shell");
+      bot.selectStartingSwarmAlgorithm("boids_flock");
+      // bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
       // Note: if bots later get shooters: need to add magazines here
     }
@@ -123,6 +124,10 @@ public class SwarmWars extends PApplet {
   // >>>>>> MAIN GAME LOOP <<<<<<<<<<
   public void gameScreen() {
     background(22, 0, 8);
+    List<Vector2D> stars = this.map.getMapStars();
+    for (int i = 0; i < stars.size(); i++){
+      render.update(stars.get(i), Tag.STAR, 0.0, player.getPosition());
+    }
 
     // Points player earns in a loop
     pointsToAdd = 0;
