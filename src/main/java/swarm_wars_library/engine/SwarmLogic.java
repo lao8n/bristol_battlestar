@@ -3,6 +3,7 @@ package swarm_wars_library.engine;
 import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefensiveShell;
 import swarm_wars_library.swarm_algorithms.BoidsFlock;
+import swarm_wars_library.swarm_algorithms.ScoutShell;
 
 public class SwarmLogic {
 
@@ -43,6 +44,9 @@ public class SwarmLogic {
     }
     else if (swarm_algorithm == "boids_flock"){
       swarm_algo = new BoidsFlock(this.comms, this.id, this.transform, this.rb);
+    }
+    else if (swarm_algorithm == "scout_shell"){
+      swarm_algo = new ScoutShell(this.comms, this.id, this.transform, this.rb);
     }
   }
 

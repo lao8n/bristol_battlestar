@@ -7,9 +7,9 @@ import swarm_wars_library.engine.CommsPacket;
 import swarm_wars_library.engine.Vector2D;
 
 public abstract class SwarmRule{
-  private CommsGlobal rule_comms;
+  protected CommsGlobal rule_comms;
   protected double rule_dist;
-  private int rule_id;
+  protected int rule_id;
   protected int rule_neighbourCount;
   protected CommsPacket rule_otherBot;
   protected Vector2D rule_v2d = new Vector2D(0, 0);
