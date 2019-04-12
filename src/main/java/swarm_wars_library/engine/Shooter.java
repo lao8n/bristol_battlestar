@@ -2,6 +2,7 @@
 package swarm_wars_library.engine;
 
 import processing.core.PApplet;
+import swarm_wars_library.engine.Vector2D;
 import java.util.*;
 
 class Shooter {
@@ -55,7 +56,6 @@ class Shooter {
         currPos = magazine.get(i).getPosition();
         //magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
         magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
-
         //update bullet to render it
         magazine.get(i).update();
       }

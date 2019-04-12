@@ -1,14 +1,12 @@
 /* Component arch system - everything is an entity*/
 package swarm_wars_library.engine;
 
-import javax.swing.text.Position;
-import java.util.*;
-
-import swarm_wars_library.graphics.Render;
-import swarm_wars_library.comms.CommsGlobal;
-import swarm_wars_library.comms.CommsPacket;
+import java.util.ArrayList;
 
 import processing.core.PApplet;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsPacket;
+import swarm_wars_library.graphics.Render;
 
 public class Entity {
 
@@ -29,6 +27,7 @@ public class Entity {
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
+  private Vector2D view_centre;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -154,8 +153,12 @@ public class Entity {
 
     //draw it
     if (hasRender) {
-      render.update(transform.getPosition(), tag, transform.getHeading());
+      render.update(transform.getPosition(), tag, transform.getHeading(), this.view_centre);
     }
+  }
+
+  public void setViewCentre(Vector2D view_centre){
+    this.view_centre = view_centre;
   }
 
   public Tag getTag(){

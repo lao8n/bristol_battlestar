@@ -2,6 +2,8 @@ package swarm_wars_library.graphics;
 
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.Tag;
+import swarm_wars_library.comms.CommsGlobal;
+
 import java.util.*;
 
 import processing.core.PApplet;
@@ -11,24 +13,37 @@ public class Render {
   private PApplet sketch;
   private int scale;
   private int numParticles = 20;
+  private double render_x;
+  private double render_y;
+  private Vector2D view_centre;
 
   public Render(PApplet sketch, int s){
     this.sketch = sketch;
     this.scale = s;
   }
 
-  public void update(Vector2D loc, Tag tag, double heading){
+  public void update(Vector2D loc, Tag tag, double heading, Vector2D view_centre){
       //drawBackground();
-      this.sketch.pushMatrix();
-      //this.sketch.ellipseMode(0);
-      this.sketch.stroke(0);
-      this.sketch.translate((float)loc.getX(), (float)loc.getY());
-      this.sketch.rotate((float) heading);
-      drawEntity(loc, tag);
-      this.sketch.popMatrix();
+      this.view_centre = view_centre;
+      this.render_x = loc.getX() - this.view_centre.getX()
+                                 + this.sketch.width / 2;
+      this.render_y = loc.getY() - this.view_centre.getY()
+                                 + this.sketch.height / 2;
+      
+      if(this.render_x >= 0 && this.render_x <= this.sketch.width &&
+        this.render_y >= 0 && this.render_y <= this.sketch.height){
+        this.sketch.pushMatrix();
+        //this.sketch.ellipseMode(0);
+        this.sketch.stroke(0);
+        this.sketch.translate((float) this.render_x, (float) this.render_y);
+        this.sketch.rotate((float) heading);
+        drawEntity(loc, tag);
+        this.sketch.popMatrix();
+      }
    }
-  
+
   public void drawEntity(Vector2D loc, Tag tag){
+    
     switch(tag){
       case PLAYER: drawPlayer(loc);
         break;
@@ -171,7 +186,7 @@ public class Render {
     this.sketch.ellipseMode(2);
 
     List<Particle> list = new ArrayList<Particle>();
-;
+
     for (int i = 0; i < numParticles; i++){
       // Create particle in randomised circle around entity
       float startX = (float) (loc.getX() + (-1 + (1 - - 1) * (float) Math.random()));

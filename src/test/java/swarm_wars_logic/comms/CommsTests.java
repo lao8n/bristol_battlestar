@@ -1,4 +1,4 @@
-package swarm_wars_logic.engine;
+package swarm_wars_logic.comms;
 
 import static org.junit.jupiter.api.Assertions.*;
 

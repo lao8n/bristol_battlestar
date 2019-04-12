@@ -41,7 +41,7 @@ public class Vector2D {
 		y = y + v.y;
 	}
 
-	static Vector2D add(Vector2D v1, Vector2D v2) {
+	public static Vector2D add(Vector2D v1, Vector2D v2) {
 		Vector2D v3 = new Vector2D(v1.x + v2.x, v1.y + v2.y);
 		return v3;
 	}
@@ -61,7 +61,7 @@ public class Vector2D {
 		y = y * n;
 	}
 
-	static Vector2D mult(Vector2D v1, double n) {
+	public static Vector2D mult(Vector2D v1, double n) {
 		Vector2D v2 = new Vector2D(v1.x * n, v1.y * n);
 		return v2;
 	}

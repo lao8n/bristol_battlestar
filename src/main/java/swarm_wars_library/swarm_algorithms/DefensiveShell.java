@@ -32,8 +32,8 @@ public class DefensiveShell extends SwarmAlgorithm {
                                                             .getPacket(0)
                                                             .getLocation());
 
-    separate_v2d.mult(0.1);
-    seek_mothership_v2d.mult(1.0);
+    separate_v2d.mult(0.2);
+    seek_mothership_v2d.mult(0.8);
     
     this.avoidEdge(0.1);
     this.rb.applyForce(separate_v2d);
