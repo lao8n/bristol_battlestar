@@ -4,6 +4,10 @@ package swarm_wars_library.engine;
 import javax.swing.text.Position;
 import java.util.*;
 
+import swarm_wars_library.graphics.Render;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsPacket;
+
 import processing.core.PApplet;
 
 public class Entity {

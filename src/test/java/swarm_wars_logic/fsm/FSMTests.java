@@ -6,9 +6,9 @@ import java.beans.Transient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import swarm_wars_library.engine.FSM;
-import swarm_wars_library.engine.Transition;
-import swarm_wars_library.engine.State;
+import swarm_wars_library.fsm.FSM;
+import swarm_wars_library.fsm.Transition;
+import swarm_wars_library.fsm.State;
 
 
 class FSMTests {

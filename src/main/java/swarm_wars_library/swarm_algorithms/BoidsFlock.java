@@ -4,7 +4,7 @@ import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
 import swarm_wars_library.engine.Transform;
 import swarm_wars_library.engine.RigidBody;
 import swarm_wars_library.engine.Vector2D;
-import swarm_wars_library.engine.CommsGlobal;
+import swarm_wars_library.comms.CommsGlobal;
 
 public class BoidsFlock extends SwarmAlgorithm {
   private CommsGlobal comms;

@@ -3,6 +3,10 @@ package swarm_wars_library;
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.*;
+import swarm_wars_library.graphics.Render;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsChannel;
+
 import java.util.Random;
 import java.util.*;
 

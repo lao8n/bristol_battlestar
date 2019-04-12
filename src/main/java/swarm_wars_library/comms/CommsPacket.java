@@ -1,4 +1,6 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.comms;
+
+import swarm_wars_library.engine.Vector2D;
 
 public class CommsPacket {
   private Vector2D location;

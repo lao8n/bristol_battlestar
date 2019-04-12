@@ -1,4 +1,4 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.fsm;
 import java.util.*;
 
 public class FSM {

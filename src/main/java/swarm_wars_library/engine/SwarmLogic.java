@@ -1,9 +1,11 @@
 package swarm_wars_library.engine;
 
+import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefensiveShell;
 import swarm_wars_library.swarm_algorithms.BoidsFlock;
 import swarm_wars_library.swarm_algorithms.ScoutShell;
+
 
 public class SwarmLogic {
 

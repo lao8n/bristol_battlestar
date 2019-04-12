@@ -2,8 +2,8 @@ package swarm_wars_library.swarm_algorithms;
 
 import swarm_wars_library.engine.RigidBody;
 import swarm_wars_library.engine.Transform;
-import swarm_wars_library.engine.CommsGlobal;
-import swarm_wars_library.engine.CommsPacket;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.engine.Vector2D;
 
 public abstract class SwarmRule{

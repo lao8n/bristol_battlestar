@@ -1,4 +1,4 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.graphics;
 
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.Tag;
