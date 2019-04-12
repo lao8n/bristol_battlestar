@@ -57,8 +57,9 @@ public class Entity {
       //NOTICE: must call method to init swarmLogic in main loop
     }
     if (tag.equals(Tag.P_BOT)){
-      transform.setPosition(this.sketch.width / 2 + Math.random() * 5,
-                            this.sketch.height /2 + Math.random() * 5);
+      transform.setPosition(this.sketch.width / 2 - 100 +  Math.random() * 200,
+                            this.sketch.height / 2 - 100 +  Math.random() * 200);
+      transform.setVelocity(-0.01 + Math.random() * 0.02, -0.01 + Math.random() * 0.02);
     }
     if (hasInput) {
       input = new Input(sketch);
