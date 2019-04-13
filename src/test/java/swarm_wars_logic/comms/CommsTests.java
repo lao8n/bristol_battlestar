@@ -2,7 +2,6 @@ package swarm_wars_logic.comms;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.beans.Transient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

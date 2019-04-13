@@ -2,7 +2,11 @@ package swarm_wars_library.graphics;
 
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.Tag;
-import swarm_wars_library.comms.CommsGlobal;
+// import swarm_wars_library.comms.CommsGlobal;
+
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.TOP;
 
 import java.util.*;
 
@@ -171,7 +175,7 @@ public class Render {
   public void drawPoints(int points){
     this.sketch.fill(0, 101, 255);
     this.sketch.textSize(30);
-    this.sketch.textAlign(this.sketch.LEFT, this.sketch.TOP);
+    this.sketch.textAlign(LEFT, TOP);
     this.sketch.text("POINTS: " + points, 5, 5);
   }
 
@@ -246,7 +250,7 @@ public class Render {
   public void drawInitScreen(float width, float height){
     this.sketch.background(56,1,9);
     this.sketch.fill(25, 0, 255);
-    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textAlign(CENTER);
     this.sketch.textSize(50);
     this.sketch.text("BATTLESTAR\n\nsurvive the swarm", width / 2, height / 2);
   }
@@ -255,12 +259,12 @@ public class Render {
     this.sketch.background(17, 0, 2);
     // Pink Glow
     this.sketch.fill(255, 0, 89); 
-    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textAlign(CENTER);
     this.sketch.textSize(81);
     this.sketch.text("GAME OVER", width / 2, height / 2);
     //DARK BLUE
     this.sketch.fill(19, 0, 232); 
-    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textAlign(CENTER);
     this.sketch.textSize(80);
     this.sketch.text("GAME OVER", width / 2, height / 2);
 

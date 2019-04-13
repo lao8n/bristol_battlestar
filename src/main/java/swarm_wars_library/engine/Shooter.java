@@ -55,7 +55,7 @@ class Shooter {
       if (magazine.get(i).isRendering()){
         currPos = magazine.get(i).getPosition();
         //magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
-        magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), 
+        magazine.get(i).setPosition(Vector2D.add(currPos, magazine.get(i).getVelocity()), 
                                     magazine.get(i).getHeading());
         //update bullet to render it
         magazine.get(i).update();

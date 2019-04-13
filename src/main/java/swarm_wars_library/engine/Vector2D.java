@@ -74,7 +74,7 @@ public class Vector2D {
 		}
 	}
 
-	static Vector2D div(Vector2D v1, double n) {
+	public static Vector2D div(Vector2D v1, double n) {
 		/*	if(n == 0 || n == 0){
 			 NEED TO RAISE EXCEPTION << check for zero divide <<<<<<<<<
 			return;
