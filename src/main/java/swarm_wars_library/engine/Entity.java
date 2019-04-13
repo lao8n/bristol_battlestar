@@ -27,7 +27,7 @@ public class Entity {
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
-  private Vector2D view_centre;
+  private Vector2D view_centre = new Vector2D(0, 0);
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -91,7 +91,7 @@ public class Entity {
       transform.setScale(5, 5);
     }
     if (hasRender) {
-      render = new Render(sketch, sc);
+      render = new Render(sketch, sc, this.view_centre);
     }
   }
 
@@ -136,7 +136,9 @@ public class Entity {
       }
       // draw explosion if dead
       if (health.getCurrentHealth() <= 0){
-        render.drawExplosion(transform.getPosition(), tag);
+        render.drawExplosion(transform.getPosition(), 
+                             tag,
+                             this.view_centre);
       }
     }
 
@@ -221,7 +223,9 @@ public class Entity {
   }
 
   public void kill() {
-    render.drawExplosion(transform.getPosition(), tag);
+    render.drawExplosion(transform.getPosition(), 
+                         tag,
+                         this.view_centre);
     hasRender = false;
     hasShooter = false;
     isAlive = false;

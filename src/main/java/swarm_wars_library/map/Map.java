@@ -31,8 +31,8 @@ import java.util.*;
  *    being more explicit about where things happen. Currently there is a
  *    loop over entity objects which checks for map location and screen
  *    location before deciding whether to render. But as bullets are 
- *    not entities this doesn't work. Might need to work on better solution
- *    with Valia/Aurora etc.
+ *    not in entity list this doesn't work. Might need to work on better 
+ *    solution with Valia/Aurora etc.
  * @author nd17792
  */
 public class Map {

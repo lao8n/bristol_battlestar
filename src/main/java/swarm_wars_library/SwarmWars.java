@@ -31,7 +31,7 @@ public class SwarmWars extends PApplet {
   CommsGlobal comms = new CommsGlobal();
 
   // To render UI / Game screens
-  Render render = new Render(this, width);
+  Render render = new Render(this, width, new Vector2D(0, 0));
 
   int MAXSCREENS = 3;
   int gameScreen = 0;

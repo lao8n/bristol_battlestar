@@ -21,9 +21,10 @@ public class Render {
   private double render_y;
   private Vector2D view_centre;
 
-  public Render(PApplet sketch, int s){
+  public Render(PApplet sketch, int s, Vector2D view_centre){
     this.sketch = sketch;
     this.scale = s;
+    this.view_centre = view_centre;
   }
 
   public void update(Vector2D loc, Tag tag, double heading, Vector2D view_centre){
@@ -179,16 +180,16 @@ public class Render {
     this.sketch.text("POINTS: " + points, 5, 5);
   }
 
-  public void drawExplosion(Vector2D loc, Tag tag){
+  public void drawExplosion(Vector2D loc, Tag tag, Vector2D view_centre){
 
     int r = 0, g = 0, b = 0, alpha; 
-
+    this.view_centre = view_centre;
     // Bigger entities have longer explosions
     int frames = 5;
     if (tag.equals(Tag.ENEMY)){
       frames = 10;
       // To put a black hole briefly where enemy was
-      drawEnemyVoid(loc);
+      drawEnemyVoid(new Vector2D(render_x, render_y));
       r = 229; g = 11; b = 109;
     } else if (tag.equals(Tag.P_BULLET)){
       r = 0; g = 237; b = 255; 
@@ -223,28 +224,42 @@ public class Render {
       this.sketch.fill(r, g, b, 50);
       alpha = 20;
       for (Particle p : list){
-        if (tag.equals(Tag.ENEMY)){drawEnemyParticle(p, r, g, b, alpha);}
-        else if (tag.equals(Tag.P_BOT)){drawPlayerBotParticle(p, r, g, b, alpha);}
-        else {drawBulletParticle(p, r, g, b, alpha);}
+        render_x = p.getX() - this.view_centre.getX()
+                + this.sketch.width / 2;
+        render_y = p.getY() - this.view_centre.getY()
+                + this.sketch.height / 2;
+        System.out.println(render_y);
+        if (tag.equals(Tag.ENEMY)){
+          drawEnemyParticle(render_x, render_y, r, g, b, alpha);
+        }
+        else if (tag.equals(Tag.P_BOT)){
+          drawPlayerBotParticle(render_x, render_y, r, g, b, alpha);
+        }
+        else {
+          drawBulletParticle(render_x, render_y, r, g, b, alpha);
+        }
         alpha += 10;
         p.update();
       }
     }
   }
 
-  private void drawEnemyParticle(Particle p, int r, int g, int b, int alpha){
+  private void drawEnemyParticle(double render_x, double render_y, int r, 
+    int g, int b, int alpha){
     this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 6, 6);
+    this.sketch.ellipse((float) render_x, (float) render_y, 6, 6);
   }
 
-  private void drawPlayerBotParticle(Particle p, int r, int g, int b, int alpha){
+  private void drawPlayerBotParticle(double render_x, double render_y, int r, 
+    int g, int b, int alpha){
     this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 4, 4);
+    this.sketch.ellipse((float) render_x, (float) render_y, 4, 4);
   }
 
-  private void drawBulletParticle(Particle p, int r, int g, int b, int alpha){
+  private void drawBulletParticle(double render_x, double render_y, int r, 
+  int g, int b, int alpha){
     this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 3, 3);
+    this.sketch.ellipse((float) render_x, (float) render_y, 3, 3);
   }
 
   public void drawInitScreen(float width, float height){
@@ -270,7 +285,7 @@ public class Render {
 
     // random particle explosion
     Vector2D v = new Vector2D(Math.random() * width +1, Math.random() * height + 1);
-    drawExplosion(v, Tag.ENEMY);
+    drawExplosion(v, Tag.ENEMY, this.view_centre);
   }
 
 }
