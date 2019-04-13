@@ -26,12 +26,11 @@ public class SwarmWars extends PApplet {
   // Entity builder class
   EntityBuilder eb = new EntityBuilder(this);
 
-
   // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
 
   // To render UI / Game screens
-  Render render = new Render(this, width, new Vector2D(0, 0));
+  Render render = new Render(this, width);
 
   int MAXSCREENS = 3;
   int gameScreen = 0;
@@ -43,9 +42,18 @@ public class SwarmWars extends PApplet {
   int pointsToAdd = 0;
   Map map = Map.getInstance();
 
+  public void settings() {
+    size(900, 700, "processing.awt.PGraphicsJava2D");
+  }
+
   public void setup() {
     frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
-
+    // added game_setup as I think this only starts calling the function and then will try
+    // draw which reduces the lag-time. I'm not 100% sure however.
+    game_setup();
+  }
+  
+  public void game_setup(){
     // use singleton pattern for map - not sure how this works with networking however.
     map.setMapDimensions(this.map_width, this.map_height);
     map.setMapStars();
@@ -92,10 +100,6 @@ public class SwarmWars extends PApplet {
 
     // IMPORTANT to do at end of setup - sets all initial packets to current
     comms.update();
-  }
-
-  public void settings() {
-    size(900, 700, "processing.awt.PGraphicsJava2D");
   }
 
   public void draw() {

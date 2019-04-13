@@ -91,7 +91,7 @@ public class Entity {
       transform.setScale(5, 5);
     }
     if (hasRender) {
-      render = new Render(sketch, sc, this.view_centre);
+      render = new Render(sketch, sc);
     }
   }
 

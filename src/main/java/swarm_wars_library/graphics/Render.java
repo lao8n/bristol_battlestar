@@ -21,10 +21,9 @@ public class Render {
   private double render_y;
   private Vector2D view_centre;
 
-  public Render(PApplet sketch, int s, Vector2D view_centre){
+  public Render(PApplet sketch, int s){
     this.sketch = sketch;
     this.scale = s;
-    this.view_centre = view_centre;
   }
 
   public void update(Vector2D loc, Tag tag, double heading, Vector2D view_centre){
@@ -228,7 +227,6 @@ public class Render {
                 + this.sketch.width / 2;
         render_y = p.getY() - this.view_centre.getY()
                 + this.sketch.height / 2;
-        System.out.println(render_y);
         if (tag.equals(Tag.ENEMY)){
           drawEnemyParticle(render_x, render_y, r, g, b, alpha);
         }
