@@ -5,8 +5,27 @@ import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefensiveShell;
 import swarm_wars_library.swarm_algorithms.BoidsFlock;
 import swarm_wars_library.swarm_algorithms.ScoutShell;
-
-
+/**
+ * SwarmLogic Class is a manager class for Swarm behaviour. It includes,
+ * getter and setter methods for Transform, id and Global Comms and 
+ * crucially the update method which runs the applySwarmAlgorithm() method.
+ * What method this is depends upon the constructed class (currently
+ * DefensiveShell, BoidsFlock, and ScoutShell) and their specific 
+ * implementations.
+ * <p>
+ * The idea here is to follow the State design pattern, where each State
+ * (in this case Swarm Algorithm) implements a different version of the 
+ * Swarm Rule interface (although here we use an abstract class to allow 
+ * state and concrete implementation). The advantage of this is we can
+ * follow the adage 'code to the interface not the implementation'.
+ * <p>
+ * Issues
+ * 1. There is currently on way to switch between the Swarm Algorithms. In
+ *    fact, the choice is hard-coded in as the starting implementation in 
+ *    the bot section of SwarmWars (search for 
+ *    bot.selectStartingSwarmAlgorithm). How this should work with FSM/player
+ *    input wasn't clear to me so I wanted to wait before proceeding.
+ */
 public class SwarmLogic {
 
   private RigidBody rb;

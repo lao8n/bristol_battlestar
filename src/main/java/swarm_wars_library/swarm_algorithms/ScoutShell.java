@@ -6,6 +6,39 @@ import swarm_wars_library.engine.RigidBody;
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.comms.CommsGlobal;
 
+/**
+ * ScoutShell Class is an implementation of the previous SwarmLogic
+ * but making use of the SwarmRule and SwarmAlgorithm abstract classes to make
+ * the coder slightly cleaner. It forms a rough shell around the Mothership
+ * with a slight lag moving across the map, like defensive shell, however
+ * in addition about 20% of the bots try to 'scout' across the map, returning
+ * only when they reach an edge.
+ * <p>
+ * The class contains references to GlobalComms and properties of 
+ * the entity calling it including id, Transform and RigidBody.
+ * It implements abstract methods applySwarmLogic() and seekMotherShip() and 
+ * also includes helper functions to help with this implementation. 
+ * applySwarmLogic(), in particular, contains the private class SeparateRule
+ * which implements the abstract class SwarmRule which is how the swarm 
+ * behaviour is calculated. 
+ * <p>
+ * Issues
+ * 1. Ideally you'd like, via say the FSM or user input, to directly tweak the
+ *    mult() hyperparameters (separate_v2d.mult() and seek_mothership_v2d), but
+ *    it is unclear to me how to do this and make it generic, where you have 
+ *    n rules each with n potential hyperparameters. Currently the 
+ *    hyperparameters are hard-coded in but this probably needs to be changed.
+ * 2. Scouting currently is useless as the map is only visible in the part of
+ *    map the user is on, and that part of the map is perfectly visible. It
+ *    would be cool to try and add a mini-map and fog of war to make this a 
+ *    more useful algorithm.
+ * 3. I considered adding more algorithms, but others may have stronger view 
+ *    on what the various behaviours should look like. The main thing is to
+ *    show a few examples of using the abstract classes. It would also be cool
+ *    to add swarm algorithms like bee-behaviour although this would require
+ *    something on the map to seek, like resources, HP or bullets etc.
+ * 
+ */
 public class ScoutShell extends SwarmAlgorithm {
   private CommsGlobal comms;
   private int id;

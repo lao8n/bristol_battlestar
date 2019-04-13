@@ -3,6 +3,38 @@ package swarm_wars_library.map;
 import swarm_wars_library.engine.Vector2D;
 import java.util.*;
 
+/**
+ * Map Class holds information about the underlying game map (not the 
+ * rendered map which is different). It provides getter access to the
+ * map width and map height, and to the position of the background stars
+ * <p>
+ * All positions of objects are now relative to the Map Class and its 
+ * dimensions and not the sketch dimensions. Rendering is achieved by
+ * translating between the two, but game logic should be with respect to 
+ * Map dimensions only.
+ * <p>
+ * Map Class is implemented with a private constructor and a static single
+ * instance. This uses the well-known singleton pattern.
+ * Map Class is instantiated in SwarmWars.java and setMapDimensions() and 
+ * setMapStars() are called in setup(). 
+ * Map is called in SwarmAlgorithm.java where the concrete implementation 
+ * of avoidEdge() is. For similar reasons Map is also accessed in Input and
+ * edgeCheck().
+ * <p> 
+ * Issues
+ * 1. Does Singleton pattern with static constructor work with networking?
+ * 2. SwarmWars.java has in the game loop a for loop over star objects 
+ *    to render them. Does this further mix game loop role to include both
+ *    rendering and game logic?
+ * 3. Currently, some actions occur off the game map, including bullets
+ *    and collisions. I think the solution is to clean up rendering and
+ *    being more explicit about where things happen. Currently there is a
+ *    loop over entity objects which checks for map location and screen
+ *    location before deciding whether to render. But as bullets are 
+ *    not entities this doesn't work. Might need to work on better solution
+ *    with Valia/Aurora etc.
+ * @author nd17792
+ */
 public class Map {
 
   private static Map instance = new Map();
