@@ -103,7 +103,7 @@ public class Entity {
 
     // Set position with either Input or AI
     if (hasInput) {
-      input.update();
+      input.update(this.view_centre);
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
     }

@@ -8,7 +8,6 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
 
-import java.util.Random;
 import java.util.*;
 
 /*control which screen is active by setting/updating gameScreen var

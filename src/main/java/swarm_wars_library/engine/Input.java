@@ -29,11 +29,16 @@ public class Input {
     map = Map.getInstance();
   }
 
-  public void update() {
-    location.setXY(location.getX() + (int) moveForce * (moveRight - moveLeft),
-        location.getY() + (int) moveForce * 0.8 * (moveDown - moveUp));
+  public void update(Vector2D view_centre) {
+    location.setXY(location.getX() + 
+                   (int) moveForce * (moveRight - moveLeft),
+                   location.getY() + 
+                   (int) moveForce * 0.8 * (moveDown - moveUp));
 
-    heading = Math.atan2(sketch.mouseY - location.getY(), sketch.mouseX - location.getX());
+    heading = Math.atan2((sketch.mouseY + view_centre.getY() - sketch.height/2) 
+                          - location.getY(), 
+                         (sketch.mouseX + view_centre.getX() - sketch.width/2)
+                          - location.getX());
     edgeCheck();
   }
 
