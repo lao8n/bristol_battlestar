@@ -1,186 +1,194 @@
 import processing.core.PApplet;
 
-import swarm_wars_library.engine.BoxCollider;
-import swarm_wars_library.engine.GameObject;
-import swarm_wars_library.engine.Mover;
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.engine.*;
+import java.util.Random;
 
+/*control which screen is active by setting/updating gameScreen var
+0: initial screen
+1: game screen - game object
+2: game-over screen
+*/
 
 public class SwarmWars extends PApplet {
 
-	Display display = new Display();
-	Player p;
-	int moveForce = 10;
-	EnvObject g;
+  // Player must be here so that event listeners can access it
+  Entity player;
 
+  // Entity list that has all our game things.
+  ArrayList < Entity > entityList = new ArrayList < Entity > ();
+  // Entity builder class
+  EntityBuilder eb = new EntityBuilder(this);
 
-	void setup() {  
-		p = new Player(new Vector2D(width/2, height/2));
-		g = new EnvObject(new Vector2D(100, 100));
-	}
+  // To render UI / Game screens
+  Render render = new Render(this, width);
 
-	public void settings(){
-		size(300, 300, "processing.awt.PGraphicsJava2D");
-	}
+  int MAXSCREENS = 3;
+  int gameScreen = 0;
+  int initScreenTimer = 120;
+  int numBots = 100;
+  int numTurrets = 5;
 
-	void draw(){
-		int i = 0;
-		background(25, 25, 76);
+  int pointsToAdd = 0;
 
-		p.update();
-		display.display(g);
-		display.display(p);
-		//loop over all objects and set hasCollisions to false at start of loop
-		BoxCollider.clearCollision(p); BoxCollider.clearCollision(g);
-    //this will loop over all game objects as needed to check for collisions
-		BoxCollider.boundingCheck(p, g);
-	}
+  // global comms channel any entity that has comms should set comms to this
+  CommsGlobal comms = new CommsGlobal();
 
+  void setup() {
+    frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
+    /* GUIDE TO ADDING NEW THINGS
+      Use the EntityBuilder, for example: player = eb.newPlayer()
+      this creates new entity - and automatically sets alls it's components
+      optional - if has comms. add a space for it in a CommsChannel and set it's comms to the global comms
+      add the entity to the entityList
+    */
 
-	/* ------ EVENT LISTENERS ------ */
+    // set up comms before entities
+    comms.add("PLAYER", new CommsChannel(numBots + 1));
+    comms.add("ENEMY", new CommsChannel(numTurrets)); // we will add 1 turret therefore we have 1 item in enemy comms channel
 
-	void keyPressed() {
-		p.setMove(keyCode, true);
-	}
+    // add a player
+    player = eb.newPlayer();
+    player.setComms(comms);
+    entityList.add(player);
+    //add player bullets
+    entityList.addAll(player.getMagazine());
 
-	void keyReleased() {
-		p.setMove(keyCode, false);
-	}
-
-	class Display {
-		 public void display(GameObject go){
-		    //drawBackground();
-				pushMatrix();
-				rectMode(CENTER);
-				stroke(0);
-				translate((float)go.getLocationX(), (float)go.getLocationY());
-				rotate((float)go.getHeading());
-				drawObject(go);
-				popMatrix();
-		 }
-
-     //TODO : add tracking, moving background image
-		 private void drawBackground(){
-		    background(25,25,76); //dark blue
-		 }
-
-		 private void drawObject(GameObject go){
-			 if (go.getGOTag() == "PLAYER"){
-				 drawShip(go);
-			 } else if (go.getGOTag() == "ENV"){
-				 drawEnv(go);
-
-				//will add drawBullet, drawEnemy, drawBase etc
-			 } else {
-				 //do nothing
-			 }
-		 }
-
-		 private void drawShip(GameObject go){
-		 	 //go.setScale(30, 20);
-			 go.setScale(20,10);
-			 if (go.getHasCollision()){
-			    fill(random(0, 255),random(0, 255),random(0, 255));
-			 }
-			 //shadow
-			 noStroke();
-			 fill(33,11,232, 20);
-			 rect(0, 0, (float)go.getScaleX()*1.75, (float)go.getScaleY()*1.75);
-			 fill(33,11,232, 50);
-			 rect(0, 0, (float)go.getScaleX()*1.5, (float)go.getScaleY()*1.5);
-			 fill(33,11,232, 70);
-			 rect(0, 0, (float)go.getScaleX()*1.2, (float)go.getScaleY()*1.2);
-			 //wing shadows
-			 fill(33, 11, 232, 70);
-			 rect(-(float)go.getScaleX()/1.75, (float)go.getScaleY()/2.5, 
-			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.75, -(float)go.getScaleY()/2.5, 
-			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 //wings
-			 fill(33, 11, 232);
-			 rect(-(float)go.getScaleX()/1.5, (float)go.getScaleY()/2, 
-			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2, 
-			 			(float)go.getScaleX(), (float)go.getScaleY());
-			 //ship head
-			 fill(77, 77, 255);
-			 rect(0, 0, (float)go.getScaleX(), (float)go.getScaleY());
-		 }
-
-		 private void drawEnv(GameObject go){
-		   noStroke();
-   		 go.setScale(50, 40);
-		   fill(128, 128, 128);
-			 if (go.getHasCollision()){
-					fill(random(0, 255),random(0, 255),random(0, 255));
-			 }
-			 rect(0, 0, (float)go.getScaleX(), (float)go.getScaleY());
-		 }
-	}
-
-	/* ------ ENV CLASS ------ */
-
-	class EnvObject extends GameObject {
-		EnvObject(Vector2D location_) {
-			super(location_);
-			setGOTag("ENV");
-		}
-
-	}
-
-	/* ------ PLAYER CLASS ------ */
-
-	class Player extends Mover {
-		boolean moveLeft, moveRight, moveUp, moveDown;
-		int moveForce = 10;
-
-		Player(Vector2D location_) {
-			super(location_);
-			setMoverTag("PLAYER");
-		}
-
-		void update(){
-			/* I THINK WE SHOULD MOVE IN THE Y DIRECTION SLIGHTLY SLOWER THAN X -
-			 FOR ORTHO APPEARANCE */
-			setLocationXY(getLocationX() + 
-										moveForce * (int(moveRight) - int(moveLeft)),
-										getLocationY() + 
-										0.8 * moveForce * (int(moveDown) - int(moveUp)));
-			setHeading(Math.atan2(mouseY - getLocationY(),
-														mouseX - getLocationX()));
-
-			updateMover(getLocation(), getHeading());
-		}
-
-		boolean setMove(int k, boolean b){
-			switch(k) {
-				case 'W':
-				case 'w':
-				case UP:
-					return moveUp = b;
-				case 'A':
-				case 'a':
-				case LEFT:
-					return moveLeft = b;
-				case 'S':
-				case 's':
-				case DOWN:
-					return moveDown = b;
-				case 'D':
-				case 'd':
-				case RIGHT:
-					return moveRight = b;
-
-				default:
-					return b;
-			}
-		}
-	}
-  
-	public static void main(String[] passedArgs) {
-		String[] appletArgs = new String[] { "SwarmWars" };
-		PApplet.main(appletArgs);
+    //add player bots
+    for (int i = 0; i < numBots; i++) {
+      Entity bot = eb.newBot();
+      bot.setSwarmLogic();
+      bot.setComms(comms);
+      entityList.add(bot);
+      // Note: if bots later get shooters: need to add magazines here
     }
-}
 
+    // add an Enemy Turrets
+    for (int i = 0; i < numTurrets; i++){
+      Entity turret = eb.newTurret();
+      turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
+      turret.setComms(comms);
+      entityList.add(turret);
+      // Add enemy shooter magazines (bullets)
+      entityList.addAll(turret.getMagazine());
+    }
+
+    // IMPORTANT to do at end of setup - sets all initial packets to current
+    comms.update();
+  }
+
+  public void settings() {
+    size(900, 700, "processing.awt.PGraphicsJava2D");
+  }
+
+  void draw() {
+    //display contents of the current screen
+    if (gameScreen == 0) {
+      initScreen();
+    } else if (gameScreen == 1) {
+      gameScreen();
+    } else {
+      gameOverScreen();
+    }
+  }
+
+  /*--------GAME SCREENS ----*/
+
+  void initScreen() {
+    render.drawInitScreen((float) width, (float) height);
+
+    // After timer, switch to game
+    if (initScreenTimer-- < 0) {
+      gameScreen = 1;
+    }
+  }
+
+  // >>>>>> MAIN GAME LOOP <<<<<<<<<<
+  void gameScreen() {
+    background(22, 0, 8);
+
+    // Points player earns in a loop
+    pointsToAdd = 0;
+
+    // Update all game things
+    for (int i = entityList.size()-1; i >= 0; i--) {
+      entityList.get(i).update();
+
+      // Collision detection - avoids double checking
+      for(int j = entityList.size()-1; j > i; j--){
+
+        // Stop checking i if entity dies
+        if (entityList.get(i).isDead()){j = i;}
+
+        // All responses to collisions handled in BoxCollider
+        BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
+      }
+
+      // Remove if entity dead
+      if (entityList.get(i).isDead()){
+        // Respawn if turret
+        if (entityList.get(i).getTag().equals(Tag.ENEMY)){
+          // Give player points for kill
+          pointsToAdd += 10;
+
+          entityList.get(i).setPosition(Math.random() * width +1, Math.random() * height + 1);
+          entityList.get(i).setAlive();
+          entityList.get(i).setAlive(true);
+        // If player, move to game over
+        } else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
+          gameScreen = 3;
+        }else {
+          entityList.remove(i);
+        }
+      }      
+    }
+
+    // Add points player earned for enemies killed this loop
+    player.addPoints(pointsToAdd);
+
+    // Sets future comms to current for next loop
+    comms.update();
+
+  }
+
+  void gameOverScreen() {
+    render.drawGameOverScreen(width, height);
+  }
+
+  void changeScreen(int k) {
+    //TODO add more checks here, only change screens in certain cases
+    if (k == 'n' || k == 'N') {
+      gameScreen++;
+      if (gameScreen > MAXSCREENS) {
+        gameScreen = 0;
+      }
+    }
+    //add pause screen on 'p'
+  }
+
+  public static void main(String[] passedArgs) {
+    String[] appletArgs = new String[] {
+      "SwarmWars"
+    };
+    PApplet.main(appletArgs);
+  }
+
+  /* ------ EVENT LISTENERS ------ */
+  void keyPressed() {
+    //changeScreen(keyCode);
+    player.input.setMove(keyCode, 1);
+  }
+
+  void keyReleased() {
+    player.input.setMove(keyCode, 0);
+  }
+
+  public void mousePressed(MouseEvent e) {
+    player.input.setMouse(1);
+    
+  }
+  public void mouseReleased(MouseEvent e) {
+    player.input.setMouse(0);
+    
+  }
+}

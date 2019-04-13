@@ -7,11 +7,17 @@
 # Images
 *.png
 
+# Intellij
+*.idea
+
 ### Gradle ###
 .gradle
 /build/
 
 ### 
+/library/
+/library/classes/
+/library/tmp/
 /library/reports/
 /library/test-results/
 /library/battlestar.jar

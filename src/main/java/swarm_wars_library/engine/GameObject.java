@@ -85,4 +85,12 @@ public class GameObject {
 		boundingLength = Math.sqrt(x * x / 4 + y * y / 4);
 	};
 
+	public void update(){
+	}
+
+	public int getTimer(){
+		return 0;
+	}
+
+
 }
