@@ -225,8 +225,6 @@ public class SwarmWars extends PApplet {
 
         try {
             GameClient.countDownLatch.await();
-            // System.out.println("Start sending messages");
-            // Thread.sleep(5000);
         } catch (Exception e) {
             e.printStackTrace();
         }

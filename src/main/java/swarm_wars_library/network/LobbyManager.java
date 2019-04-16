@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 public class LobbyManager {
 
@@ -15,6 +16,8 @@ public class LobbyManager {
     private static LobbyManager lobbyManager = new LobbyManager();
 
     private static Channel channelToServer;
+
+    public static CountDownLatch c = new CountDownLatch(1);
 
     public static synchronized LobbyManager getLobbyManager(){
         return lobbyManager;

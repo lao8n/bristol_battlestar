@@ -1,4 +1,5 @@
 package swarm_wars_library.network;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -19,13 +20,14 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
+        // TODO: add logging
         // 1. Convert message to GameProtocol object
         GameProtocol g = (GameProtocol) msg;
-        logger.log("In Protocol Process Handler, message is: " + g.toString(), "Client");
+        //logger.log("In Protocol Process Handler, message is: " + g.toString(), "Client");
         // 2. Process message
         ProtocolProcessor processor = ProtocolProcessor.getProcessorInstance();
         processor.process0(g);
-        logger.log("Successfully stored in buffer","Client");
+        //logger.log("Successfully stored in buffer","Client");
     }
 
     @Override

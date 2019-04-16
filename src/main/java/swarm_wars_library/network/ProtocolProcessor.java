@@ -31,6 +31,15 @@ public class ProtocolProcessor {
             String content = new String(msg.getContent());
             JSONObject j = new JSONObject(content);
             Map m = j.toMap();
+            if (m.get(Headers.TYPE).equals(Constants.START)) {
+                MessageHandlerMulti.gameStarted = true;
+                return;
+            }
+            // TODO: Only for test
+            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == Client.id){
+                return;
+            }
+            // TODO ends here
             if (!MessageHandlerMulti.isBufferExist((Integer) m.get(Headers.PLAYER))) {
                 try{
                     MessageHandlerMulti.createNewBuffer((Integer) m.get(Headers.PLAYER));

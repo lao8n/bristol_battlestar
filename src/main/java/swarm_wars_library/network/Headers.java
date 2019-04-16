@@ -29,4 +29,6 @@ public class Headers {
     public static final String FRAME = "F";
 
     public static final String PLAYER = "P";
+
+    public static final String RANDOM_SEED = "R";
 }
