@@ -299,9 +299,12 @@ public class Entity {
       comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
     }
 
+    // TODO TIM - need to fix ids here...
     if (tag.equals(Tag.ENEMY)) {
       comms.get("ENEMY").setPacket(commsPacket, 0);
     }
+
+    // TODO TIM add here for P_BULLET / E_BULLET
   }
 
   public ArrayList<Entity> getMagazine(){
