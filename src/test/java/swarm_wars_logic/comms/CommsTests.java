@@ -1,14 +1,13 @@
-package swarm_wars_logic.engine;
+package swarm_wars_logic.comms;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.beans.Transient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import swarm_wars_library.engine.CommsGlobal;
-import swarm_wars_library.engine.CommsChannel;
-import swarm_wars_library.engine.CommsPacket;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsChannel;
+import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.engine.Vector2D;
 
 class CommsTests {

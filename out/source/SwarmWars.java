@@ -4,15 +4,8 @@ import processing.event.*;
 import processing.opengl.*; 
 
 import processing.core.PApplet; 
-import swarm_wars_library.engine.BoxCollider; 
-import swarm_wars_library.engine.SwarmLogic; 
-import swarm_wars_library.engine.Vector2D; 
-import swarm_wars_library.engine.CommsGlobal; 
-import swarm_wars_library.engine.CommsChannel; 
-import swarm_wars_library.engine.CommsPacket; 
-import swarm_wars_library.engine.Entity; 
-import swarm_wars_library.engine.Tag; 
-import swarm_wars_library.engine.EnVar; 
+import swarm_wars_library.engine.*; 
+import java.util.Random; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -22,17 +15,6 @@ import java.io.PrintWriter;
 import java.io.InputStream; 
 import java.io.OutputStream; 
 import java.io.IOException; 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-
-
-
-
-
-//import swarm_wars_library.engine.GameObject;
-//import swarm_wars_library.engine.Mover;
-
 
 
 
@@ -44,94 +26,79 @@ import java.awt.event.MouseListener;
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
 1: game screen - game object
-2: Game screen - entity
-3: game-over screen
+2: game-over screen
 */
 
 public class SwarmWars extends PApplet {
 
-  //Entity(tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, hasAI)
+  // Player must be here so that event listeners can access it
   Entity player;
 
-  Entity turret; 
-
-  //MAKE SOME BOTS
+  // Entity list that has all our game things.
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
+  // Entity builder class
+  EntityBuilder eb = new EntityBuilder(this);
+
+  // To render UI / Game screens
+  Render render = new Render(this, width);
 
   int MAXSCREENS = 3;
-  int gameScreen = 2;
+  int gameScreen = 0;
   int initScreenTimer = 120;
   int numBots = 100;
+  int numTurrets = 5;
 
+  int pointsToAdd = 0;
+
+  // global comms channel any entity that has comms should set comms to this
   CommsGlobal comms = new CommsGlobal();
 
-  // EnVar envar;
-  Entity bot;
-
   public void setup() {
+    frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
+    /* GUIDE TO ADDING NEW THINGS
+      Use the EntityBuilder, for example: player = eb.newPlayer()
+      this creates new entity - and automatically sets alls it's components
+      optional - if has comms. add a space for it in a CommsChannel and set it's comms to the global comms
+      add the entity to the entityList
+    */
+
+    // set up comms before entities
     comms.add("PLAYER", new CommsChannel(numBots + 1));
+    comms.add("ENEMY", new CommsChannel(numTurrets)); // we will add 1 turret therefore we have 1 item in enemy comms channel
 
-    // envar = new EnVar();
-    // entityList.add(envar);
-
-    player = new Entity(
-      this, 
-      Tag.PLAYER, 
-      30, 
-      true, 
-      true, 
-      true, 
-      true, 
-      true, 
-      true, 
-      false
-    );
-
+    // add a player
+    player = eb.newPlayer();
     player.setComms(comms);
     entityList.add(player);
-    //add bots
+    //add player bullets
+    entityList.addAll(player.getMagazine());
+
+    //add player bots
     for (int i = 0; i < numBots; i++) {
-      bot = new Entity(this, 
-                         Tag.P_BOT, 
-                         5, 
-                         true, 
-                         false, 
-                         false, 
-                         false, 
-                         true, 
-                         true, 
-                         false
-      );
+      Entity bot = eb.newBot();
       bot.setSwarmLogic();
       bot.setComms(comms);
       entityList.add(bot);
-      //System.out.println("bot created: " + i);
+      // Note: if bots later get shooters: need to add magazines here
     }
 
+    // add an Enemy Turrets
+    for (int i = 0; i < numTurrets; i++){
+      Entity turret = eb.newTurret();
+      turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
+      turret.setComms(comms);
+      entityList.add(turret);
+      // Add enemy shooter magazines (bullets)
+      entityList.addAll(turret.getMagazine());
+    }
 
-    turret = new Entity(
-      this, 
-      Tag.ENEMY, 
-      40, 
-      true, 
-      false, 
-      true, 
-      false, 
-      true, 
-      true, 
-      true);
-    turret.setPosition(200, 200);
-    turret.setSwarmLogic();
-    turret.setComms(comms);
-    entityList.add(turret);
-
-    // import to do at end of setup - sets all initial packets to current
+    // IMPORTANT to do at end of setup - sets all initial packets to current
     comms.update();
   }
 
   public void settings() {
-    size(700, 900, "processing.awt.PGraphicsJava2D");
+    size(900, 700, "processing.awt.PGraphicsJava2D");
   }
 
   public void draw() {
@@ -140,8 +107,6 @@ public class SwarmWars extends PApplet {
       initScreen();
     } else if (gameScreen == 1) {
       gameScreen();
-    } else if (gameScreen == 2) {
-      gameScreenEntity();
     } else {
       gameOverScreen();
     }
@@ -150,40 +115,64 @@ public class SwarmWars extends PApplet {
   /*--------GAME SCREENS ----*/
 
   public void initScreen() {
-    background(0);
-    textAlign(CENTER);
-    text("welcome to\n\nSWARM WARS\n\n\nMove: WASD", width / 2, height / 2);
+    render.drawInitScreen((float) width, (float) height);
 
-    //after timer, switch to game
+    // After timer, switch to game
     if (initScreenTimer-- < 0) {
       gameScreen = 1;
     }
   }
 
+  // >>>>>> MAIN GAME LOOP <<<<<<<<<<
   public void gameScreen() {
-    background(25, 25, 76);
-  }
+    background(22, 0, 8);
 
-  public void gameScreenEntity() {
-    background(25, 25, 76);
+    // Points player earns in a loop
+    pointsToAdd = 0;
 
-    // update all bots
-    for (int j = 0; j < entityList.size(); j++){
-      this.entityList.get(j).update();
-      // try{
-      //   this.entityList.get(j).update();
-      // }
-      // catch(Exception e){
-      //   e.printStackTrace();
-      // }
+    // Update all game things
+    for (int i = entityList.size()-1; i >= 0; i--) {
+      entityList.get(i).update();
+
+      // Collision detection - avoids double checking
+      for(int j = entityList.size()-1; j > i; j--){
+
+        // Stop checking i if entity dies
+        if (entityList.get(i).isDead()){j = i;}
+
+        // All responses to collisions handled in BoxCollider
+        BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
+      }
+
+      // Remove if entity dead
+      if (entityList.get(i).isDead()){
+        // Respawn if turret
+        if (entityList.get(i).getTag().equals(Tag.ENEMY)){
+          // Give player points for kill
+          pointsToAdd += 10;
+
+          entityList.get(i).setPosition(Math.random() * width +1, Math.random() * height + 1);
+          entityList.get(i).setAlive();
+          entityList.get(i).setAlive(true);
+        // If player, move to game over
+        } else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
+          gameScreen = 3;
+        }else {
+          entityList.remove(i);
+        }
+      }      
     }
-    // sets future comms to current for next loop
+
+    // Add points player earned for enemies killed this loop
+    player.addPoints(pointsToAdd);
+
+    // Sets future comms to current for next loop
     comms.update();
 
   }
 
   public void gameOverScreen() {
-    background(0, 0, 0);
+    render.drawGameOverScreen(width, height);
   }
 
   public void changeScreen(int k) {
@@ -212,5 +201,14 @@ public class SwarmWars extends PApplet {
 
   public void keyReleased() {
     player.input.setMove(keyCode, 0);
+  }
+
+  public void mousePressed(MouseEvent e) {
+    player.input.setMouse(1);
+    
+  }
+  public void mouseReleased(MouseEvent e) {
+    player.input.setMouse(0);
+    
   }
 }

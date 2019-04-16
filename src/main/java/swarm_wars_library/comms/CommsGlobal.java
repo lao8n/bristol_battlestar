@@ -1,4 +1,4 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.comms;
 
 import java.util.HashMap;
 import java.util.Map;

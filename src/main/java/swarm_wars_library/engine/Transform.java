@@ -1,6 +1,6 @@
 package swarm_wars_library.engine;
 
-class Transform {
+public class Transform {
 
     private Vector2D position;
     private Vector2D scale;

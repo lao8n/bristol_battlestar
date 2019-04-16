@@ -1,4 +1,4 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.comms;
 
 /*
   CommsChannel - is a collection of shared information, packets

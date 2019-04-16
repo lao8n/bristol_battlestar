@@ -1,9 +1,9 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.graphics;
 
 import swarm_wars_library.engine.Vector2D;
-import swarm_wars_library.engine.Tag;
+// import swarm_wars_library.engine.Tag;
 
-import processing.core.PApplet;
+// import processing.core.PApplet;
 
 // a class for the renderer to calculate special effects
 class Particle {

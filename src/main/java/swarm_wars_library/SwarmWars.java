@@ -1,7 +1,14 @@
+package swarm_wars_library;
+
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.*;
-import java.util.Random;
+import swarm_wars_library.graphics.Render;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsChannel;
+import swarm_wars_library.map.Map;
+
+import java.util.*;
 
 /*control which screen is active by setting/updating gameScreen var
 0: initial screen
@@ -19,6 +26,9 @@ public class SwarmWars extends PApplet {
   // Entity builder class
   EntityBuilder eb = new EntityBuilder(this);
 
+  // global comms channel any entity that has comms should set comms to this
+  CommsGlobal comms = new CommsGlobal();
+
   // To render UI / Game screens
   Render render = new Render(this, width);
 
@@ -27,15 +37,26 @@ public class SwarmWars extends PApplet {
   int initScreenTimer = 120;
   int numBots = 100;
   int numTurrets = 5;
-
+  int map_width = 2000;
+  int map_height = 2000;
   int pointsToAdd = 0;
+  Map map = Map.getInstance();
 
-  // global comms channel any entity that has comms should set comms to this
-  CommsGlobal comms = new CommsGlobal();
+  public void settings() {
+    size(900, 700, "processing.awt.PGraphicsJava2D");
+  }
 
-  void setup() {
+  public void setup() {
     frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
-
+    // added game_setup as I think this only starts calling the function and then will try
+    // draw which reduces the lag-time. I'm not 100% sure however.
+    game_setup();
+  }
+  
+  public void game_setup(){
+    // use singleton pattern for map - not sure how this works with networking however.
+    map.setMapDimensions(this.map_width, this.map_height);
+    map.setMapStars();
     /* GUIDE TO ADDING NEW THINGS
       Use the EntityBuilder, for example: player = eb.newPlayer()
       this creates new entity - and automatically sets alls it's components
@@ -59,6 +80,9 @@ public class SwarmWars extends PApplet {
       Entity bot = eb.newBot();
       bot.setSwarmLogic();
       bot.setComms(comms);
+      // bot.selectStartingSwarmAlgorithm("scout_shell");
+      bot.selectStartingSwarmAlgorithm("boids_flock");
+      // bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
       // Note: if bots later get shooters: need to add magazines here
     }
@@ -66,7 +90,8 @@ public class SwarmWars extends PApplet {
     // add an Enemy Turrets
     for (int i = 0; i < numTurrets; i++){
       Entity turret = eb.newTurret();
-      turret.setPosition(Math.random() * width +1, Math.random() * height + 1);
+      turret.setPosition(Math.random() * map_width +1, 
+                         Math.random() * map_height + 1);
       turret.setComms(comms);
       entityList.add(turret);
       // Add enemy shooter magazines (bullets)
@@ -77,11 +102,7 @@ public class SwarmWars extends PApplet {
     comms.update();
   }
 
-  public void settings() {
-    size(900, 700, "processing.awt.PGraphicsJava2D");
-  }
-
-  void draw() {
+  public void draw() {
     //display contents of the current screen
     if (gameScreen == 0) {
       initScreen();
@@ -94,7 +115,7 @@ public class SwarmWars extends PApplet {
 
   /*--------GAME SCREENS ----*/
 
-  void initScreen() {
+  public void initScreen() {
     render.drawInitScreen((float) width, (float) height);
 
     // After timer, switch to game
@@ -104,14 +125,19 @@ public class SwarmWars extends PApplet {
   }
 
   // >>>>>> MAIN GAME LOOP <<<<<<<<<<
-  void gameScreen() {
+  public void gameScreen() {
     background(22, 0, 8);
+    List<Vector2D> stars = this.map.getMapStars();
+    for (int i = 0; i < stars.size(); i++){
+      render.update(stars.get(i), Tag.STAR, 0.0, player.getPosition());
+    }
 
     // Points player earns in a loop
     pointsToAdd = 0;
 
     // Update all game things
     for (int i = entityList.size()-1; i >= 0; i--) {
+      entityList.get(i).setViewCentre(player.getPosition());
       entityList.get(i).update();
 
       // Collision detection - avoids double checking
@@ -131,13 +157,16 @@ public class SwarmWars extends PApplet {
           // Give player points for kill
           pointsToAdd += 10;
 
-          entityList.get(i).setPosition(Math.random() * width +1, Math.random() * height + 1);
+          entityList.get(i).setPosition(Math.random() * map_width +1, 
+                                        Math.random() * map_height + 1);
           entityList.get(i).setAlive();
           entityList.get(i).setAlive(true);
         // If player, move to game over
-        } else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
+        } 
+        else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
           gameScreen = 3;
-        }else {
+        }
+        else {
           entityList.remove(i);
         }
       }      
@@ -151,11 +180,11 @@ public class SwarmWars extends PApplet {
 
   }
 
-  void gameOverScreen() {
+  public void gameOverScreen() {
     render.drawGameOverScreen(width, height);
   }
 
-  void changeScreen(int k) {
+  public void changeScreen(int k) {
     //TODO add more checks here, only change screens in certain cases
     if (k == 'n' || k == 'N') {
       gameScreen++;
@@ -168,27 +197,26 @@ public class SwarmWars extends PApplet {
 
   public static void main(String[] passedArgs) {
     String[] appletArgs = new String[] {
-      "SwarmWars"
+      "swarm_wars_library.SwarmWars"
     };
     PApplet.main(appletArgs);
   }
 
   /* ------ EVENT LISTENERS ------ */
-  void keyPressed() {
+  public void keyPressed() {
     //changeScreen(keyCode);
     player.input.setMove(keyCode, 1);
   }
 
-  void keyReleased() {
+  public void keyReleased() {
     player.input.setMove(keyCode, 0);
   }
 
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed() {
     player.input.setMouse(1);
     
   }
-  public void mouseReleased(MouseEvent e) {
+  public void mouseReleased() {
     player.input.setMouse(0);
-    
   }
 }

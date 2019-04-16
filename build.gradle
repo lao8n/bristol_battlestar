@@ -1,3 +1,7 @@
+plugins {
+    id 'application'
+}
+
 group 'battlestar'
 version '1.0-SNAPSHOT'
 
@@ -32,6 +36,7 @@ sourceSets {
 }
 
 dependencies {
+    compile files('library/core.jar')
     provided group: 'org.processing', name: 'core', version: '3.3.6'
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.1')
@@ -43,4 +48,8 @@ test {
     testLogging {
 		events "passed", "skipped", "failed"
 	}
+}
+
+application {
+    mainClassName = 'swarm_wars_library.SwarmWars'
 }

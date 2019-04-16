@@ -1,4 +1,4 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.fsm;
 import java.util.*;
 
 public class FSM {
@@ -15,7 +15,7 @@ public class FSM {
         stateList.add(State.ORBIT);
       }
       transitionList = new ArrayList<Transition>();
-      for (int i = 0; i < numStates; i++) {
+      for (int i = 0; i < this.numStates; i++) {
         transitionList.add(new Transition());
       }
     }

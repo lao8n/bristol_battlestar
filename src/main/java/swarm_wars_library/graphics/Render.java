@@ -1,8 +1,13 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.graphics;
 
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.Tag;
-import swarm_wars_library.engine.Particle;
+// import swarm_wars_library.comms.CommsGlobal;
+
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.TOP;
+
 import java.util.*;
 
 import processing.core.PApplet;
@@ -12,24 +17,37 @@ public class Render {
   private PApplet sketch;
   private int scale;
   private int numParticles = 20;
+  private double render_x;
+  private double render_y;
+  private Vector2D view_centre;
 
   public Render(PApplet sketch, int s){
     this.sketch = sketch;
     this.scale = s;
   }
 
-  public void update(Vector2D loc, Tag tag, double heading){
+  public void update(Vector2D loc, Tag tag, double heading, Vector2D view_centre){
       //drawBackground();
-      this.sketch.pushMatrix();
-      //this.sketch.ellipseMode(0);
-      this.sketch.stroke(0);
-      this.sketch.translate((float)loc.getX(), (float)loc.getY());
-      this.sketch.rotate((float) heading);
-      drawEntity(loc, tag);
-      this.sketch.popMatrix();
+      this.view_centre = view_centre;
+      this.render_x = loc.getX() - this.view_centre.getX()
+                                 + this.sketch.width / 2;
+      this.render_y = loc.getY() - this.view_centre.getY()
+                                 + this.sketch.height / 2;
+      
+      if(this.render_x >= 0 && this.render_x <= this.sketch.width &&
+        this.render_y >= 0 && this.render_y <= this.sketch.height){
+        this.sketch.pushMatrix();
+        //this.sketch.ellipseMode(0);
+        this.sketch.stroke(0);
+        this.sketch.translate((float) this.render_x, (float) this.render_y);
+        this.sketch.rotate((float) heading);
+        drawEntity(loc, tag);
+        this.sketch.popMatrix();
+      }
    }
-  
+
   public void drawEntity(Vector2D loc, Tag tag){
+    
     switch(tag){
       case PLAYER: drawPlayer(loc);
         break;
@@ -45,6 +63,8 @@ public class Render {
         break;
       case P_BOT:
       case E_BOT: drawBot(loc);
+        break;
+      case STAR: drawStar();
         break;
     }
   }
@@ -131,6 +151,15 @@ public class Render {
     this.sketch.ellipse(0,0, this.scale, this.scale); 
   }
 
+  public void drawStar(){
+    this.sketch.noStroke();
+    this.sketch.fill(255, 255, 204); 
+    this.sketch.ellipse((float) 0, 
+                        (float) 0, 
+                        (float) 1, 
+                        (float) 1); 
+  }
+
   public void drawHealth(int health){
     //draw border
     this.sketch.rectMode(0);
@@ -146,20 +175,20 @@ public class Render {
   public void drawPoints(int points){
     this.sketch.fill(0, 101, 255);
     this.sketch.textSize(30);
-    this.sketch.textAlign(this.sketch.LEFT, this.sketch.TOP);
+    this.sketch.textAlign(LEFT, TOP);
     this.sketch.text("POINTS: " + points, 5, 5);
   }
 
-  public void drawExplosion(Vector2D loc, Tag tag){
+  public void drawExplosion(Vector2D loc, Tag tag, Vector2D view_centre){
 
     int r = 0, g = 0, b = 0, alpha; 
-
+    this.view_centre = view_centre;
     // Bigger entities have longer explosions
     int frames = 5;
     if (tag.equals(Tag.ENEMY)){
       frames = 10;
       // To put a black hole briefly where enemy was
-      drawEnemyVoid(loc);
+      drawEnemyVoid(new Vector2D(render_x, render_y));
       r = 229; g = 11; b = 109;
     } else if (tag.equals(Tag.P_BULLET)){
       r = 0; g = 237; b = 255; 
@@ -172,7 +201,7 @@ public class Render {
     this.sketch.ellipseMode(2);
 
     List<Particle> list = new ArrayList<Particle>();
-;
+
     for (int i = 0; i < numParticles; i++){
       // Create particle in randomised circle around entity
       float startX = (float) (loc.getX() + (-1 + (1 - - 1) * (float) Math.random()));
@@ -194,34 +223,47 @@ public class Render {
       this.sketch.fill(r, g, b, 50);
       alpha = 20;
       for (Particle p : list){
-        if (tag.equals(Tag.ENEMY)){drawEnemyParticle(p, r, g, b, alpha);}
-        else if (tag.equals(Tag.P_BOT)){drawPlayerBotParticle(p, r, g, b, alpha);}
-        else {drawBulletParticle(p, r, g, b, alpha);}
+        render_x = p.getX() - this.view_centre.getX()
+                + this.sketch.width / 2;
+        render_y = p.getY() - this.view_centre.getY()
+                + this.sketch.height / 2;
+        if (tag.equals(Tag.ENEMY)){
+          drawEnemyParticle(render_x, render_y, r, g, b, alpha);
+        }
+        else if (tag.equals(Tag.P_BOT)){
+          drawPlayerBotParticle(render_x, render_y, r, g, b, alpha);
+        }
+        else {
+          drawBulletParticle(render_x, render_y, r, g, b, alpha);
+        }
         alpha += 10;
         p.update();
       }
     }
   }
 
-  private void drawEnemyParticle(Particle p, int r, int g, int b, int alpha){
+  private void drawEnemyParticle(double render_x, double render_y, int r, 
+    int g, int b, int alpha){
     this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 6, 6);
+    this.sketch.ellipse((float) render_x, (float) render_y, 6, 6);
   }
 
-  private void drawPlayerBotParticle(Particle p, int r, int g, int b, int alpha){
+  private void drawPlayerBotParticle(double render_x, double render_y, int r, 
+    int g, int b, int alpha){
     this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 4, 4);
+    this.sketch.ellipse((float) render_x, (float) render_y, 4, 4);
   }
 
-  private void drawBulletParticle(Particle p, int r, int g, int b, int alpha){
+  private void drawBulletParticle(double render_x, double render_y, int r, 
+  int g, int b, int alpha){
     this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) p.getX(), (float) p.getY(), 3, 3);
+    this.sketch.ellipse((float) render_x, (float) render_y, 3, 3);
   }
 
   public void drawInitScreen(float width, float height){
     this.sketch.background(56,1,9);
     this.sketch.fill(25, 0, 255);
-    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textAlign(CENTER);
     this.sketch.textSize(50);
     this.sketch.text("BATTLESTAR\n\nsurvive the swarm", width / 2, height / 2);
   }
@@ -230,18 +272,18 @@ public class Render {
     this.sketch.background(17, 0, 2);
     // Pink Glow
     this.sketch.fill(255, 0, 89); 
-    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textAlign(CENTER);
     this.sketch.textSize(81);
     this.sketch.text("GAME OVER", width / 2, height / 2);
     //DARK BLUE
     this.sketch.fill(19, 0, 232); 
-    this.sketch.textAlign(this.sketch.CENTER);
+    this.sketch.textAlign(CENTER);
     this.sketch.textSize(80);
     this.sketch.text("GAME OVER", width / 2, height / 2);
 
     // random particle explosion
     Vector2D v = new Vector2D(Math.random() * width +1, Math.random() * height + 1);
-    drawExplosion(v, Tag.ENEMY);
+    drawExplosion(v, Tag.ENEMY, this.view_centre);
   }
 
 }

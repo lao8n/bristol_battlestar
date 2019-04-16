@@ -2,7 +2,6 @@ package swarm_wars_logic.engine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.beans.Transient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ class HealthTests {
 
   @Test
   @DisplayName("Health HealthTests")
-  void HealthTests(){
+  void PlayerHealthTests(){
     Health h = new Health(Tag.PLAYER);
     assertEquals(100, h.getMaxHealth(), "max health for a player should be 100");
     assertEquals(100, h.getCurrentHealth(), "current health for a player should be 100");

@@ -1,10 +1,12 @@
 /* Component arch system - everything is an entity*/
 package swarm_wars_library.engine;
 
-import javax.swing.text.Position;
-import java.util.*;
+import java.util.ArrayList;
 
 import processing.core.PApplet;
+import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.CommsPacket;
+import swarm_wars_library.graphics.Render;
 
 public class Entity {
 
@@ -25,6 +27,7 @@ public class Entity {
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
+  private Vector2D view_centre = new Vector2D(0, 0);
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -56,8 +59,10 @@ public class Entity {
       isBot = true;
       //NOTICE: must call method to init swarmLogic in main loop
     }
-    if (hasRender) {
-      render = new Render(sketch, sc);
+    if (tag.equals(Tag.P_BOT)){
+      transform.setPosition(this.sketch.width / 2 - 100 +  Math.random() * 200,
+                            this.sketch.height / 2 - 100 +  Math.random() * 200);
+      transform.setVelocity(-0.01 + Math.random() * 0.02, -0.01 + Math.random() * 0.02);
     }
     if (hasInput) {
       input = new Input(sketch);
@@ -85,6 +90,9 @@ public class Entity {
     if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
       transform.setScale(5, 5);
     }
+    if (hasRender) {
+      render = new Render(sketch, sc);
+    }
   }
 
   public void update() {
@@ -95,7 +103,7 @@ public class Entity {
 
     // Set position with either Input or AI
     if (hasInput) {
-      input.update();
+      input.update(this.view_centre);
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
     }
@@ -128,7 +136,9 @@ public class Entity {
       }
       // draw explosion if dead
       if (health.getCurrentHealth() <= 0){
-        render.drawExplosion(transform.getPosition(), tag);
+        render.drawExplosion(transform.getPosition(), 
+                             tag,
+                             this.view_centre);
       }
     }
 
@@ -145,8 +155,12 @@ public class Entity {
 
     //draw it
     if (hasRender) {
-      render.update(transform.getPosition(), tag, transform.getHeading());
+      render.update(transform.getPosition(), tag, transform.getHeading(), this.view_centre);
     }
+  }
+
+  public void setViewCentre(Vector2D view_centre){
+    this.view_centre = view_centre;
   }
 
   public Tag getTag(){
@@ -209,7 +223,9 @@ public class Entity {
   }
 
   public void kill() {
-    render.drawExplosion(transform.getPosition(), tag);
+    render.drawExplosion(transform.getPosition(), 
+                         tag,
+                         this.view_centre);
     hasRender = false;
     hasShooter = false;
     isAlive = false;
@@ -265,11 +281,16 @@ public class Entity {
     swarmLogic = new SwarmLogic(transform, rb);
   }
 
+  public void selectStartingSwarmAlgorithm(String swarm_algorithm){
+    swarmLogic.selectSwarmAlgorithm(swarm_algorithm);
+  }
+
   //ALLL COMMS
   public void sendPacket() {
     //update this logic
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setIsAlive(true);
+    commsPacket.setVelocity(transform.getVelocity());
     if (isMothership) {
       comms.get("PLAYER").setPacket(commsPacket, 0);
     }
@@ -280,7 +301,6 @@ public class Entity {
 
     if (tag.equals(Tag.ENEMY)) {
       comms.get("ENEMY").setPacket(commsPacket, 0);
-
     }
   }
 

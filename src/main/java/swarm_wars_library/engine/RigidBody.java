@@ -9,6 +9,7 @@ public class RigidBody {
 
 	private double maxSpeed;
 	private double maxAngSpeed;
+	private double maxForce;
 
 	private double mass;
 
@@ -21,6 +22,7 @@ public class RigidBody {
 
 		maxSpeed = 10;
 		maxAngSpeed = 10;
+		maxForce = 10;
 
 		mass = 1;
 	}
@@ -51,6 +53,10 @@ public class RigidBody {
 
 	public double getMaxSpeed(){
 		return maxSpeed;
+	}
+
+	public double getMaxForce(){
+		return maxForce;
 	}
 
 	public void setMaxSpeed(double maxSpeed) {

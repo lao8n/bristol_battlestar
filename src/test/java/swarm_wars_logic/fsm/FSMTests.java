@@ -1,14 +1,14 @@
-package swarm_wars_logic.engine;
+package swarm_wars_logic.fsm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.beans.Transient;
+// import java.beans.Transient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import swarm_wars_library.engine.FSM;
-import swarm_wars_library.engine.Transition;
-import swarm_wars_library.engine.State;
+import swarm_wars_library.fsm.FSM;
+// import swarm_wars_library.fsm.Transition;
+import swarm_wars_library.fsm.State;
 
 
 class FSMTests {
