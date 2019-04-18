@@ -6,6 +6,9 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.engine.Vector2D;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * SwarmRule Class holds information about CommsGlobal and properties of 
  * the Entity including id, RigidBody and Transform. It includes two 
@@ -56,10 +59,12 @@ public abstract class SwarmRule{
   public Vector2D iterateOverSwarm(double desiredDistance){
     this.rule_neighbourCount = 0;
 
-    for(int i = 1; i < this.rule_comms.get("PLAYER").getNumberOfReceivers(); i++){
-      if (i != rule_id){
-        this.rule_otherBot = this.rule_comms.get("PLAYER").getPacket(i);
-        if (this.rule_otherBot.getIsAlive()){
+    ArrayList<CommsPacket> otherBots = rule_comms.get("P_BOT").getPackets();
+
+    for(CommsPacket otherBot: otherBots){
+      this.rule_otherBot = otherBot;
+      if (this.rule_otherBot.getId() != rule_id){
+        if (this.rule_otherBot.isAlive()){
           this.rule_dist = Vector2D.sub(this.rule_transform.getPosition(),
                                         this.rule_otherBot.getLocation())
                                    .mag();

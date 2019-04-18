@@ -19,8 +19,8 @@ class CommsTests {
         testPacket.setLocation(new Vector2D(0, 10));
         assertEquals(testPacket.getLocation().getX(), 0);
         assertEquals(testPacket.getLocation().getY(), 10);
-        testPacket.setIsAlive(true);
-        assertEquals(testPacket.getIsAlive(), true);
+        testPacket.setAlive(true);
+        assertEquals(testPacket.isAlive(), true);
     }
 
     @Test
@@ -117,6 +117,12 @@ class CommsTests {
 
         assertNotNull(testGlobal.get("ENEMY").getPacket(1));
         assertEquals(testGlobal.get("ENEMY").getPacket(1).getLocation().getX(), 10);
+    }
+
+    @Test
+    @DisplayName("CommsGlobal testing update")
+    void CommsTestIntegration() {
 
     }
+
 }

@@ -35,11 +35,10 @@ public class SwarmLogic {
   private static int counter = 1;
   private SwarmAlgorithm swarm_algo;
 
-  public SwarmLogic(Transform transform, RigidBody rb){
+  public SwarmLogic(Transform transform, RigidBody rb, int id){
     this.rb = rb;
     this.transform = transform;
-    this.id = counter;
-    counter++;
+    this.id = id;
     rb.setMaxSpeed(15);
   }
 

@@ -65,14 +65,15 @@ public class SwarmWars extends PApplet {
     */
 
     // set up comms before entities
-    comms.add("PLAYER", new CommsChannel(numBots + 1));
-    comms.add("ENEMY", new CommsChannel(numTurrets)); // we will add 1 turret therefore we have 1 item in enemy comms channel
+    comms.add("PLAYER", new CommsChannel(1));
+    comms.add("P_BOT", new CommsChannel(numBots));
+    comms.add("ENEMY", new CommsChannel(numTurrets));
 
     // TODO TIM - add a comms channel for P_BULLET and E_BULLET. size is turrets * magazine count
     // TODO TIM - what about ids / locations in list.... which one to update?
     // TODO TIM - where are these magazine counts stored?? how to access them?
-    comms.add("E_BULLET", new CommsChannel(numTurrets * ####));
-    comms.add("P_BULLET", new CommsChannel(1 * ####));
+    // comms.add("E_BULLET", new CommsChannel(numTurrets * ####));
+    // comms.add("P_BULLET", new CommsChannel(1 * ####));
 
     // add a player
     player = eb.newPlayer();
@@ -87,8 +88,8 @@ public class SwarmWars extends PApplet {
       bot.setSwarmLogic();
       bot.setComms(comms);
       // bot.selectStartingSwarmAlgorithm("scout_shell");
-      bot.selectStartingSwarmAlgorithm("boids_flock");
-      // bot.selectStartingSwarmAlgorithm("defensive_shell");
+      // bot.selectStartingSwarmAlgorithm("boids_flock");
+      bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
       // Note: if bots later get shooters: need to add magazines here
     }

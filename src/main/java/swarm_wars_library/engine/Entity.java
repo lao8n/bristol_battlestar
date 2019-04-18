@@ -29,6 +29,9 @@ public class Entity {
   private boolean isAlive = true;
   private Vector2D view_centre = new Vector2D(0, 0);
 
+  private int id;
+  private static int nextId = 0;
+
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
           PApplet sketch,
@@ -54,6 +57,9 @@ public class Entity {
     isMothership = false;
     hasAI = hai;
     points = 0;
+
+    id = nextId;
+    nextId++;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -278,7 +284,7 @@ public class Entity {
   //BOT methods
   public void setSwarmLogic() {
     //init swarm logic
-    swarmLogic = new SwarmLogic(transform, rb);
+    swarmLogic = new SwarmLogic(transform, rb, id);
   }
 
   public void selectStartingSwarmAlgorithm(String swarm_algorithm){
@@ -289,19 +295,20 @@ public class Entity {
   public void sendPacket() {
     //update this logic
     commsPacket.setLocation(transform.getPosition());
-    commsPacket.setIsAlive(true);
+    commsPacket.setAlive(true);
     commsPacket.setVelocity(transform.getVelocity());
+    commsPacket.setId(id);
     if (isMothership) {
-      comms.get("PLAYER").setPacket(commsPacket, 0);
+      comms.get("PLAYER").addPacket(commsPacket);
     }
 
     if (isBot) {
-      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
+      comms.get("P_BOT").addPacket(commsPacket);
     }
 
     // TODO TIM - need to fix ids here...
     if (tag.equals(Tag.ENEMY)) {
-      comms.get("ENEMY").setPacket(commsPacket, 0);
+      comms.get("ENEMY").addPacket(commsPacket);
     }
 
     // TODO TIM add here for P_BULLET / E_BULLET
