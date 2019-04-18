@@ -128,4 +128,8 @@ public class Vector2D {
 		x = (v.x - x) * i;
 		y = (v.y - y) * i;
 	}
+
+	public Vector2D copy() {
+		return new Vector2D(x, y);
+	}
 }
