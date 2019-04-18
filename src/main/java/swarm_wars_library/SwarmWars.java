@@ -68,12 +68,10 @@ public class SwarmWars extends PApplet {
     CommsGlobal.add("PLAYER", new CommsChannel(1));
     CommsGlobal.add("P_BOT", new CommsChannel(numBots));
     CommsGlobal.add("ENEMY", new CommsChannel(numTurrets));
-
-    // TODO TIM - add a comms channel for P_BULLET and E_BULLET. size is turrets * magazine count
-    // TODO TIM - what about ids / locations in list.... which one to update?
-    // TODO TIM - where are these magazine counts stored?? how to access them?
-     CommsGlobal.add("E_BULLET", new CommsChannel(numTurrets * 20));
-     CommsGlobal.add("P_BULLET", new CommsChannel(1 * 20));
+    // TODO TIM - where are these magazine counts stored?? how to access them - SHOULD WE HAVE A GLOBAL CONFIG?
+    //  also 5 more added to E_BULLET not sure where from
+    CommsGlobal.add("E_BULLET", new CommsChannel(numTurrets * 20));
+    CommsGlobal.add("P_BULLET", new CommsChannel(1 * 20));
 
     // add a player
     player = eb.newPlayer();

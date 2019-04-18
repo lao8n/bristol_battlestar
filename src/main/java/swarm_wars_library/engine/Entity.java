@@ -288,15 +288,11 @@ public class Entity {
 
   //ALLL COMMS
   public void sendPacket() {
-    //update this logic
     commsPacket.setLocation(transform.getPosition());
     commsPacket.setAlive(true);
     commsPacket.setVelocity(transform.getVelocity());
     commsPacket.setId(id);
-
     CommsGlobal.get(tag.toString()).addPacket(commsPacket);
-
-    // TODO TIM add here for P_BULLET / E_BULLET
   }
 
   public ArrayList<Entity> getMagazine(){

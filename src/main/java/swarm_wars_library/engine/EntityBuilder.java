@@ -25,8 +25,6 @@ public class EntityBuilder {
         return t;
     }
 
-    // TODO TIM - set comms to true. make changes in Shooter
-
     public Entity newBullet(Tag bulletTag){
         Entity b = new Entity(sketch, bulletTag, 5, true, false, false, false, true, true, false);
         return b;
