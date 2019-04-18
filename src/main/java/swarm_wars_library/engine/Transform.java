@@ -25,7 +25,7 @@ public class Transform {
     }
 
     public Vector2D getPosition(){
-        return position.copy();
+        return position;
     }
 
     public void setVelocity(double x, double y){
@@ -38,7 +38,7 @@ public class Transform {
     }
 
     public Vector2D getVelocity(){
-        return velocity.copy();
+        return velocity;
     }
 
     public void setScale(double x, double y){
@@ -51,7 +51,7 @@ public class Transform {
     }
 
     public Vector2D getScale(){
-        return scale.copy();
+        return scale;
     }
 
     public void setHeading(double h){
