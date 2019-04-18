@@ -30,7 +30,6 @@ import swarm_wars_library.comms.CommsGlobal;
  *    might be really inefficient. I don't understand what is fast/slow in Java.
  */
 public class BoidsFlock extends SwarmAlgorithm {
-  private CommsGlobal comms;
   private int id;
   public RigidBody rb;
   public Transform transform;
@@ -38,17 +37,16 @@ public class BoidsFlock extends SwarmAlgorithm {
   private AlignRule align_rule;
   private CoheseRule cohese_rule;
 
-  public BoidsFlock(CommsGlobal comms, int id, Transform transform, RigidBody rb){
+  public BoidsFlock(int id, Transform transform, RigidBody rb){
     super(transform);
-    this.comms = comms;
     this.id = id;
     this.rb = rb;
     this.transform = transform;
-    this.separate_rule = new SeparateRule(this.comms, this.id, 
+    this.separate_rule = new SeparateRule(this.id,
       this.rb, this.transform);
-    this.align_rule = new AlignRule(this.comms, this.id, this.rb, 
+    this.align_rule = new AlignRule(this.id, this.rb,
       this.transform);
-    this.cohese_rule = new CoheseRule(this.comms, this.id, this.rb,
+    this.cohese_rule = new CoheseRule(this.id, this.rb,
       this.transform);
   }
 
@@ -59,7 +57,7 @@ public class BoidsFlock extends SwarmAlgorithm {
     Vector2D align_v2d = this.align_rule.iterateOverSwarm(40);
     Vector2D cohese_v2d = this.cohese_rule.iterateOverSwarm(40);
     Vector2D random_v2d = new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
-    Vector2D seek_mothership_v2d = seekMotherShip(this.comms.get("PLAYER")
+    Vector2D seek_mothership_v2d = seekMotherShip(CommsGlobal.get("PLAYER")
                                                             .getPacket(0)
                                                             .getLocation());
 
@@ -89,9 +87,9 @@ public class BoidsFlock extends SwarmAlgorithm {
   }
 
   private class SeparateRule extends SwarmRule {  
-    public SeparateRule(CommsGlobal rule_comms, int rule_id, 
+    public SeparateRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
-      super(rule_comms, rule_id, rule_rb, rule_transform);
+      super(rule_id, rule_rb, rule_transform);
     }
 
     @Override
@@ -113,9 +111,9 @@ public class BoidsFlock extends SwarmAlgorithm {
   }
 
   private class AlignRule extends SwarmRule {  
-    public AlignRule(CommsGlobal rule_comms, int rule_id, 
+    public AlignRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
-      super(rule_comms, rule_id, rule_rb, rule_transform);
+      super(rule_id, rule_rb, rule_transform);
     }
 
     @Override
@@ -135,9 +133,9 @@ public class BoidsFlock extends SwarmAlgorithm {
   }
 
   private class CoheseRule extends SwarmRule {  
-    public CoheseRule(CommsGlobal rule_comms, int rule_id, 
+    public CoheseRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
-      super(rule_comms, rule_id, rule_rb, rule_transform);
+      super(rule_id, rule_rb, rule_transform);
     }
 
     @Override

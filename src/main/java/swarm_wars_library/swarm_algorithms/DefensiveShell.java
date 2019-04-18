@@ -33,7 +33,6 @@ import swarm_wars_library.comms.CommsGlobal;
  */
 
 public class DefensiveShell extends SwarmAlgorithm {
-  private CommsGlobal comms;
   private int id;
   private double orbitDistance = 70;
   public RigidBody rb;
@@ -41,20 +40,19 @@ public class DefensiveShell extends SwarmAlgorithm {
   private SeparateRule separate_rule;
   private double stopDistance = 100;
 
-  public DefensiveShell(CommsGlobal comms, int id, Transform transform, RigidBody rb){
+  public DefensiveShell(int id, Transform transform, RigidBody rb){
     super(transform);
-    this.comms = comms;
     this.id = id;
     this.rb = rb;
     this.transform = transform;
-    this.separate_rule = new SeparateRule(this.comms, this.id, 
+    this.separate_rule = new SeparateRule(this.id,
       this.rb, this.transform);
   }
 
   @Override
   public void applySwarmAlgorithm(){
     Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(20);
-    Vector2D seek_mothership_v2d = seekMotherShip(this.comms.get("PLAYER")
+    Vector2D seek_mothership_v2d = seekMotherShip(CommsGlobal.get("PLAYER")
                                                             .getPacket(0)
                                                             .getLocation());
 
@@ -99,9 +97,9 @@ public class DefensiveShell extends SwarmAlgorithm {
   }
 
   private class SeparateRule extends SwarmRule {  
-    public SeparateRule(CommsGlobal rule_comms, int rule_id, 
+    public SeparateRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
-      super(rule_comms, rule_id, rule_rb, rule_transform);
+      super(rule_id, rule_rb, rule_transform);
     }
     @Override
     public void swarmRule(){

@@ -21,7 +21,6 @@ public class Entity {
   private RigidBody rb;
   private AI ai;
   //BOT Specific comps
-  private CommsGlobal comms;
   private CommsPacket commsPacket;
   //private State state;
   private SwarmLogic swarmLogic;
@@ -115,7 +114,7 @@ public class Entity {
     }
     if (hasAI) {
       //pass it current player position, its own transform
-      Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
+      Vector2D playerLoc = CommsGlobal.get("PLAYER").getPacket(0).getLocation();
       ai.update(playerLoc, transform);
       //shooter uses this info below to target player
     }
@@ -272,12 +271,8 @@ public class Entity {
     return (int) transform.getScale().getX();
   }
 
-  public void setComms(CommsGlobal comms) {
-    this.comms = comms;
+  public void setComms() {
     commsPacket = new CommsPacket();
-    if (isBot) {
-      swarmLogic.setComms(this.comms);
-    }
     sendPacket();
   }
 
@@ -298,18 +293,8 @@ public class Entity {
     commsPacket.setAlive(true);
     commsPacket.setVelocity(transform.getVelocity());
     commsPacket.setId(id);
-    if (isMothership) {
-      comms.get("PLAYER").addPacket(commsPacket);
-    }
 
-    if (isBot) {
-      comms.get("P_BOT").addPacket(commsPacket);
-    }
-
-    // TODO TIM - need to fix ids here...
-    if (tag.equals(Tag.ENEMY)) {
-      comms.get("ENEMY").addPacket(commsPacket);
-    }
+    CommsGlobal.get(tag.toString()).addPacket(commsPacket);
 
     // TODO TIM add here for P_BULLET / E_BULLET
   }

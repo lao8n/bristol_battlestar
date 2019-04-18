@@ -35,7 +35,6 @@ import java.util.ArrayList;
  *    in one go?
  */
 public abstract class SwarmRule{
-  protected CommsGlobal rule_comms;
   protected double rule_dist;
   protected int rule_id;
   protected int rule_neighbourCount;
@@ -44,9 +43,8 @@ public abstract class SwarmRule{
   protected RigidBody rule_rb;
   protected Transform rule_transform;
 
-  public SwarmRule(CommsGlobal rule_comms, int rule_id, 
+  public SwarmRule(int rule_id,
     RigidBody rule_rb, Transform rule_transform){
-    this.rule_comms = rule_comms;
     this.rule_id = rule_id;
     this.rule_rb = rule_rb;
     this.rule_transform = rule_transform;
@@ -59,7 +57,7 @@ public abstract class SwarmRule{
   public Vector2D iterateOverSwarm(double desiredDistance){
     this.rule_neighbourCount = 0;
 
-    ArrayList<CommsPacket> otherBots = rule_comms.get("P_BOT").getPackets();
+    ArrayList<CommsPacket> otherBots = CommsGlobal.get("P_BOT").getPackets();
 
     for(CommsPacket otherBot: otherBots){
       this.rule_otherBot = otherBot;

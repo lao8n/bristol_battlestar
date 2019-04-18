@@ -8,25 +8,21 @@ import java.util.Map;
     There are different groups, i.e CommsChannels. so that there is a PLAYER comms or ENEMY comms
  */
 public class CommsGlobal {
-    private HashMap<String, CommsChannel> commsMap;
-
-    public CommsGlobal(){
-        commsMap = new HashMap<String, CommsChannel>();
-    }
+    private static HashMap<String, CommsChannel> commsMap = new HashMap<String, CommsChannel>();
 
     // channelName is Tag - i.e player or envObjects
-    public void add(String channelName, CommsChannel commsChannel) {
+    public static void add(String channelName, CommsChannel commsChannel) {
         if(commsMap.containsKey(channelName)) throw new Error("Channel already exists");
         commsMap.put(channelName, commsChannel);
     }
 
     // returns LIVE CommsChannel
-    public CommsChannel get(String channelName) {
+    public static CommsChannel get(String channelName) {
         if(!commsMap.containsKey(channelName)) throw new Error("Channel doesn't exist");
         return commsMap.get(channelName);
     }
 
-    public void update() {
+    public static void update() {
         for(Map.Entry<String, CommsChannel> entry: commsMap.entrySet()){
             entry.getValue().update();
         }

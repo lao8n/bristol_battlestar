@@ -2,6 +2,7 @@
 package swarm_wars_library.engine;
 
 import processing.core.PApplet;
+import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.engine.Vector2D;
 import java.util.*;
 
@@ -42,6 +43,7 @@ class Shooter {
     for (int i = 0; i < numBullets; i++){
       // Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
       Entity bullet = eb.newBullet(bulletTag);
+      bullet.setComms();
       bullet.kill();
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);

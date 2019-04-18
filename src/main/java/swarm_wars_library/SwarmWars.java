@@ -65,19 +65,19 @@ public class SwarmWars extends PApplet {
     */
 
     // set up comms before entities
-    comms.add("PLAYER", new CommsChannel(1));
-    comms.add("P_BOT", new CommsChannel(numBots));
-    comms.add("ENEMY", new CommsChannel(numTurrets));
+    CommsGlobal.add("PLAYER", new CommsChannel(1));
+    CommsGlobal.add("P_BOT", new CommsChannel(numBots));
+    CommsGlobal.add("ENEMY", new CommsChannel(numTurrets));
 
     // TODO TIM - add a comms channel for P_BULLET and E_BULLET. size is turrets * magazine count
     // TODO TIM - what about ids / locations in list.... which one to update?
     // TODO TIM - where are these magazine counts stored?? how to access them?
-    // comms.add("E_BULLET", new CommsChannel(numTurrets * ####));
-    // comms.add("P_BULLET", new CommsChannel(1 * ####));
+     CommsGlobal.add("E_BULLET", new CommsChannel(numTurrets * 20));
+     CommsGlobal.add("P_BULLET", new CommsChannel(1 * 20));
 
     // add a player
     player = eb.newPlayer();
-    player.setComms(comms);
+    player.setComms();
     entityList.add(player);
     //add player bullets
     entityList.addAll(player.getMagazine());
@@ -86,7 +86,7 @@ public class SwarmWars extends PApplet {
     for (int i = 0; i < numBots; i++) {
       Entity bot = eb.newBot();
       bot.setSwarmLogic();
-      bot.setComms(comms);
+      bot.setComms();
       // bot.selectStartingSwarmAlgorithm("scout_shell");
       // bot.selectStartingSwarmAlgorithm("boids_flock");
       bot.selectStartingSwarmAlgorithm("defensive_shell");
@@ -99,14 +99,14 @@ public class SwarmWars extends PApplet {
       Entity turret = eb.newTurret();
       turret.setPosition(Math.random() * map_width +1, 
                          Math.random() * map_height + 1);
-      turret.setComms(comms);
+      turret.setComms();
       entityList.add(turret);
       // Add enemy shooter magazines (bullets)
       entityList.addAll(turret.getMagazine());
     }
 
     // IMPORTANT to do at end of setup - sets all initial packets to current
-    comms.update();
+    CommsGlobal.update();
   }
 
   public void draw() {

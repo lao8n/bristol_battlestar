@@ -29,7 +29,6 @@ import swarm_wars_library.swarm_algorithms.ScoutShell;
 public class SwarmLogic {
 
   private RigidBody rb;
-  private CommsGlobal comms;
   private Transform transform;
   private int id;
   private static int counter = 1;
@@ -54,19 +53,15 @@ public class SwarmLogic {
     return this.id;
   }
 
-  public void setComms(CommsGlobal comms){
-    this.comms = comms;
-  }
-
   public void selectSwarmAlgorithm(String swarm_algorithm){
     if(swarm_algorithm == "defensive_shell"){
-      swarm_algo = new DefensiveShell(this.comms, this.id, this.transform, this.rb);
+      swarm_algo = new DefensiveShell(this.id, this.transform, this.rb);
     }
     else if (swarm_algorithm == "boids_flock"){
-      swarm_algo = new BoidsFlock(this.comms, this.id, this.transform, this.rb);
+      swarm_algo = new BoidsFlock(this.id, this.transform, this.rb);
     }
     else if (swarm_algorithm == "scout_shell"){
-      swarm_algo = new ScoutShell(this.comms, this.id, this.transform, this.rb);
+      swarm_algo = new ScoutShell(this.id, this.transform, this.rb);
     }
   }
 
