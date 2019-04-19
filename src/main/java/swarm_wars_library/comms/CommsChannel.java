@@ -37,8 +37,13 @@ public class CommsChannel {
 
   public void setPacket(CommsPacket packet, int i) {
     if(packet == null) throw new Error ("Setting a null packet in CommsChannel");
-    if(i >= futurePackets.size()) throw new Error ("Setting packet out of range of CommsChannel..");
-    futurePackets.set(i, packet);
+    // CHANGE: size() doesn't make sense here as it is the number of values
+    // already in the arraylist not the maximum size (which is unlimited). 
+    // Instead check that adding to just next value (or less)
+    if(i >= futurePackets.size() + 1) throw new Error ("Setting packet out of range of CommsChannel..");
+
+    // CHANGE: was set for Arrays, not add for ArrayLists
+    futurePackets.add(i, packet);
   }
 
   public void addPacket(CommsPacket packet) {
