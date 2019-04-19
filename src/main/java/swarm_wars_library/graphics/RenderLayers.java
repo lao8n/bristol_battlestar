@@ -1,6 +1,7 @@
 package swarm_wars_library.graphics;
 
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.comms.Event;
 import swarm_wars_library.map.Map;
 
 import processing.core.PApplet;
@@ -65,6 +66,16 @@ public class RenderLayers{
                                                  .getPacket(0)
                                                  .getLocation());
       }
+      if(CommsGlobal.get("E_BULLET").getPacket(i).getEvent()
+        .equals(Event.EXPLODE)){
+          this.renderEnemyBullet.updateExplosion(CommsGlobal.get("E_BULLET")
+                                                            .getPacket(i)
+                                                            .getLocation(),
+                                                 CommsGlobal.get("PLAYER")
+                                                            .getPacket(0)
+                                                            .getLocation(),
+                                                 3);
+      }
     }
 
     // Render Player Bullets
@@ -77,17 +88,37 @@ public class RenderLayers{
                                                   .getPacket(0)
                                                   .getLocation());
       }
+      if(CommsGlobal.get("P_BULLET").getPacket(i).getEvent()
+        .equals(Event.EXPLODE)){
+          this.renderPlayerBullet.updateExplosion(CommsGlobal.get("P_BULLET")
+                                                             .getPacket(i)
+                                                             .getLocation(),
+                                                  CommsGlobal.get("PLAYER")
+                                                             .getPacket(0)
+                                                             .getLocation(),
+                                                  3);
+      }
     }
 
     // Render Bots
     for (int i = 0; i < CommsGlobal.get("P_BOT").getNumberOfReceivers(); i++){
       if(CommsGlobal.get("P_BOT").getPacket(i).isAlive()){
         this.renderBot.update(CommsGlobal.get("P_BOT")
-                                        .getPacket(i)
-                                        .getLocation(),
+                                         .getPacket(i)
+                                         .getLocation(),
                               CommsGlobal.get("PLAYER")
-                                        .getPacket(0)
-                                        .getLocation());
+                                         .getPacket(0)
+                                         .getLocation());
+      }
+      if(CommsGlobal.get("P_BOT").getPacket(i).getEvent()
+        .equals(Event.EXPLODE)){
+          this.renderBot.updateExplosion(CommsGlobal.get("P_BOT")
+                                                    .getPacket(i)
+                                                    .getLocation(),
+                                         CommsGlobal.get("PLAYER")
+                                                    .getPacket(0)
+                                                    .getLocation(),
+                                         5);
       }
     }
   
@@ -95,11 +126,27 @@ public class RenderLayers{
     for (int i = 0; i < CommsGlobal.get("ENEMY").getNumberOfReceivers(); i++){
       if(CommsGlobal.get("ENEMY").getPacket(i).isAlive()){
         this.renderEnemy.update(CommsGlobal.get("ENEMY")
-                                          .getPacket(i)
-                                          .getLocation(),
+                                           .getPacket(i)
+                                           .getLocation(),
                                 CommsGlobal.get("PLAYER")
-                                          .getPacket(0)
-                                          .getLocation());
+                                           .getPacket(0)
+                                           .getLocation());
+      }
+      if(CommsGlobal.get("ENEMY").getPacket(i).getEvent()
+        .equals(Event.EXPLODE)){
+          this.renderEnemy.updateExplosion(CommsGlobal.get("ENEMY")
+                                                      .getPacket(i)
+                                                      .getLocation(),
+                                           CommsGlobal.get("PLAYER")
+                                                      .getPacket(0)
+                                                      .getLocation(),
+                                           10);
+          this.renderEnemy.updateVoid(CommsGlobal.get("ENEMY")
+                                                 .getPacket(i)
+                                                 .getLocation(),
+                                       CommsGlobal.get("PLAYER")
+                                                 .getPacket(0)
+                                                 .getLocation());
       }
     }
 
@@ -109,18 +156,19 @@ public class RenderLayers{
                                         .getLocation(),
                              CommsGlobal.get("PLAYER")
                                         .getPacket(0)
-                                        .getLocation());
-
-    // Render Explosions
-    
+                                        .getLocation());    
   }
   
   private void renderDisplaysLayer(){
     // Render player score
-    this.renderPlayerScore.update(10);
+    this.renderPlayerScore.update(CommsGlobal.get("PLAYER")
+                                             .getPacket(0)
+                                             .getScore());
 
     // Render health bar
-    this.renderPlayerHealth.update(80);
+    this.renderPlayerHealth.update(CommsGlobal.get("PLAYER")
+                                              .getPacket(0)
+                                              .getHealth());
 
     // Render (empty) mini map
     this.renderMiniMap.update();

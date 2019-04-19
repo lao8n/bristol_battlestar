@@ -88,8 +88,8 @@ public class SwarmWars extends PApplet {
       Entity bot = eb.newBot();
       bot.setSwarmLogic();
       bot.setComms();
-      bot.selectStartingSwarmAlgorithm("scout_shell");
-      // bot.selectStartingSwarmAlgorithm("boids_flock");
+      // bot.selectStartingSwarmAlgorithm("scout_shell");
+      bot.selectStartingSwarmAlgorithm("boids_flock");
       // bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
       PlayerTakeDamage.add(bot);
@@ -106,7 +106,7 @@ public class SwarmWars extends PApplet {
       EnemyTakeDamage.add(turret);
       // Add enemy shooter magazines (bullets)
       entityList.addAll(turret.getMagazine());
-      EnemyTakeDamage.addAll(turret.getMagazine());
+      EnemyDealDamage.addAll(turret.getMagazine());
     }
     // IMPORTANT to do at end of setup - sets all initial packets to current
     CommsGlobal.update();
@@ -144,7 +144,20 @@ public class SwarmWars extends PApplet {
   public void gameScreen() {
     background(0, 0, 0);
     // Points player earns in a loop
-    pointsToAdd = 0;
+
+    for(int i = 0; i < EnemyDealDamage.size(); i++){
+      for(int j = 0; j < PlayerTakeDamage.size(); j++){
+        BoxCollider.boundingCheck(EnemyDealDamage.get(i),
+                                  PlayerTakeDamage.get(j));
+      }
+    }
+
+    for(int i = 0; i < PlayerDealDamage.size(); i++){
+      for(int j = 0; j < EnemyTakeDamage.size(); j++){
+        BoxCollider.boundingCheck(PlayerDealDamage.get(i),
+                                  EnemyTakeDamage.get(j));
+      }
+    }
 
     for(int i = 0; i < PlayerTakeDamage.size(); i++){
       PlayerTakeDamage.get(i).update();
@@ -159,20 +172,8 @@ public class SwarmWars extends PApplet {
       EnemyDealDamage.get(i).update();
     }
 
-    for(int i = 0; i < EnemyDealDamage.size(); i++){
-      for(int j = 0; j < PlayerTakeDamage.size(); j++){
-        BoxCollider.boundingCheck(EnemyDealDamage.get(i),
-                                  PlayerTakeDamage.get(j));
-      }
-    }
-
-    for(int i = 0; i < PlayerDealDamage.size(); i++){
-      for(int j = 0; j < EnemyTakeDamage.size(); j++){
-        BoxCollider.boundingCheck(PlayerDealDamage.get(i),
-                                  EnemyTakeDamage.get(j));
-      }
-    } 
     this.renderLayers.update();
+
     CommsGlobal.update();
   }
 

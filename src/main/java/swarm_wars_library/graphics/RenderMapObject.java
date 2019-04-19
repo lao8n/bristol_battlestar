@@ -5,14 +5,18 @@ import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
 public abstract class RenderMapObject{
+
   protected PApplet sketch;
   protected Vector2D objectRenderPosition = new Vector2D(0, 0);
+  private ParticleExplosion PE;
 
   public RenderMapObject(PApplet sketch){
     this.sketch = sketch;
   }
 
   protected abstract void renderMapObject();
+
+  protected abstract void renderMapObjectExplosion(int alpha);
 
   public void update(Vector2D objectMapPosition, 
     Vector2D viewCentreMapPosition){
@@ -26,7 +30,25 @@ public abstract class RenderMapObject{
     }
   }
 
-  private void setObjectRenderPosition(Vector2D objectMapPosition, 
+  public void updateExplosion(Vector2D objectMapPosition, 
+    Vector2D viewCentreMapPosition, int frames){
+      this.setParticleExplosionMapPosition(objectMapPosition);
+    int alpha = 20;
+    for(int f = 0; f < frames; f++){
+      for(Particle p: PE.getParticleExplosion()){
+        this.setObjectRenderPosition(p.getXY(), viewCentreMapPosition);
+        this.renderMapObjectExplosion(alpha);
+        p.update();
+        alpha +=10;
+      }
+    }
+  }
+
+  public void setParticleExplosionMapPosition(Vector2D objectMapPosition){
+    this.PE = new ParticleExplosion(objectMapPosition);
+  }
+
+  protected void setObjectRenderPosition(Vector2D objectMapPosition, 
     Vector2D viewCentreMapPosition){
 
     double viewCentreMapX;

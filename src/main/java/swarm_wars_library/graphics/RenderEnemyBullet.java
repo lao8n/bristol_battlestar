@@ -21,4 +21,15 @@ public class RenderEnemyBullet extends RenderMapObject{
                         this.scale, 
                         this.scale); 
   }
+
+  @Override 
+  public void renderMapObjectExplosion(int alpha){
+    this.sketch.noStroke();
+    this.sketch.fill(255, 0, 199, alpha); 
+    this.sketch.ellipseMode(2);
+    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
+                        (float) this.objectRenderPosition.getY(), 
+                        (float) 3, 
+                        (float) 3); 
+  }
 }

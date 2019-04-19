@@ -48,4 +48,15 @@ public class RenderPlayer extends RenderMapObject{
                         this.scale + 3, 
                         this.scale + 3);       
   }
+
+  @Override 
+  public void renderMapObjectExplosion(int alpha){
+    this.sketch.noStroke();
+    this.sketch.fill(70, 102, 255, alpha); 
+    this.sketch.ellipseMode(2);
+    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
+                        (float) this.objectRenderPosition.getY(), 
+                        this.scale, 
+                        this.scale); 
+  }
 }

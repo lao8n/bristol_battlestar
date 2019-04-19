@@ -7,6 +7,9 @@ public class CommsPacket {
   private boolean isAlive;
   private Vector2D velocity;
   private int id;
+  private int health;
+  private int score;
+  private Event event = Event.DEFAULT;
 
   public int getId() {
     return id;
@@ -38,5 +41,32 @@ public class CommsPacket {
 
   public void setVelocity(Vector2D velocity){
     this.velocity = velocity;
+  }
+
+  public int getHealth(){
+    return this.health;
+  }
+  public void setHealth(int health){
+    this.health = health;
+  }
+
+  public int getScore(){
+    return this.score;
+  }
+
+  public void setScore(int score){
+    this.score = score;
+  }
+
+  public void addScore(int score){
+    this.score += score;
+  }
+
+  public void setEvent(Event event){
+    this.event = event;
+  }
+
+  public Event getEvent(){
+    return this.event;
   }
 }

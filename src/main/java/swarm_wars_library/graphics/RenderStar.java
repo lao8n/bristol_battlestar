@@ -23,4 +23,9 @@ public class RenderStar extends RenderMapObject{
                         (float) this.scale, 
                         (float) this.scale); 
   }
+
+  @Override 
+  public void renderMapObjectExplosion(int alpha){
+    // DO NOTHING
+  }
 }

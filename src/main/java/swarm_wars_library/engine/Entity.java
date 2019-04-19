@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
+import swarm_wars_library.comms.Event;
 import swarm_wars_library.map.Map;
 
 public class Entity {
@@ -13,7 +14,6 @@ public class Entity {
   private Tag tag;
   private Transform transform;
   public Input input;
-  private int points;
   private Shooter shooter;
   private Health health;
   private RigidBody rb;
@@ -22,20 +22,20 @@ public class Entity {
   private CommsPacket commsPacket;
   //private State state;
   private SwarmLogic swarmLogic;
-  private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
+  private boolean hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
   private Vector2D view_centre = new Vector2D(0, 0);
   private Map map;
-
+  private int score = 0;
   private int id;
   private static int nextId = 0;
+  private Event event = Event.DEFAULT;
 
-  //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
+  //Entity(sketch, tag, scale, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
           PApplet sketch,
           Tag t,
           int sc,
-          boolean r,
           boolean i,
           boolean s,
           boolean h,
@@ -46,7 +46,6 @@ public class Entity {
     this.map = Map.getInstance();
     tag = t;
     transform = new Transform();
-    hasRender = r;
     hasInput = i;
     hasShooter = s;
     hasHealth = h;
@@ -54,8 +53,6 @@ public class Entity {
     hasRb = rigbod;
     isMothership = false;
     hasAI = hai;
-    points = 0;
-
     id = nextId;
     nextId++;
 
@@ -95,17 +92,9 @@ public class Entity {
     if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
       transform.setScale(map.getBulletScale(), map.getBulletScale());
     }
-    if (hasRender) {
-      // render = new Render(sketch, sc);
-    }
   }
 
   public void update() {
-    // Update points
-    if (tag.equals(Tag.PLAYER)){
-      // render.drawPoints(points);
-    }
-
     // Set position with either Input or AI
     if (hasInput) {
       input.update(this.view_centre);
@@ -128,23 +117,12 @@ public class Entity {
 
     if (hasShooter && hasAI){
       //need to set heading as direction to player
-      // System.out.println("AI SHOOT");
       shooter.shoot(transform.getPosition(), ai.getHeading());
       shooter.update();
     }
 
     if (hasHealth) {
-      health.update();
-      if(tag.equals(Tag.PLAYER)){
-         // TODO render call should not be in update
-        //  render.drawHealth(health.getCurrentHealth());
-      }
-      // draw explosion if dead
-      if (health.getCurrentHealth() <= 0){
-        // render.drawExplosion(transform.getPosition(), 
-        //                      tag,
-        //                      this.view_centre);
-      }
+      this.health.update();
     }
 
     if (isBot) {
@@ -154,13 +132,14 @@ public class Entity {
       transform = swarmLogic.getTransform();
     }
 
+    this.score = CommsGlobal.get("PLAYER").getPacket(0).getScore();
+    
+
     if (hasComms) {
       sendPacket();
     }
-
-    //draw it
-    if (hasRender) {
-      // render.update(transform.getPosition(), tag, transform.getHeading(), this.view_centre);
+    if(this.event.equals(Event.EXPLODE)){
+      this.event = Event.DEFAULT;
     }
   }
 
@@ -182,16 +161,6 @@ public class Entity {
 
   public Vector2D getVelocity() {
     return transform.getVelocity();
-  }
-
-  //set if visible
-  public void setRender(boolean value) {
-    hasRender = value;
-  }
-
-  //to check if entity is visible
-  public boolean isRendering() {
-    return hasRender;
   }
 
   public void setHeading(double heading) {
@@ -228,42 +197,29 @@ public class Entity {
   }
 
   public void kill() {
-    // render.drawExplosion(transform.getPosition(), 
-    //                      tag,
-    //                      this.view_centre);
-    hasRender = false;
     hasShooter = false;
-    isAlive = false;
-    
+    isAlive = false;   
+    this.event = Event.EXPLODE;
   }
 
   public boolean isDead() {
     if (hasHealth) {
       return health.isDead();
-    
     // Bots and some entities don't have health
     } else if (isAlive){
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
-  public void setAlive() {
-    //reset velocity to 0
-    //if (hasAI){
-    //  ai.reset();
-    //}
-    hasRender = true;
-    hasShooter = true;
-    //isAlive = true; <-- this breaks collision detection, why? 
-    //add something for health
+  public void setAlive(){
+    isAlive = true;
   }
 
   public void setAlive(boolean value){
-    hasRender = value;
     hasShooter = value;
     isAlive = value;
-    if (isAlive){
+    if (hasHealth){
       health.reset();
     }
   }
@@ -293,6 +249,10 @@ public class Entity {
     this.commsPacket.setAlive(this.isAlive);
     this.commsPacket.setVelocity(transform.getVelocity());
     this.commsPacket.setId(this.id);
+    this.commsPacket.setHealth(this.getHealth());
+    this.commsPacket.setScore(this.score);
+    this.commsPacket.setEvent(this.event);
+    
     CommsGlobal.get(tag.toString()).addPacket(this.commsPacket);
   }
 
@@ -314,10 +274,4 @@ public class Entity {
       health.reset();
     }
   }
-
-  public void addPoints(int p){
-    points += p;
-  }
-
-  //will need to get and set state here for FSM
 }
