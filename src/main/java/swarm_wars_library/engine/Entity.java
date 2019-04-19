@@ -21,13 +21,15 @@ public class Entity {
   private RigidBody rb;
   private AI ai;
   //BOT Specific comps
-  private CommsGlobal comms;
   private CommsPacket commsPacket;
   //private State state;
   private SwarmLogic swarmLogic;
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
   private Vector2D view_centre = new Vector2D(0, 0);
+
+  private int id;
+  private static int nextId = 0;
 
   //Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
   public Entity(
@@ -54,6 +56,9 @@ public class Entity {
     isMothership = false;
     hasAI = hai;
     points = 0;
+
+    id = nextId;
+    nextId++;
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
@@ -109,7 +114,7 @@ public class Entity {
     }
     if (hasAI) {
       //pass it current player position, its own transform
-      Vector2D playerLoc = comms.get("PLAYER").getPacket(0).getLocation();
+      Vector2D playerLoc = CommsGlobal.get("PLAYER").getPacket(0).getLocation();
       ai.update(playerLoc, transform);
       //shooter uses this info below to target player
     }
@@ -266,19 +271,15 @@ public class Entity {
     return (int) transform.getScale().getX();
   }
 
-  public void setComms(CommsGlobal comms) {
-    this.comms = comms;
+  public void setComms() {
     commsPacket = new CommsPacket();
-    if (isBot) {
-      swarmLogic.setComms(this.comms);
-    }
     sendPacket();
   }
 
   //BOT methods
   public void setSwarmLogic() {
     //init swarm logic
-    swarmLogic = new SwarmLogic(transform, rb);
+    swarmLogic = new SwarmLogic(transform, rb, id);
   }
 
   public void selectStartingSwarmAlgorithm(String swarm_algorithm){
@@ -287,21 +288,11 @@ public class Entity {
 
   //ALLL COMMS
   public void sendPacket() {
-    //update this logic
     commsPacket.setLocation(transform.getPosition());
-    commsPacket.setIsAlive(true);
+    commsPacket.setAlive(true);
     commsPacket.setVelocity(transform.getVelocity());
-    if (isMothership) {
-      comms.get("PLAYER").setPacket(commsPacket, 0);
-    }
-
-    if (isBot) {
-      comms.get("PLAYER").setPacket(commsPacket, swarmLogic.getId());
-    }
-
-    if (tag.equals(Tag.ENEMY)) {
-      comms.get("ENEMY").setPacket(commsPacket, 0);
-    }
+    commsPacket.setId(id);
+    CommsGlobal.get(tag.toString()).addPacket(commsPacket);
   }
 
   public ArrayList<Entity> getMagazine(){

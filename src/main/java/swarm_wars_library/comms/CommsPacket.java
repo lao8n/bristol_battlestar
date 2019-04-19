@@ -6,6 +6,16 @@ public class CommsPacket {
   private Vector2D location;
   private boolean isAlive;
   private Vector2D velocity;
+  private  int id;
+
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public void setLocation(Vector2D location) {
     this.location = location;
@@ -15,11 +25,11 @@ public class CommsPacket {
     return this.location;
   }
 
-  public boolean getIsAlive() {
+  public boolean isAlive() {
     return this.isAlive;
   }
 
-  public void setIsAlive(boolean isAlive) {
+  public void setAlive(boolean isAlive) {
     this.isAlive = isAlive;
   }
 

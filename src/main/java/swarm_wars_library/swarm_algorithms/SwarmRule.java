@@ -6,6 +6,9 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.engine.Vector2D;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * SwarmRule Class holds information about CommsGlobal and properties of 
  * the Entity including id, RigidBody and Transform. It includes two 
@@ -32,7 +35,6 @@ import swarm_wars_library.engine.Vector2D;
  *    in one go?
  */
 public abstract class SwarmRule{
-  protected CommsGlobal rule_comms;
   protected double rule_dist;
   protected int rule_id;
   protected int rule_neighbourCount;
@@ -41,9 +43,8 @@ public abstract class SwarmRule{
   protected RigidBody rule_rb;
   protected Transform rule_transform;
 
-  public SwarmRule(CommsGlobal rule_comms, int rule_id, 
+  public SwarmRule(int rule_id,
     RigidBody rule_rb, Transform rule_transform){
-    this.rule_comms = rule_comms;
     this.rule_id = rule_id;
     this.rule_rb = rule_rb;
     this.rule_transform = rule_transform;
@@ -56,10 +57,12 @@ public abstract class SwarmRule{
   public Vector2D iterateOverSwarm(double desiredDistance){
     this.rule_neighbourCount = 0;
 
-    for(int i = 1; i < this.rule_comms.get("PLAYER").getNumberOfReceivers(); i++){
-      if (i != rule_id){
-        this.rule_otherBot = this.rule_comms.get("PLAYER").getPacket(i);
-        if (this.rule_otherBot.getIsAlive()){
+    ArrayList<CommsPacket> otherBots = CommsGlobal.get("P_BOT").getPackets();
+
+    for(CommsPacket otherBot: otherBots){
+      this.rule_otherBot = otherBot;
+      if (this.rule_otherBot.getId() != rule_id){
+        if (this.rule_otherBot.isAlive()){
           this.rule_dist = Vector2D.sub(this.rule_transform.getPosition(),
                                         this.rule_otherBot.getLocation())
                                    .mag();

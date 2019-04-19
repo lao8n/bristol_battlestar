@@ -26,7 +26,7 @@ public class EntityBuilder {
     }
 
     public Entity newBullet(Tag bulletTag){
-        Entity b = new Entity(sketch, bulletTag, 5, true, false, false, false, false, true, false);
+        Entity b = new Entity(sketch, bulletTag, 5, true, false, false, false, true, true, false);
         return b;
     }
 
