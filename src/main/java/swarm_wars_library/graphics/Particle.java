@@ -26,13 +26,12 @@ class Particle {
         force.mult(forceMag);
     }
 
-    public double getX(){
-        return location.getX();
+    public Vector2D getXY(){
+        return location;
     }
-
-    public double getY(){
-        return location.getY();
+    
+    public void setXY(Vector2D location){
+        this.location = location;
     }
-
 }
 

@@ -131,12 +131,12 @@ public class Render {
   //   this.sketch.ellipse(0, 0, this.scale+3, this.scale+3);  
   // }
 
-  public void drawEnemyVoid(Vector2D loc){
-    this.sketch.fill(0, 0, 0); 
-    this.sketch.noStroke();
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale, this.scale); 
-  }
+  // public void drawEnemyVoid(Vector2D loc){
+  //   this.sketch.fill(0, 0, 0); 
+  //   this.sketch.noStroke();
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale, this.scale); 
+  // }
   
   // public void drawBullet(Vector2D loc, boolean isPlayer){
   //   this.sketch.noStroke();
@@ -177,86 +177,86 @@ public class Render {
   //   this.sketch.text("POINTS: " + points, 5, 5);
   // }
 
-  public void drawExplosion(Vector2D loc, Tag tag, Vector2D view_centre){
+  // public void drawExplosion(Vector2D loc, Tag tag, Vector2D view_centre){
 
-    int r = 0, g = 0, b = 0, alpha; 
-    this.view_centre = view_centre;
-    // Bigger entities have longer explosions
-    int frames = 5;
-    if (tag.equals(Tag.ENEMY)){
-      frames = 10;
-      // To put a black hole briefly where enemy was
-      drawEnemyVoid(new Vector2D(render_x, render_y));
-      r = 229; g = 11; b = 109;
-    } else if (tag.equals(Tag.P_BULLET)){
-      r = 0; g = 237; b = 255; 
-    } else if (tag.equals(Tag.E_BULLET)){
-      r = 255; g = 0; b = 199;
-    }
+    // int r = 0, g = 0, b = 0, alpha; 
+    // this.view_centre = view_centre;
+    // // Bigger entities have longer explosions
+    // int frames = 5;
+    // if (tag.equals(Tag.ENEMY)){
+    //   frames = 10;
+    //   // To put a black hole briefly where enemy was
+    //   drawEnemyVoid(new Vector2D(render_x, render_y));
+    //   r = 229; g = 11; b = 109;
+    // } else if (tag.equals(Tag.P_BULLET)){
+    //   r = 0; g = 237; b = 255; 
+    // } else if (tag.equals(Tag.E_BULLET)){
+    //   r = 255; g = 0; b = 199;
+    // }
 
-    this.sketch.fill(242, 227, 6, 50); 
-    this.sketch.noStroke();
-    this.sketch.ellipseMode(2);
+    // this.sketch.fill(242, 227, 6, 50); 
+    // this.sketch.noStroke();
+    // this.sketch.ellipseMode(2);
 
-    List<Particle> list = new ArrayList<Particle>();
+    // List<Particle> list = new ArrayList<Particle>();
 
-    for (int i = 0; i < numParticles; i++){
-      // Create particle in randomised circle around entity
-      float startX = (float) (loc.getX() + (-1 + (1 - - 1) * (float) Math.random()));
-      float startY = (float) (loc.getY() + (-1 + (1 - - 1) * (float) Math.random()));
-      Vector2D start = new Vector2D(startX, startY);
+    // for (int i = 0; i < numParticles; i++){
+    //   // Create particle in randomised circle around entity
+    //   float startX = (float) (loc.getX() + (-1 + (1 - - 1) * (float) Math.random()));
+    //   float startY = (float) (loc.getY() + (-1 + (1 - - 1) * (float) Math.random()));
+    //   Vector2D start = new Vector2D(startX, startY);
 
-      Particle p = new Particle(startX, startY);
+    //   Particle p = new Particle(startX, startY);
 
-      // Set force for each particle to move away from entity
-      Vector2D temp = Vector2D.sub(start, loc);
-      p.setForce(temp);
+    //   // Set force for each particle to move away from entity
+    //   Vector2D temp = Vector2D.sub(start, loc);
+    //   p.setForce(temp);
 
-      // Add to particle list
-      list.add(p);
-    }
+    //   // Add to particle list
+    //   list.add(p);
+    // }
 
     // draw explosion
-    for (int j = 0; j < frames; j++){
-      this.sketch.fill(r, g, b, 50);
-      alpha = 20;
-      for (Particle p : list){
-        render_x = p.getX() - this.view_centre.getX()
-                + this.sketch.width / 2;
-        render_y = p.getY() - this.view_centre.getY()
-                + this.sketch.height / 2;
-        if (tag.equals(Tag.ENEMY)){
-          drawEnemyParticle(render_x, render_y, r, g, b, alpha);
-        }
-        else if (tag.equals(Tag.P_BOT)){
-          drawPlayerBotParticle(render_x, render_y, r, g, b, alpha);
-        }
-        else {
-          drawBulletParticle(render_x, render_y, r, g, b, alpha);
-        }
-        alpha += 10;
-        p.update();
-      }
-    }
-  }
+    // for (int j = 0; j < frames; j++){
+    //   this.sketch.fill(r, g, b, 50);
+    //   alpha = 20;
+    //   for (Particle p : list){
+    //     render_x = p.getX() - this.view_centre.getX()
+    //             + this.sketch.width / 2;
+    //     render_y = p.getY() - this.view_centre.getY()
+    //             + this.sketch.height / 2;
+    //     if (tag.equals(Tag.ENEMY)){
+    //       drawEnemyParticle(render_x, render_y, r, g, b, alpha);
+    //     }
+    //     else if (tag.equals(Tag.P_BOT)){
+    //       drawPlayerBotParticle(render_x, render_y, r, g, b, alpha);
+    //     }
+    //     else {
+    //       drawBulletParticle(render_x, render_y, r, g, b, alpha);
+    //     }
+    //     alpha += 10;
+    //     p.update();
+    //   }
+    // }
+  // }
 
-  private void drawEnemyParticle(double render_x, double render_y, int r, 
-    int g, int b, int alpha){
-    this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) render_x, (float) render_y, 6, 6);
-  }
+  // private void drawEnemyParticle(double render_x, double render_y, int r, 
+  //   int g, int b, int alpha){
+  //   this.sketch.fill(r, g, b, alpha); 
+  //   this.sketch.ellipse((float) render_x, (float) render_y, 6, 6);
+  // }
 
-  private void drawPlayerBotParticle(double render_x, double render_y, int r, 
-    int g, int b, int alpha){
-    this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) render_x, (float) render_y, 4, 4);
-  }
+  // private void drawPlayerBotParticle(double render_x, double render_y, int r, 
+  //   int g, int b, int alpha){
+  //   this.sketch.fill(r, g, b, alpha); 
+  //   this.sketch.ellipse((float) render_x, (float) render_y, 4, 4);
+  // }
 
-  private void drawBulletParticle(double render_x, double render_y, int r, 
-  int g, int b, int alpha){
-    this.sketch.fill(r, g, b, alpha); 
-    this.sketch.ellipse((float) render_x, (float) render_y, 3, 3);
-  }
+  // private void drawBulletParticle(double render_x, double render_y, int r, 
+  // int g, int b, int alpha){
+  //   this.sketch.fill(r, g, b, alpha); 
+  //   this.sketch.ellipse((float) render_x, (float) render_y, 3, 3);
+  // }
 
   public void drawInitScreen(float width, float height){
     this.sketch.background(56,1,9);
@@ -281,7 +281,7 @@ public class Render {
 
     // random particle explosion
     Vector2D v = new Vector2D(Math.random() * width +1, Math.random() * height + 1);
-    drawExplosion(v, Tag.ENEMY, this.view_centre);
+    // drawExplosion(v, Tag.ENEMY, this.view_centre);
   }
 
 }

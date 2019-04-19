@@ -234,6 +234,7 @@ public class Entity {
     hasRender = false;
     hasShooter = false;
     isAlive = false;
+    
   }
 
   public boolean isDead() {
@@ -272,7 +273,7 @@ public class Entity {
   }
 
   public void setComms() {
-    commsPacket = new CommsPacket();
+    this.commsPacket = new CommsPacket();
     sendPacket();
   }
 
@@ -288,11 +289,11 @@ public class Entity {
 
   //ALLL COMMS
   public void sendPacket() {
-    commsPacket.setLocation(transform.getPosition());
-    commsPacket.setAlive(true);
-    commsPacket.setVelocity(transform.getVelocity());
-    commsPacket.setId(id);
-    CommsGlobal.get(tag.toString()).addPacket(commsPacket);
+    this.commsPacket.setLocation(transform.getPosition());
+    this.commsPacket.setAlive(this.isAlive);
+    this.commsPacket.setVelocity(transform.getVelocity());
+    this.commsPacket.setId(this.id);
+    CommsGlobal.get(tag.toString()).addPacket(this.commsPacket);
   }
 
   public ArrayList<Entity> getMagazine(){

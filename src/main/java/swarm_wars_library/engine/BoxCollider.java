@@ -4,66 +4,46 @@ public class BoxCollider {
 
 	BoxCollider(){}
 
-	//checks for tags first and only check collisions that matter
-	public static void boundingCheck(Entity first, Entity second){
+	//checks for tags dealDamage and only check collisions that matter
+	public static void boundingCheck(Entity dealDamage, Entity takeDamage){
+
 		// Prevents any dead entity having impact
-		if (first.isDead() || !first.isRendering() || second.isDead() || !second.isRendering()){
+		if (dealDamage.isDead() || !dealDamage.isRendering() || takeDamage.isDead() || !takeDamage.isRendering()){
 			return;
 		}
-
-		// Player - Enemy bullet
-		if (first.getTag().equals(Tag.PLAYER)){
-			if (second.getTag().equals(Tag.E_BULLET)){
-				if (hasCollision(first, second)){
-					first.takeDamage(5);
-					second.kill();
-				}
-		  } // any other collisions we care about involving player: 
-		  
-		} else if (first.getTag().equals(Tag.E_BULLET)){
-		//if (second.getTag().equals(Tag.PLAYER)){
-		//	if (hasCollision(first, second)){
-		//		second.takeDamage(5);
-		//		first.kill();
-		//	} else
-			if (second.getTag().equals(Tag.P_BOT)){
-				if (hasCollision(first, second)){
-					first.kill();
-					second.kill();
+		// E_BULLET -> P_BOT
+		if (dealDamage.getTag().equals(Tag.E_BULLET)){
+			if (takeDamage.getTag().equals(Tag.P_BOT)){
+				if (hasCollision(dealDamage, takeDamage)){
+					dealDamage.kill();
+					takeDamage.kill();
 				}
 			}	
-
-		} else if (first.getTag().equals(Tag.P_BOT)){
-			if (second.getTag().equals(Tag.E_BULLET)){
-				if (hasCollision(first, second)){
-					first.kill();
-					second.kill();
+		} 
+		// E_BULLET -> PLAYER
+		if (dealDamage.getTag().equals(Tag.E_BULLET)){
+			if (takeDamage.getTag().equals(Tag.PLAYER)){
+				if (hasCollision(dealDamage, takeDamage)){
+					dealDamage.kill();
+					takeDamage.takeDamage(5);
 				}
-			}
-		
-		// Enemy - Player bullet
-		} else if (first.getTag().equals(Tag.ENEMY)){
-			if(second.getTag().equals(Tag.P_BULLET)){
-				if (hasCollision(first, second)){
-					first.takeDamage(5);
-					second.kill();					
-				}	
-			}
-		} else if (first.getTag().equals(Tag.P_BULLET)){
-			if(second.getTag().equals(Tag.ENEMY)){
-				if (hasCollision(first, second)){
-					second.takeDamage(5);
-					first.kill();
+			}	
+		} 
+		// P_BULLET -> ENEMY
+		if (dealDamage.getTag().equals(Tag.P_BULLET)){
+			if(takeDamage.getTag().equals(Tag.ENEMY)){
+				if (hasCollision(dealDamage, takeDamage)){
+					dealDamage.kill();
+					takeDamage.kill();
 				}	
 			}
 		}
-
 	}
 
-	public static boolean hasCollision(Entity first, Entity second){
-		if(Vector2D.sub(first.getPosition(), second.getPosition()).mag() < 
-			//(first.getBoundingLength() + second.getBoundingLength())){
-			(first.getScale() + second.getScale())){
+	public static boolean hasCollision(Entity dealDamage, Entity takeDamage){
+		if(Vector2D.sub(dealDamage.getPosition(), takeDamage.getPosition()).mag() < 
+			//(dealDamage.getBoundingLength() + takeDamage.getBoundingLength())){
+			(dealDamage.getScale() + takeDamage.getScale())){
 			return true;
 		}
 		return false;

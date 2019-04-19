@@ -23,7 +23,11 @@ public class CommsChannel {
 
   // TODO this should probably return an immutable copy of the packet
   public CommsPacket getPacket(int i) {
-    if(i >= currentPackets.size()) throw new Error ("Getting packet out of range of CommsChannel..");
+    if(i >= currentPackets.size()) //throw new Error ("Getting packet out of range of CommsChannel..");
+    {
+      // System.out.println(i);
+      // System.out.println(currentPackets.size());
+    }
     CommsPacket packet = currentPackets.get(i);
     if(packet == null) throw new Error ("Getting packet from CommsChannel that is null, have you set it yet?");
     return packet;
@@ -48,6 +52,7 @@ public class CommsChannel {
   public void addPacket(CommsPacket packet) {
     if(packet == null) throw new Error ("Setting a null packet in CommsChannel");
     futurePackets.add(packet);
+    // System.out.println(futurePackets.size());
   }
 
   public int getNumberOfReceivers() {

@@ -43,7 +43,7 @@ class Shooter {
       // Entity(sketch, tag, scale, hasRender, hasInput, hasShooter, hasHealth, hasComms, hasRb, isAI)
       Entity bullet = eb.newBullet(bulletTag);
       bullet.setComms();
-      bullet.kill();
+      // bullet.kill();
       magazine.add(bullet);
       magazine.get(i).setPosition(location, 1.50);
     }

@@ -23,6 +23,10 @@ public class SwarmWars extends PApplet {
 
   // Entity list that has all our game things.
   ArrayList < Entity > entityList = new ArrayList < Entity > ();
+  ArrayList <Entity> PlayerTakeDamage = new ArrayList <Entity>();
+  ArrayList <Entity> PlayerDealDamage = new ArrayList <Entity>();
+  ArrayList <Entity> EnemyTakeDamage = new ArrayList <Entity>();
+  ArrayList <Entity> EnemyDealDamage = new ArrayList <Entity>();
   // Entity builder class
   EntityBuilder eb = new EntityBuilder(this);
 
@@ -74,8 +78,10 @@ public class SwarmWars extends PApplet {
     player = eb.newPlayer();
     player.setComms();
     entityList.add(player);
+    PlayerTakeDamage.add(player);
     //add player bullets
     entityList.addAll(player.getMagazine());
+    PlayerDealDamage.addAll(player.getMagazine());
 
     //add player bots
     for (int i = 0; i < numBots; i++) {
@@ -86,6 +92,7 @@ public class SwarmWars extends PApplet {
       // bot.selectStartingSwarmAlgorithm("boids_flock");
       // bot.selectStartingSwarmAlgorithm("defensive_shell");
       entityList.add(bot);
+      PlayerTakeDamage.add(bot);
       // Note: if bots later get shooters: need to add magazines here
     }
 
@@ -96,10 +103,11 @@ public class SwarmWars extends PApplet {
                          Math.random() * map.getMapHeight() + 1);
       turret.setComms();
       entityList.add(turret);
+      EnemyTakeDamage.add(turret);
       // Add enemy shooter magazines (bullets)
       entityList.addAll(turret.getMagazine());
+      EnemyTakeDamage.addAll(turret.getMagazine());
     }
-
     // IMPORTANT to do at end of setup - sets all initial packets to current
     CommsGlobal.update();
   }
@@ -132,70 +140,105 @@ public class SwarmWars extends PApplet {
   }
 
   // >>>>>> MAIN GAME LOOP <<<<<<<<<<
+  int i = 1; 
   public void gameScreen() {
     background(0, 0, 0);
     // Points player earns in a loop
     pointsToAdd = 0;
 
-    // Update all game things
-    for (int i = entityList.size()-1; i >= 0; i--) {
-      entityList.get(i).setViewCentre(player.getPosition());
-      entityList.get(i).update();
-
-      // Collision detection - avoids double checking
-      for(int j = entityList.size()-1; j > i; j--){
-
-        // Stop checking i if entity dies
-        if (entityList.get(i).isDead()){j = i;}
-
-        // All responses to collisions handled in BoxCollider
-        BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
-      }
-
-      // Remove if entity dead
-      if (entityList.get(i).isDead()){
-        // Respawn if turret
-        if (entityList.get(i).getTag().equals(Tag.ENEMY)){
-          // Give player points for kill
-          pointsToAdd += 10;
-
-          entityList.get(i).setPosition(Math.random() * map.getMapWidth() +1, 
-                                        Math.random() * map.getMapHeight() + 1);
-          entityList.get(i).setAlive();
-          entityList.get(i).setAlive(true);
-        // If player, move to game over
-        } 
-        else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
-          gameScreen = 3;
-        }
-        else {
-          entityList.remove(i);
-        }
-      }      
+    for(int i = 0; i < PlayerTakeDamage.size(); i++){
+      PlayerTakeDamage.get(i).update();
+    }
+    for(int i = 0; i < PlayerDealDamage.size(); i++){
+      PlayerDealDamage.get(i).update();
+    }
+    for(int i = 0; i < EnemyTakeDamage.size(); i++){
+      EnemyTakeDamage.get(i).update();
+    }
+    for(int i = 0; i < EnemyDealDamage.size(); i++){
+      EnemyDealDamage.get(i).update();
     }
 
-    // Add points player earned for enemies killed this loop
-    player.addPoints(pointsToAdd);
+    for(int i = 0; i < EnemyDealDamage.size(); i++){
+      for(int j = 0; j < PlayerTakeDamage.size(); j++){
+        BoxCollider.boundingCheck(EnemyDealDamage.get(i),
+                                  PlayerTakeDamage.get(j));
+      }
+    }
 
-    // Sets future comms to current for next loop
-    CommsGlobal.update();
+    for(int i = 0; i < PlayerDealDamage.size(); i++){
+      for(int j = 0; j < EnemyTakeDamage.size(); j++){
+        BoxCollider.boundingCheck(PlayerDealDamage.get(i),
+                                  EnemyTakeDamage.get(j));
+      }
+    } 
     this.renderLayers.update();
+    CommsGlobal.update();
   }
 
-  public void gameOverScreen() {
-    // render.drawGameOverScreen(width, height);
-  }
+    // Update all game things
+  //   for (int i = 0; i < entityList.size(); i++) {
+  //     entityList.get(i).setViewCentre(player.getPosition());
+  //     entityList.get(i).update();
+  //     // if(entityList.get(i).getTag().equals(Tag.E_BULLET)){System.out.println("E_BULLET");}
+  //     // Collision detection - avoids double checking
+  //     if(entityList.get(i).getTag().equals(Tag.E_BULLET)){
+  //       System.out.println("E_BULLET");
+  //     }
+  //     for(int j = i + 1; j <  entityList.size(); j++){
+  //       System.out.println(i + j);
+  //       // Stop checking i if entity dies
+  //       // if (entityList.get(i).isDead()){j = i;}
 
-  public void changeScreen(int k) {
-    //TODO add more checks here, only change screens in certain cases
-    if (k == 'n' || k == 'N') {
-      gameScreen++;
-      if (gameScreen > MAXSCREENS) {
-        gameScreen = 0;
-      }
-    }
+  //       // All responses to collisions handled in BoxCollider
+  //       // BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
+  //     }
+
+  //     // Remove if entity dead
+  //     if (entityList.get(i).isDead()){
+  //       // Respawn if turret
+  //       if (entityList.get(i).getTag().equals(Tag.ENEMY)){
+  //         // Give player points for kill
+  //         pointsToAdd += 10;
+
+  //         entityList.get(i).setPosition(Math.random() * map.getMapWidth() +1, 
+  //                                       Math.random() * map.getMapHeight() + 1);
+  //         entityList.get(i).setAlive();
+  //         entityList.get(i).setAlive(true);
+  //       // If player, move to game over
+  //       } 
+  //       else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
+  //         gameScreen = 3;
+  //         System.out.println("GAME OVER");
+  //         break;
+  //       }
+  //       else {
+  //         // entityList.remove(i);
+  //       }
+  //     }      
+  //   }
+
+  //   // Add points player earned for enemies killed this loop
+  //   player.addPoints(pointsToAdd);
+
+  //   // Sets future comms to current for next loop
+  //   CommsGlobal.update();
+  //   this.renderLayers.update();
+  // }
+
+  // public void gameOverScreen() {
+  //   // render.drawGameOverScreen(width, height);
+  // }
+
+  // public void changeScreen(int k) {
+  //   //TODO add more checks here, only change screens in certain cases
+  //   if (k == 'n' || k == 'N') {
+  //     gameScreen++;
+  //     if (gameScreen > MAXSCREENS) {
+  //       gameScreen = 0;
+  //     }
+  //   }
     //add pause screen on 'p'
-  }
 
   public static void main(String[] passedArgs) {
     String[] appletArgs = new String[] {

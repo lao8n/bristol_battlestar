@@ -6,8 +6,7 @@ public class CommsPacket {
   private Vector2D location;
   private boolean isAlive;
   private Vector2D velocity;
-  private  int id;
-
+  private int id;
 
   public int getId() {
     return id;

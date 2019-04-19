@@ -57,42 +57,50 @@ public class RenderLayers{
   private void renderEntitiesLayer(){
     // Render Enemy Bullets
     for (int i = 0; i < CommsGlobal.get("E_BULLET").getNumberOfReceivers(); i++){
-      this.renderEnemyBullet.update(CommsGlobal.get("E_BULLET")
-                                                .getPacket(i)
-                                                .getLocation(),
-                                    CommsGlobal.get("PLAYER")
-                                                .getPacket(0)
-                                                .getLocation());
+      if(CommsGlobal.get("E_BULLET").getPacket(i).isAlive()){
+        this.renderEnemyBullet.update(CommsGlobal.get("E_BULLET")
+                                                 .getPacket(i)
+                                                 .getLocation(),
+                                      CommsGlobal.get("PLAYER")
+                                                 .getPacket(0)
+                                                 .getLocation());
+      }
     }
 
     // Render Player Bullets
     for (int i = 0; i < CommsGlobal.get("P_BULLET").getNumberOfReceivers(); i++){
-      this.renderPlayerBullet.update(CommsGlobal.get("P_BULLET")
-                                                .getPacket(i)
-                                                .getLocation(),
-                                      CommsGlobal.get("PLAYER")
-                                                .getPacket(0)
-                                                .getLocation());
+      if(CommsGlobal.get("P_BULLET").getPacket(i).isAlive()){
+        this.renderPlayerBullet.update(CommsGlobal.get("P_BULLET")
+                                                  .getPacket(i)
+                                                  .getLocation(),
+                                        CommsGlobal.get("PLAYER")
+                                                  .getPacket(0)
+                                                  .getLocation());
+      }
     }
 
     // Render Bots
     for (int i = 0; i < CommsGlobal.get("P_BOT").getNumberOfReceivers(); i++){
-      this.renderBot.update(CommsGlobal.get("P_BOT")
-                                       .getPacket(i)
-                                       .getLocation(),
-                            CommsGlobal.get("PLAYER")
-                                       .getPacket(0)
-                                       .getLocation());
+      if(CommsGlobal.get("P_BOT").getPacket(i).isAlive()){
+        this.renderBot.update(CommsGlobal.get("P_BOT")
+                                        .getPacket(i)
+                                        .getLocation(),
+                              CommsGlobal.get("PLAYER")
+                                        .getPacket(0)
+                                        .getLocation());
+      }
     }
   
     // Render Enemy
     for (int i = 0; i < CommsGlobal.get("ENEMY").getNumberOfReceivers(); i++){
-      this.renderEnemy.update(CommsGlobal.get("ENEMY")
-                                         .getPacket(i)
-                                         .getLocation(),
-                              CommsGlobal.get("PLAYER")
-                                         .getPacket(0)
-                                         .getLocation());
+      if(CommsGlobal.get("ENEMY").getPacket(i).isAlive()){
+        this.renderEnemy.update(CommsGlobal.get("ENEMY")
+                                          .getPacket(i)
+                                          .getLocation(),
+                                CommsGlobal.get("PLAYER")
+                                          .getPacket(0)
+                                          .getLocation());
+      }
     }
 
     // Render Player
@@ -102,6 +110,9 @@ public class RenderLayers{
                              CommsGlobal.get("PLAYER")
                                         .getPacket(0)
                                         .getLocation());
+
+    // Render Explosions
+    
   }
   
   private void renderDisplaysLayer(){
