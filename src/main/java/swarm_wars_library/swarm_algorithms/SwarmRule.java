@@ -6,7 +6,6 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.engine.Vector2D;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

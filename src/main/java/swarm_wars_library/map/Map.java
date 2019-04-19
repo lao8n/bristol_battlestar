@@ -38,31 +38,30 @@ import java.util.*;
 public class Map {
 
   private static Map instance = new Map();
-  private int map_width;
-  private int map_height;
+  private int map_width = 2000;
+  private int map_height = 2000;
+  private int playerScale = 15;
+  private int enemyScale = 15;
+  private int botScale = 8;
+  private int bulletScale = 5;
+  private int starScale = 1;
+  private int numStars = 500;
   private List<Vector2D> backgroundStars;
 
   //make the constructor private so that this class cannot be
   //instantiated
-  private Map(){}
-
-  //Get the only object available
-  public static Map getInstance(){
-     return instance;
-  }
-  
-  public void setMapDimensions(int map_width, int map_height){
-    this.map_width = map_width;
-    this.map_height = map_height;
-  }
-
-  public void setMapStars(){
+  private Map(){
     this.backgroundStars = new ArrayList<Vector2D>();
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < this.numStars; i++){
       Vector2D v2d = new Vector2D(Math.random() * map_width, 
                                   Math.random() * map_height);
       backgroundStars.add(i, v2d);
     }
+  }
+
+  //Get the only object available
+  public static Map getInstance(){
+     return instance;
   }
 
   public List<Vector2D> getMapStars(){
@@ -74,5 +73,25 @@ public class Map {
 
   public int getMapHeight(){
     return this.map_height;
+  }
+
+  public int getPlayerScale(){
+    return this.playerScale;
+  }
+
+  public int getBotScale(){
+    return this.botScale;
+  }
+
+  public int getEnemyScale(){
+    return this.enemyScale;
+  }
+
+  public int getBulletScale(){
+    return this.bulletScale;
+  }
+
+  public int getStarScale(){
+    return this.starScale;
   }
 }

@@ -4,9 +4,7 @@ import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.engine.Tag;
 // import swarm_wars_library.comms.CommsGlobal;
 
-import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.TOP;
 
 import java.util.*;
 
@@ -26,112 +24,112 @@ public class Render {
     this.scale = s;
   }
 
-  public void update(Vector2D loc, Tag tag, double heading, Vector2D view_centre){
-      //drawBackground();
-      this.view_centre = view_centre;
-      this.render_x = loc.getX() - this.view_centre.getX()
-                                 + this.sketch.width / 2;
-      this.render_y = loc.getY() - this.view_centre.getY()
-                                 + this.sketch.height / 2;
+  // public void update(Vector2D loc, Tag tag, double heading, Vector2D view_centre){
+  //     //drawBackground();
+  //     this.view_centre = view_centre;
+  //     this.render_x = loc.getX() - this.view_centre.getX()
+  //                                + this.sketch.width / 2;
+  //     this.render_y = loc.getY() - this.view_centre.getY()
+  //                                + this.sketch.height / 2;
       
-      if(this.render_x >= 0 && this.render_x <= this.sketch.width &&
-        this.render_y >= 0 && this.render_y <= this.sketch.height){
-        this.sketch.pushMatrix();
-        //this.sketch.ellipseMode(0);
-        this.sketch.stroke(0);
-        this.sketch.translate((float) this.render_x, (float) this.render_y);
-        this.sketch.rotate((float) heading);
-        drawEntity(loc, tag);
-        this.sketch.popMatrix();
-      }
-   }
+  //     if(this.render_x >= 0 && this.render_x <= this.sketch.width &&
+  //       this.render_y >= 0 && this.render_y <= this.sketch.height){
+  //       this.sketch.pushMatrix();
+  //       //this.sketch.ellipseMode(0);
+  //       this.sketch.stroke(0);
+  //       this.sketch.translate((float) this.render_x, (float) this.render_y);
+  //       this.sketch.rotate((float) heading);
+  //       drawEntity(loc, tag);
+  //       this.sketch.popMatrix();
+  //     }
+  //  }
 
-  public void drawEntity(Vector2D loc, Tag tag){
+  // public void drawEntity(Vector2D loc, Tag tag){
     
-    switch(tag){
-      case PLAYER: drawPlayer(loc);
-        break;
-      case ENEMY: drawEnemy(loc);
-        break;
-      case E_BULLET: drawBullet(loc, false);
-        break;
-      case P_BULLET: drawBullet(loc, true);
-        break;
-      case ROCK:
-        break;
-      case EMPTY:
-        break;
-      case P_BOT:
-      case E_BOT: drawBot(loc);
-        break;
-      case STAR: drawStar();
-        break;
-    }
-  }
+  //   switch(tag){
+  //     case PLAYER: drawPlayer(loc);
+  //       break;
+  //     case ENEMY: drawEnemy(loc);
+  //       break;
+  //     case E_BULLET: drawBullet(loc, false);
+  //       break;
+  //     case P_BULLET: drawBullet(loc, true);
+  //       break;
+  //     case ROCK:
+  //       break;
+  //     case EMPTY:
+  //       break;
+  //     case P_BOT:
+  //     case E_BOT: drawBot(loc);
+  //       break;
+  //     case STAR: drawStar();
+  //       break;
+  //   }
+  // }
     
-  public void drawPlayer(Vector2D loc){ 
-    this.sketch.noStroke();
-    this.sketch.fill(70, 102, 255); 
-    //this.sketch.ellipse((int)loc.getX(), (int)loc.getY(), this.scale-10, this.scale); 
-    //this.sketch.rectMode(2);
-    //this.sketch.rect(0, 0, this.scale, this.scale);
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale, this.scale); 
-    // Dark inside
-    this.sketch.fill(17, 8, 117, 50); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale-2, this.scale-2); 
-    this.sketch.fill(9, 3, 71); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale-3, this.scale-3); 
-    // Add glow
-    this.sketch.fill(21, 0, 255, 60); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale+2, this.scale+2); 
-    this.sketch.fill(21, 0, 255, 40); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale+3, this.scale+3); 
-  }
+  // public void drawPlayer(Vector2D loc){ 
+  //   this.sketch.noStroke();
+  //   this.sketch.fill(70, 102, 255); 
+  //   //this.sketch.ellipse((int)loc.getX(), (int)loc.getY(), this.scale-10, this.scale); 
+  //   //this.sketch.rectMode(2);
+  //   //this.sketch.rect(0, 0, this.scale, this.scale);
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale, this.scale); 
+  //   // Dark inside
+  //   this.sketch.fill(17, 8, 117, 50); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale-2, this.scale-2); 
+  //   this.sketch.fill(9, 3, 71); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale-3, this.scale-3); 
+  //   // Add glow
+  //   this.sketch.fill(21, 0, 255, 60); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale+2, this.scale+2); 
+  //   this.sketch.fill(21, 0, 255, 40); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale+3, this.scale+3); 
+  // }
   
-  public void drawBot(Vector2D loc){ 
-    this.sketch.noStroke();
-    this.sketch.fill(50, 50, 255); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale, this.scale); 
-    // Dark Inside 
-    this.sketch.fill(17, 17, 135); 
-    this.sketch.ellipse(0, 0, this.scale-2, this.scale-2); 
-    // Add Glow
-    this.sketch.fill(15, 15, 221, 50); 
-    this.sketch.ellipse(0, 0, this.scale+2, this.scale+2); 
-  }
+  // public void drawBot(Vector2D loc){ 
+  //   this.sketch.noStroke();
+  //   this.sketch.fill(50, 50, 255); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale, this.scale); 
+  //   // Dark Inside 
+  //   this.sketch.fill(17, 17, 135); 
+  //   this.sketch.ellipse(0, 0, this.scale-2, this.scale-2); 
+  //   // Add Glow
+  //   this.sketch.fill(15, 15, 221, 50); 
+  //   this.sketch.ellipse(0, 0, this.scale+2, this.scale+2); 
+  // }
 
-  public void drawEnemy(Vector2D loc){
-    this.sketch.noStroke();
-    this.sketch.fill(168, 5, 78); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale, this.scale); 
-    //this.sketch.fill(150, 0, 35); 
-    //this.sketch.ellipseMode(2);
-    //this.sketch.ellipse(0, 0, this.scale-5, this.scale-5); 
-    // Dark inside
-    this.sketch.fill(81, 4, 37, 90); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale-3, this.scale-3); 
-    this.sketch.fill(81, 4, 37, 85); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale-2, this.scale-2); 
-    // Add glow
-    this.sketch.fill(239, 2, 57, 60); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale+1, this.scale+1); 
-    this.sketch.fill(239, 2, 57, 50); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale+2, this.scale+2);
-    this.sketch.fill(239, 2, 57, 30); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0, 0, this.scale+3, this.scale+3);  
-  }
+  // public void drawEnemy(Vector2D loc){
+  //   this.sketch.noStroke();
+  //   this.sketch.fill(168, 5, 78); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale, this.scale); 
+  //   //this.sketch.fill(150, 0, 35); 
+  //   //this.sketch.ellipseMode(2);
+  //   //this.sketch.ellipse(0, 0, this.scale-5, this.scale-5); 
+  //   // Dark inside
+  //   this.sketch.fill(81, 4, 37, 90); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale-3, this.scale-3); 
+  //   this.sketch.fill(81, 4, 37, 85); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale-2, this.scale-2); 
+  //   // Add glow
+  //   this.sketch.fill(239, 2, 57, 60); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale+1, this.scale+1); 
+  //   this.sketch.fill(239, 2, 57, 50); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale+2, this.scale+2);
+  //   this.sketch.fill(239, 2, 57, 30); 
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0, 0, this.scale+3, this.scale+3);  
+  // }
 
   public void drawEnemyVoid(Vector2D loc){
     this.sketch.fill(0, 0, 0); 
@@ -140,44 +138,44 @@ public class Render {
     this.sketch.ellipse(0, 0, this.scale, this.scale); 
   }
   
-  public void drawBullet(Vector2D loc, boolean isPlayer){
-    this.sketch.noStroke();
-    if (isPlayer){
-      this.sketch.fill(0, 237, 255); //neon blue
-    } else {
-      this.sketch.fill(255, 0, 199); //neon pink
-    }
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse(0,0, this.scale, this.scale); 
-  }
+  // public void drawBullet(Vector2D loc, boolean isPlayer){
+  //   this.sketch.noStroke();
+  //   if (isPlayer){
+  //     this.sketch.fill(0, 237, 255); //neon blue
+  //   } else {
+  //     this.sketch.fill(255, 0, 199); //neon pink
+  //   }
+  //   this.sketch.ellipseMode(2);
+  //   this.sketch.ellipse(0,0, this.scale, this.scale); 
+  // }
 
-  public void drawStar(){
-    this.sketch.noStroke();
-    this.sketch.fill(255, 255, 204); 
-    this.sketch.ellipse((float) 0, 
-                        (float) 0, 
-                        (float) 1, 
-                        (float) 1); 
-  }
+  // public void drawStar(){
+  //   this.sketch.noStroke();
+  //   this.sketch.fill(255, 255, 204); 
+  //   this.sketch.ellipse((float) 0, 
+  //                       (float) 0, 
+  //                       (float) 1, 
+  //                       (float) 1); 
+  // }
 
-  public void drawHealth(int health){
-    //draw border
-    this.sketch.rectMode(0);
-    this.sketch.stroke(20, 100, 0);
-    this.sketch.fill(0, 72, 150);
-    this.sketch.rect(775, 5, 100 ,30);
-    //draw health
-    this.sketch.stroke(25, 25, 76);
-    this.sketch.fill(31, 126, 226);
-    this.sketch.rect(775, 5, health, 30);
-  }
+  // public void drawHealth(int health){
+  //   //draw border
+  //   this.sketch.rectMode(0);
+  //   this.sketch.stroke(20, 100, 0);
+  //   this.sketch.fill(0, 72, 150);
+  //   this.sketch.rect(775, 5, 100 ,30);
+  //   //draw health
+  //   this.sketch.stroke(25, 25, 76);
+  //   this.sketch.fill(31, 126, 226);
+  //   this.sketch.rect(775, 5, health, 30);
+  // }
 
-  public void drawPoints(int points){
-    this.sketch.fill(0, 101, 255);
-    this.sketch.textSize(30);
-    this.sketch.textAlign(LEFT, TOP);
-    this.sketch.text("POINTS: " + points, 5, 5);
-  }
+  // public void drawPoints(int points){
+  //   this.sketch.fill(0, 101, 255);
+  //   this.sketch.textSize(30);
+  //   this.sketch.textAlign(LEFT, TOP);
+  //   this.sketch.text("POINTS: " + points, 5, 5);
+  // }
 
   public void drawExplosion(Vector2D loc, Tag tag, Vector2D view_centre){
 
@@ -345,17 +343,4 @@ public class Render {
 // rect(-(float)go.getScaleX()/1.5, -(float)go.getScaleY()/2,
 //      (float)go.getScaleX(), (float)go.getScaleY());
 //ship head
-//     fill(77, 77, 255);
-//     rect(0, 0, (float)go.getScaleX(), (float)go.getScaleY());
-//   }
-
-// private void drawEnv(GameObject go){
-//  noStroke();
-// go.setScale(50, 40);
-//fill(128, 128, 128);
-//if (go.getHasCollision()){
-//    fill(random(0, 255),random(0, 255),random(0, 255));
-//}
-//rect(0, 0, (float)go.getScaleX(), (float)go.getScaleY());
-// }
-//}
+// 

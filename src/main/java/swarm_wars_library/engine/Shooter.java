@@ -2,7 +2,6 @@
 package swarm_wars_library.engine;
 
 import processing.core.PApplet;
-import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.engine.Vector2D;
 import java.util.*;
 

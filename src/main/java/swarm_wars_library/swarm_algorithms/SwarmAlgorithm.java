@@ -34,7 +34,7 @@ import swarm_wars_library.map.Map;
 public abstract class SwarmAlgorithm{
 
   protected Transform transform;
-  private Map map;
+  protected Map map;
 
   public SwarmAlgorithm(Transform transform){
     this.transform = transform;

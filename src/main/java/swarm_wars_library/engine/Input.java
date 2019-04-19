@@ -23,10 +23,11 @@ public class Input {
 
   public Input(PApplet sketch) {
     this.sketch = sketch;
-    this.location = new Vector2D(sketch.width / 2, sketch.height / 2);
+    this.map = Map.getInstance();
+    this.location = new Vector2D(this.map.getMapWidth() / 2, 
+                                 this.map.getMapHeight() / 2);
     this.moveForce = 6;
     this.heading = 0;
-    map = Map.getInstance();
   }
 
   public void update(Vector2D view_centre) {

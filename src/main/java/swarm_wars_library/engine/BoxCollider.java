@@ -68,5 +68,4 @@ public class BoxCollider {
 		}
 		return false;
 	}
-
 }

@@ -1,7 +1,6 @@
 package swarm_wars_library.comms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /*
   CommsChannel - is a collection of shared information, packets

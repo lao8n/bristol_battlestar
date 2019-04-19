@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
-import swarm_wars_library.graphics.Render;
+import swarm_wars_library.map.Map;
 
 public class Entity {
 
-  private PApplet sketch;
   private Tag tag;
   private Transform transform;
-  private Render render;
   public Input input;
   private int points;
   private Shooter shooter;
@@ -27,6 +25,7 @@ public class Entity {
   private boolean hasRender, hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
   private Vector2D view_centre = new Vector2D(0, 0);
+  private Map map;
 
   private int id;
   private static int nextId = 0;
@@ -44,7 +43,7 @@ public class Entity {
           boolean rigbod,
           boolean hai) {
 
-    this.sketch = sketch;
+    this.map = Map.getInstance();
     tag = t;
     transform = new Transform();
     hasRender = r;
@@ -62,11 +61,12 @@ public class Entity {
 
     if (tag.equals(Tag.P_BOT) || (tag.equals(Tag.E_BOT))) {
       isBot = true;
+      transform.setScale(map.getBotScale(), map.getBotScale());
       //NOTICE: must call method to init swarmLogic in main loop
     }
     if (tag.equals(Tag.P_BOT)){
-      transform.setPosition(this.sketch.width / 2 - 100 +  Math.random() * 200,
-                            this.sketch.height / 2 - 100 +  Math.random() * 200);
+      transform.setPosition(this.map.getMapWidth() / 2 - 100 +  Math.random() * 200,
+                            this.map.getMapHeight() / 2 - 100 +  Math.random() * 200);
       transform.setVelocity(-0.01 + Math.random() * 0.02, -0.01 + Math.random() * 0.02);
     }
     if (hasInput) {
@@ -86,24 +86,24 @@ public class Entity {
     }
     if (tag.equals(Tag.PLAYER)) {
       isMothership = true;
-      transform.setScale(30, 30);
+      transform.setScale(map.getPlayerScale(), map.getPlayerScale());
 
     }
     if(tag.equals(Tag.ENEMY)){
-      transform.setScale(30, 30);
+      transform.setScale(map.getEnemyScale(), map.getEnemyScale());
     }
     if (tag.equals(Tag.P_BULLET) || tag.equals(Tag.E_BULLET)) {
-      transform.setScale(5, 5);
+      transform.setScale(map.getBulletScale(), map.getBulletScale());
     }
     if (hasRender) {
-      render = new Render(sketch, sc);
+      // render = new Render(sketch, sc);
     }
   }
 
   public void update() {
     // Update points
     if (tag.equals(Tag.PLAYER)){
-      render.drawPoints(points);
+      // render.drawPoints(points);
     }
 
     // Set position with either Input or AI
@@ -137,13 +137,13 @@ public class Entity {
       health.update();
       if(tag.equals(Tag.PLAYER)){
          // TODO render call should not be in update
-         render.drawHealth(health.getCurrentHealth());
+        //  render.drawHealth(health.getCurrentHealth());
       }
       // draw explosion if dead
       if (health.getCurrentHealth() <= 0){
-        render.drawExplosion(transform.getPosition(), 
-                             tag,
-                             this.view_centre);
+        // render.drawExplosion(transform.getPosition(), 
+        //                      tag,
+        //                      this.view_centre);
       }
     }
 
@@ -160,7 +160,7 @@ public class Entity {
 
     //draw it
     if (hasRender) {
-      render.update(transform.getPosition(), tag, transform.getHeading(), this.view_centre);
+      // render.update(transform.getPosition(), tag, transform.getHeading(), this.view_centre);
     }
   }
 
@@ -228,9 +228,9 @@ public class Entity {
   }
 
   public void kill() {
-    render.drawExplosion(transform.getPosition(), 
-                         tag,
-                         this.view_centre);
+    // render.drawExplosion(transform.getPosition(), 
+    //                      tag,
+    //                      this.view_centre);
     hasRender = false;
     hasShooter = false;
     isAlive = false;

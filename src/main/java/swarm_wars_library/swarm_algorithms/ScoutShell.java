@@ -66,9 +66,9 @@ public class ScoutShell extends SwarmAlgorithm {
                                                             .getPacket(0)
                                                             .getLocation());
 
-    separate_v2d.mult(0.02);
-    seek_mothership_v2d.mult(0.2);
-    random_v2d.mult(0.1);
+    separate_v2d.mult(0.2);
+    seek_mothership_v2d.mult(0.5);
+    random_v2d.mult(0.01);
     this.stopScouting();
     this.avoidEdge(0.6);
     this.rb.applyForce(separate_v2d);
@@ -127,12 +127,12 @@ public class ScoutShell extends SwarmAlgorithm {
   private void stopScouting(){
     if(transform.getPosition().getX() < 0){
       this.scoutFlag = -1;
-    } else if (transform.getPosition().getX() > 900){
+    } else if (transform.getPosition().getX() > this.map.getMapWidth()){
       this.scoutFlag = -1;
     }
     if(transform.getPosition().getY() < 0){
       this.scoutFlag = -1;
-    } else if (transform.getPosition().getY() > 700){
+    } else if (transform.getPosition().getY() > this.map.getMapHeight()){
       this.scoutFlag = -1;
     }
   }

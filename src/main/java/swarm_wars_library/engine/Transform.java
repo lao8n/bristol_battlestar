@@ -10,7 +10,7 @@ public class Transform {
 
     Transform(){
         position = new Vector2D(0,0);
-        scale = new Vector2D(10, 10);
+        scale = new Vector2D(0, 0);
         velocity = new Vector2D(0,0);
         heading = 0;
     }
