@@ -143,22 +143,21 @@ public class SwarmWars extends PApplet {
   int i = 1; 
   public void gameScreen() {
     background(0, 0, 0);
-    // Points player earns in a loop
-
+    // Call Box Collision: Enemy -> Player
     for(int i = 0; i < EnemyDealDamage.size(); i++){
       for(int j = 0; j < PlayerTakeDamage.size(); j++){
         BoxCollider.boundingCheck(EnemyDealDamage.get(i),
                                   PlayerTakeDamage.get(j));
       }
     }
-
+    // Call Box Collision: Player -> Enemy
     for(int i = 0; i < PlayerDealDamage.size(); i++){
       for(int j = 0; j < EnemyTakeDamage.size(); j++){
         BoxCollider.boundingCheck(PlayerDealDamage.get(i),
                                   EnemyTakeDamage.get(j));
       }
     }
-
+    // Update all entities
     for(int i = 0; i < PlayerTakeDamage.size(); i++){
       PlayerTakeDamage.get(i).update();
     }

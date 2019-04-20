@@ -7,6 +7,7 @@ import processing.core.PApplet;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.comms.Event;
+import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 
 public class Entity {
@@ -24,7 +25,6 @@ public class Entity {
   private SwarmLogic swarmLogic;
   private boolean hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
   private boolean isAlive = true;
-  private Vector2D view_centre = new Vector2D(0, 0);
   private Map map;
   private int score = 0;
   private int id;
@@ -97,7 +97,7 @@ public class Entity {
   public void update() {
     // Set position with either Input or AI
     if (hasInput) {
-      input.update(this.view_centre);
+      input.update();
       transform.setPosition(input.getLocation());
       transform.setHeading(input.getHeading());
     }
@@ -117,7 +117,9 @@ public class Entity {
 
     if (hasShooter && hasAI){
       //need to set heading as direction to player
-      shooter.shoot(transform.getPosition(), ai.getHeading());
+      if(ai.getInRange()){
+        shooter.shoot(transform.getPosition(), ai.getHeading());
+      }
       shooter.update();
     }
 
@@ -141,10 +143,6 @@ public class Entity {
     if(this.event.equals(Event.EXPLODE)){
       this.event = Event.DEFAULT;
     }
-  }
-
-  public void setViewCentre(Vector2D view_centre){
-    this.view_centre = view_centre;
   }
 
   public Tag getTag(){

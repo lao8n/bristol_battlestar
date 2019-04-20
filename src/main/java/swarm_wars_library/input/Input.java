@@ -1,4 +1,4 @@
-package swarm_wars_library.engine;
+package swarm_wars_library.input;
 
 import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.map.Map;
@@ -30,15 +30,41 @@ public class Input {
     this.heading = 0;
   }
 
-  public void update(Vector2D view_centre) {
+  public void update() {
+
     location.setXY(location.getX() + 
                    (int) moveForce * (moveRight - moveLeft),
                    location.getY() + 
                    (int) moveForce * 0.8 * (moveDown - moveUp));
-    heading = Math.atan2(sketch.mouseY - this.sketch.height/2, 
-                         sketch.mouseX - this.sketch.width/2);
+
+    // We want to do the comparison between the player and the mouseXY
+    // purely in terms of actual map coordinates. 
+    // Player coordinate is simple location
+    // However mouseXY is complicated because rendering depends upon whether 
+    // close to edge of map.
+
+    double xAdj = 0;
+    double yAdj = 0;
+    if(map.getMapWidth() - location.getX() < sketch.width/2){
+      xAdj = sketch.width/2 + map.getMapWidth() - location.getX();
+    }
+    else if(location.getX() < sketch.width/2){
+      xAdj = - sketch.width/2 + location.getX();
+    }
+    if(map.getMapHeight() - location.getY() < sketch.height/2){
+      yAdj = sketch.height/2 + map.getMapHeight() - location.getY();
+    }
+    else if(location.getY() < sketch.height/2){
+      yAdj = - sketch.height/2 + location.getY();
+    }
+    double comparativeMouseX= sketch.mouseX - this.sketch.width/2 - xAdj;
+    double comparativeMouseY = sketch.mouseY - this.sketch.height/2 - yAdj;
+    heading = Math.atan2(comparativeMouseY,
+                         comparativeMouseX);
     edgeCheck();
   }
+
+
 
   public Vector2D getLocation() {
     return location;
