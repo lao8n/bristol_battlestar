@@ -7,7 +7,7 @@ import processing.core.PApplet;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.comms.Event;
-import swarm_wars_library.input.Input;
+import swarm_wars_library.input.*;
 import swarm_wars_library.map.Map;
 
 public class Entity {
@@ -23,7 +23,7 @@ public class Entity {
   private CommsPacket commsPacket;
   //private State state;
   private SwarmLogic swarmLogic;
-  private boolean hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, isMothership, hasAI;
+  private boolean hasInput, hasShooter, hasHealth, hasComms, isBot, hasRb, hasAI;
   private boolean isAlive = true;
   private Map map;
   private int score = 0;
@@ -51,7 +51,6 @@ public class Entity {
     hasHealth = h;
     hasComms = coms;
     hasRb = rigbod;
-    isMothership = false;
     hasAI = hai;
     id = nextId;
     nextId++;
@@ -82,7 +81,6 @@ public class Entity {
       ai = new AI();
     }
     if (tag.equals(Tag.PLAYER)) {
-      isMothership = true;
       transform.setScale(map.getPlayerScale(), map.getPlayerScale());
 
     }

@@ -22,7 +22,6 @@ public class SwarmWars extends PApplet {
   Entity player;
 
   // Entity list that has all our game things.
-  ArrayList < Entity > entityList = new ArrayList < Entity > ();
   ArrayList <Entity> PlayerTakeDamage = new ArrayList <Entity>();
   ArrayList <Entity> PlayerDealDamage = new ArrayList <Entity>();
   ArrayList <Entity> EnemyTakeDamage = new ArrayList <Entity>();
@@ -77,10 +76,8 @@ public class SwarmWars extends PApplet {
     // add a player
     player = eb.newPlayer();
     player.setComms();
-    entityList.add(player);
     PlayerTakeDamage.add(player);
     //add player bullets
-    entityList.addAll(player.getMagazine());
     PlayerDealDamage.addAll(player.getMagazine());
 
     //add player bots
@@ -91,7 +88,6 @@ public class SwarmWars extends PApplet {
       // bot.selectStartingSwarmAlgorithm("scout_shell");
       bot.selectStartingSwarmAlgorithm("boids_flock");
       // bot.selectStartingSwarmAlgorithm("defensive_shell");
-      entityList.add(bot);
       PlayerTakeDamage.add(bot);
       // Note: if bots later get shooters: need to add magazines here
     }
@@ -102,10 +98,8 @@ public class SwarmWars extends PApplet {
       turret.setPosition(Math.random() * map.getMapWidth() +1, 
                          Math.random() * map.getMapHeight() + 1);
       turret.setComms();
-      entityList.add(turret);
       EnemyTakeDamage.add(turret);
       // Add enemy shooter magazines (bullets)
-      entityList.addAll(turret.getMagazine());
       EnemyDealDamage.addAll(turret.getMagazine());
     }
     // IMPORTANT to do at end of setup - sets all initial packets to current
@@ -259,7 +253,6 @@ public class SwarmWars extends PApplet {
 
   public void mousePressed() {
     player.input.setMouse(1);
-    
   }
   public void mouseReleased() {
     player.input.setMouse(0);

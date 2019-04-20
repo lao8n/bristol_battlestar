@@ -46,13 +46,13 @@ public class Input {
     double xAdj = 0;
     double yAdj = 0;
     if(map.getMapWidth() - location.getX() < sketch.width/2){
-      xAdj = sketch.width/2 - map.getMapWidth() + location.getX();
+      xAdj = sketch.width/2 + map.getMapWidth() - location.getX();
     }
     else if(location.getX() < sketch.width/2){
       xAdj = - sketch.width/2 + location.getX();
     }
     if(map.getMapHeight() - location.getY() < sketch.height/2){
-      yAdj = sketch.height/2 - map.getMapHeight() + location.getY();
+      yAdj = sketch.height/2 + map.getMapHeight() - location.getY();
     }
     else if(location.getY() < sketch.height/2){
       yAdj = - sketch.height/2 + location.getY();
