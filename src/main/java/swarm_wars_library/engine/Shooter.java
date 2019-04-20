@@ -50,15 +50,12 @@ class Shooter {
   }
 
   void update(){
-    //loops over its list of bullets and renders them if visible
     for(int i = 0; i < magazine.size(); i++){
-      //should this be isAlive instead of rendering?
       if (!magazine.get(i).isDead()){
         currPos = magazine.get(i).getPosition();
-        //magazine.get(i).setPosition(currPos.add(currPos, magazine.get(i).getVelocity()), magazine.get(i).getHeading());
-        magazine.get(i).setPosition(Vector2D.add(currPos, magazine.get(i).getVelocity()), 
+        magazine.get(i).setPosition(Vector2D.add(currPos, 
+                                                 magazine.get(i).getVelocity()), 
                                     magazine.get(i).getHeading());
-        //update bullet to render it
         magazine.get(i).update();
       }
     }
@@ -68,7 +65,6 @@ class Shooter {
     //add delay between shooting
     if (shooterCount++ % shootTimer == 0){
       //makes a bullet visible
-      // magazine.get(magCount).setRender(true);
       //set bullet heading
       if (heading < 0){
           heading = heading + 2 * Math.PI;
