@@ -29,7 +29,7 @@ public class RenderPlayerBullet extends RenderMapObject{
     this.sketch.ellipseMode(2);
     this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
                         (float) this.objectRenderPosition.getY(), 
-                        (float) 3, 
-                        (float) 3); 
+                        (float) 6, 
+                        (float) 6); 
   }
 }

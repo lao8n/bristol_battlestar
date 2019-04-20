@@ -96,7 +96,7 @@ public class RenderLayers{
                                                   CommsGlobal.get("PLAYER")
                                                              .getPacket(0)
                                                              .getLocation(),
-                                                  3);
+                                                  7);
       }
     }
 
@@ -140,7 +140,7 @@ public class RenderLayers{
                                            CommsGlobal.get("PLAYER")
                                                       .getPacket(0)
                                                       .getLocation(),
-                                           10);
+                                           5);
           this.renderEnemy.updateVoid(CommsGlobal.get("ENEMY")
                                                  .getPacket(i)
                                                  .getLocation(),
