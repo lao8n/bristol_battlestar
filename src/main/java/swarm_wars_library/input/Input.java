@@ -1,6 +1,7 @@
 package swarm_wars_library.input;
 
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.map.Map;
 
 import static processing.core.PConstants.DOWN;
@@ -21,11 +22,10 @@ public class Input {
   private int mouse;
   private Map map;
 
-  public Input(PApplet sketch) {
+  public Input(ENTITY tag, PApplet sketch) {
     this.sketch = sketch;
     this.map = Map.getInstance();
-    this.location = new Vector2D(this.map.getMapWidth() / 2, 
-                                 this.map.getMapHeight() / 2);
+    this.location = this.map.getPlayerStartingLocation(tag);
     this.moveForce = 6;
     this.heading = 0;
   }
@@ -46,13 +46,13 @@ public class Input {
     double xAdj = 0;
     double yAdj = 0;
     if(map.getMapWidth() - location.getX() < sketch.width/2){
-      xAdj = sketch.width/2 + map.getMapWidth() - location.getX();
+      xAdj = sketch.width/2 - map.getMapWidth() + location.getX();
     }
     else if(location.getX() < sketch.width/2){
       xAdj = - sketch.width/2 + location.getX();
     }
     if(map.getMapHeight() - location.getY() < sketch.height/2){
-      yAdj = sketch.height/2 + map.getMapHeight() - location.getY();
+      yAdj = sketch.height/2 - map.getMapHeight() + location.getY();
     }
     else if(location.getY() < sketch.height/2){
       yAdj = - sketch.height/2 + location.getY();
@@ -63,8 +63,6 @@ public class Input {
                          comparativeMouseX);
     edgeCheck();
   }
-
-
 
   public Vector2D getLocation() {
     return location;

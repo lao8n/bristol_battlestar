@@ -18,8 +18,8 @@ public class RenderStar extends RenderMapObject{
 
     this.sketch.noStroke();
     this.sketch.fill(255, 255, 204); 
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         (float) this.scale, 
                         (float) this.scale); 
   }

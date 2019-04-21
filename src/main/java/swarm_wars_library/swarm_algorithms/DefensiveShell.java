@@ -1,10 +1,12 @@
 package swarm_wars_library.swarm_algorithms;
 
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
-import swarm_wars_library.engine.Transform;
-import swarm_wars_library.engine.RigidBody;
-import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.Tag;
+import swarm_wars_library.physics.Transform;
+import swarm_wars_library.physics.RigidBody;
+import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
 
 /**
  * DefensiveShell Class is an implementation of the previous SwarmLogic
@@ -40,21 +42,21 @@ public class DefensiveShell extends SwarmAlgorithm {
   private SeparateRule separate_rule;
   private double stopDistance = 100;
 
-  public DefensiveShell(int id, Transform transform, RigidBody rb){
-    super(transform);
+  public DefensiveShell(ENTITY tag, int id, Transform transform, RigidBody rb){
+    super(tag, transform);
     this.id = id;
     this.rb = rb;
     this.transform = transform;
-    this.separate_rule = new SeparateRule(this.id,
-      this.rb, this.transform);
+    this.separate_rule = new SeparateRule(this.id, this.rb, this.transform);
   }
 
   @Override
   public void applySwarmAlgorithm(){
-    Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(20);
-    Vector2D seek_mothership_v2d = seekMotherShip(CommsGlobal.get("PLAYER")
-                                                            .getPacket(0)
-                                                            .getLocation());
+    Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(this.tag, 20);
+    Vector2D seek_mothership_v2d = 
+      seekMotherShip(CommsGlobal.get(Tag.getMothershipTag(this.tag).toString())
+                                .getPacket(0)
+                                .getLocation());
 
     separate_v2d.mult(0.2);
     seek_mothership_v2d.mult(0.8);
@@ -63,12 +65,12 @@ public class DefensiveShell extends SwarmAlgorithm {
     this.rb.applyForce(separate_v2d);
     this.rb.applyForce(seek_mothership_v2d);
     this.transform.setHeading(this.rb.getVelocity().heading());
-    this.rb.update(this.transform.getPosition(), this.transform.getHeading());
+    this.rb.update(this.transform.getLocation(), this.transform.getHeading());
   }
 
   @Override
   public Vector2D seekMotherShip(Vector2D mothership_location) {
-    Vector2D target = Vector2D.sub(mothership_location, transform.getPosition());
+    Vector2D target = Vector2D.sub(mothership_location, transform.getLocation());
     target = findOrbit(target);
     target = checkStopDistance(target);
     target.limit(rb.getMaxForce());
@@ -103,7 +105,7 @@ public class DefensiveShell extends SwarmAlgorithm {
     }
     @Override
     public void swarmRule(){
-      Vector2D diff = Vector2D.sub(this.rule_transform.getPosition(), 
+      Vector2D diff = Vector2D.sub(this.rule_transform.getLocation(), 
                                         this.rule_otherBot.getLocation());
       diff.normalise();
       diff.div(this.rule_dist);

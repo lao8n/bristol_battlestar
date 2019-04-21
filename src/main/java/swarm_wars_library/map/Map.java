@@ -1,7 +1,10 @@
 package swarm_wars_library.map;
 
-import swarm_wars_library.engine.Vector2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.physics.Vector2D;
 
 /**
  * Map Class holds information about the underlying game map (not the 
@@ -41,12 +44,17 @@ public class Map {
   private int map_width = 2000;
   private int map_height = 2000;
   private int playerScale = 15;
-  private int enemyScale = 15;
+  private int turretScale = 15;
   private int botScale = 8;
   private int bulletScale = 5;
   private int starScale = 1;
   private int numStars = 500;
+  private int numBotsPerPlayer = 100;
+  private int numTurrets = 5;
+  private int numBulletsPerMagazine = 20;
   private List<Vector2D> backgroundStars;
+  private Vector2D player1StartingLocation;
+  private Vector2D player2StartingLocation;
 
   //make the constructor private so that this class cannot be
   //instantiated
@@ -57,6 +65,10 @@ public class Map {
                                   Math.random() * map_height);
       backgroundStars.add(i, v2d);
     }
+    this.player1StartingLocation = new Vector2D(this.map_width * Math.random(), 
+                                                this.map_height * Math.random());
+    this.player2StartingLocation = new Vector2D(this.map_width * Math.random(), 
+                                                this.map_height * Math.random());
   }
 
   //Get the only object available
@@ -83,8 +95,8 @@ public class Map {
     return this.botScale;
   }
 
-  public int getEnemyScale(){
-    return this.enemyScale;
+  public int getTurretScale(){
+    return this.turretScale;
   }
 
   public int getBulletScale(){
@@ -93,5 +105,25 @@ public class Map {
 
   public int getStarScale(){
     return this.starScale;
+  }
+
+  public int getNumBotsPerPlayer(){
+    return this.numBotsPerPlayer;
+  }
+
+  public int getNumTurrets(){
+    return this.numTurrets;
+  }
+
+  public int getNumBulletsPerMagazine(){
+    return this.numBulletsPerMagazine;
+  }
+
+  public Vector2D getPlayerStartingLocation(ENTITY tag){
+    if(tag.equals(ENTITY.PLAYER1)){
+      return this.player1StartingLocation;
+    }
+    return this.player2StartingLocation;
+
   }
 }

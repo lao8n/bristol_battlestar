@@ -20,20 +20,20 @@ public class FSM {
       }
     }
 
-    public void setState(int position, State state) {
-      stateList.set(position, state);
+    public void setState(int location, State state) {
+      stateList.set(location, state);
     }
 
-    public State getState(int position) {
-      if (position >= stateList.size()) {
-        position = position % stateList.size();
+    public State getState(int location) {
+      if (location >= stateList.size()) {
+        location = location % stateList.size();
       }
-      State state = stateList.get(position);
+      State state = stateList.get(location);
       return state;
     }
 
     //transition related functions
-    public Transition getTransition(int position) {
-      return transitionList.get(position);
+    public Transition getTransition(int location) {
+      return transitionList.get(location);
     }
 }

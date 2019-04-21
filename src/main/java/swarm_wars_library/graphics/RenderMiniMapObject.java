@@ -1,6 +1,6 @@
 package swarm_wars_library.graphics;
 
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.map.Map;
 
 import processing.core.PApplet;
@@ -8,7 +8,7 @@ import processing.core.PApplet;
 public abstract class RenderMiniMapObject{
 
   protected PApplet sketch;
-  protected Vector2D objectRenderPosition = new Vector2D(0, 0);
+  protected Vector2D objectRenderLocation = new Vector2D(0, 0);
   protected Map map;
   protected float miniMapDim = 200;
   protected float miniMapOffset = 20;
@@ -20,19 +20,19 @@ public abstract class RenderMiniMapObject{
 
   protected abstract void renderMiniMapObject();
 
-  public void update(Vector2D objectMapPosition){
+  public void update(Vector2D objectMapLocation){
 
-    this.setObjectRenderPosition(objectMapPosition);
+    this.setObjectRenderLocation(objectMapLocation);
     this.renderMiniMapObject();
   }
 
-  private void setObjectRenderPosition(Vector2D objectMapPosition){
+  private void setObjectRenderLocation(Vector2D objectMapLocation){
     
-    this.objectRenderPosition.setX(
-      objectMapPosition.getX() / this.map.getMapWidth() *
+    this.objectRenderLocation.setX(
+      objectMapLocation.getX() / this.map.getMapWidth() *
       this.miniMapDim);
-    this.objectRenderPosition.setY(
-      objectMapPosition.getY() / this.map.getMapHeight() *
+    this.objectRenderLocation.setY(
+      objectMapLocation.getY() / this.map.getMapHeight() *
       this.miniMapDim);
   }
 }

@@ -1,20 +1,20 @@
 package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.physics.Vector2D;
 
-public class RenderMiniMapEnemy extends RenderMiniMapObject{
+public class RenderMiniMapTurret extends RenderMiniMapObject{
 
   private int scale = 5;
 
-  public RenderMiniMapEnemy(PApplet sketch){
+  public RenderMiniMapTurret(PApplet sketch){
     super(sketch);
   }
 
-  public boolean checkInLineOfSight(Vector2D botMapPosition, 
-    Vector2D enemyMapPosition, double botMapLineOfSight){
+  public boolean checkInLineOfSight(Vector2D botMapLocation, 
+    Vector2D turretMapLocation, double botMapLineOfSight){
 
-    if(Vector2D.sub(botMapPosition, enemyMapPosition).mag()
+    if(Vector2D.sub(botMapLocation, turretMapLocation).mag()
        < botMapLineOfSight){
       return true;
     }
@@ -30,9 +30,9 @@ public class RenderMiniMapEnemy extends RenderMiniMapObject{
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getX(),
+        + (float) this.objectRenderLocation.getX(),
       this.sketch.height - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getY(),
+        + (float) this.objectRenderLocation.getY(),
       (float) this.scale, 
       (float) this.scale);  
   }

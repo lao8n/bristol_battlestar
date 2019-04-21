@@ -1,10 +1,12 @@
 package swarm_wars_library.swarm_algorithms;
 
-import swarm_wars_library.engine.RigidBody;
-import swarm_wars_library.engine.Transform;
+import swarm_wars_library.physics.RigidBody;
+import swarm_wars_library.physics.Transform;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.STATE;
+import swarm_wars_library.physics.Vector2D;
 
 import java.util.ArrayList;
 
@@ -53,16 +55,15 @@ public abstract class SwarmRule{
 
   public abstract void swarmRule();
 
-  public Vector2D iterateOverSwarm(double desiredDistance){
+  public Vector2D iterateOverSwarm(ENTITY tag, double desiredDistance){
     this.rule_neighbourCount = 0;
-
-    ArrayList<CommsPacket> otherBots = CommsGlobal.get("P_BOT").getPackets();
-
+    ArrayList<CommsPacket> otherBots = CommsGlobal.get(tag.toString())
+                                                  .getPackets();
     for(CommsPacket otherBot: otherBots){
       this.rule_otherBot = otherBot;
-      if (this.rule_otherBot.getId() != rule_id){
-        if (this.rule_otherBot.isAlive()){
-          this.rule_dist = Vector2D.sub(this.rule_transform.getPosition(),
+      if (this.rule_otherBot.getId() != this.rule_id){
+        if (this.rule_otherBot.getState().equals(STATE.ALIVE)){
+          this.rule_dist = Vector2D.sub(this.rule_transform.getLocation(),
                                         this.rule_otherBot.getLocation())
                                    .mag();
           if (this.rule_dist > 0 && this.rule_dist < desiredDistance){

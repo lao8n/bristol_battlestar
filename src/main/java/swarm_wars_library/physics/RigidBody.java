@@ -1,6 +1,4 @@
-package swarm_wars_library.engine;
-
-import swarm_wars_library.physics.Vector2D;
+package swarm_wars_library.physics;
 
 public class RigidBody {
 	private Vector2D velocity;

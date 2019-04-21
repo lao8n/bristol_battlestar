@@ -1,10 +1,13 @@
 package swarm_wars_library.swarm_algorithms;
 
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
-import swarm_wars_library.engine.Transform;
-import swarm_wars_library.engine.RigidBody;
-import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.Tag;
+import swarm_wars_library.physics.Transform;
+import swarm_wars_library.physics.RigidBody;
+import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
+
 
 /**
  * ScoutShell Class is an implementation of the previous SwarmLogic
@@ -49,22 +52,22 @@ public class ScoutShell extends SwarmAlgorithm {
   private double stopDistance = 100;
   private double scoutFlag = Math.random();
 
-  public ScoutShell(int id, Transform transform, RigidBody rb){
-    super(transform);
+  public ScoutShell(ENTITY tag, int id, Transform transform, RigidBody rb){
+    super(tag, transform);
     this.id = id;
     this.rb = rb;
     this.transform = transform;
-    this.separate_rule = new SeparateRule(this.id,
-      this.rb, this.transform);
+    this.separate_rule = new SeparateRule(this.id, this.rb, this.transform);
   }
 
   @Override
   public void applySwarmAlgorithm(){
-    Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(20);
+    Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(this.tag, 20);
     Vector2D random_v2d = new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
-    Vector2D seek_mothership_v2d = seekMotherShip(CommsGlobal.get("PLAYER")
-                                                            .getPacket(0)
-                                                            .getLocation());
+    Vector2D seek_mothership_v2d = 
+      seekMotherShip(CommsGlobal.get(Tag.getMothershipTag(this.tag).toString())
+                                .getPacket(0)
+                                .getLocation());
 
     separate_v2d.mult(0.2);
     seek_mothership_v2d.mult(0.5);
@@ -75,14 +78,14 @@ public class ScoutShell extends SwarmAlgorithm {
     this.rb.applyForce(seek_mothership_v2d);
     this.rb.applyForce(random_v2d);
     this.transform.setHeading(this.rb.getVelocity().heading());
-    this.rb.update(this.transform.getPosition(), this.transform.getHeading());
+    this.rb.update(this.transform.getLocation(), this.transform.getHeading());
   }
 
   @Override
   public Vector2D seekMotherShip(Vector2D mothership_location) {
 
     Vector2D target = Vector2D.sub(mothership_location, 
-                                   transform.getPosition());
+                                   transform.getLocation());
     if(this.scoutFlag > 0.2){
       target = findOrbit(target);
       target = checkStopDistance(target);
@@ -125,14 +128,14 @@ public class ScoutShell extends SwarmAlgorithm {
   }
 
   private void stopScouting(){
-    if(transform.getPosition().getX() < 0){
+    if(transform.getLocation().getX() < 0){
       this.scoutFlag = -1;
-    } else if (transform.getPosition().getX() > this.map.getMapWidth()){
+    } else if (transform.getLocation().getX() > this.map.getMapWidth()){
       this.scoutFlag = -1;
     }
-    if(transform.getPosition().getY() < 0){
+    if(transform.getLocation().getY() < 0){
       this.scoutFlag = -1;
-    } else if (transform.getPosition().getY() > this.map.getMapHeight()){
+    } else if (transform.getLocation().getY() > this.map.getMapHeight()){
       this.scoutFlag = -1;
     }
   }
@@ -144,8 +147,8 @@ public class ScoutShell extends SwarmAlgorithm {
     }
     @Override
     public void swarmRule(){
-      Vector2D diff = Vector2D.sub(this.rule_transform.getPosition(), 
-      this.rule_otherBot.getLocation());
+      Vector2D diff = Vector2D.sub(this.rule_transform.getLocation(), 
+                                   this.rule_otherBot.getLocation());
       diff.normalise();
       diff.div(this.rule_dist);
       this.rule_v2d.add(diff);

@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.comms.CommsPacket;
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.entities.STATE;
+import swarm_wars_library.physics.Vector2D;
 
 class CommsTests {
 
@@ -19,8 +20,8 @@ class CommsTests {
         testPacket.setLocation(new Vector2D(0, 10));
         assertEquals(testPacket.getLocation().getX(), 0);
         assertEquals(testPacket.getLocation().getY(), 10);
-        testPacket.setAlive(true);
-        assertEquals(testPacket.isAlive(), true);
+        testPacket.setState(STATE.ALIVE);
+        assertEquals(testPacket.getState(), STATE.ALIVE);
     }
 
     @Test
@@ -99,31 +100,31 @@ class CommsTests {
         testPacket.setLocation(new Vector2D(0, 1));
         CommsPacket testPacket2 = new CommsPacket();
         testPacket2.setLocation(new Vector2D(10, 11));
-        CommsGlobal.add("PLAYER", new CommsChannel(2));
-        CommsGlobal.add("ENEMY", new CommsChannel(2));
+        CommsGlobal.add("PLAYER1", new CommsChannel(2));
+        CommsGlobal.add("TURRET", new CommsChannel(2));
 
-        assertNotNull(CommsGlobal.get("PLAYER"), "CommsChannel should exist");
+        assertNotNull(CommsGlobal.get("PLAYER1"), "CommsChannel should exist");
 
         try {
-            CommsGlobal.add("PLAYER", new CommsChannel(2));
+            CommsGlobal.add("PLAYER1", new CommsChannel(2));
             assertTrue(false, "Error should of been thrown by CommsGlobal adding a non uniquely named CommsChannel");
         } catch (Error e) {}
 
-        CommsGlobal.get("PLAYER").addPacket(testPacket);
-        CommsGlobal.get("ENEMY").addPacket(testPacket2);
+        CommsGlobal.get("PLAYER1").addPacket(testPacket);
+        CommsGlobal.get("TURRET").addPacket(testPacket2);
 
         try {
-            CommsGlobal.get("PLAYER").getPacket(1);
+            CommsGlobal.get("PLAYER1").getPacket(1);
             assertTrue(false, "Error should of been thrown by CommsChannel returning a null packet");
         } catch (Error e) {}
 
-        // test that new staged packet in PLAYER CommsChannel is made accesible through CommsGlobal.update()
+        // test that new staged packet in PLAYER1 CommsChannel is made accesible through CommsGlobal.update()
         CommsGlobal.update();
-        assertNotNull(CommsGlobal.get("PLAYER").getPacket(0));
-        assertEquals(CommsGlobal.get("PLAYER").getPacket(0).getLocation().getX(), 0);
+        assertNotNull(CommsGlobal.get("PLAYER1").getPacket(0));
+        assertEquals(CommsGlobal.get("PLAYER1").getPacket(0).getLocation().getX(), 0);
 
-        assertNotNull(CommsGlobal.get("ENEMY").getPacket(0));
-        assertEquals(CommsGlobal.get("ENEMY").getPacket(0).getLocation().getX(), 10);
+        assertNotNull(CommsGlobal.get("TURRET").getPacket(0));
+        assertEquals(CommsGlobal.get("TURRET").getPacket(0).getLocation().getX(), 10);
     }
 
     @Test

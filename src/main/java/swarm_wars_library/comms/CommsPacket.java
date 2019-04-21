@@ -1,15 +1,15 @@
 package swarm_wars_library.comms;
 
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.entities.STATE;
 
 public class CommsPacket {
   private Vector2D location;
-  private boolean isAlive;
+  private STATE state;
   private Vector2D velocity;
   private int id;
   private int health;
   private int score;
-  private Event event = Event.DEFAULT;
 
   public int getId() {
     return id;
@@ -25,14 +25,6 @@ public class CommsPacket {
 
   public Vector2D getLocation() {
     return this.location;
-  }
-
-  public boolean isAlive() {
-    return this.isAlive;
-  }
-
-  public void setAlive(boolean isAlive) {
-    this.isAlive = isAlive;
   }
 
   public Vector2D getVelocity(){
@@ -62,11 +54,11 @@ public class CommsPacket {
     this.score += score;
   }
 
-  public void setEvent(Event event){
-    this.event = event;
+  public STATE getState(){
+    return this.state;
   }
 
-  public Event getEvent(){
-    return this.event;
+  public void setState(STATE state){
+    this.state = state;
   }
 }
