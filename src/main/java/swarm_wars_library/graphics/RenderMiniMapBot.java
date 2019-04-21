@@ -23,18 +23,18 @@ public class RenderMiniMapBot extends RenderMiniMapObject{
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getX(),
+        + (float) this.objectRenderLocation.getX(),
       this.sketch.height - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getY(),
+        + (float) this.objectRenderLocation.getY(),
       (float) this.scale + this.botRenderLineOfSight / 10, 
       (float) this.scale + this.botRenderLineOfSight / 10);  
     this.sketch.fill(70, 102, 255);
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getX(),
+        + (float) this.objectRenderLocation.getX(),
       this.sketch.height - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getY(),
+        + (float) this.objectRenderLocation.getY(),
       (float) this.scale, 
       (float) this.scale); 
   }

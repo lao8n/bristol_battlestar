@@ -1,10 +1,12 @@
 package swarm_wars_library.swarm_algorithms;
 
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
-import swarm_wars_library.engine.Transform;
-import swarm_wars_library.engine.RigidBody;
-import swarm_wars_library.engine.Vector2D;
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.Tag;
+import swarm_wars_library.physics.Transform;
+import swarm_wars_library.physics.RigidBody;
+import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
 
 /**
  * BoidsFlock Class is an implementation of the previous SwarmLogic
@@ -37,8 +39,8 @@ public class BoidsFlock extends SwarmAlgorithm {
   private AlignRule align_rule;
   private CoheseRule cohese_rule;
 
-  public BoidsFlock(int id, Transform transform, RigidBody rb){
-    super(transform);
+  public BoidsFlock(ENTITY tag, int id, Transform transform, RigidBody rb){
+    super(tag, transform);
     this.id = id;
     this.rb = rb;
     this.transform = transform;
@@ -53,13 +55,15 @@ public class BoidsFlock extends SwarmAlgorithm {
   @Override
   public void applySwarmAlgorithm(){
 
-    Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(20);
-    Vector2D align_v2d = this.align_rule.iterateOverSwarm(40);
-    Vector2D cohese_v2d = this.cohese_rule.iterateOverSwarm(40);
-    Vector2D random_v2d = new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
-    Vector2D seek_mothership_v2d = seekMotherShip(CommsGlobal.get("PLAYER")
-                                                            .getPacket(0)
-                                                            .getLocation());
+    Vector2D separate_v2d = this.separate_rule.iterateOverSwarm(this.tag, 20);
+    Vector2D align_v2d = this.align_rule.iterateOverSwarm(this.tag, 40);
+    Vector2D cohese_v2d = this.cohese_rule.iterateOverSwarm(this.tag, 40);
+    Vector2D random_v2d = 
+      new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
+    Vector2D seek_mothership_v2d = 
+      seekMotherShip(CommsGlobal.get(Tag.getMothershipTag(this.tag).toString())
+                                .getPacket(0)
+                                .getLocation());
 
     separate_v2d.mult(0.05);
     align_v2d.mult(0.004);
@@ -74,12 +78,12 @@ public class BoidsFlock extends SwarmAlgorithm {
     this.rb.applyForce(random_v2d);
     this.rb.applyForce(seek_mothership_v2d);
     this.transform.setHeading(this.rb.getVelocity().heading());
-    this.rb.update(this.transform.getPosition(), this.transform.getHeading());
+    this.rb.update(this.transform.getLocation(), this.transform.getHeading());
   }
   
   @Override
   public Vector2D seekMotherShip(Vector2D mothership_location) {
-    Vector2D target = Vector2D.sub(mothership_location, transform.getPosition());
+    Vector2D target = Vector2D.sub(mothership_location, transform.getLocation());
     target.normalise();
     target.mult(rb.getMaxSpeed());
     target.limit(rb.getMaxForce());
@@ -94,7 +98,7 @@ public class BoidsFlock extends SwarmAlgorithm {
 
     @Override
     public void swarmRule(){
-      Vector2D diff = Vector2D.sub(this.rule_transform.getPosition(), 
+      Vector2D diff = Vector2D.sub(this.rule_transform.getLocation(), 
                                         this.rule_otherBot.getLocation());
       diff.normalise();
       diff.div(this.rule_dist);
@@ -147,7 +151,7 @@ public class BoidsFlock extends SwarmAlgorithm {
     @Override
     public void neighbourCountRule(){
       this.rule_v2d.div(this.rule_neighbourCount);
-      this.rule_v2d.sub(this.rule_transform.getPosition());
+      this.rule_v2d.sub(this.rule_transform.getLocation());
       this.rule_v2d.normalise();
       this.rule_v2d.mult(rb.getMaxSpeed());
       this.rule_v2d.sub(rb.getVelocity());

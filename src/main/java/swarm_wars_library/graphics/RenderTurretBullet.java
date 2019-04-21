@@ -3,11 +3,11 @@ package swarm_wars_library.graphics;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
-public class RenderEnemyBullet extends RenderMapObject{
+public class RenderTurretBullet extends RenderMapObject{
 
   private float scale = (float) Map.getInstance().getBulletScale();
 
-  public RenderEnemyBullet(PApplet sketch){
+  public RenderTurretBullet(PApplet sketch){
     super(sketch);
   }
 
@@ -16,8 +16,8 @@ public class RenderEnemyBullet extends RenderMapObject{
     this.sketch.noStroke();
     this.sketch.fill(255, 0, 199); //neon pink
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         this.scale, 
                         this.scale); 
   }
@@ -27,8 +27,8 @@ public class RenderEnemyBullet extends RenderMapObject{
     this.sketch.noStroke();
     this.sketch.fill(255, 0, 199, alpha); 
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         (float) 3, 
                         (float) 3); 
   }

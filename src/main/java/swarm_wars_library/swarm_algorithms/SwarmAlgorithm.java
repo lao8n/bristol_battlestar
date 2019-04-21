@@ -1,8 +1,9 @@
 package swarm_wars_library.swarm_algorithms;
 
-import swarm_wars_library.engine.Vector2D;
-import swarm_wars_library.engine.Transform;
+import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.physics.Transform;
 
 /**
  * SwarmAlgorithm Class holds information about the game map and the Transform
@@ -35,9 +36,11 @@ public abstract class SwarmAlgorithm{
 
   protected Transform transform;
   protected Map map;
+  protected ENTITY tag;
 
-  public SwarmAlgorithm(Transform transform){
+  public SwarmAlgorithm(ENTITY tag, Transform transform){
     this.transform = transform;
+    this.tag = tag;
     map = Map.getInstance();
   }
 
@@ -45,18 +48,18 @@ public abstract class SwarmAlgorithm{
   protected abstract Vector2D seekMotherShip(Vector2D mothership_location);
 
   protected void avoidEdge(double scale){
-    if(transform.getPosition().getX() < 0){
-      this.transform.setPosition(0, transform.getPosition().getY());
+    if(transform.getLocation().getX() < 0){
+      this.transform.setLocation(0, transform.getLocation().getY());
       this.transform.setVelocity(new Vector2D(scale, 0.0));
-    } else if (transform.getPosition().getX() > map.getMapWidth()){
-      this.transform.setPosition(map.getMapWidth(), transform.getPosition().getY());
+    } else if (transform.getLocation().getX() > map.getMapWidth()){
+      this.transform.setLocation(map.getMapWidth(), transform.getLocation().getY());
       this.transform.setVelocity(new Vector2D(-scale, 0.0));
     }
-    if(transform.getPosition().getY() < 0){
-      this.transform.setPosition(transform.getPosition().getX(), 0);
+    if(transform.getLocation().getY() < 0){
+      this.transform.setLocation(transform.getLocation().getX(), 0);
       this.transform.setVelocity(new Vector2D(0, scale));
-    } else if (transform.getPosition().getY() > map.getMapHeight()){
-      this.transform.setPosition(transform.getPosition().getX(), map.getMapHeight());
+    } else if (transform.getLocation().getY() > map.getMapHeight()){
+      this.transform.setLocation(transform.getLocation().getX(), map.getMapHeight());
       this.transform.setVelocity(new Vector2D(0, -scale));
     }
   }

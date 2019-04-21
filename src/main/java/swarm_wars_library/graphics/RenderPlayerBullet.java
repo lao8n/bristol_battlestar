@@ -16,8 +16,8 @@ public class RenderPlayerBullet extends RenderMapObject{
     this.sketch.noStroke();
     this.sketch.fill(0, 237, 255); //neon blue
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         this.scale, 
                         this.scale);   
   }
@@ -27,8 +27,8 @@ public class RenderPlayerBullet extends RenderMapObject{
     this.sketch.noStroke();
     this.sketch.fill(0, 237, 255, alpha); 
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         (float) 6, 
                         (float) 6); 
   }

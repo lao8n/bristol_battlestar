@@ -1,13 +1,13 @@
 package swarm_wars_library.graphics;
 
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
 public abstract class RenderMapObject{
 
   protected PApplet sketch;
-  protected Vector2D objectRenderPosition = new Vector2D(0, 0);
+  protected Vector2D objectRenderLocation = new Vector2D(0, 0);
   private ParticleExplosion PE;
 
   public RenderMapObject(PApplet sketch){
@@ -18,25 +18,25 @@ public abstract class RenderMapObject{
 
   protected abstract void renderMapObjectExplosion(int alpha);
 
-  public void update(Vector2D objectMapPosition, 
-    Vector2D viewCentreMapPosition){
+  public void update(Vector2D objectMapLocation, 
+    Vector2D viewCentreMapLocation){
 
-    this.setObjectRenderPosition(objectMapPosition, viewCentreMapPosition);
-    if(this.objectRenderPosition.getX() >= 0 && 
-       this.objectRenderPosition.getX() <= this.sketch.width &&
-       this.objectRenderPosition.getY() >= 0 && 
-       this.objectRenderPosition.getY() <= this.sketch.height){
+    this.setObjectRenderLocation(objectMapLocation, viewCentreMapLocation);
+    if(this.objectRenderLocation.getX() >= 0 && 
+       this.objectRenderLocation.getX() <= this.sketch.width &&
+       this.objectRenderLocation.getY() >= 0 && 
+       this.objectRenderLocation.getY() <= this.sketch.height){
         this.renderMapObject();
     }
   }
 
-  public void updateExplosion(Vector2D objectMapPosition, 
-    Vector2D viewCentreMapPosition, int frames){
-      this.setParticleExplosionMapPosition(objectMapPosition);
+  public void updateExplosion(Vector2D objectMapLocation, 
+    Vector2D viewCentreMapLocation, int frames){
+      this.setParticleExplosionMapLocation(objectMapLocation);
     int alpha = 20;
     for(int f = 0; f < frames; f++){
       for(Particle p: PE.getParticleExplosion()){
-        this.setObjectRenderPosition(p.getXY(), viewCentreMapPosition);
+        this.setObjectRenderLocation(p.getXY(), viewCentreMapLocation);
         this.renderMapObjectExplosion(alpha);
         p.update();
         alpha +=10;
@@ -44,41 +44,41 @@ public abstract class RenderMapObject{
     }
   }
 
-  public void setParticleExplosionMapPosition(Vector2D objectMapPosition){
-    this.PE = new ParticleExplosion(objectMapPosition);
+  public void setParticleExplosionMapLocation(Vector2D objectMapLocation){
+    this.PE = new ParticleExplosion(objectMapLocation);
   }
 
-  protected void setObjectRenderPosition(Vector2D objectMapPosition, 
-    Vector2D viewCentreMapPosition){
+  protected void setObjectRenderLocation(Vector2D objectMapLocation, 
+    Vector2D viewCentreMapLocation){
 
     double viewCentreMapX;
     double viewCentreMapY;
 
-    if(Map.getInstance().getMapWidth() - viewCentreMapPosition.getX() < 
+    if(Map.getInstance().getMapWidth() - viewCentreMapLocation.getX() < 
        this.sketch.width /2){
       viewCentreMapX = Map.getInstance().getMapWidth() - this.sketch.width / 2;
     }
-    else if (viewCentreMapPosition.getX() < this.sketch.width / 2){
+    else if (viewCentreMapLocation.getX() < this.sketch.width / 2){
       viewCentreMapX = this.sketch.width / 2;
     }
     else {
-      viewCentreMapX = viewCentreMapPosition.getX();
+      viewCentreMapX = viewCentreMapLocation.getX();
     }
 
-    if(Map.getInstance().getMapHeight() - viewCentreMapPosition.getY() < 
+    if(Map.getInstance().getMapHeight() - viewCentreMapLocation.getY() < 
        this.sketch.height /2){
       viewCentreMapY = Map.getInstance().getMapHeight() - this.sketch.height / 2;
     }
-    else if (viewCentreMapPosition.getY() < this.sketch.height / 2){
+    else if (viewCentreMapLocation.getY() < this.sketch.height / 2){
       viewCentreMapY = this.sketch.height / 2;
     }
     else {
-      viewCentreMapY = viewCentreMapPosition.getY();
+      viewCentreMapY = viewCentreMapLocation.getY();
     }
     
-    this.objectRenderPosition.setX(objectMapPosition.getX() - 
+    this.objectRenderLocation.setX(objectMapLocation.getX() - 
       viewCentreMapX + this.sketch.width / 2);
-    this.objectRenderPosition.setY(objectMapPosition.getY() - 
+    this.objectRenderLocation.setY(objectMapLocation.getY() - 
       viewCentreMapY + this.sketch.height / 2);
   }
 

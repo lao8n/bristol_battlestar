@@ -18,22 +18,22 @@ public class RenderBot extends RenderMapObject{
     this.sketch.noStroke();
     this.sketch.fill(50, 50, 255); 
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         this.scale, 
                         this.scale); 
     // Dark Inside 
     this.sketch.fill(17, 17, 135); 
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         this.scale - 2, 
                         this.scale - 2); 
     // Add Glow
     this.sketch.fill(21, 0, 255, 60); 
     this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-                        (float) this.objectRenderPosition.getY(), 
+    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+                        (float) this.objectRenderLocation.getY(), 
                         this.scale + 5, 
                         this.scale + 5); 
   }
@@ -43,8 +43,8 @@ public class RenderBot extends RenderMapObject{
     // this.sketch.noStroke();
     // this.sketch.fill(0, 0, 0, 100); 
     // this.sketch.ellipseMode(2);
-    // this.sketch.ellipse((float) this.objectRenderPosition.getX(), 
-    //                     (float) this.objectRenderPosition.getY(), 
+    // this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
+    //                     (float) this.objectRenderLocation.getY(), 
     //                     this.scale, 
     //                     this.scale); 
   }

@@ -18,9 +18,9 @@ public class RenderMiniMapPlayer extends RenderMiniMapObject{
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getX(),
+        + (float) this.objectRenderLocation.getX(),
       this.sketch.height - this.miniMapDim - this.miniMapOffset
-        + (float) this.objectRenderPosition.getY(),
+        + (float) this.objectRenderLocation.getY(),
       (float) this.scale, 
       (float) this.scale);  
   }

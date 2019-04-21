@@ -1,6 +1,7 @@
 package swarm_wars_library.input;
 
-import swarm_wars_library.engine.Vector2D;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.map.Map;
 
 import static processing.core.PConstants.DOWN;
@@ -21,11 +22,10 @@ public class Input {
   private int mouse;
   private Map map;
 
-  public Input(PApplet sketch) {
+  public Input(ENTITY tag, PApplet sketch) {
     this.sketch = sketch;
     this.map = Map.getInstance();
-    this.location = new Vector2D(this.map.getMapWidth() / 2, 
-                                 this.map.getMapHeight() / 2);
+    this.location = this.map.getPlayerStartingLocation(tag);
     this.moveForce = 6;
     this.heading = 0;
   }
@@ -63,8 +63,6 @@ public class Input {
                          comparativeMouseX);
     edgeCheck();
   }
-
-
 
   public Vector2D getLocation() {
     return location;

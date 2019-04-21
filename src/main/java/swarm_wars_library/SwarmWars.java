@@ -1,260 +1,180 @@
 package swarm_wars_library;
 
+import java.util.*;
 import processing.core.PApplet;
 
-import swarm_wars_library.engine.*;
+import swarm_wars_library.engine.CollisionDetection;
+import swarm_wars_library.entities.AbstractEntity;
+import swarm_wars_library.entities.Bot;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.PlayerN;
+import swarm_wars_library.entities.Turret;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
 
-import java.util.*;
-
-/*control which screen is active by setting/updating gameScreen var
-0: initial screen
-1: game screen - game object
-2: game-over screen
-*/
-
 public class SwarmWars extends PApplet {
 
-  // Player must be here so that event listeners can access it
-  Entity player;
+  // Players
+  PlayerN player1;
+  PlayerN player2;
 
-  // Entity list that has all our game things.
-  ArrayList <Entity> PlayerTakeDamage = new ArrayList <Entity>();
-  ArrayList <Entity> PlayerDealDamage = new ArrayList <Entity>();
-  ArrayList <Entity> EnemyTakeDamage = new ArrayList <Entity>();
-  ArrayList <Entity> EnemyDealDamage = new ArrayList <Entity>();
-  // Entity builder class
-  EntityBuilder eb = new EntityBuilder(this);
+  // Entity lists that has all our game things.
+  ArrayList <AbstractEntity> player1TakeDamage;  
+  ArrayList <AbstractEntity> player1DealDamage;
+  ArrayList <AbstractEntity> player2TakeDamage;
+  ArrayList <AbstractEntity> player2DealDamage;
+  ArrayList <AbstractEntity> gameObjectsTakeDamage;
+  ArrayList <AbstractEntity> gameObjectsDealDamage;
 
-  // global comms channel any entity that has comms should set comms to this
-  CommsGlobal comms = new CommsGlobal();
-
-  // To render UI / Game screens
-  // Render render = new Render(this, width);
-
-  int MAXSCREENS = 3;
-  int gameScreen = 0;
-  int initScreenTimer = 120;
-  int numBots = 100;
-  int numTurrets = 5;
-  int pointsToAdd = 0;
+  // Game Backend Objects
   Map map = Map.getInstance();
-  public RenderLayers renderLayers;
+  RenderLayers renderLayers;
 
+  //=========================================================================//
+  // Processing Settings                                                     //
+  //=========================================================================//
   public void settings() {
-    size(1200, 800, "processing.awt.PGraphicsJava2D");
+    this.size(1200, 800, "processing.awt.PGraphicsJava2D");
   }
 
+  //=========================================================================//
+  // Processing Setup                                                        //
+  //=========================================================================//
   public void setup() {
-    frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
-    // added game_setup as I think this only starts calling the function and then will try
-    // draw which reduces the lag-time. I'm not 100% sure however.
-    game_setup();
-    render_setup();
-  }
-  
-  public void game_setup(){
-    /* GUIDE TO ADDING NEW THINGS
-      Use the EntityBuilder, for example: player = eb.newPlayer()
-      this creates new entity - and automatically sets alls it's components
-      optional - if has comms. add a space for it in a CommsChannel and set it's comms to the global comms
-      add the entity to the entityList
-    */
-
-    // set up comms before entities
-    CommsGlobal.add("PLAYER", new CommsChannel(1));
-    CommsGlobal.add("P_BOT", new CommsChannel(numBots));
-    CommsGlobal.add("ENEMY", new CommsChannel(numTurrets));
-    // TODO TIM - where are these magazine counts stored?? how to access them - SHOULD WE HAVE A GLOBAL CONFIG?
-    //  also 5 more added to E_BULLET not sure where from
-    CommsGlobal.add("E_BULLET", new CommsChannel(numTurrets * 20));
-    CommsGlobal.add("P_BULLET", new CommsChannel(1 * 20));
-
-    // add a player
-    player = eb.newPlayer();
-    player.setComms();
-    PlayerTakeDamage.add(player);
-    //add player bullets
-    PlayerDealDamage.addAll(player.getMagazine());
-
-    //add player bots
-    for (int i = 0; i < numBots; i++) {
-      Entity bot = eb.newBot();
-      bot.setSwarmLogic();
-      bot.setComms();
-      // bot.selectStartingSwarmAlgorithm("scout_shell");
-      bot.selectStartingSwarmAlgorithm("boids_flock");
-      // bot.selectStartingSwarmAlgorithm("defensive_shell");
-      PlayerTakeDamage.add(bot);
-      // Note: if bots later get shooters: need to add magazines here
-    }
-
-    // add an Enemy Turrets
-    for (int i = 0; i < numTurrets; i++){
-      Entity turret = eb.newTurret();
-      turret.setPosition(Math.random() * map.getMapWidth() +1, 
-                         Math.random() * map.getMapHeight() + 1);
-      turret.setComms();
-      EnemyTakeDamage.add(turret);
-      // Add enemy shooter magazines (bullets)
-      EnemyDealDamage.addAll(turret.getMagazine());
-    }
-    // IMPORTANT to do at end of setup - sets all initial packets to current
+    this.frameRate(60); 
+    this.commsSetup();
+    this.entitiesSetup();
     CommsGlobal.update();
+    this.renderSetup();
   }
-
-  public void render_setup(){
-    this.renderLayers = new RenderLayers(this);
-  }
-
+  //=========================================================================//
+  // Processing Game Loop                                                    //
+  //=========================================================================//
   public void draw() {
-    //display contents of the current screen
-    // if (gameScreen == 0) {
-    //   initScreen();
-    // } else if (gameScreen == 1) {
-    //   gameScreen();
-    // } else {
-    //   gameOverScreen();
-    // }
-    gameScreen();
-  }
-
-  /*--------GAME SCREENS ----*/
-
-  public void initScreen() {
-    // render.drawInitScreen((float) width, (float) height);
-
-    // After timer, switch to game
-    if (initScreenTimer-- < 0) {
-      gameScreen = 1;
-    }
-  }
-
-  // >>>>>> MAIN GAME LOOP <<<<<<<<<<
-  int i = 1; 
-  public void gameScreen() {
-    background(0, 0, 0);
-    // Call Box Collision: Enemy -> Player
-    for(int i = 0; i < EnemyDealDamage.size(); i++){
-      for(int j = 0; j < PlayerTakeDamage.size(); j++){
-        BoxCollider.boundingCheck(EnemyDealDamage.get(i),
-                                  PlayerTakeDamage.get(j));
-      }
-    }
-    // Call Box Collision: Player -> Enemy
-    for(int i = 0; i < PlayerDealDamage.size(); i++){
-      for(int j = 0; j < EnemyTakeDamage.size(); j++){
-        BoxCollider.boundingCheck(PlayerDealDamage.get(i),
-                                  EnemyTakeDamage.get(j));
-      }
-    }
-    // Update all entities
-    for(int i = 0; i < PlayerTakeDamage.size(); i++){
-      PlayerTakeDamage.get(i).update();
-    }
-    for(int i = 0; i < PlayerDealDamage.size(); i++){
-      PlayerDealDamage.get(i).update();
-    }
-    for(int i = 0; i < EnemyTakeDamage.size(); i++){
-      EnemyTakeDamage.get(i).update();
-    }
-    for(int i = 0; i < EnemyDealDamage.size(); i++){
-      EnemyDealDamage.get(i).update();
-    }
-
+    this.background(0, 0, 0);
+    this.checkCollisions();
+    this.entitiesUpdate();
     this.renderLayers.update();
-
-    CommsGlobal.update();
+    CommsGlobal.update(); 
   }
 
-    // Update all game things
-  //   for (int i = 0; i < entityList.size(); i++) {
-  //     entityList.get(i).setViewCentre(player.getPosition());
-  //     entityList.get(i).update();
-  //     // if(entityList.get(i).getTag().equals(Tag.E_BULLET)){System.out.println("E_BULLET");}
-  //     // Collision detection - avoids double checking
-  //     if(entityList.get(i).getTag().equals(Tag.E_BULLET)){
-  //       System.out.println("E_BULLET");
-  //     }
-  //     for(int j = i + 1; j <  entityList.size(); j++){
-  //       System.out.println(i + j);
-  //       // Stop checking i if entity dies
-  //       // if (entityList.get(i).isDead()){j = i;}
-
-  //       // All responses to collisions handled in BoxCollider
-  //       // BoxCollider.boundingCheck(entityList.get(i), entityList.get(j));
-  //     }
-
-  //     // Remove if entity dead
-  //     if (entityList.get(i).isDead()){
-  //       // Respawn if turret
-  //       if (entityList.get(i).getTag().equals(Tag.ENEMY)){
-  //         // Give player points for kill
-  //         pointsToAdd += 10;
-
-  //         entityList.get(i).setPosition(Math.random() * map.getMapWidth() +1, 
-  //                                       Math.random() * map.getMapHeight() + 1);
-  //         entityList.get(i).setAlive();
-  //         entityList.get(i).setAlive(true);
-  //       // If player, move to game over
-  //       } 
-  //       else if (entityList.get(i).getTag().equals(Tag.PLAYER)){
-  //         gameScreen = 3;
-  //         System.out.println("GAME OVER");
-  //         break;
-  //       }
-  //       else {
-  //         // entityList.remove(i);
-  //       }
-  //     }      
-  //   }
-
-  //   // Add points player earned for enemies killed this loop
-  //   player.addPoints(pointsToAdd);
-
-  //   // Sets future comms to current for next loop
-  //   CommsGlobal.update();
-  //   this.renderLayers.update();
-  // }
-
-  // public void gameOverScreen() {
-  //   // render.drawGameOverScreen(width, height);
-  // }
-
-  // public void changeScreen(int k) {
-  //   //TODO add more checks here, only change screens in certain cases
-  //   if (k == 'n' || k == 'N') {
-  //     gameScreen++;
-  //     if (gameScreen > MAXSCREENS) {
-  //       gameScreen = 0;
-  //     }
-  //   }
-    //add pause screen on 'p'
-
+  //=========================================================================//
+  // Processing Main                                                         //
+  //=========================================================================//
   public static void main(String[] passedArgs) {
     String[] appletArgs = new String[] {
       "swarm_wars_library.SwarmWars"
     };
     PApplet.main(appletArgs);
   }
+  //=========================================================================//
+  // Comms Setup                                                             //
+  //=========================================================================//
+  public void commsSetup(){
+    // player1 setup
+    CommsGlobal.add("PLAYER1", new CommsChannel(1));
+    CommsGlobal.add("PLAYER1_BOT", 
+      new CommsChannel(map.getNumBotsPerPlayer()));
+    CommsGlobal.add("PLAYER1_BULLET", 
+      new CommsChannel(1 * map.getNumBulletsPerMagazine()));
 
-  /* ------ EVENT LISTENERS ------ */
+    // player2 setup
+    CommsGlobal.add("PLAYER2", new CommsChannel(1));
+    CommsGlobal.add("PLAYER2_BOT", 
+      new CommsChannel(map.getNumBotsPerPlayer()));
+    CommsGlobal.add("PLAYER2_BULLET", 
+      new CommsChannel(1 * map.getNumBulletsPerMagazine()));
+
+    // game objects setup
+    CommsGlobal.add("TURRET", new CommsChannel(map.getNumTurrets()));
+    CommsGlobal.add("TURRET_BULLET", 
+      new CommsChannel(map.getNumTurrets() * map.getNumBulletsPerMagazine()));
+  }
+
+  //=========================================================================//
+  // Entities Setup                                                          //
+  //=========================================================================//
+  public void entitiesSetup(){
+
+    this.player1TakeDamage = new ArrayList<AbstractEntity>();  
+    this.player1DealDamage = new ArrayList<AbstractEntity>();
+    this.player2TakeDamage = new ArrayList<AbstractEntity>();
+    this.player2DealDamage = new ArrayList<AbstractEntity>();
+    this.gameObjectsTakeDamage = new ArrayList<AbstractEntity>();
+    this.gameObjectsDealDamage = new ArrayList<AbstractEntity>();
+
+    // player1 setup
+    this.player1 = new PlayerN(this, ENTITY.PLAYER1);
+    this.player1TakeDamage.add(this.player1);
+    this.player1DealDamage.addAll(player1.getBullets());
+    for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
+      Bot bot = new Bot(ENTITY.PLAYER1_BOT, "boids_flock", i);
+      this.player1TakeDamage.add(bot);
+    }
+
+    // TODO player 2 setup
+
+    // turrets setup
+    for(int i = 0; i < this.map.getNumTurrets(); i++){
+      Turret turret = new Turret(ENTITY.TURRET);
+      this.gameObjectsTakeDamage.add(turret);
+      this.gameObjectsDealDamage.addAll(turret.getBullets());
+    }
+  }
+
+  //=========================================================================//
+  // Render Setup                                                            //
+  //=========================================================================//
+  public void renderSetup(){
+    this.renderLayers = new RenderLayers(this);
+  }
+
+  //=========================================================================//
+  // Collision checks                                                        //
+  //=========================================================================//
+  public void checkCollisions() {
+    CollisionDetection.checkCollisions(this.gameObjectsDealDamage,
+                                       this.player1TakeDamage);
+    CollisionDetection.checkCollisions(this.player1DealDamage,
+                                       this.gameObjectsTakeDamage);
+  }
+
+  //=========================================================================//
+  // Entities update                                                         //
+  //=========================================================================//
+  public void entitiesUpdate(){
+    // Update all entities
+    for(int i = 0; i < player1TakeDamage.size(); i++){
+      player1TakeDamage.get(i).update();
+    }
+    for(int i = 0; i < player1DealDamage.size(); i++){
+      player1DealDamage.get(i).update();
+    }
+    for(int i = 0; i < gameObjectsTakeDamage.size(); i++){
+      gameObjectsTakeDamage.get(i).update();
+    }
+    for(int i = 0; i < gameObjectsDealDamage.size(); i++){
+      gameObjectsDealDamage.get(i).update();
+    }
+  }
+
+  //=========================================================================//
+  // Event listeners                                                         //
+  //=========================================================================//
   public void keyPressed() {
-    //changeScreen(keyCode);
-    player.input.setMove(keyCode, 1);
+    this.player1.listenKeyPressed(this.keyCode);
   }
 
   public void keyReleased() {
-    player.input.setMove(keyCode, 0);
+    this.player1.listenKeyReleased(this.keyCode);
   }
 
   public void mousePressed() {
-    player.input.setMouse(1);
+    this.player1.listenMousePressed();
   }
   public void mouseReleased() {
-    player.input.setMouse(0);
+    this.player1.listenMouseReleased();
   }
 }
