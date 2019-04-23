@@ -14,6 +14,10 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
 
+//added by Steph
+import swarm_wars_library.ui.UI;
+
+
 public class SwarmWars extends PApplet {
 
   // Players
@@ -32,6 +36,9 @@ public class SwarmWars extends PApplet {
   Map map = Map.getInstance();
   RenderLayers renderLayers;
 
+  //game screens -- added by Steph
+  int CurrentScreen = 0;
+
   //=========================================================================//
   // Processing Settings                                                     //
   //=========================================================================//
@@ -43,21 +50,33 @@ public class SwarmWars extends PApplet {
   // Processing Setup                                                        //
   //=========================================================================//
   public void setup() {
-    this.frameRate(60); 
-    this.commsSetup();
-    this.entitiesSetup();
-    CommsGlobal.update();
-    this.renderSetup();
+    //added by Steph
+    if (CurrentScreen == 0) {
+      UI.UIsetup();
+    }
+    else {
+      this.frameRate(60);
+      this.commsSetup();
+      this.entitiesSetup();
+      CommsGlobal.update();
+      this.renderSetup();
+    }
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
   //=========================================================================//
   public void draw() {
-    this.background(0, 0, 0);
-    this.checkCollisions();
-    this.entitiesUpdate();
-    this.renderLayers.update();
-    CommsGlobal.update(); 
+    //added by Steph
+    if (CurrentScreen == 0) {
+      UI.Draw();
+    }
+    else {
+      this.background(0, 0, 0);
+      this.checkCollisions();
+      this.entitiesUpdate();
+      this.renderLayers.update();
+      CommsGlobal.update();
+    }
   }
 
   //=========================================================================//
@@ -176,5 +195,12 @@ public class SwarmWars extends PApplet {
   }
   public void mouseReleased() {
     this.player1.listenMouseReleased();
+  }
+
+
+  // ------ added by Steph -------
+  public void mouseClicked() {
+    UI.mouseEvents();
+    CurrentScreen = UI.gameState();
   }
 }
