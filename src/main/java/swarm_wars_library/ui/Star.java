@@ -1,90 +1,108 @@
 package swarm_wars_library.ui;
 
+import processing.core.PApplet;
+import static processing.core.PConstants.CLOSE;
+import static processing.core.PConstants.TWO_PI;
+import static processing.core.PApplet.cos;
+import static processing.core.PApplet.sin;
+
+import swarm_wars_library.physics.Vector2D;
+
 public class Star {
+  private PApplet sketch;
+  private Vector2D location;
+  private Vector2D dimensions;
+  private int nPoints;
+  private int colourR = 0;
+  private int colourG = 237;
+  private int colourB = 255;
 
-    float x;
-    float y;
-    float radius1;
-    float radius2;
-    int npoints;
-    float posx;
-    float posy;
-    int ColourR = 0;
-    int ColourG = 237;
-    int ColourB = 255;
+  //=========================================================================//
+  // Star constructor                                                        //
+  //=========================================================================//
+  public Star (PApplet sketch, Vector2D location, Vector2D dimensions, 
+               int nPoints) {
+    this.sketch = sketch;
+    this.location = location;
+    this.dimensions = dimensions;
+    this.nPoints = nPoints;
+  }
 
-    Star (float x, float y, float radius1, float radius2, int npoints,
-          float posx, float posy) {
-        this.x = x;
-        this.y = y;
-        this.radius1 = radius1;
-        this.radius2 = radius2;
-        this.npoints = npoints;
-        this.posx = posx;
-        this.posy = posy;
+  //=========================================================================//
+  // Star update                                                             //
+  //=========================================================================//
+  public void update() {
+    this.sketch.pushMatrix();
+    this.sketch.translate((float) this.location.getX(), 
+                          (float) this.location.getY());
+    this.sketch.rotate(this.sketch.frameCount / (float) -100.0);
+    this.renderStar();
+    this.sketch.popMatrix();
+  }
+
+  //=========================================================================//
+  // Star render methods                                                     //
+  //=========================================================================//   
+  private void renderStar() {
+    float angle = TWO_PI / this.nPoints;
+    float halfAngle = angle / (float) 2.0;
+
+    this.sketch.beginShape();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 60);
+    for (float a = 0; a < TWO_PI; a += angle) {
+        float sx = -1 + cos(a) * (float) this.dimensions.getY() + 2;
+        float sy = -1 + sin(a) * (float) this.dimensions.getY() + 2;
+        this.sketch.vertex(sx, sy);
+        sx = cos(a + halfAngle) * (float) this.dimensions.getX() + 2;
+        sy = sin(a + halfAngle) * (float) this.dimensions.getX() + 2;
+        this.sketch.vertex(sx, sy);
     }
+    this.sketch.endShape(CLOSE);
 
-    public void Draw() {
-        pushMatrix();
-        translate(posx, posy);
-        rotate(frameCount / -100.0);
-        star(x, y, radius1, radius2, npoints);
-        popMatrix();
+    this.sketch.beginShape();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 30);
+    for (float a = 0; a < TWO_PI; a += angle) {
+        float sx = (float) -2.5 + cos(a) * 
+                    (float) this.dimensions.getY() + 5;
+        float sy = (float) -2.5 + sin(a) * 
+                    (float) this.dimensions.getY() + 5;
+        this.sketch.vertex(sx, sy);
+        sx = cos(a+halfAngle) * (float) this.dimensions.getX() + 5;
+        sy = sin(a+halfAngle) * (float) this.dimensions.getX() + 5;
+        this.sketch.vertex(sx, sy);
     }
+    this.sketch.endShape(CLOSE);
 
-    void star(float x, float y, float radius1, float radius2, int npoints) {
-        float angle = TWO_PI / npoints;
-        float halfAngle = angle/2.0;
-
-
-        beginShape();
-        fill(ColourR, ColourG, ColourB, 60);
-        for (float a = 0; a < TWO_PI; a += angle) {
-            float sx = x-1 + cos(a) * radius2+2;
-            float sy = y-1 + sin(a) * radius2+2;
-            vertex(sx, sy);
-            sx = x + cos(a+halfAngle) * radius1+2;
-            sy = y + sin(a+halfAngle) * radius1+2;
-            vertex(sx, sy);
-        }
-        endShape(CLOSE);
-
-        beginShape();
-        fill(ColourR, ColourG, ColourB, 30);
-        for (float a = 0; a < TWO_PI; a += angle) {
-            float sx = x-2.5 + cos(a) * radius2+5;
-            float sy = y-2.5 + sin(a) * radius2+5;
-            vertex(sx, sy);
-            sx = x + cos(a+halfAngle) * radius1+5;
-            sy = y + sin(a+halfAngle) * radius1+5;
-            vertex(sx, sy);
-        }
-        endShape(CLOSE);
-
-        beginShape();
-        fill(ColourR, ColourG, ColourB);
-        for (float a = 0; a < TWO_PI; a += angle) {
-            float sx = x + cos(a) * radius2;
-            float sy = y + sin(a) * radius2;
-            vertex(sx, sy);
-            sx = x + cos(a+halfAngle) * radius1;
-            sy = y + sin(a+halfAngle) * radius1;
-            vertex(sx, sy);
-        }
-        endShape(CLOSE);
-
+    this.sketch.beginShape();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB);
+    for (float a = 0; a < TWO_PI; a += angle) {
+        float sx = cos(a) * (float) this.dimensions.getY();
+        float sy = sin(a) * (float) this.dimensions.getY();
+        this.sketch.vertex(sx, sy);
+        sx = cos(a+halfAngle) * (float) this.dimensions.getX();
+        sy = sin(a+halfAngle) * (float) this.dimensions.getX();
+        this.sketch.vertex(sx, sy);
     }
+    this.sketch.endShape(CLOSE);
+  }
 
-    public void changecolor() {
-        if (ColourR == 0) {
-            ColourR = 255;
-            ColourG = 0;
-            ColourB = 199;
-        }
-        else  {
-            ColourR = 0;
-            ColourG = 237;
-            ColourB = 255;
-        }
+  //=========================================================================//
+  // Star change methods                                                     //
+  //=========================================================================//   
+  public void changeColour() {
+    if (this.colourR == 0) {
+        this.colourR = 255;
+        this.colourG = 0;
+        this.colourB = 199;
     }
+    else  {
+        this.colourR = 0;
+        this.colourG = 237;
+        this.colourB = 255;
+    }
+  }
+
+  public int getColourR(){
+    return this.colourB;
+  }
 }

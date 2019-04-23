@@ -1,51 +1,75 @@
 package swarm_wars_library.ui;
 
+import processing.core.PApplet;
+
+import swarm_wars_library.physics.Vector2D;
+
 public class Circle {
-    float posx;
-    float posy;
-    float w;
-    float h;
-    int ColourR = 0;
-    int ColourG = 237;
-    int ColourB = 255;
 
-    Circle(float posx, float posy, float w, float h) {
-        this.posx = posx;
-        this.posy = posy;
-        this.w = w;
-        this.h = h;
+  private PApplet sketch;
+  private Vector2D location;
+  private Vector2D dimensions;
+  private int colourR = 0;
+  private int colourG = 237;
+  private int colourB = 255;
+
+  //=========================================================================//
+  // Circle constructor                                                      //
+  //=========================================================================//
+  public Circle(PApplet sketch, Vector2D location, Vector2D dimensions) {
+    this.sketch = sketch;
+    this.location = location;
+    this.dimensions = dimensions;
+  }
+
+  //=========================================================================//
+  // Circle update method                                                    //
+  //=========================================================================//
+  public void update() {
+    //glow effect
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 30);
+    this.sketch.ellipse((float) this.location.getX() + 6, 
+                        (float) this.location.getY() + 6, 
+                        (float) this.dimensions.getX(), 
+                        (float) this.dimensions.getY());
+
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 50);
+    this.sketch.ellipse((float) this.location.getX()+4, 
+                        (float) this.location.getY()+4,
+                        (float) this.dimensions.getX(), 
+                        (float) this.dimensions.getY());
+
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 60);
+    this.sketch.ellipse((float) this.location.getX()+2, 
+                        (float) this.location.getY()+2,
+                        (float) this.dimensions.getX(), 
+                        (float) this.dimensions.getY());
+
+    //inner colour
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB);
+    this.sketch.ellipse((float) this.location.getX(), 
+                        (float) this.location.getY(),
+                        (float) this.dimensions.getX(), 
+                        (float) this.dimensions.getY());
+  }
+
+  //=========================================================================//
+  // Circle change methods                                                   //
+  //=========================================================================//
+  public void changeColour() {
+    if (this.colourR == 0) {
+        this.colourR = 255;
+        this.colourG = 0;
+        this.colourB = 199;
     }
-
-    public void Draw() {
-        //glow effect
-        noStroke();
-        fill(ColourR, ColourG, ColourB, 30);
-        ellipse(posx+6, posy+6, w, h);
-
-        noStroke();
-        fill(ColourR, ColourG, ColourB, 50);
-        ellipse(posx+4, posy+4, w, h);
-
-        noStroke();
-        fill(ColourR, ColourG, ColourB, 60);
-        ellipse(posx+2, posy+2, w, h);
-
-        //inner colour
-        noStroke();
-        fill(ColourR, ColourG, ColourB);
-        ellipse(posx, posy, w, h);
+    else {
+        this.colourR = 0;
+        this.colourG = 237;
+        this.colourB = 255;
     }
-
-    public void changecolor() {
-        if (ColourR == 0) {
-            ColourR = 255;
-            ColourG = 0;
-            ColourB = 199;
-        }
-        else {
-            ColourR = 0;
-            ColourG = 237;
-            ColourB = 255;
-        }
-    }
+  }
 }

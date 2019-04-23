@@ -9,12 +9,11 @@ import swarm_wars_library.entities.Bot;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
+import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
-
-//added by Steph
 import swarm_wars_library.ui.UI;
 
 
@@ -35,9 +34,10 @@ public class SwarmWars extends PApplet {
   // Game Backend Objects
   Map map = Map.getInstance();
   RenderLayers renderLayers;
+  UI ui;
 
-  //game screens -- added by Steph
-  int CurrentScreen = 0;
+  // Game screens 
+  GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
 
   //=========================================================================//
   // Processing Settings                                                     //
@@ -50,32 +50,33 @@ public class SwarmWars extends PApplet {
   // Processing Setup                                                        //
   //=========================================================================//
   public void setup() {
-    //added by Steph
-    if (CurrentScreen == 0) {
-      UI.UIsetup();
-    }
-    else {
-      this.frameRate(60);
-      this.commsSetup();
-      this.entitiesSetup();
-      CommsGlobal.update();
-      this.renderSetup();
-    }
+    this.frameRate(60);
+    this.uiSetup();
+    this.commsSetup();
+    this.entitiesSetup();
+    CommsGlobal.update();
+    this.renderSetup();
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
   //=========================================================================//
   public void draw() {
-    //added by Steph
-    if (CurrentScreen == 0) {
-      UI.Draw();
-    }
-    else {
-      this.background(0, 0, 0);
-      this.checkCollisions();
-      this.entitiesUpdate();
-      this.renderLayers.update();
-      CommsGlobal.update();
+    switch(this.currentScreen){
+      case START:
+        break;
+      case FSMUI:
+        this.uiUpdate();
+        break;
+      case GAME:
+        this.checkCollisions();
+        this.entitiesUpdate();
+        this.renderLayersUpdate();
+        CommsGlobal.update();
+        break;
+      case GAMEOVER:
+        break;
+      default:
+        // TODO Add error
     }
   }
 
@@ -88,6 +89,7 @@ public class SwarmWars extends PApplet {
     };
     PApplet.main(appletArgs);
   }
+  
   //=========================================================================//
   // Comms Setup                                                             //
   //=========================================================================//
@@ -151,6 +153,13 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // UI Setup                                                                //
+  //=========================================================================//
+  public void uiSetup(){
+    this.ui = new UI(this);
+  }
+
+  //=========================================================================//
   // Collision checks                                                        //
   //=========================================================================//
   public void checkCollisions() {
@@ -180,8 +189,27 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // RenderLayers update                                                     //
+  //=========================================================================//
+  public void renderLayersUpdate(){
+    this.renderLayers.update();
+  }
+
+  //=========================================================================//
+  // UI update                                                               //
+  //=========================================================================//
+  public void uiUpdate(){
+    this.ui.update();
+    this.currentScreen = this.ui.getGameScreen();
+  }
+
+
+  //=========================================================================//
   // Event listeners                                                         //
   //=========================================================================//
+  // TODO is it possible to have these in a switch statement rather than 
+  // a switch statement inside them?
+
   public void keyPressed() {
     this.player1.listenKeyPressed(this.keyCode);
   }
@@ -191,16 +219,35 @@ public class SwarmWars extends PApplet {
   }
 
   public void mousePressed() {
-    this.player1.listenMousePressed();
+    switch(this.currentScreen){
+      case START:
+        break;
+      case FSMUI:
+        this.ui.listenMousePressed();
+        break;
+      case GAME:
+        this.player1.listenMousePressed();
+        break;
+      case GAMEOVER:
+        break;
+      default:
+        // TODO Add error
+    }
   }
   public void mouseReleased() {
-    this.player1.listenMouseReleased();
-  }
-
-
-  // ------ added by Steph -------
-  public void mouseClicked() {
-    UI.mouseEvents();
-    CurrentScreen = UI.gameState();
+    switch(this.currentScreen){
+      case START:
+        break;
+      case FSMUI:
+        this.ui.listenMouseReleased();
+        break;
+      case GAME:
+        this.player1.listenMouseReleased();
+        break;
+      case GAMEOVER:
+        break;
+      default:
+        // TODO Add error
+    }
   }
 }

@@ -9,6 +9,7 @@ import processing.core.PApplet;
 public class RenderLayers{
 
   private Map map;
+  private RenderBackground renderBackground;
   private RenderStar renderStar;
   private RenderPlayer renderPlayer;
   private RenderPlayerBullet renderPlayerBullet;
@@ -24,6 +25,7 @@ public class RenderLayers{
 
   public RenderLayers(PApplet sketch){
     this.map = Map.getInstance();
+    this.renderBackground = new RenderBackground(sketch);
     this.renderStar = new RenderStar(sketch);
     this.renderPlayer = new RenderPlayer(sketch);
     this.renderPlayerBullet = new RenderPlayerBullet(sketch);
@@ -52,6 +54,8 @@ public class RenderLayers{
   // Render Background Layer                                                 //
   //=========================================================================//
   private void renderBackgroundLayer(){
+    // Render background
+    this.renderBackground.update();
     // Render Stars
     for (int i = 0; i < this.map.getMapStars().size(); i++){
       this.renderStar.update(this.map.getMapStars().get(i),

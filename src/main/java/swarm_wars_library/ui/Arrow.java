@@ -1,29 +1,46 @@
 package swarm_wars_library.ui;
 
+import processing.core.PApplet;
+
+import swarm_wars_library.physics.Vector2D;
+
 public class Arrow {
-    float x1;
-    float y1;
-    float x2;
-    float y2;
+  private PApplet sketch;
+  private Vector2D fromLocation;
+  private Vector2D toLocation;
 
-    Arrow(float x1, float y1, float x2, float y2) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-    }
+  //=========================================================================//
+  // Arrow constructor                                                       //
+  //=========================================================================//
+  public Arrow(PApplet sketch, Vector2D fromLocation, Vector2D toLocation){
+    this.sketch = sketch;
+    this.fromLocation = fromLocation;
+    this.toLocation = toLocation;
+  }
 
-    void Draw() {
-        stroke(0, 235, 255);
-        strokeWeight(5);
-        fill(0, 235, 255);
-        float a = dist(x1, y1, x2, y2) / 50;
-        pushMatrix();
-        translate(x2, y2);
-        rotate(atan2(y2 - y1, x2 - x1));
-        triangle(- a * 2 , - a, 0, 0, - a * 2, a);
-        popMatrix();
-        line(x1, y1, x2, y2);
-    }
-
+  //=========================================================================//
+  // Arrow update                                                            //
+  //=========================================================================//
+  public void update(){
+    this.sketch.stroke(0, 235, 255);
+    this.sketch.strokeWeight(5);
+    this.sketch.fill(0, 235, 255);
+    float a = PApplet.dist((float) this.fromLocation.getX(), 
+                           (float) this.fromLocation.getY(), 
+                           (float) this.toLocation.getX(), 
+                           (float) this.toLocation.getY()) / 50;
+    this.sketch.pushMatrix();
+    this.sketch.translate((float) this.toLocation.getX(), 
+                          (float) this.toLocation.getY());
+    this.sketch.rotate(PApplet.atan2((float) this.toLocation.getY()- 
+                                     (float) this.fromLocation.getY(),
+                                     (float) this.toLocation.getX() -
+                                     (float) this.fromLocation.getX()));
+    this.sketch.triangle(- a * 2 , - a, 0, 0, - a * 2, a);
+    this.sketch.popMatrix();
+    this.sketch.line((float) this.fromLocation.getX(), 
+                     (float) this.fromLocation.getY(), 
+                     (float) this.toLocation.getX(), 
+                     (float) this.toLocation.getY());
+  }
 }

@@ -1,69 +1,103 @@
 package swarm_wars_library.ui;
 
+import processing.core.PApplet;
+import static processing.core.PConstants.CENTER;
+
+import swarm_wars_library.physics.Vector2D;
+
 public class Button {
-    String label;
-    float x;    // top left corner x position
-    float y;    // top left corner y position
-    float w;    // width of button
-    float h;    // height of button
-    int ColourR = 0;
-    int ColourG = 237;
-    int ColourB = 255;
+  private PApplet sketch;
+  private String label;
+  private Vector2D topLeftLocation;   
+  private Vector2D buttonDimensions;  
+  private int colourR = 0;
+  private int colourG = 237;
+  private int colourB = 255;
 
-    Button(String labelB, float xpos, float ypos, float widthB, float heightB) {
-        label = labelB;
-        x = xpos;
-        y = ypos;
-        w = widthB;
-        h = heightB;
+  //=========================================================================//
+  // Button constructor                                                      //
+  //=========================================================================//
+  public Button(PApplet sketch, String labelB, Vector2D topLeftLocation, 
+                Vector2D buttonDimensions) {
+    this.sketch = sketch;
+    this.label = labelB;
+    this.topLeftLocation = topLeftLocation;
+    this.buttonDimensions = buttonDimensions;
+  }
+
+  //=========================================================================//
+  // Button update                                                           //
+  //=========================================================================//
+  public void update(){
+    //glow effect
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 30);
+    this.sketch.rect((float) this.topLeftLocation.getX() - 4, 
+                     (float) this.topLeftLocation.getY() - 4, 
+                     (float) this.buttonDimensions.getX() + 8, 
+                     (float) this.buttonDimensions.getY() + 8, 
+                     10);
+
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 50);
+    this.sketch.rect((float) this.topLeftLocation.getX()-2, 
+                     (float) this.topLeftLocation.getY()-2, 
+                     (float) this.buttonDimensions.getX() + 4, 
+                     (float) this.buttonDimensions.getY() + 4, 
+                     10);
+
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB, 60);
+    this.sketch.rect((float) this.topLeftLocation.getX()-1, 
+                     (float) this.topLeftLocation.getY()-1, 
+                     (float) this.buttonDimensions.getX() + 2, 
+                     (float) this.buttonDimensions.getY() + 2, 
+                     10);
+
+    //inner colour
+    this.sketch.noStroke();
+    this.sketch.fill(this.colourR, this.colourG, this.colourB);
+    this.sketch.rect((float) this.topLeftLocation.getX(), 
+                     (float) this.topLeftLocation.getY(), 
+                     (float) this.buttonDimensions.getX(), 
+                     (float) this.buttonDimensions.getY(), 
+                     10);
+
+    this.sketch.textAlign(CENTER, CENTER);
+    this.sketch.fill(255);
+    this.sketch.text(label, 
+                     (float) this.topLeftLocation.getX() + 
+                     (float) this.buttonDimensions.getX() / 2, 
+                     (float) this.topLeftLocation.getY() + 
+                     (float) this.buttonDimensions.getY() / 2);
+  }
+
+  //=========================================================================//
+  // Button Colour method                                                    //
+  //=========================================================================//
+
+  public void changeColour() {
+    if (this.colourR == 0) {
+      this.colourR = 255;
+      this.colourG = 0;
+      this.colourB = 199;
     }
-
-    void Draw() {
-        //glow effect
-        noStroke();
-        fill(ColourR, ColourG, ColourB, 30);
-        rect(x-4, y-4, w+8, h+8, 10);
-
-        noStroke();
-        fill(ColourR, ColourG, ColourB, 50);
-        rect(x-2, y-2, w+4, h+4, 10);
-
-        noStroke();
-        fill(ColourR, ColourG, ColourB, 60);
-        rect(x-1, y-1, w+2, h+2, 10);
-
-        //inner colour
-        noStroke();
-        fill(ColourR, ColourG, ColourB);
-        rect(x, y, w, h, 10);
-
-        textAlign(CENTER, CENTER);
-        fill(255);
-        text(label, x + (w / 2), y + (h / 2));
+    else {
+      this.colourR = 0;
+      this.colourG = 237;
+      this.colourB = 255;
     }
+  }
 
-    public void changecolor() {
-        if (ColourR == 0) {
-            ColourR = 255;
-            ColourG = 0;
-            ColourB = 199;
-        }
-        else {
-            ColourR = 0;
-            ColourG = 237;
-            ColourB = 255;
-        }
-    }
+  //=========================================================================//
+  // Button label methods                                                    //
+  //=========================================================================//
 
-    public void OnmouseClicked(float xpos, float ypos, float widthB,
-                               float heightB, int mousex, int mousey) {
-        if(mousex >= xpos && mousex <=  xpos+widthB &&
-                mousey >= ypos && mousey <= ypos+heightB) {
-            changecolor();
-        }
-    }
+  public String getLabelString(){
+    return this.label;
+  }
 
-    public void changeLabel(String label) {
-        this.label = label;
-    }
+  public void changeLabel(String label) {
+    this.label = label;
+  }
 }

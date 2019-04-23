@@ -1,27 +1,45 @@
 package swarm_wars_library.ui;
 
+import processing.core.PApplet;
+import static processing.core.PConstants.CENTER;
+
+import swarm_wars_library.physics.Vector2D;
+
 public class Label {
-    int Colour;
-    String label;
-    float posx;
-    float posy;
-    boolean clicked = false;
+  private PApplet sketch;
+  private int colour;
+  private String label;
+  private Vector2D location;
 
-    Label(int Colour, String label, float posx, float posy) {
-        this.Colour = Colour;
-        this.label = label;
-        this.posx = posx;
-        this.posy = posy;
-    }
+  //=========================================================================//
+  // Label constructor                                                       //
+  //=========================================================================//
+  public Label(PApplet sketch, int colour, String label, Vector2D location){
+    this.sketch = sketch;
+    this.colour = colour;
+    this.label = label;
+    this.location = location;
+  }
 
-    public void Draw() {
-        textAlign(CENTER, CENTER);
-        fill(Colour);
-        text(label, posx, posy);
-    }
+  //=========================================================================//
+  // Label update                                                            //
+  //=========================================================================//
+  public void update(){
+    this.sketch.textAlign(CENTER, CENTER);
+    this.sketch.fill(colour);
+    this.sketch.text(label, 
+                     (float) this.location.getX(), 
+                     (float) this.location.getY());    
+  }
 
-    public void changeLabel(String newLabel) {
-        label = newLabel;
-    }
+  //=========================================================================//
+  // Label methods                                                           //
+  //=========================================================================//
+  public void changeLabel(String newLabel) {
+    this.label = newLabel;
+  }
 
+  public String getLabelString(){
+    return this.label;
+  }
 }

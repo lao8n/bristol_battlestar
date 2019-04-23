@@ -1,35 +1,170 @@
 package swarm_wars_library.ui;
+
+import java.util.Arrays;
 import java.util.ArrayList;
-PImage backgroundimg;
 
-public class UI {
+import processing.core.PApplet;
+import processing.core.PImage;
+
+import swarm_wars_library.game_screens.GAMESCREEN;
+import swarm_wars_library.physics.Vector2D;;
+
+public class UI{
+
+  // Processing 
+  private PApplet sketch;
+  private PImage backgroundImage;
+
+  // Game Screen
+  private GAMESCREEN currentScreen;
+
+  //FSM POSITIONS
+  private Vector2D location1;
+  private Vector2D location2;
+  private Vector2D location3;
+  private Vector2D location4;
+  private Vector2D location5;
+
+  // Arrows
+  private Arrow arrow1;
+  private Arrow arrow2;
+  private Arrow arrow3;
+  private Arrow arrow4;
+  private Arrow arrow5;
+
+  // Buttons
+  private Button start;
+  private Button info;
+  private Button transition1;
+  private Button transition2;
+  private Button transition3;
+  private Button transition4;
+  private Button transition5;
+  private Circle tooltip;
+  private boolean showTooltip;
+  private String buttonToSwap;
+  private boolean buttons[];
+
+  // Labels
+  private Label questionMark;
+  private Label label1;
+  private Label label2;
+  private Label label3;
+  private Label label4;
+  private Label label5;
+  private ArrayList<Label> allLabels;
+  private Label lab[];
+
+  // Mouse 
+  private boolean mousePressed = false;
+
+  // Stars
+  private Star star1;
+  private Star star2;
+  private Star star3;
+  private Star star4;
+  private Star star5;
+  private ArrayList<Star> allStars;
 
 
-    int GameState = 0;
+  //=========================================================================//
+  // Constructor                                                             //
+  //=========================================================================//
+  public UI(PApplet sketch){
+    this.sketch = sketch;
+    this.currentScreen = GAMESCREEN.FSMUI;
+    PImage background = sketch.loadImage(
+      "src/main/java/swarm_wars_library/ui/star-blue.jpg");
+    this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
+    this.setupLocations();
+    this.setupButtons();
+    this.setupStars();
+    this.setupArrows();
+    this.setupLabels();
+  }
 
-    //SCREEN SIZE
-    int width = 700;
-    int height = 900;
+  //=========================================================================//
+  // Update method                                                           //
+  //=========================================================================//
+  public void update(){
+    this.updateBackground();
+    this.updateArrows();
+    this.updateStars();
+    this.updateButtons();
+    this.updateLabels();
+    this.updateMousePressButton();
+    this.updateMousePressStar();
+  }
 
-    //POSITIONS
-    float positionx1 = width*0.5;
-    float positiony1 = height*0.15;
-    float positionx2 = width*0.9;
-    float positiony2 = height*0.40;
-    float positionx3 = width*0.1;
-    float positiony3 = height*0.40;
-    float positionx4 = width*0.25;
-    float positiony4 = height*0.75;
-    float positionx5 = width*0.75;
-    float positiony5 = height*0.75;
+  //=========================================================================//
+  // Game screen method                                                      //
+  //=========================================================================//
+  public GAMESCREEN getGameScreen(){
+    return this.currentScreen;
+  }
 
-    //BUTTONS START
-    Button start  = new Button ("Start Game", 500, 30, 100, 40);
+  //=========================================================================//
+  // Arrow methods                                                           //
+  //=========================================================================//
+  private void setupArrows(){
+    this.arrow1 = new Arrow(this.sketch, 
+                            this.location1, 
+                            Vector2D.add(this.location2, 
+                                         new Vector2D(-25, -25)));
+    this.arrow2 = new Arrow(this.sketch, 
+                            this.location2,
+                            Vector2D.add(this.location5, 
+                                         new Vector2D(0, -30)));
+    this.arrow3 = new Arrow(this.sketch,
+                            this.location3, 
+                            Vector2D.add(this.location1,
+                                         new Vector2D(-25, 0)));
+    this.arrow4 = new Arrow(this.sketch,
+                            this.location4, 
+                            Vector2D.add(this.location3,
+                                         new Vector2D(0, 30)));
+    this.arrow5 = new Arrow(this.sketch,
+                            this.location5,
+                            Vector2D.add(this.location4,
+                                         new Vector2D(30, 0)));
+  }
 
+  private void updateArrows(){
+    this.arrow1.update();
+    this.arrow2.update();
+    this.arrow3.update();
+    this.arrow4.update();
+    this.arrow5.update();
+  }
+
+  //=========================================================================//
+  // Background methods                                                      //
+  //=========================================================================//
+  private void updateBackground(){
+    this.sketch.image(this.backgroundImage, 0, 0, 
+                      this.sketch.width, this.sketch.height);
+    
+    for(int i = 0; i <= 10; i++){
+      this.sketch.fill(255, 255, 204);
+      this.sketch.ellipse(this.sketch.random(this.sketch.width),
+                          this.sketch.random(this.sketch.height),
+                          2, 
+                          2);
+    }
+  }
+
+  //=========================================================================//
+  // Button methods                                                          //
+  //=========================================================================//
+  private void setupButtons(){       
     //INFO RELATED BUTTONS
-    Circle tooltip = new Circle(50, 45, 30, 30);
-    Label questionMark = new Label(255, "?", 50, 45);
-    String instructions = "WELCOME TO THE \nFINITE STATE MACHINE!\n\n" +
+    this.start = new Button (this.sketch, 
+                             "Start Game", 
+                             new Vector2D(500, 30),
+                             new Vector2D(100, 40));
+
+    String instructions = 
+            "WELCOME TO THE \nFINITE STATE MACHINE!\n\n" +
             "Your swarm will transite through\n"+
             "each of the five states represented\n" +
             "in the stars below when the transition\n" +
@@ -43,535 +178,564 @@ public class UI {
             "the states and transitions\n" +
             "of your finite state machine\n" +
             "click 'Start Game'.";
-    Button info = new Button(instructions, 50, 45, 250, 300);
-    boolean showTooltip = false;
 
-    //BUTTON TRANSITIONS
-    Button transition1  = new Button ("If enemy is\n" + "more than 2\n" +
-            "star meter away",
-            (positionx1+positionx2)/2-30,
-            (positiony1+positiony2)/2-27,
-            120, 55);
-    Button transition2  = new Button ("If enemy is\n" + "more than 5\n" +
-            "star meters away\n",
-            (positionx2+positionx5)/2-60,
-            (positiony2+positiony5)/2-27,
-            120, 55);
-    Button transition3  = new Button ("If fuel is\n" + "less than 1\n" +
-            "gallons of stardust",
-            (positionx4+positionx5)/2-60,
-            positiony5-27,
-            120, 55);
-    Button transition4  = new Button ("If enemy is\n" + "less than 1\n" +
-            "star meter away",
-            (positionx3+positionx4)/2-60,
-            (positiony3+positiony4)/2-27,
-            120, 55);
-    Button transition5  = new Button ("If enemy is\n" + "less than 2\n" +
-            "star meter away",
-            (positionx3+positionx1)/2-90,
-            (positiony3+positiony1)/2-27,
-            120, 55);
+    this.info = new Button(this.sketch, 
+                           instructions, 
+                           new Vector2D(50, 45),
+                           new Vector2D(250, 300));
 
-    //STARS
-    Star star1 = new Star(0, 0, 25, 60, 5, positionx1, positiony1);
-    Star star2 = new Star(0, 0, 25, 60, 5, positionx2, positiony2);
-    Star star3 = new Star(0, 0, 25, 60, 5, positionx3, positiony3);
-    Star star4 = new Star(0, 0, 25, 60, 5, positionx4, positiony4);
-    Star star5 = new Star(0, 0, 25, 60, 5, positionx5, positiony5);
+    this.tooltip = new Circle(this.sketch,
+                              new Vector2D(50, 45),
+                              new Vector2D(30, 30));
+
+    this.showTooltip = false;
+    
+    // Button transitions
+    Vector2D transitionDimensions = new Vector2D(120, 55);
+    this.transition1  = new Button (
+      this.sketch,
+      "If enemy is\n" + "more than 2\n star meter away",
+      Vector2D.add(this.getMidPoint(this.location1, this.location2),
+                   new Vector2D(-30, -27)),
+      transitionDimensions);
+
+    this.transition2  = new Button (
+      this.sketch,
+      "If enemy is\n" + "more than 5\n star meters away\n",
+      Vector2D.add(this.getMidPoint(this.location2, this.location5),
+                   new Vector2D(-60, -27)),
+      transitionDimensions);
+
+    this.transition3  = new Button (
+      this.sketch,
+      "If fuel is\n" + "less than 1\n gallons of stardust",
+      Vector2D.add(this.getMidPoint(this.location4, this.location5),
+                   new Vector2D(-60, -27)),
+      transitionDimensions);
+    
+    this.transition4  = new Button (
+      this.sketch,
+      "If enemy is\n" + "less than 1\n star meter away",
+      Vector2D.add(this.getMidPoint(this.location3, this.location4),
+                   new Vector2D(-60, -27)),
+      transitionDimensions);
+    
+    this.transition5  = new Button (
+      this.sketch,
+      "If enemy is\n" + "less than 2\n star meter away",
+      Vector2D.add(this.getMidPoint(this.location1, this.location3),
+                   new Vector2D(-90, -27)),
+      transitionDimensions);
+    
+    // Buttons for swaps
+    this.buttonToSwap = null;
+    this.buttons = new boolean[5];
+    Arrays.fill(this.buttons, false);
+  }
+
+  private void updateButtons(){
+    this.start.update();
+
+    this.transition1.update();
+    this.transition2.update();
+    this.transition3.update();
+    this.transition4.update();
+    this.transition5.update();
+
+    this.tooltip.update();
+    if(this.showTooltip){
+      this.info.update();
+    }
+  }
+
+  //=========================================================================//
+  // FSM methods                                                             //
+  //=========================================================================//
+  public String[] getTransitions(){
+    String transitionsOrder[] = {"", "", "", "", ""};
+    transitionsOrder[0] = this.transition1.getLabelString();
+    transitionsOrder[1] = this.transition2.getLabelString();
+    transitionsOrder[2] = this.transition3.getLabelString();
+    transitionsOrder[3] = this.transition4.getLabelString();
+    transitionsOrder[4] = this.transition5.getLabelString();
+    return transitionsOrder;
+  }
+
+    public String[] getStates() {
+      String statesOrder[] = {"", "", "", "", ""};
+      statesOrder[0] = this.label1.getLabelString();
+      statesOrder[1] = this.label1.getLabelString();
+      statesOrder[2] = this.label1.getLabelString();
+      statesOrder[3] = this.label1.getLabelString();
+      statesOrder[4] = this.label1.getLabelString();
+      return statesOrder;
+    }
+
+  //=========================================================================//
+  // Labels methods                                                          //
+  //=========================================================================//
+  private void setupLabels(){
+    int labelColour = 255;
+    this.questionMark = new Label(this.sketch, 
+                                  labelColour, 
+                                  "?", 
+                                  new Vector2D(50, 45));
 
     //LABELS TO PUT ON STARS
-    Label label1 = new Label(255, "attack", positionx1, positiony1);
-    Label label2 = new Label(255, "orbit", positionx2, positiony2);
-    Label label3 = new Label(255, "defence", positionx3, positiony3);
-    Label label4 = new Label(255, "re-fuel", positionx4, positiony4);
-    Label label5 = new Label(255, "seek", positionx5, positiony5);
+    this.label1 = new Label(this.sketch, labelColour, "attack", 
+                            this.location1);
+    this.label2 = new Label(this.sketch, labelColour, "orbit", 
+                            this.location2);
+    this.label3 = new Label(this.sketch, labelColour, "defence", 
+                            this.location3);
+    this.label4 = new Label(this.sketch, labelColour, "re-fuel", 
+                            this.location4);
+    this.label5 = new Label(this.sketch, labelColour, "seek", 
+                            this.location5);
 
-    //ARROWS
-    Arrow arrow1 = new Arrow(positionx1, positiony1, positionx2-25, positiony2-25);
-    Arrow arrow2 = new Arrow(positionx2, positiony2, positionx5, positiony5-30);
-    Arrow arrow3 = new Arrow(positionx3, positiony3, positionx1-25, positiony1);
-    Arrow arrow4 = new Arrow(positionx4, positiony4, positionx3, positiony3+30);
-    Arrow arrow5 = new Arrow(positionx5, positiony5, positionx4+30, positiony4);
+    this.allLabels = new ArrayList<Label>();
+    this.allLabels.add(this.label1);
+    this.allLabels.add(this.label2);
+    this.allLabels.add(this.label3);
+    this.allLabels.add(this.label4);
+    this.allLabels.add(this.label5);
 
-    //VARIABLES FOR SWAPS
-    ArrayList<Label> allLabels;
-    ArrayList<Star> allStars;
-    String labelToSwap = null;
-    String buttonToSwap = null;
-    boolean buttons[] = {false, false, false, false, false};
-    Label lab[] = {null, null};
+    // Labels for swaps
+    this.lab = new Label[2];
+    Arrays.fill(this.lab, null);
+  } 
 
+  private void updateLabels(){
+    this.label1.update();
+    this.label2.update();
+    this.label3.update();
+    this.label4.update();
+    this.label5.update();
 
-    void UIsetup() {
-        size(700, 900);
-        backgroundimg = loadImage("bluestars.jpg");
+    this.questionMark.update();
+  }
 
-        allLabels = new ArrayList<Label>();
-        allLabels.add(label1);
-        allLabels.add(label2);
-        allLabels.add(label3);
-        allLabels.add(label4);
-        allLabels.add(label5);
+  //=========================================================================//
+  // Locations methods                                                       //
+  //=========================================================================//
+  private void setupLocations(){
+    this.location1 = new Vector2D(this.sketch.width * 0.5,
+                                  this.sketch.height * 0.15);
+    this.location2 = new Vector2D(this.sketch.width * 0.9,
+                                  this.sketch.height * 0.4);                                  
+    this.location3 = new Vector2D(this.sketch.width * 0.1,
+                                  this.sketch.height * 0.4);
+    this.location4 = new Vector2D(this.sketch.width * 0.25,
+                                  this.sketch.height * 0.75);
+    this.location5 = new Vector2D(this.sketch.width * 0.75,
+                                  this.sketch.height * 0.75);
+  }
 
-        allStars = new ArrayList<Star>();
-        allStars.add(star1);
-        allStars.add(star2);
-        allStars.add(star3);
-        allStars.add(star4);
-        allStars.add(star5);
+  private Vector2D getMidPoint(Vector2D location1, Vector2D location2){
+    return new Vector2D((location1.getX() + location2.getX()) / 2,
+                        (location2.getY() + location2.getY()) / 2);
+  }
+
+  //=========================================================================//
+  // Mouse methods                                                           //
+  //=========================================================================// 
+  public void updateMousePressStar(){
+    // Swap label1 for star
+    if(this.checkMousePressStar(this.location1, this.label1)){
+      this.star1.changeColour();
+    }
+    // Swap label2 for star
+    else if(this.checkMousePressStar(this.location2, this.label2)){
+      this.star2.changeColour();
+    }
+    // Swap label3 for star
+    else if(this.checkMousePressStar(this.location3, this.label3)){
+      this.star3.changeColour();
+    }
+    // Swap label4 for star
+    else if(this.checkMousePressStar(this.location4, this.label4)){
+      this.star4.changeColour();
+    }
+    // Swap label5 for star
+    else if(this.checkMousePressStar(this.location5, this.label5)){
+      this.star5.changeColour();
+    }
+    else {
+      this.checkForColourChanges();
+    }
+  }
+
+  public void updateMousePressButton(){
+    Vector2D buttonDimensions = new Vector2D(120, 55);
+    // Swap button1
+    if(this.checkMousePressButton(
+        Vector2D.add(this.getMidPoint(this.location1, this.location2),
+                     new Vector2D(-30, -27)),                   
+        buttonDimensions)){
+      this.swapButton1();
+    }
+    // Swap button2
+    else if(this.checkMousePressButton(
+        Vector2D.add(this.getMidPoint(this.location2, this.location5),
+                     new Vector2D(-60, -27)),                   
+        buttonDimensions)){
+      this.swapButton2();
+    }  
+    // Swap button3
+    else if(this.checkMousePressButton(
+        Vector2D.add(this.getMidPoint(this.location4, this.location5),
+                     new Vector2D(-60, -27)),                   
+        buttonDimensions)){
+      this.swapButton3();
+    } 
+    // Swap button 4
+    else if(this.checkMousePressButton(
+        Vector2D.add(this.getMidPoint(this.location3, this.location4),
+                     new Vector2D(-60, -27)),                   
+        buttonDimensions)){
+      this.swapButton4();
+    }
+    // Swap button 5
+    else if(this.checkMousePressButton(
+        Vector2D.add(this.getMidPoint(this.location3, this.location1),
+                     new Vector2D(-90, -27)),                   
+        buttonDimensions)){
+      this.swapButton5();
+    }
+    else if(this.checkMousePressButton(new Vector2D(30, 25),
+                                       new Vector2D(40, 40))){
+      if(this.showTooltip){
+        this.showTooltip = false;
+      }
+      else {
+        this.showTooltip = true;
+      }
+      this.tooltip.changeColour();
+      this.info.changeColour();
+    }
+    // Start game
+    else if(this.checkMousePressButton(new Vector2D(500, 30),
+                                       new Vector2D(100, 50))){
+      this.start.changeColour();
+      this.currentScreen = GAMESCREEN.GAME;
     }
 
-    void Draw() {
-        background(backgroundimg);
+  }
 
-        //draws twickly backround stars
-        for (int i = 0; i <= 10; i++) {
-            fill(255, 255, 204);
-            ellipse(random(width), random(height), 2, 2);
-        }
-
-
-        start.Draw();
-
-
-        arrow1.Draw();
-        arrow2.Draw();
-        arrow3.Draw();
-        arrow4.Draw();
-        arrow5.Draw();
-
-        transition1.Draw();
-        transition2.Draw();
-        transition3.Draw();
-        transition4.Draw();
-        transition5.Draw();
-
-        star1.Draw();
-        star2.Draw();
-        star3.Draw();
-        star4.Draw();
-        star5.Draw();
-
-        label1.Draw();
-        label2.Draw();
-        label3.Draw();
-        label4.Draw();
-        label5.Draw();
-
-        tooltip.Draw();
-        questionMark.Draw();
-        if (showTooltip == true) {
-            info.Draw();
-        }
+  private boolean checkMousePressButton(Vector2D location, 
+    Vector2D dimensions){
+    if(this.sketch.mouseX >= location.getX() &&
+       this.sketch.mouseX <= location.getX() + dimensions.getX() &&
+       this.sketch.mouseY >= location.getY() &&
+       this.sketch.mouseY <= location.getY() + dimensions.getY()){
+      return true;
     }
+    return false;
+  }
 
-    public void mouseEvents() {
-        //LABEL SWAPS FOR STATES
-        //label1 swap - stars
-        if (mouseX >= positionx1- 10 && mouseX <=  positionx1+ 10 &&
-                mouseY >= positiony1- 10 && mouseY <= positiony1+10) {
-            if (swapLabel(label1) == false) {
-                star1.changecolor();
-            }
-            else {
-                checkForColourChanges();
-            }
+  private boolean checkMousePressStar(Vector2D location, Label label){
+    if(this.mousePressed && !this.swapLabel(label)){
+      if(Vector2D.sub(new Vector2D(this.sketch.mouseX, this.sketch.mouseY),
+                      location)
+                 .mag() < 10){
+        return true;
+      }
+    }
+    return false;
+  }
 
-        }
-        //label3 swap - stars
-        else if (mouseX >= positionx3 - 10 && mouseX <=  positionx3+ 10 &&
-                mouseY >= positiony3 - 10 && mouseY <= positiony3 + 10) {
-            if (swapLabel(label3) == false) {
-                star3.changecolor();
-            }
-            else {
-                checkForColourChanges();
-            }
+  public void listenMousePressed(){
+    this.mousePressed = true;
+  }
 
-        }
-        //swapping label2 - stars
-        else if (mouseX >= positionx2 - 10 && mouseX <=  positionx2 + 10 &&
-                mouseY >= positiony2 -10 && mouseY <= positionx2 + 10) {
-            if (swapLabel(label2) == false) {
-                star2.changecolor();
-            }
-            else {
-                checkForColourChanges();
-            }
-        }
-        //swapping label4 - stars
-        else if (mouseX >= positionx4 - 10 && mouseX <=  positionx4 + 10 &&
-                mouseY >= positiony4 - 10 && mouseY <= positiony4 + 10) {
+  public void listenMouseReleased(){
+    this.mousePressed = false;
+  }
 
-            if (swapLabel(label4) == false) {
-                star4.changecolor();
-            }
-            else {
-                checkForColourChanges();
-            }
-        }
-        //swapping for label5 - stars
-        else if (mouseX >= positionx5 - 10 && mouseX <=  positionx5 + 10 &&
-                mouseY >= positiony5 - 10  && mouseY <= positiony5 + 10) {
+  //=========================================================================//
+  // Star methods                                                            //
+  //=========================================================================//
+  private void setupStars(){
+    Vector2D dimensions = new Vector2D(25, 60);
+    int nPoints = 5;
+    this.star1 = new Star(this.sketch, this.location1, dimensions, nPoints);
+    this.star2 = new Star(this.sketch, this.location2, dimensions, nPoints);
+    this.star3 = new Star(this.sketch, this.location3, dimensions, nPoints);
+    this.star4 = new Star(this.sketch, this.location4, dimensions, nPoints);
+    this.star5 = new Star(this.sketch, this.location5, dimensions, nPoints);
 
-            if (swapLabel(label5) == false) {
-                star5.changecolor();
-            }
-            else {
-                checkForColourChanges();
-            }
-        }
+    this.allStars = new ArrayList<Star>();
+    this.allStars.add(this.star1);
+    this.allStars.add(this.star2);
+    this.allStars.add(this.star3);
+    this.allStars.add(this.star4);
+    this.allStars.add(this.star5);
+  }  
 
+  private void checkForColourChanges(){
+    if (this.star1.getColourR() == 255) {
+      this.star1.changeColour();
+    }
+    if (this.star2.getColourR() == 255) {
+      this.star2.changeColour();
+    }
+    if (this.star3.getColourR() == 255) {
+      this.star3.changeColour();
+    }
+    if (star4.getColourR() == 255) {
+      star4.changeColour();
+    }
+    if (this.star5.getColourR() == 255) {
+      this.star5.changeColour();
+    }
+  }
 
-        //LABEL SWAPS FOR TRANSITIONS
-        else if (mouseX >= (positionx1+positionx2)/2-30 &&
-                mouseX <= (positionx1+positionx2)/2-30+120 &&
-                mouseY >= (positiony1+positiony2)/2-27 &&
-                mouseY <= (positiony1+positiony2)/2-27+55) {
-            swapButton1();
-        }
-        else if (mouseX >= (positionx2+positionx5)/2-60 &&
-                mouseX <= (positionx2+positionx5)/2-60+120 &&
-                mouseY >= (positiony2+positiony5)/2-27 &&
-                mouseY <= (positiony2+positiony5)/2-27+55) {
-            swapButton2();
-        }
-        else if (mouseX >= (positionx4+positionx5)/2-60 &&
-                mouseX <= (positionx4+positionx5)/2-60 +120 &&
-                mouseY >= positiony5-27 &&
-                mouseY <= positiony5-27 +55) {
-            swapButton3();
-        }
-        else if (mouseX >= (positionx3+positionx4)/2-60 &&
-                mouseX <=  (positionx3+positionx4)/2-60+120 &&
-                mouseY >= (positiony3+positiony4)/2-27 &&
-                mouseY <= (positiony3+positiony4)/2-27 +55) {
-            swapButton4();
-        }
-        else if (mouseX >= (positionx3+positionx1)/2-90 &&
-                mouseX <=  (positionx3+positionx1)/2-90+120 &&
-                mouseY >= (positiony3+positiony1)/2-27 &&
-                mouseY <= (positiony3+positiony1)/2-27+55) {
-            swapButton5();
-        }
+  private void updateStars(){
+    this.star1.update();
+    this.star2.update();
+    this.star3.update();
+    this.star4.update();
+    this.star5.update();
+  }
 
-        //START GAME
-        else if (mouseX >= 500 && mouseX <= 500+100 &&
-                mouseY >= 30 && mouseY <= 30+50) {
-            GameState = 1;
-            start.changecolor();
+  //=========================================================================//
+  // Swap methods                                                            //
+  //=========================================================================//
+  public void swapButton1() {
+    if (this.buttonToSwap == null) {
+      this.buttonToSwap = this.transition1.getLabelString();
+      this.transition1.changeColour();
+      buttons[0] = true;
+    }
+    else {
+      for (int i=0; i <=4; i++) {
+        if (buttons[1] == true) {
+          this.transition2.changeLabel(this.transition1.getLabelString());
+          this.transition1.changeLabel(this.buttonToSwap);
+          this.transition2.changeColour();
+          buttons[1] = false;
+          this.buttonToSwap = null;
         }
-
-        //TOOLTIP
-        else if (mouseX >= 50 - 20 && mouseX <= 50 +20 &&
-                mouseY >= 45 -20 && mouseY <= 45 + 20) {
-            if (showTooltip == false) {
-                showTooltip = true;
-                tooltip.changecolor();
-                info.changecolor();
-            }
-            else {
-                showTooltip = false;
-                tooltip.changecolor();
-                info.changecolor();
-            }
+        else if (buttons[2] == true) {
+          this.transition3.changeLabel(this.transition1.getLabelString());
+          this.transition1.changeLabel(this.buttonToSwap);
+          this.transition3.changeColour();
+          buttons[2] = false;
+          this.buttonToSwap = null;
+        }
+        else if (buttons[3] == true) {
+          this.transition4.changeLabel(this.transition1.getLabelString());
+          this.transition1.changeLabel(this.buttonToSwap);
+          this.transition4.changeColour();
+          buttons[3] = false;
+          this.buttonToSwap = null;
+        }
+        else if (buttons[4] == true) {
+          this.transition5.changeLabel(this.transition1.getLabelString());
+          this.transition1.changeLabel(this.buttonToSwap);
+          this.transition5.changeColour();
+          buttons[4] = false;
+          this.buttonToSwap = null;
         }
       }
     }
+  }
 
-
-
-
-    public void checkForColourChanges() {
-        if (star1.ColourR == 255) {
-            star1.changecolor();
-        }
-        if (star2.ColourR == 255) {
-            star2.changecolor();
-        }
-        if (star3.ColourR == 255) {
-            star3.changecolor();
-        }
-        if (star4.ColourR == 255) {
-            star4.changecolor();
-        }
-        if (star5.ColourR == 255) {
-            star5.changecolor();
-        }
+  public void swapButton2() {
+    if (this.buttonToSwap == null) {
+      this.buttonToSwap = this.transition2.getLabelString();
+      this.transition2.changeColour();
+      buttons[1] = true;
+      System.out.println(this.buttonToSwap);
     }
-
-    //swap button1
-    public void swapButton1() {
-        if (buttonToSwap == null) {
-            buttonToSwap = transition1.label;
-            transition1.changecolor();
-            System.out.println(buttonToSwap);
-            buttons[0] = true;
+    else {
+      for (int i=0; i <=4; i++) {
+        if (buttons[0] == true) {
+          this.transition1.changeLabel(this.transition2.getLabelString());
+          this.transition2.changeLabel(this.buttonToSwap);
+          this.transition1.changeColour();
+          buttons[0] = false;
+          this.buttonToSwap = null;
         }
-        else {
-            for (int i=0; i <=4; i++) {
-                if (buttons[1] == true) {
-                    transition2.changeLabel(transition1.label);
-                    transition1.changeLabel(buttonToSwap);
-
-                    transition2.changecolor();
-
-                    buttons[1] = false;
-                    buttonToSwap = null;
-
-                }
-                else if (buttons[2] == true) {
-                    transition3.changeLabel(transition1.label);
-                    transition1.changeLabel(buttonToSwap);
-                    transition3.changecolor();
-                    buttons[2] = false;
-                    labelToSwap = null;
-                }
-                else if (buttons[3] == true) {
-                    transition4.changeLabel(transition1.label);
-                    transition1.changeLabel(buttonToSwap);
-                    transition4.changecolor();
-                    buttons[3] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[4] == true) {
-                    transition5.changeLabel(transition1.label);
-                    transition1.changeLabel(buttonToSwap);
-                    transition5.changecolor();
-                    buttons[4] = false;
-                    buttonToSwap = null;
-                }
-            }
+        else if (buttons[2] == true) {
+          this.transition3.changeLabel(this.transition2.getLabelString());
+          this.transition2.changeLabel(this.buttonToSwap);
+          this.transition3.changeColour();
+          buttons[2] = false;
+          this.buttonToSwap = null;
         }
+        else if (buttons[3] == true) {
+          this.transition4.changeLabel(this.transition2.getLabelString());
+          this.transition2.changeLabel(this.buttonToSwap);
+          this.transition4.changeColour();
+          buttons[3] = false;
+          this.buttonToSwap = null;
+        }
+        else if (buttons[4] == true) {
+          this.transition5.changeLabel(this.transition2.getLabelString());
+          this.transition2.changeLabel(this.buttonToSwap);
+          this.transition5.changeColour();
+          buttons[4] = false;
+          this.buttonToSwap = null;
+        }
+      }
     }
+  }
 
-
-    public void swapButton3() {
-        if (buttonToSwap == null) {
-            buttonToSwap = transition3.label;
-            transition3.changecolor();
-            buttons[2] = true;
-            System.out.println(buttonToSwap);
-        }
-        else {
-            for (int i=0; i <=4; i++) {
-                if (buttons[0] == true) {
-                    System.out.print(buttonToSwap);
-                    System.out.println(transition3.label);
-
-                    transition1.changeLabel(transition3.label);
-                    transition3.changeLabel(buttonToSwap);
-                    transition1.changecolor();
-
-                    buttons[0] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[1] == true) {
-                    transition2.changeLabel(transition3.label);
-                    transition3.changeLabel(buttonToSwap);
-                    transition2.changecolor();
-                    buttons[1] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[3] == true) {
-                    transition4.changeLabel(transition3.label);
-                    transition3.changeLabel(buttonToSwap);
-                    transition4.changecolor();
-                    buttons[3] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[4] == true) {
-                    transition5.changeLabel(transition3.label);
-                    transition3.changeLabel(buttonToSwap);
-                    transition5.changecolor();
-                    buttons[4] = false;
-                    buttonToSwap = null;
-                }
-            }
-        }
+  public void swapButton3() {
+    if (this.buttonToSwap == null) {
+      this.buttonToSwap = this.transition3.getLabelString();
+      this.transition3.changeColour();
+      buttons[2] = true;
     }
-
-    public void swapButton2() {
-        if (buttonToSwap == null) {
-            buttonToSwap = transition2.label;
-            transition2.changecolor();
-            buttons[1] = true;
-            System.out.println(buttonToSwap);
+    else {
+      for (int i=0; i <=4; i++) {
+        if (buttons[0] == true) {
+          this.transition1.changeLabel(this.transition3.getLabelString());
+          this.transition3.changeLabel(this.buttonToSwap);
+          this.transition1.changeColour();
+          buttons[0] = false;
+          this.buttonToSwap = null;
         }
-        else {
-            for (int i=0; i <=4; i++) {
-                if (buttons[0] == true) {
-                    transition1.changeLabel(transition2.label);
-                    transition2.changeLabel(buttonToSwap);
-                    transition1.changecolor();
-
-                    buttons[0] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[2] == true) {
-                    transition3.changeLabel(transition2.label);
-                    transition2.changeLabel(buttonToSwap);
-                    transition3.changecolor();
-                    buttons[2] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[3] == true) {
-                    transition4.changeLabel(transition2.label);
-                    transition2.changeLabel(buttonToSwap);
-                    transition4.changecolor();
-                    buttons[3] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[4] == true) {
-                    transition5.changeLabel(transition2.label);
-                    transition2.changeLabel(buttonToSwap);
-                    transition5.changecolor();
-                    buttons[4] = false;
-                    buttonToSwap = null;
-                }
-            }
+        else if (buttons[1] == true) {
+          this.transition2.changeLabel(this.transition3.getLabelString());
+          this.transition3.changeLabel(this.buttonToSwap);
+          this.transition2.changeColour();
+          buttons[1] = false;
+          this.buttonToSwap = null;
         }
+        else if (buttons[3] == true) {
+          this.transition4.changeLabel(this.transition3.getLabelString());
+          this.transition3.changeLabel(this.buttonToSwap);
+          this.transition4.changeColour();
+          buttons[3] = false;
+          this.buttonToSwap = null;
+        }
+        else if (buttons[4] == true) {
+          this.transition5.changeLabel(this.transition3.getLabelString());
+          this.transition3.changeLabel(this.buttonToSwap);
+          this.transition5.changeColour();
+          buttons[4] = false;
+          this.buttonToSwap = null;
+        }
+      }
     }
-    public void swapButton4() {
-        if (buttonToSwap == null) {
-            buttonToSwap = transition4.label;
-            transition4.changecolor();
-            buttons[3] = true;
-            System.out.println(buttonToSwap);
-        }
-        else {
-            for (int i=0; i <=4; i++) {
-                if (buttons[0] == true) {
-                    transition1.changeLabel(transition4.label);
-                    transition4.changeLabel(buttonToSwap);
-                    transition1.changecolor();
-                    buttons[0] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[1] == true) {
-                    transition2.changeLabel(transition4.label);
-                    transition4.changeLabel(buttonToSwap);
-                    transition2.changecolor();
-                    buttons[1] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[2] == true) {
-                    transition3.changeLabel(transition4.label);
-                    transition4.changeLabel(buttonToSwap);
-                    transition3.changecolor();
-                    buttons[2] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[4] == true) {
-                    transition5.changeLabel(transition4.label);
-                    transition4.changeLabel(buttonToSwap);
-                    transition5.changecolor();
-                    buttons[4] = false;
-                    buttonToSwap = null;
-                }
-            }
-        }
+  }
+
+  public void swapButton4() {
+    if (this.buttonToSwap == null) {
+      this.buttonToSwap = this.transition4.getLabelString();
+      this.transition4.changeColour();
+      buttons[3] = true;
+      System.out.println(this.buttonToSwap);
     }
-    public void swapButton5() {
-        if (buttonToSwap == null) {
-            buttonToSwap = transition5.label;
-            transition5.changecolor();
-            buttons[4] = true;
-            System.out.println(buttonToSwap);
+    else {
+      for (int i=0; i <=4; i++) {
+        if (buttons[0] == true) {
+          this.transition1.changeLabel(this.transition4.getLabelString());
+          this.transition4.changeLabel(this.buttonToSwap);
+          this.transition1.changeColour();
+          buttons[0] = false;
+          this.buttonToSwap = null;
         }
-        else {
-            for (int i=0; i <=4; i++) {
-                if (buttons[0] == true) {
-                    transition1.changeLabel(transition5.label);
-                    transition5.changeLabel(buttonToSwap);
-                    transition1.changecolor();
-                    buttons[0] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[1] == true) {
-                    transition2.changeLabel(transition5.label);
-                    transition5.changeLabel(buttonToSwap);
-                    transition2.changecolor();
-                    buttons[1] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[2] == true) {
-                    transition3.changeLabel(transition5.label);
-                    transition5.changeLabel(buttonToSwap);
-                    transition3.changecolor();
-                    buttons[2] = false;
-                    buttonToSwap = null;
-                }
-                else if (buttons[3] == true) {
-                    transition4.changeLabel(transition5.label);
-                    transition5.changeLabel(buttonToSwap);
-                    transition4.changecolor();
-                    buttons[3] = false;
-                    buttonToSwap = null;
-                }
-            }
+        else if (buttons[1] == true) {
+          this.transition2.changeLabel(this.transition4.getLabelString());
+          this.transition4.changeLabel(this.buttonToSwap);
+          this.transition2.changeColour();
+          buttons[1] = false;
+          this.buttonToSwap = null;
         }
-    }
-
-    public boolean swapLabel(Label oldLabel) {
-        if (lab[0] == null) {
-            lab[0] = oldLabel;
-            return false;
+        else if (buttons[2] == true) {
+          this.transition3.changeLabel(this.transition4.getLabelString());
+          this.transition4.changeLabel(this.buttonToSwap);
+          this.transition3.changeColour();
+          buttons[2] = false;
+          this.buttonToSwap = null;
         }
-        else if (lab[1] == null && lab[0].label != oldLabel.label) {
-            lab[1] = oldLabel;
-            System.out.println("hey1 " + lab[0].label);
-            System.out.println("hey2 " + lab[1].label);
-
-            swapAction();
-            // reset
-            lab[0] = null;
-            lab[1] = null;
-            return true;
+        else if (buttons[4] == true) {
+          this.transition5.changeLabel(this.transition4.getLabelString());
+          this.transition4.changeLabel(this.buttonToSwap);
+          this.transition5.changeColour();
+          buttons[4] = false;
+          this.buttonToSwap = null;
         }
-        return false;
+      }
     }
+  }
 
-    public void swapAction() {
-        String temp;
-        for (Label i : allLabels) {
-            if (i.label == lab[0].label) {
-                for (Label j : allLabels) {
-                    if (j.label == lab[1].label) {
-                        temp = i.label;
-                        i.changeLabel(j.label);
-                        j.changeLabel(temp);
-                        return;
-                    }
-                }
-            }
+  public void swapButton5() {
+    if (this.buttonToSwap == null) {
+      this.buttonToSwap = this.transition5.getLabelString();
+      this.transition5.changeColour();
+      buttons[4] = true;
+    }
+    else {
+      for (int i=0; i <=4; i++) {
+        if (buttons[0] == true) {
+          this.transition1.changeLabel(this.transition5.getLabelString());
+          this.transition5.changeLabel(this.buttonToSwap);
+          this.transition1.changeColour();
+          buttons[0] = false;
+          this.buttonToSwap = null;
         }
+        else if (buttons[1] == true) {
+          this.transition2.changeLabel(this.transition5.getLabelString());
+          this.transition5.changeLabel(this.buttonToSwap);
+          this.transition2.changeColour();
+          buttons[1] = false;
+          this.buttonToSwap = null;
+        }
+        else if (buttons[2] == true) {
+          this.transition3.changeLabel(this.transition5.getLabelString());
+          this.transition5.changeLabel(this.buttonToSwap);
+          this.transition3.changeColour();
+          buttons[2] = false;
+          this.buttonToSwap = null;
+        }
+        else if (buttons[3] == true) {
+          this.transition4.changeLabel(this.transition5.getLabelString());
+          this.transition5.changeLabel(this.buttonToSwap);
+          this.transition4.changeColour();
+          buttons[3] = false;
+          this.buttonToSwap = null;
+        }
+      }
     }
+  }
 
-    public String[] getTransitions() {
-
-        String TransitionsOrder[] = {"", "", "", "", ""};
-        TransitionsOrder[0] = transition1.label;
-        TransitionsOrder[1] = transition2.label;
-        TransitionsOrder[2] = transition3.label;
-        TransitionsOrder[3] = transition4.label;
-        TransitionsOrder[4] = transition5.label;
-        return TransitionsOrder;
+  public boolean swapLabel(Label oldLabel) {
+    if (lab[0] == null) {
+      lab[0] = oldLabel;
+      return false;
     }
+    else if (lab[1] == null && 
+            lab[0].getLabelString() != oldLabel.getLabelString()) {
+      lab[1] = oldLabel;
+      System.out.println("hey1 " + lab[0].getLabelString());
+      System.out.println("hey2 " + lab[1].getLabelString());
 
-    public String[] getOrders() {
-        String StatesOrder[] = {"", "", "", "", ""};
-        StatesOrder[0] = label1.label;
-        StatesOrder[1] = label1.label;
-        StatesOrder[2] = label1.label;
-        StatesOrder[3] = label1.label;
-        StatesOrder[4] = label1.label;
-        return StatesOrder;
+      this.swapAction();
+      // reset
+      lab[0] = null;
+      lab[1] = null;
+      return true;
     }
+    return false;
+  }
 
-    public int GameState() {
-       return GameState;
+  public void swapAction() {
+    String temp;
+    for (Label i : allLabels) {
+      if (i.getLabelString() == lab[0].getLabelString()) {
+        for (Label j : allLabels) {
+          if (j.getLabelString() == lab[1].getLabelString()) {
+            temp = i.getLabelString();
+            i.changeLabel(j.getLabelString());
+            j.changeLabel(temp);
+            return;
+          }
+        }
+      }
     }
-
+  }
 }
