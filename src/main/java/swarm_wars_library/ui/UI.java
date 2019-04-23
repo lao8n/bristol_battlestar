@@ -90,8 +90,8 @@ public class UI{
     this.updateBackground();
     this.updateArrows();
     this.updateStars();
-    this.updateButtons();
     this.updateLabels();
+    this.updateButtons();
     this.updateMousePressButton();
     this.updateMousePressStar();
   }
@@ -424,11 +424,13 @@ public class UI{
 
   private boolean checkMousePressButton(Vector2D location, 
     Vector2D dimensions){
-    if(this.sketch.mouseX >= location.getX() &&
-       this.sketch.mouseX <= location.getX() + dimensions.getX() &&
-       this.sketch.mouseY >= location.getY() &&
-       this.sketch.mouseY <= location.getY() + dimensions.getY()){
-      return true;
+    if(this.mousePressed){
+      if(this.sketch.mouseX >= location.getX() &&
+      this.sketch.mouseX <= location.getX() + dimensions.getX() &&
+      this.sketch.mouseY >= location.getY() &&
+      this.sketch.mouseY <= location.getY() + dimensions.getY()){
+        return true;
+      }
     }
     return false;
   }
