@@ -5,7 +5,7 @@ PImage backgroundimg;
 public class UI {
 
 
-    int GameState = 4;
+    int GameState = 0;
 
     //SCREEN SIZE
     int width = 700;
@@ -103,7 +103,7 @@ public class UI {
     Label lab[] = {null, null};
 
 
-    void setup() {
+    void UIsetup() {
         size(700, 900);
         backgroundimg = loadImage("bluestars.jpg");
 
@@ -166,7 +166,119 @@ public class UI {
         }
     }
 
+    public void mouseEvents() {
+        //LABEL SWAPS FOR STATES
+        //label1 swap - stars
+        if (mouseX >= positionx1- 10 && mouseX <=  positionx1+ 10 &&
+                mouseY >= positiony1- 10 && mouseY <= positiony1+10) {
+            if (swapLabel(label1) == false) {
+                star1.changecolor();
+            }
+            else {
+                checkForColourChanges();
+            }
 
+        }
+        //label3 swap - stars
+        else if (mouseX >= positionx3 - 10 && mouseX <=  positionx3+ 10 &&
+                mouseY >= positiony3 - 10 && mouseY <= positiony3 + 10) {
+            if (swapLabel(label3) == false) {
+                star3.changecolor();
+            }
+            else {
+                checkForColourChanges();
+            }
+
+        }
+        //swapping label2 - stars
+        else if (mouseX >= positionx2 - 10 && mouseX <=  positionx2 + 10 &&
+                mouseY >= positiony2 -10 && mouseY <= positionx2 + 10) {
+            if (swapLabel(label2) == false) {
+                star2.changecolor();
+            }
+            else {
+                checkForColourChanges();
+            }
+        }
+        //swapping label4 - stars
+        else if (mouseX >= positionx4 - 10 && mouseX <=  positionx4 + 10 &&
+                mouseY >= positiony4 - 10 && mouseY <= positiony4 + 10) {
+
+            if (swapLabel(label4) == false) {
+                star4.changecolor();
+            }
+            else {
+                checkForColourChanges();
+            }
+        }
+        //swapping for label5 - stars
+        else if (mouseX >= positionx5 - 10 && mouseX <=  positionx5 + 10 &&
+                mouseY >= positiony5 - 10  && mouseY <= positiony5 + 10) {
+
+            if (swapLabel(label5) == false) {
+                star5.changecolor();
+            }
+            else {
+                checkForColourChanges();
+            }
+        }
+
+
+        //LABEL SWAPS FOR TRANSITIONS
+        else if (mouseX >= (positionx1+positionx2)/2-30 &&
+                mouseX <= (positionx1+positionx2)/2-30+120 &&
+                mouseY >= (positiony1+positiony2)/2-27 &&
+                mouseY <= (positiony1+positiony2)/2-27+55) {
+            swapButton1();
+        }
+        else if (mouseX >= (positionx2+positionx5)/2-60 &&
+                mouseX <= (positionx2+positionx5)/2-60+120 &&
+                mouseY >= (positiony2+positiony5)/2-27 &&
+                mouseY <= (positiony2+positiony5)/2-27+55) {
+            swapButton2();
+        }
+        else if (mouseX >= (positionx4+positionx5)/2-60 &&
+                mouseX <= (positionx4+positionx5)/2-60 +120 &&
+                mouseY >= positiony5-27 &&
+                mouseY <= positiony5-27 +55) {
+            swapButton3();
+        }
+        else if (mouseX >= (positionx3+positionx4)/2-60 &&
+                mouseX <=  (positionx3+positionx4)/2-60+120 &&
+                mouseY >= (positiony3+positiony4)/2-27 &&
+                mouseY <= (positiony3+positiony4)/2-27 +55) {
+            swapButton4();
+        }
+        else if (mouseX >= (positionx3+positionx1)/2-90 &&
+                mouseX <=  (positionx3+positionx1)/2-90+120 &&
+                mouseY >= (positiony3+positiony1)/2-27 &&
+                mouseY <= (positiony3+positiony1)/2-27+55) {
+            swapButton5();
+        }
+
+        //START GAME
+        else if (mouseX >= 500 && mouseX <= 500+100 &&
+                mouseY >= 30 && mouseY <= 30+50) {
+            GameState = 1;
+            start.changecolor();
+        }
+
+        //TOOLTIP
+        else if (mouseX >= 50 - 20 && mouseX <= 50 +20 &&
+                mouseY >= 45 -20 && mouseY <= 45 + 20) {
+            if (showTooltip == false) {
+                showTooltip = true;
+                tooltip.changecolor();
+                info.changecolor();
+            }
+            else {
+                showTooltip = false;
+                tooltip.changecolor();
+                info.changecolor();
+            }
+        }
+      }
+    }
 
 
 
@@ -456,6 +568,10 @@ public class UI {
         StatesOrder[3] = label1.label;
         StatesOrder[4] = label1.label;
         return StatesOrder;
+    }
+
+    public int GameState() {
+       return GameState;
     }
 
 }
