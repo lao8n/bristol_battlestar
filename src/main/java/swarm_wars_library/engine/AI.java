@@ -1,7 +1,6 @@
 
 package swarm_wars_library.engine;
 
-import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.Vector2D;
 
 public class AI {

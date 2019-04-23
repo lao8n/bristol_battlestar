@@ -29,7 +29,7 @@ public class RenderTurretBullet extends RenderMapObject{
     this.sketch.ellipseMode(2);
     this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
                         (float) this.objectRenderLocation.getY(), 
-                        (float) 3, 
-                        (float) 3); 
+                        (float) 2, 
+                        (float) 2); 
   }
 }

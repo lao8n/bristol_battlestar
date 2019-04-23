@@ -1,6 +1,6 @@
 package swarm_wars_library;
 
-import java.util.*;
+import java.util.ArrayList;
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.CollisionDetection;

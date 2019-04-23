@@ -65,80 +65,11 @@ public class RenderLayers{
   // Render Entities Layer                                                   //
   //=========================================================================//
   private void renderEntitiesLayer(){
-    this.renderTurretBullets();
-    this.renderPlayer1Bullets();
     this.renderPlayer1Bots();
     this.renderTurrets();
     this.renderPlayer1();
-  }
-  
-  //=========================================================================//
-  // Render Turret Bullets Layer                                             //
-  //=========================================================================//
-  private void renderTurretBullets(){
-    for (int i = 0; i < CommsGlobal.get("TURRET_BULLET")
-                                   .getNumberOfReceivers(); i++){
-      // Render entity if alive
-      if(CommsGlobal.get("TURRET_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
-        this.renderTurretBullet.update(CommsGlobal.get("TURRET_BULLET")
-                                                 .getPacket(i)
-                                                 .getLocation(),
-                                      CommsGlobal.get("PLAYER1")
-                                                 .getPacket(0)
-                                                 .getLocation());
-      }
-      // Render explosions
-      if(CommsGlobal.get("TURRET_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-        this.renderTurretBullet.updateExplosion(CommsGlobal.get("TURRET_BULLET")
-                                                          .getPacket(i)
-                                                          .getLocation(),
-                                                CommsGlobal.get("PLAYER1")
-                                                          .getPacket(0)
-                                                          .getLocation(),
-                                                3);
-      }
-    }
-  }
-  
-  //=========================================================================//
-  // Render Player1 Bullets Layer                                            //
-  //=========================================================================//
-  private void renderPlayer1Bullets(){
-    for (int i = 0; i < CommsGlobal.get("PLAYER1_BULLET")
-                                   .getNumberOfReceivers(); i++){
-      // Render entity if alive
-      if(CommsGlobal.get("PLAYER1_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
-        this.renderPlayerBullet.update(CommsGlobal.get("PLAYER1_BULLET")
-                                                  .getPacket(i)
-                                                  .getLocation(),
-                                        CommsGlobal.get("PLAYER1")
-                                                  .getPacket(0)
-                                                  .getLocation());
-      }
-      // Render explosions
-      if(CommsGlobal.get("PLAYER1_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-          this.renderPlayerBullet.updateExplosion(CommsGlobal.get(
-                                                    "PLAYER1_BULLET")
-                                                             .getPacket(i)
-                                                             .getLocation(),
-                                                  CommsGlobal.get("PLAYER1")
-                                                             .getPacket(0)
-                                                             .getLocation(),
-                                                  7);
-      }
-    }
+    this.renderTurretBullets();
+    this.renderPlayer1Bullets();
   }
 
   //=========================================================================//
@@ -250,6 +181,75 @@ public class RenderLayers{
                                             .getPacket(0)
                                             .getLocation());
       }
+  }
+
+  //=========================================================================//
+  // Render Turret Bullets Layer                                             //
+  //=========================================================================//
+  private void renderTurretBullets(){
+    for (int i = 0; i < CommsGlobal.get("TURRET_BULLET")
+                                   .getNumberOfReceivers(); i++){
+      // Render entity if alive
+      if(CommsGlobal.get("TURRET_BULLET")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.ALIVE)){
+        this.renderTurretBullet.update(CommsGlobal.get("TURRET_BULLET")
+                                                 .getPacket(i)
+                                                 .getLocation(),
+                                      CommsGlobal.get("PLAYER1")
+                                                 .getPacket(0)
+                                                 .getLocation());
+      }
+      // Render explosions
+      if(CommsGlobal.get("TURRET_BULLET")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.EXPLODE)){
+        this.renderTurretBullet.updateExplosion(CommsGlobal.get("TURRET_BULLET")
+                                                          .getPacket(i)
+                                                          .getLocation(),
+                                                CommsGlobal.get("PLAYER1")
+                                                          .getPacket(0)
+                                                          .getLocation(),
+                                                3);
+      }
+    }
+  }
+  
+  //=========================================================================//
+  // Render Player1 Bullets Layer                                            //
+  //=========================================================================//
+  private void renderPlayer1Bullets(){
+    for (int i = 0; i < CommsGlobal.get("PLAYER1_BULLET")
+                                   .getNumberOfReceivers(); i++){
+      // Render entity if alive
+      if(CommsGlobal.get("PLAYER1_BULLET")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.ALIVE)){
+        this.renderPlayerBullet.update(CommsGlobal.get("PLAYER1_BULLET")
+                                                  .getPacket(i)
+                                                  .getLocation(),
+                                        CommsGlobal.get("PLAYER1")
+                                                  .getPacket(0)
+                                                  .getLocation());
+      }
+      // Render explosions
+      if(CommsGlobal.get("PLAYER1_BULLET")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.EXPLODE)){
+          this.renderPlayerBullet.updateExplosion(CommsGlobal.get(
+                                                    "PLAYER1_BULLET")
+                                                             .getPacket(i)
+                                                             .getLocation(),
+                                                  CommsGlobal.get("PLAYER1")
+                                                             .getPacket(0)
+                                                             .getLocation(),
+                                                  7);
+      }
+    }
   }
 
   //=========================================================================//
