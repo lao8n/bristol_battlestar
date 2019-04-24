@@ -5,15 +5,15 @@ import processing.core.PApplet;
 
 public class RenderPlayer extends RenderMapObject{
 
-  private float scale = (float) Map.getInstance().getPlayerScale();
+  private float scale;
 
   public RenderPlayer(PApplet sketch){
     super(sketch);
+    this.scale = (float) Map.getInstance().getPlayerScale();
   }
 
-  @Override 
+  // @Override 
   public void renderMapObject(){
-
     this.sketch.noStroke();
     this.sketch.fill(70, 102, 255); 
     this.sketch.ellipseMode(2);

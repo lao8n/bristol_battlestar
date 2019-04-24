@@ -7,6 +7,7 @@ import swarm_wars_library.engine.CollisionDetection;
 import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.PlayerAI;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
 import swarm_wars_library.game_screens.GAMESCREEN;
@@ -21,7 +22,7 @@ public class SwarmWars extends PApplet {
 
   // Players
   PlayerN player1;
-  PlayerN player2;
+  PlayerAI player2;
 
   // Entity lists that has all our game things.
   ArrayList <AbstractEntity> player1TakeDamage;  
@@ -135,7 +136,9 @@ public class SwarmWars extends PApplet {
       this.player1TakeDamage.add(bot);
     }
 
-    // TODO player 2 setup
+    // player2 setup
+    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
+    this.player2TakeDamage.add(this.player2);
 
     // turrets setup
     for(int i = 0; i < this.map.getNumTurrets(); i++){
@@ -163,8 +166,16 @@ public class SwarmWars extends PApplet {
   // Collision checks                                                        //
   //=========================================================================//
   public void checkCollisions() {
+    // Game Objects -> Player1
     CollisionDetection.checkCollisions(this.gameObjectsDealDamage,
                                        this.player1TakeDamage);
+    // Game Objects -> Player2
+    CollisionDetection.checkCollisions(this.gameObjectsDealDamage,
+                                       this.player2TakeDamage);
+    // Player1 -> Game Objects
+    CollisionDetection.checkCollisions(this.player1DealDamage,
+                                       this.gameObjectsTakeDamage);
+    // Player1 -> Player2
     CollisionDetection.checkCollisions(this.player1DealDamage,
                                        this.gameObjectsTakeDamage);
   }
@@ -173,18 +184,23 @@ public class SwarmWars extends PApplet {
   // Entities update                                                         //
   //=========================================================================//
   public void entitiesUpdate(){
-    // Update all entities
-    for(int i = 0; i < player1TakeDamage.size(); i++){
-      player1TakeDamage.get(i).update();
+    // Update game entities
+    for(int i = 0; i < this.gameObjectsTakeDamage.size(); i++){
+      this.gameObjectsTakeDamage.get(i).update();
     }
-    for(int i = 0; i < player1DealDamage.size(); i++){
-      player1DealDamage.get(i).update();
+    for(int i = 0; i < this.gameObjectsDealDamage.size(); i++){
+      this.gameObjectsDealDamage.get(i).update();
     }
-    for(int i = 0; i < gameObjectsTakeDamage.size(); i++){
-      gameObjectsTakeDamage.get(i).update();
+    // Update player1
+    for(int i = 0; i < this.player1TakeDamage.size(); i++){
+      this.player1TakeDamage.get(i).update();
     }
-    for(int i = 0; i < gameObjectsDealDamage.size(); i++){
-      gameObjectsDealDamage.get(i).update();
+    for(int i = 0; i < this.player1DealDamage.size(); i++){
+      this.player1DealDamage.get(i).update();
+    }
+    // Update player2
+    for(int i = 0; i < this.player2TakeDamage.size(); i++){
+      this.player2TakeDamage.get(i).update();
     }
   }
 

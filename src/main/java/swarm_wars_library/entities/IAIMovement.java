@@ -1,14 +1,12 @@
 package swarm_wars_library.entities;
 
-import java.util.List;
-
 import swarm_wars_library.physics.Vector2D;
 
-public interface IAI {
+public interface IAIMovement{
+  
   //=========================================================================//
-  // AI methods                                                              //
+  // Movement methods                                                        //
   //=========================================================================//
-  public void updateAI();
-  public Vector2D getAILocation();
-  public List<Vector2D> getAITarget();
+  public void updateAIMovement();
+  public Vector2D getAIMovementLocation();
 }

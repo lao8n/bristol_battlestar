@@ -13,7 +13,7 @@ import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
-public class PlayerN extends AbstractEntity implements IHealth, IShooterInput,
+public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   IScore{
 
   private Health health;
@@ -139,6 +139,17 @@ public class PlayerN extends AbstractEntity implements IHealth, IShooterInput,
   }
 
   //=========================================================================//
+  // Input-Shooter methods                                                   //
+  //=========================================================================//
+  @Override
+  public boolean isInputShoot(){
+    if(this.input.getMouse() == 1){
+      return true;
+    }
+    return false;
+  }
+
+  //=========================================================================//
   // Score methods                                                           //
   //=========================================================================//
   public void updateScore(){
@@ -176,14 +187,4 @@ public class PlayerN extends AbstractEntity implements IHealth, IShooterInput,
     return this.shooter.getMagazine();
   }
 
-  //=========================================================================//
-  // Shooter-Input methods                                                   //
-  //=========================================================================//
-  @Override
-  public boolean isInputShoot(){
-    if(this.input.getMouse() == 1){
-      return true;
-    }
-    return false;
-  }
 }

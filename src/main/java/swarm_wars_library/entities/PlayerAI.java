@@ -1,31 +1,41 @@
 package swarm_wars_library.entities;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import processing.core.PApplet;
 
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.engine.AI;
+import swarm_wars_library.engine.AIMovement;
+import swarm_wars_library.engine.Health;
 import swarm_wars_library.engine.Shooter;
+import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
-public class Turret extends AbstractEntity implements IAIShooter{
+public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
+  IAIShooter, IScore{
 
+  private Health health;
+  private int score;
   private AI ai;
+  private AIMovement aiMovement;
   private Shooter shooter;
   private int shootInterval = 0;
 
   //=========================================================================//
   // Constructor                                                             //
-  //=========================================================================// 
-  public Turret(ENTITY tag){
-    super(tag, Map.getInstance().getTurretScale());
+  //=========================================================================//
+  public PlayerAI(PApplet sketch, ENTITY tag){
+    super(tag, Map.getInstance().getPlayerScale());
     this.ai = new AI();
-    this.shooter = new Shooter(this.tag, 5);
-    this.setLocation(new Vector2D(Math.random() * Map.getInstance()
-                                                     .getMapWidth(), 
-                                  Math.random() * Map.getInstance()
-                                                     .getMapHeight()));
+    this.aiMovement = new AIMovement(this.tag);
+    this.setLocation(Map.getInstance().getPlayerStartingLocation(this.tag));
+    this.health = new Health(this.tag);
+    this.score = 0;
+    this.shooter = new Shooter(this.tag, 10);
     this.updateCommsPacket();
     this.sendCommsPacket();  
   }
@@ -36,15 +46,11 @@ public class Turret extends AbstractEntity implements IAIShooter{
   @Override
   public void update(){
     if(this.isState(STATE.ALIVE)){
-      this.updateAI();
+      this.updateAIMovement();
+      this.updateHealth();
       this.updateShooter();
-    }
-    if(this.isState(STATE.DEAD)){
-      this.setState(STATE.ALIVE);
-      this.setLocation(new Vector2D(Math.random() * Map.getInstance()
-                                                       .getMapWidth(), 
-                                    Math.random() * Map.getInstance()
-                                                       .getMapHeight()));
+      this.updateScore();
+      this.updateState();
     }
     // Comms & explode last
     this.updateCommsPacket();
@@ -68,10 +74,9 @@ public class Turret extends AbstractEntity implements IAIShooter{
   @Override
   public List<Vector2D> getAITarget(){
     // TODO make it look for closer of Player1 or Player2
-    List<Vector2D> aiTargets = new ArrayList<Vector2D>();
-    aiTargets.add(CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
-    aiTargets.add(CommsGlobal.get("PLAYER2").getPacket(0).getLocation());
-    return aiTargets;
+    List<Vector2D> list = new ArrayList<Vector2D>();
+    list.add(CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
+    return list;
   }
 
   public double getAIHeading(){
@@ -79,11 +84,25 @@ public class Turret extends AbstractEntity implements IAIShooter{
   }
 
   //=========================================================================//
+  // AI Movement methods                                                     //
+  //=========================================================================//
+  @Override
+  public void updateAIMovement(){
+    this.aiMovement.update();
+    this.setLocation(this.getAIMovementLocation());
+  }
+
+  @Override
+  public Vector2D getAIMovementLocation(){
+    return this.aiMovement.getLocation();
+  }
+
+  //=========================================================================//
   // AI-Shooter methods                                                      //
   //=========================================================================//
   @Override
   public boolean isAIShoot(){
-    if(this.shootInterval()){
+    if(this.ai.getInRange() && this.shootInterval()){
       return true;
     }
     return false;
@@ -92,7 +111,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   @Override
   public boolean shootInterval(){
     this.shootInterval++;
-    if(this.shootInterval % 5 == 0){
+    if(this.shootInterval % 2 == 0){
       this.shootInterval = 0;
       return true;
     }
@@ -104,7 +123,9 @@ public class Turret extends AbstractEntity implements IAIShooter{
   //=========================================================================//
   @Override
   public void updateCommsPacket(){
+    this.commsPacket.setHealth(this.getHealth());
     this.commsPacket.setLocation(this.getLocation());
+    this.commsPacket.setScore(this.getScore());
     this.commsPacket.setState(this.getState());
     this.commsPacket.setVelocity(this.getVelocity());
   }
@@ -114,7 +135,52 @@ public class Turret extends AbstractEntity implements IAIShooter{
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    this.setState(STATE.EXPLODE);
+    this.takeDamage(5);
+  }
+
+  //=========================================================================//
+  // Health methods                                                          //
+  //=========================================================================//
+  @Override
+  public void updateHealth(){
+    this.health.update();
+  }
+
+  @Override
+  public int getHealth(){
+    return this.health.getCurrentHealth();
+  }
+
+  @Override
+  public void updateState(){
+    if(health.isDead()){
+      this.state = STATE.EXPLODE;
+    }
+  }
+
+  @Override
+  public void takeDamage(int damage){
+    this.health.takeDamage(damage);
+  }
+
+  //=========================================================================//
+  // Score methods                                                           //
+  //=========================================================================//
+  @Override
+  public void updateScore(){
+    this.setScore(CommsGlobal.get(this.tag.toString())
+                             .getPacket(0)
+                             .getScore());
+  }
+
+  @Override
+  public int getScore(){
+    return this.score;
+  }
+
+  @Override
+  public void setScore(int score){
+    this.score = score;
   }
 
   //=========================================================================//
@@ -129,7 +195,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   @Override
   public void shoot(){
     if(isAIShoot()){
-      this.shooter.shoot(this.getAILocation(), this.getAIHeading());
+      this.shooter.shoot(this.getLocation(), this.getHeading());
     }
   }
 

@@ -72,6 +72,7 @@ public class RenderLayers{
     this.renderPlayer1Bots();
     this.renderTurrets();
     this.renderPlayer1();
+    this.renderPlayer2();
     this.renderTurretBullets();
     this.renderPlayer1Bullets();
   }
@@ -171,21 +172,48 @@ public class RenderLayers{
                   .getPacket(0)
                   .getState()
                   .equals(STATE.EXPLODE)){
-      this.renderTurret.updateExplosion(CommsGlobal.get("PLAYER1")
-                                                  .getPacket(0)
-                                                  .getLocation(),
-                                      CommsGlobal.get("PLAYER1")
-                                                  .getPacket(0)
-                                                  .getLocation(),
-                                      5);
-      this.renderTurret.updateVoid(CommsGlobal.get("PLAYER1")
-                                            .getPacket(0)
-                                            .getLocation(),
-                                  CommsGlobal.get("PLAYER1")
-                                            .getPacket(0)
-                                            .getLocation());
+      this.renderPlayer.updateExplosion(CommsGlobal.get("PLAYER1")
+                                                   .getPacket(0)
+                                                   .getLocation(),
+                                        CommsGlobal.get("PLAYER1")
+                                                   .getPacket(0)
+                                                   .getLocation(),
+                                        5);
+    }
+  }
+
+  //=========================================================================//
+  // Render Player2                                                          //
+  //=========================================================================//
+  private void renderPlayer2(){
+    // Render entity if alive
+    if(CommsGlobal.get("PLAYER2")
+                  .getPacket(0)
+                  .getState()
+                  .equals(STATE.ALIVE)){
+      this.renderPlayer.update(CommsGlobal.get("PLAYER2")
+                                          .getPacket(0)
+                                          .getLocation(),
+                              CommsGlobal.get("PLAYER1")
+                                          .getPacket(0)
+                                          .getLocation());
+    }
+
+    // Render explosions
+    if(CommsGlobal.get("PLAYER2")
+                  .getPacket(0)
+                  .getState()
+                  .equals(STATE.EXPLODE)){
+      this.renderPlayer.updateExplosion(CommsGlobal.get("PLAYER2")
+                                                   .getPacket(0)
+                                                   .getLocation(),
+                                        CommsGlobal.get("PLAYER1")
+                                                   .getPacket(0)
+                                                   .getLocation(),
+                                        5);
       }
   }
+
 
   //=========================================================================//
   // Render Turret Bullets Layer                                             //
