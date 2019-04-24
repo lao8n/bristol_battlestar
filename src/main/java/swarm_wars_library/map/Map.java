@@ -48,8 +48,8 @@ public class Map {
   private int botScale = 8;
   private int bulletScale = 5;
   private int starScale = 1;
-  private int numStars = 500;
-  private int numBotsPerPlayer = 100;
+  private int numStars = 100;
+  private int numBotsPerPlayer = 600;
   private int numTurrets = 5;
   private int numBulletsPerMagazine = 20;
   private List<Vector2D> backgroundStars;

@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'java'
 }
 
 group 'battlestar'
@@ -40,6 +41,14 @@ dependencies {
     provided group: 'org.processing', name: 'core', version: '3.3.6'
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.1')
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'swarm_wars_library.SwarmWars'
+        )
+    }
 }
 
 // test {
