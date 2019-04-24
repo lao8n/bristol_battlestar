@@ -47,6 +47,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   public void update(){
     if(this.isState(STATE.ALIVE)){
       this.updateAIMovement();
+      this.updateAI();
       this.updateHealth();
       this.updateShooter();
       this.updateScore();
@@ -75,7 +76,15 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   public List<Vector2D> getAITarget(){
     // TODO make it look for closer of Player1 or Player2
     List<Vector2D> list = new ArrayList<Vector2D>();
-    list.add(CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
+    if(CommsGlobal.get("PLAYER1").getPacket(0).getState().equals(STATE.ALIVE)){
+      list.add(CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
+    }
+    for(int i = 0; i < CommsGlobal.get("TURRET").getNumberOfReceivers(); i++){
+      if(CommsGlobal.get("TURRET").getPacket(i).getState()
+                    .equals(STATE.ALIVE)){
+        list.add(CommsGlobal.get("TURRET").getPacket(0).getLocation());
+      }
+    }
     return list;
   }
 
@@ -102,7 +111,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   //=========================================================================//
   @Override
   public boolean isAIShoot(){
-    if(this.ai.getInRange() && this.shootInterval()){
+    if(this.shootInterval() && this.ai.getInRange()){
       return true;
     }
     return false;
@@ -110,7 +119,6 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
 
   @Override
   public boolean shootInterval(){
-    this.shootInterval++;
     if(this.shootInterval % 2 == 0){
       this.shootInterval = 0;
       return true;
@@ -190,12 +198,13 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   public void updateShooter(){
     this.shooter.update();
     this.shoot();
+    this.shootInterval++;
   }
 
   @Override
   public void shoot(){
-    if(isAIShoot()){
-      this.shooter.shoot(this.getLocation(), this.getHeading());
+    if(this.isAIShoot()){
+      this.shooter.shoot(this.getAILocation(), this.getAIHeading());
     }
   }
 

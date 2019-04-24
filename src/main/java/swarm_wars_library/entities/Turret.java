@@ -69,8 +69,12 @@ public class Turret extends AbstractEntity implements IAIShooter{
   public List<Vector2D> getAITarget(){
     // TODO make it look for closer of Player1 or Player2
     List<Vector2D> aiTargets = new ArrayList<Vector2D>();
-    aiTargets.add(CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
-    aiTargets.add(CommsGlobal.get("PLAYER2").getPacket(0).getLocation());
+    if(CommsGlobal.get("PLAYER1").getPacket(0).getState().equals(STATE.ALIVE)){
+      aiTargets.add(CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
+    }
+    if(CommsGlobal.get("PLAYER2").getPacket(0).getState().equals(STATE.ALIVE)){
+      aiTargets.add(CommsGlobal.get("PLAYER2").getPacket(0).getLocation());
+    }
     return aiTargets;
   }
 
@@ -83,7 +87,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   //=========================================================================//
   @Override
   public boolean isAIShoot(){
-    if(this.shootInterval()){
+    if(this.shootInterval() && this.ai.getInRange()){
       return true;
     }
     return false;
@@ -91,7 +95,6 @@ public class Turret extends AbstractEntity implements IAIShooter{
 
   @Override
   public boolean shootInterval(){
-    this.shootInterval++;
     if(this.shootInterval % 5 == 0){
       this.shootInterval = 0;
       return true;
@@ -124,6 +127,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   public void updateShooter(){
     this.shooter.update();
     this.shoot();
+    this.shootInterval++;
   }
 
   @Override

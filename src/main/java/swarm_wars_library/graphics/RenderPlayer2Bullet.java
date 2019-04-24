@@ -3,18 +3,18 @@ package swarm_wars_library.graphics;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
-public class RenderPlayerBullet extends RenderMapObject{
+public class RenderPlayer2Bullet extends RenderMapObject{
 
   private float scale = (float) Map.getInstance().getBulletScale();
 
-  public RenderPlayerBullet(PApplet sketch){
+  public RenderPlayer2Bullet(PApplet sketch){
     super(sketch);
   }
 
   @Override 
   public void renderMapObject(){
     this.sketch.noStroke();
-    this.sketch.fill(0, 237, 255); //neon blue
+    this.sketch.fill(235, 225, 0); //neon blue
     this.sketch.ellipseMode(2);
     this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
                         (float) this.objectRenderLocation.getY(), 
@@ -25,7 +25,7 @@ public class RenderPlayerBullet extends RenderMapObject{
   @Override 
   public void renderMapObjectExplosion(int alpha){
     this.sketch.noStroke();
-    this.sketch.fill(0, 237, 255, alpha); 
+    this.sketch.fill(235, 225, 0, alpha); 
     this.sketch.ellipseMode(2);
     this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
                         (float) this.objectRenderLocation.getY(), 

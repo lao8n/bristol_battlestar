@@ -39,14 +39,14 @@ public class AIMovement{
 
   public void edgeCheck() {
     if (this.location.getX() < 0) {
-      this.location.setX(0);
+      this.location.setX(0 + this.moveForce);
     } else if (this.location.getX() > this.map.getMapWidth()) {
-      this.location.setX(this.map.getMapWidth());
+      this.location.setX(this.map.getMapWidth() - this.moveForce);
     }
     if (this.location.getY() < 0) {
-      this.location.setY(0);
+      this.location.setY(0 + this.moveForce);
     } else if (this.location.getY() > this.map.getMapHeight()) {
-      this.location.setY(this.map.getMapHeight());
+      this.location.setY(this.map.getMapHeight() -  this.moveForce);
     }
   }
 }
