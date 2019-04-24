@@ -1,24 +1,28 @@
 package swarm_wars_library;
 
-import java.util.*;
+import java.util.ArrayList;
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.CollisionDetection;
 import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.PlayerAI;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
+import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.ui.UI;
+
 
 public class SwarmWars extends PApplet {
 
   // Players
   PlayerN player1;
-  PlayerN player2;
+  PlayerAI player2;
 
   // Entity lists that has all our game things.
   ArrayList <AbstractEntity> player1TakeDamage;  
@@ -31,6 +35,10 @@ public class SwarmWars extends PApplet {
   // Game Backend Objects
   Map map = Map.getInstance();
   RenderLayers renderLayers;
+  UI ui;
+
+  // Game screens 
+  GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
 
   //=========================================================================//
   // Processing Settings                                                     //
@@ -43,7 +51,8 @@ public class SwarmWars extends PApplet {
   // Processing Setup                                                        //
   //=========================================================================//
   public void setup() {
-    this.frameRate(60); 
+    this.frameRate(60);
+    this.uiSetup();
     this.commsSetup();
     this.entitiesSetup();
     CommsGlobal.update();
@@ -53,11 +62,23 @@ public class SwarmWars extends PApplet {
   // Processing Game Loop                                                    //
   //=========================================================================//
   public void draw() {
-    this.background(0, 0, 0);
-    this.checkCollisions();
-    this.entitiesUpdate();
-    this.renderLayers.update();
-    CommsGlobal.update(); 
+    switch(this.currentScreen){
+      case START:
+        break;
+      case FSMUI:
+        this.uiUpdate();
+        break;
+      case GAME:
+        this.checkCollisions();
+        this.entitiesUpdate();
+        this.renderLayersUpdate();
+        CommsGlobal.update();
+        break;
+      case GAMEOVER:
+        break;
+      default:
+        // TODO Add error
+    }
   }
 
   //=========================================================================//
@@ -69,6 +90,7 @@ public class SwarmWars extends PApplet {
     };
     PApplet.main(appletArgs);
   }
+  
   //=========================================================================//
   // Comms Setup                                                             //
   //=========================================================================//
@@ -114,7 +136,14 @@ public class SwarmWars extends PApplet {
       this.player1TakeDamage.add(bot);
     }
 
-    // TODO player 2 setup
+    // player2 setup
+    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
+    this.player2TakeDamage.add(this.player2);
+    this.player2DealDamage.addAll(player2.getBullets());
+    for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
+      Bot bot = new Bot(ENTITY.PLAYER2_BOT, "boids_flock", i);
+      this.player2TakeDamage.add(bot);
+    }
 
     // turrets setup
     for(int i = 0; i < this.map.getNumTurrets(); i++){
@@ -132,37 +161,85 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // UI Setup                                                                //
+  //=========================================================================//
+  public void uiSetup(){
+    this.ui = new UI(this);
+  }
+
+  //=========================================================================//
   // Collision checks                                                        //
   //=========================================================================//
   public void checkCollisions() {
+    // Game Objects -> Player1
     CollisionDetection.checkCollisions(this.gameObjectsDealDamage,
                                        this.player1TakeDamage);
+    // Game Objects -> Player2
+    CollisionDetection.checkCollisions(this.gameObjectsDealDamage,
+                                       this.player2TakeDamage);
+    // Player1 -> Game Objects
     CollisionDetection.checkCollisions(this.player1DealDamage,
                                        this.gameObjectsTakeDamage);
+    // Player1 -> Player2
+    CollisionDetection.checkCollisions(this.player1DealDamage,
+                                       this.player2TakeDamage);
+    // Player2 -> Game Objects
+    CollisionDetection.checkCollisions(this.player2DealDamage,
+                                       this.gameObjectsTakeDamage);
+    // Player2 -> Player1
+    CollisionDetection.checkCollisions(this.player2DealDamage,
+                                       this.player1TakeDamage);
   }
 
   //=========================================================================//
   // Entities update                                                         //
   //=========================================================================//
   public void entitiesUpdate(){
-    // Update all entities
-    for(int i = 0; i < player1TakeDamage.size(); i++){
-      player1TakeDamage.get(i).update();
+    // Update game entities
+    for(int i = 0; i < this.gameObjectsTakeDamage.size(); i++){
+      this.gameObjectsTakeDamage.get(i).update();
     }
-    for(int i = 0; i < player1DealDamage.size(); i++){
-      player1DealDamage.get(i).update();
+    for(int i = 0; i < this.gameObjectsDealDamage.size(); i++){
+      this.gameObjectsDealDamage.get(i).update();
     }
-    for(int i = 0; i < gameObjectsTakeDamage.size(); i++){
-      gameObjectsTakeDamage.get(i).update();
+    // Update player1
+    for(int i = 0; i < this.player1TakeDamage.size(); i++){
+      this.player1TakeDamage.get(i).update();
     }
-    for(int i = 0; i < gameObjectsDealDamage.size(); i++){
-      gameObjectsDealDamage.get(i).update();
+    for(int i = 0; i < this.player1DealDamage.size(); i++){
+      this.player1DealDamage.get(i).update();
+    }
+    // Update player2
+    for(int i = 0; i < this.player2TakeDamage.size(); i++){
+      this.player2TakeDamage.get(i).update();
+    }
+    for(int i = 0; i < this.player2DealDamage.size(); i++){
+      this.player2DealDamage.get(i).update();
     }
   }
 
   //=========================================================================//
+  // RenderLayers update                                                     //
+  //=========================================================================//
+  public void renderLayersUpdate(){
+    this.renderLayers.update();
+  }
+
+  //=========================================================================//
+  // UI update                                                               //
+  //=========================================================================//
+  public void uiUpdate(){
+    this.ui.update();
+    this.currentScreen = this.ui.getGameScreen();
+  }
+
+
+  //=========================================================================//
   // Event listeners                                                         //
   //=========================================================================//
+  // TODO is it possible to have these in a switch statement rather than 
+  // a switch statement inside them?
+
   public void keyPressed() {
     this.player1.listenKeyPressed(this.keyCode);
   }
@@ -172,9 +249,35 @@ public class SwarmWars extends PApplet {
   }
 
   public void mousePressed() {
-    this.player1.listenMousePressed();
+    switch(this.currentScreen){
+      case START:
+        break;
+      case FSMUI:
+        this.ui.listenMousePressed();
+        break;
+      case GAME:
+        this.player1.listenMousePressed();
+        break;
+      case GAMEOVER:
+        break;
+      default:
+        // TODO Add error
+    }
   }
   public void mouseReleased() {
-    this.player1.listenMouseReleased();
+    switch(this.currentScreen){
+      case START:
+        break;
+      case FSMUI:
+        this.ui.listenMouseReleased();
+        break;
+      case GAME:
+        this.player1.listenMouseReleased();
+        break;
+      case GAMEOVER:
+        break;
+      default:
+        // TODO Add error
+    }
   }
 }

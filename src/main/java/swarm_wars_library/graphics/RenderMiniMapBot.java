@@ -3,6 +3,7 @@ package swarm_wars_library.graphics;
 import processing.core.PApplet;
 
 import swarm_wars_library.map.Map;
+import swarm_wars_library.physics.Vector2D;
 
 public class RenderMiniMapBot extends RenderMiniMapObject{
 
@@ -37,5 +38,17 @@ public class RenderMiniMapBot extends RenderMiniMapObject{
         + (float) this.objectRenderLocation.getY(),
       (float) this.scale, 
       (float) this.scale); 
+  }
+
+  public boolean checkInLineOfSight(Vector2D botMapLocation, 
+    Vector2D otherMapLocation, double botMapLineOfSight){
+
+    if(Vector2D.sub(botMapLocation, otherMapLocation).mag()
+      < botMapLineOfSight){
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

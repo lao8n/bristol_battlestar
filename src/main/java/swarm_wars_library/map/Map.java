@@ -41,14 +41,14 @@ import swarm_wars_library.physics.Vector2D;
 public class Map {
 
   private static Map instance = new Map();
-  private int map_width = 2000;
-  private int map_height = 2000;
+  private int map_width = 1500;
+  private int map_height = 1500;
   private int playerScale = 15;
   private int turretScale = 15;
   private int botScale = 8;
   private int bulletScale = 5;
   private int starScale = 1;
-  private int numStars = 500;
+  private int numStars = 100;
   private int numBotsPerPlayer = 100;
   private int numTurrets = 5;
   private int numBulletsPerMagazine = 20;
@@ -65,10 +65,12 @@ public class Map {
                                   Math.random() * map_height);
       backgroundStars.add(i, v2d);
     }
-    this.player1StartingLocation = new Vector2D(this.map_width * Math.random(), 
-                                                this.map_height * Math.random());
-    this.player2StartingLocation = new Vector2D(this.map_width * Math.random(), 
-                                                this.map_height * Math.random());
+    this.player1StartingLocation = 
+      new Vector2D(this.map_width * Math.random(), 
+                   this.map_height * Math.random());
+    this.player2StartingLocation = 
+      new Vector2D(this.map_width * Math.random(), 
+                   this.map_height * Math.random());
   }
 
   //Get the only object available
@@ -124,6 +126,5 @@ public class Map {
       return this.player1StartingLocation;
     }
     return this.player2StartingLocation;
-
   }
 }

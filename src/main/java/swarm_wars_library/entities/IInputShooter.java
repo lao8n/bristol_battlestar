@@ -1,6 +1,6 @@
 package swarm_wars_library.entities;
 
-public interface IShooterInput extends IShooter, IInput{
+public interface IInputShooter extends IShooter, IInput{
   
   //=========================================================================//
   // Shooter-Input methods                                                   //

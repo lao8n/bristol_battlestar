@@ -1,9 +1,6 @@
 ### Java ###
 *.class
 
-# Package Files #
-*.jar
-
 # Images
 *.png
 
@@ -15,10 +12,12 @@
 /build/
 
 ### 
-/library/
 /library/classes/
+/library/distributions/
+/library/generated
 /library/tmp/
 /library/reports/
+/library/scripts
 /library/test-results/
 /library/battlestar.jar
 

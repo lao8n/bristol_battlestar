@@ -2,13 +2,13 @@ package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 
-public class RenderPlayerHealth{
+public class RenderPlayer1Health{
 
   private PApplet sketch;
   private float healthBarLength = 100;
   private float healthBarOffset = 15;
 
-  public RenderPlayerHealth(PApplet sketch){
+  public RenderPlayer1Health(PApplet sketch){
     this.sketch = sketch;
   }
 

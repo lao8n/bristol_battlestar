@@ -7,7 +7,7 @@ import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.Vector2D;
 
-public abstract class AbstractEntity implements IComms{
+public abstract class AbstractEntity implements IEntity, IComms{
   protected CommsPacket commsPacket;
   protected STATE state;
   protected RigidBody rigidbody;
@@ -38,7 +38,7 @@ public abstract class AbstractEntity implements IComms{
   //=========================================================================//
   // State methods                                                           //
   //=========================================================================//
-
+  @Override
   public boolean isState(STATE state){
     if(this.state.equals(state)){
       return true;
@@ -46,14 +46,17 @@ public abstract class AbstractEntity implements IComms{
     return false;
   }
 
+  @Override
   public STATE getState(){
     return this.state;
   }
 
+  @Override
   public void setState(STATE state){
     this.state = state;
   }
 
+  @Override
   // Explode only lasts one turn
   public void updateExplode2Dead(){
     if(this.isState(STATE.EXPLODE)){
@@ -64,6 +67,7 @@ public abstract class AbstractEntity implements IComms{
   //=========================================================================//
   // Tag method                                                              //
   //=========================================================================//
+  @Override
   public ENTITY getTag(){
     // Public because needed by physics collision detection
     return this.tag;
@@ -72,6 +76,7 @@ public abstract class AbstractEntity implements IComms{
   //=========================================================================//
   // Transform getters and setter methods                                    //
   //=========================================================================//
+  @Override
   public Vector2D getLocation(){
     // Public because needed by physics collision detection
     return this.transform.getLocation();
@@ -97,6 +102,7 @@ public abstract class AbstractEntity implements IComms{
     this.transform.setVelocity(velocity);
   }
 
+  @Override
   public double getScale(){
     return this.transform.getScale();
   }
