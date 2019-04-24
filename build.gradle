@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'java'
+    // id 'java'
 }
 
 group 'battlestar'
@@ -43,13 +43,13 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.1')
 }
 
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'swarm_wars_library.SwarmWars'
-        )
-    }
-}
+// jar {
+//     manifest {
+//         attributes(
+//                 'Main-Class': 'swarm_wars_library.SwarmWars'
+//         )
+//     }
+// }
 
 // test {
 //     useJUnitPlatform()
