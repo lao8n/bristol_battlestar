@@ -14,7 +14,7 @@ public class RenderTurretBullet extends RenderMapObject{
   @Override 
   public void renderMapObject(){
     this.sketch.noStroke();
-    this.sketch.fill(255, 0, 199); //neon pink
+    this.sketch.fill(200, 0, 50); //neon pink
     this.sketch.ellipseMode(2);
     this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
                         (float) this.objectRenderLocation.getY(), 
@@ -25,7 +25,7 @@ public class RenderTurretBullet extends RenderMapObject{
   @Override 
   public void renderMapObjectExplosion(int alpha){
     this.sketch.noStroke();
-    this.sketch.fill(255, 0, 199, alpha); 
+    this.sketch.fill(255, 0, 50, alpha); 
     this.sketch.ellipseMode(2);
     this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
                         (float) this.objectRenderLocation.getY(), 
