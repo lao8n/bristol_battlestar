@@ -1,11 +1,11 @@
-graphics
+**graphics**
 
 Contains class to manage Rendering, which is called 
-* RenderLayers
+* `RenderLayers`
 
 And only has two public methods
-* RenderLayers() constructor
-* update()
+* `RenderLayers()` constructor
+* `update()`
 
 These are called in SwarmWars.
 
@@ -28,32 +28,32 @@ details are intuitive, except that
    frames since death.
 
 RenderLayers uses the following ordering.
-1. renderBackgroundLayer()
-2. renderEntitiesLayer()
-3. renderDisplaysLayer()
-4. renderMiniMapEntitiesLayer
+1. `renderBackgroundLayer()`
+2. `renderEntitiesLayer()`
+3. `renderDisplaysLayer()`
+4. `renderMiniMapEntitiesLayer()`
 
 It uses numerous concrete classes for mini-map objects and map objects where
 these inherit core implementation from 
-* AbstractRenderMiniMapObject
-* AbstractRenderMapObject 
+* `AbstractRenderMiniMapObject`
+* `AbstractRenderMapObject`
 
 Where AbstractRenderMapObject gives concrete implementation of
-* update()
-* updateExplosion()
-* setParticleExplosionMapLocation()
-* setObjectRenderLocation()
+* `update()`
+* `updateExplosion()`
+* `setParticleExplosionMapLocation()`
+* `setObjectRenderLocation()`
 
 Leaving the inheriting class to implement 
-* renderMapObject()
-* renderMapObjectExplosion()
+* `renderMapObject()`
+* `renderMapObjectExplosion()`
 
 And similarly, for AbstractRenderMiniMapObject gives concrete implementation of
-* update()
-* setObjectRenderLocation()
+* `update()`
+* `setObjectRenderLocation()`
 
 Leaving the inheriting to class to implement
-* renderMiniMapObject()
+* `renderMiniMapObject()`
 
 The health and score bars are implemented independently with no larger 
 structure, potentially as the number of classes increases this will need to 
@@ -61,7 +61,7 @@ change.
 
 Finally, there is also some graphics specific physics to calculate the 
 explosion effects in 
-* Particle 
-* ParticleExplosion
+* `Particle`
+* `ParticleExplosion`
 (Valia I think somehow, I've made the effects look not as cool as before, 
 please advise on how to fix!!)

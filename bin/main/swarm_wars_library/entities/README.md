@@ -1,28 +1,28 @@
-entities
+**entities**
 
 Contains concrete implementation of 
-* Bot
-* Bullet
-* PlayerAI
-* PlayerN
-* Turret
+* `Bot`
+* `Bullet`
+* `PlayerAI`
+* `PlayerN`
+* `Turret`
 
 The above classes all inherit from the abstract class,
-* Abstract Entity
+* `Abstract Entity`
 which itself implements the interfaces, (known as a skeletal implementation of)
-* IEntity
-* IComms
+* `IEntity`
+* `IComms`
 
 However it leaves two abstract methods to be implemented
-* update()
-* collidedWith()
+* `update()`
+* `collidedWith()`
 
 We then extend the behaviour of Abstract Entity by using mixin classes. For 
 example, PlayerAI implements
-* IHealth
-* IAIMovement
-* IAIShooter
-* IScore
+* `IHealth`
+* `IAIMovement`
+* `IAIShooter`
+* `IScore`
 These mixin interfaces do not include any concrete implementation but form a 
 contract on expected behaviour for the class.
 

@@ -1,30 +1,30 @@
-swarm_algorithms
+**swarm_algorithms**
 
 Contains concrete implementation of 
-* BoidsFlock
-* DefensiveShell
-* ScoutShell
+* `BoidsFlock`
+* `DefensiveShell`
+* `ScoutShell`
 
 These classes extend the abstract class AbstractSwarmAlgorithm which provides
 concrete implementation of the following method:
-* avoidEdge()
+* `avoidEdge()`
 
 And implement the methods:
-* applySwarmAlgorithm()
-* seekMotherShip()
+* `applySwarmAlgorithm()`
+* `seekMotherShip()`
 
 They also use composition of swarm rules. For example, BoidsFlock uses rules 
-* SeparateRule 
-* AlignRule
-* CoheseRule 
+* `SeparateRule`
+* `AlignRule`
+* `CoheseRule` 
 to get its behaviour.
 
 However, each of these rules themselves extend the class AbstractSwarmRule 
 which gives concrete implementation of:
-* iterateOverSwarm()
+* `iterateOverSwarm()`
 and provide concrete implementation of 
-* neighbourCountRule()
-* swarmRule()
+* `neighbourCountRule()`
+* `swarmRule()`
 
 These methods are then used in the 'engine' by SwarmLogic which itself is 
 used, via composition, in the entity class Bot.
