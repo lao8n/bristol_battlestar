@@ -1,12 +1,14 @@
 package swarm_wars_library.network;
 
+import swarm_wars_library.engine.Input;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class NetworkClientFunctions {
 
-    private static int interval = 1000 / 60;
+    private static int interval = 0;
 
     public static int getPlayerIdFromUser() {
         System.out.println("Enter your id");
@@ -23,10 +25,10 @@ public class NetworkClientFunctions {
         m.put(Headers.TYPE, Constants.CONNECT);
         m.put(Headers.PLAYER, id);
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Sent CONNECT");
+        // System.out.println("Sent CONNECT");
         try{Thread.sleep(interval);}
         catch (Exception e) {
-            System.out.println("FAILED");
+            // System.out.println("FAILED");
             e.printStackTrace();
         }
     }
@@ -36,17 +38,17 @@ public class NetworkClientFunctions {
         m.put(Headers.TYPE, Constants.SETUP);
         m.put(Headers.PLAYER, id);
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Sent SETUP");
+        // System.out.println("Sent SETUP");
         try{Thread.sleep(interval);}
         catch (Exception e) {
-            System.out.println("FAILED");
+            // System.out.println("FAILED");
             e.printStackTrace();
         }
     }
 
     public static void sendStart(int id) {
         if(id == 0){
-            System.out.println("Try to send START");
+            // System.out.println("Try to send START");
 
             while (!MessageHandlerMulti.gameStarted) {
                 Map<String, Object> m = new HashMap();
@@ -54,7 +56,7 @@ public class NetworkClientFunctions {
                 MessageHandlerMulti.putPackage(m);
                 try{Thread.sleep(interval);}
                 catch (Exception e) {
-                    System.out.println("FAILED");
+                    // System.out.println("FAILED");
                     e.printStackTrace();
                 }
             }
@@ -64,31 +66,33 @@ public class NetworkClientFunctions {
     }
 
     public static void awaitStart() {
-        System.out.println("Game not started yet");
+        // System.out.println("Game not started yet");
         while (!MessageHandlerMulti.gameStarted) {
             try{Thread.sleep(interval);}
             catch (Exception e) {
-                System.out.println("FAILED");
+                // System.out.println("FAILED");
                 e.printStackTrace();
             }
         }
-        System.out.println("Game started");
+        // System.out.println("Game started");
     }
 
-    public static void sendOperation(int id, int frame) {
+    public static void sendOperation(int id, int frame, Input i) {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put(Headers.TYPE, Constants.OPERATION);
         m.put(Headers.PLAYER, id);
-        m.put(Headers.W, 0);
-        m.put(Headers.A, 1);
+        m.put(Headers.W, i.getMoveUp());
+        m.put(Headers.A, i.getMoveLeft());
+        m.put(Headers.D, i.getMoveRight());
+        m.put(Headers.S, i.getMoveDown());
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
+        // System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
 
     public static Map getPackage(int id, int frame) {
         Map<String, Object> rev = null;
         int getId = Math.abs(id - 1);
-        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
+        // System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
         while (rev == null) {
             // System.out.println("Player " + id + " trying to get player " + Math.abs(id - 1) + "s package with frame number " + frame);
             rev = MessageHandlerMulti.getPackage(getId, frame);
@@ -97,12 +101,12 @@ public class NetworkClientFunctions {
             }
             try{Thread.sleep(interval);}
             catch (Exception e) {
-                System.out.println("FAILED");
+                // System.out.println("FAILED");
                 e.printStackTrace();
             }
         }
 
-        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
+        // System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
 
         return rev;
     }
@@ -112,13 +116,13 @@ public class NetworkClientFunctions {
         m.put(Headers.TYPE, Constants.END);
         m.put(Headers.PLAYER, id);
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Player " + id + " Game ends");
+        // System.out.println("Player " + id + " Game ends");
     }
 
     public static void threadSleep(){
         try{Thread.sleep(interval);}
         catch (Exception e) {
-            System.out.println("FAILED");
+            // System.out.println("FAILED");
             e.printStackTrace();
         }
     }

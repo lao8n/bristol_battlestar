@@ -1,6 +1,7 @@
 package swarm_wars_library.network;
 
 import org.json.JSONObject;
+import swarm_wars_library.SwarmWars;
 
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class ProtocolProcessor {
                 return;
             }
             // TODO: Only for test
-            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == Client.id){
+            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == SwarmWars.getPlayerId()){
                 return;
             }
             // TODO ends here

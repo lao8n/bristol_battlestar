@@ -36,6 +36,10 @@ public class SwarmWars extends PApplet {
     // global comms channel any entity that has comms should set comms to this
     CommsGlobal comms = new CommsGlobal();
 
+    public static int getPlayerId(){
+        return playerId;
+    }
+
     public void setup() {
         frameRate(60); // We will need to test how frameRate affects our network - slower FR = less messages per second
 
@@ -109,7 +113,7 @@ public class SwarmWars extends PApplet {
 
         NetworkClientFunctions.sendStart(playerId);
         NetworkClientFunctions.awaitStart();
-        NetworkClientFunctions.sendOperation(playerId, frameNumber);
+        NetworkClientFunctions.sendOperation(playerId, frameNumber, player.input);
     }
 
     public void settings() {
@@ -149,13 +153,15 @@ public class SwarmWars extends PApplet {
     // >>>>>> MAIN GAME LOOP <<<<<<<<<<
     void gameScreenEntity() {
         background(25, 25, 76);
-        System.out.println("Running draw...");
 
         // NETWORK need to get other players inputs from server
         // NETWORK need to set player inputs in this game
 
         Map<String, Object> messageIn = NetworkClientFunctions.getPackage(playerId, frameNumber++);
-
+        if(messageIn.containsKey("W")) enemyPlayer.input.setMoveUp((Integer) messageIn.get("W"));
+        if(messageIn.containsKey("A")) enemyPlayer.input.setMoveLeft((Integer) messageIn.get("A"));
+        if(messageIn.containsKey("S")) enemyPlayer.input.setMoveDown((Integer) messageIn.get("S"));
+        if(messageIn.containsKey("D")) enemyPlayer.input.setMoveRight((Integer) messageIn.get("D"));
 
         // update all game things
         for (int j = 0; j < entityList.size(); j++) {
@@ -166,30 +172,8 @@ public class SwarmWars extends PApplet {
         comms.update();
 
 
-        NetworkClientFunctions.sendOperation(playerId, frameNumber);
-        /*
-        // NETWORK need to send my input to server
-        if(frameNumber++ % networkRate == 0){
-            m = new HashMap<String, Object>();
-            m.put(Headers.TYPE, Constants.OPERATION);
-            m.put(Headers.PLAYER, playerId);
-            m.put(Headers.W, player.input.getMove('W'));
-            m.put(Headers.A, player.input.getMove('A'));
-            m.put(Headers.S, player.input.getMove('S'));
-            m.put(Headers.D, player.input.getMove('D'));
-            m.put(Headers.FRAME, networkFrame++);
-            // TODO how is mouseX and mouseY translated between different machines
-            MessageHandlerMulti.putPackage(m);
-        }
-        *//*
-        // TODO: delete this - used for development to slow down game
-        try {
-            Thread.sleep(3000);
-        } catch (Exception e) {
-        }
-        */
-
-        NetworkClientFunctions.threadSleep();
+        NetworkClientFunctions.sendOperation(playerId, frameNumber, player.input);
+        // NetworkClientFunctions.threadSleep();
     }
 
     void gameOverScreen() {

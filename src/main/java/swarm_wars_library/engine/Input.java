@@ -55,6 +55,38 @@ public class Input {
     }
   }
 
+  public int getMoveLeft() {
+    return moveLeft;
+  }
+
+  public void setMoveLeft(int moveLeft) {
+    this.moveLeft = moveLeft;
+  }
+
+  public int getMoveRight() {
+    return moveRight;
+  }
+
+  public void setMoveRight(int moveRight) {
+    this.moveRight = moveRight;
+  }
+
+  public int getMoveUp() {
+    return moveUp;
+  }
+
+  public void setMoveUp(int moveUp) {
+    this.moveUp = moveUp;
+  }
+
+  public int getMoveDown() {
+    return moveDown;
+  }
+
+  public void setMoveDown(int moveDown) {
+    this.moveDown = moveDown;
+  }
+
   public int getMove(int k) {
     if(k == 'W'){
       return moveUp;
