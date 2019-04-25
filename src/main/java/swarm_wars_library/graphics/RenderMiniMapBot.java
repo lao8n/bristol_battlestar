@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
-public class RenderMiniMapBot extends RenderMiniMapObject{
+public class RenderMiniMapBot extends AbstractRenderMiniMapObject{
 
   private int scale = 1;
   protected int botMapLineOfSight = 200;

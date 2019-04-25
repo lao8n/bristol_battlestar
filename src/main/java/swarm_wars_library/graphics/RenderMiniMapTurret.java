@@ -1,9 +1,8 @@
 package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
-import swarm_wars_library.physics.Vector2D;
 
-public class RenderMiniMapTurret extends RenderMiniMapObject{
+public class RenderMiniMapTurret extends AbstractRenderMiniMapObject{
 
   private int scale = 5;
 

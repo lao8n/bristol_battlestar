@@ -6,7 +6,7 @@ import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 
 /**
  * DefensiveShell Class is an implementation of the previous SwarmLogic
@@ -34,7 +34,7 @@ import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
  * 
  */
 
-public class DefensiveShell extends SwarmAlgorithm {
+public class DefensiveShell extends AbstractSwarmAlgorithm {
   private int id;
   private double orbitDistance = 70;
   public RigidBody rb;
@@ -98,7 +98,7 @@ public class DefensiveShell extends SwarmAlgorithm {
     return desired;
   }
 
-  private class SeparateRule extends SwarmRule {  
+  private class SeparateRule extends AbstractSwarmRule {  
     public SeparateRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
       super(rule_id, rule_rb, rule_transform);

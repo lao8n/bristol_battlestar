@@ -4,7 +4,7 @@ import swarm_wars_library.map.Map;
 
 import processing.core.PApplet;
 
-public class RenderPlayer2Bot extends RenderMapObject{
+public class RenderPlayer2Bot extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getBotScale();
 

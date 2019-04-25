@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import swarm_wars_library.comms.CommsGlobal;
-import swarm_wars_library.engine.AI;
+import swarm_wars_library.engine.AIShooter;
 import swarm_wars_library.engine.Shooter;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
 public class Turret extends AbstractEntity implements IAIShooter{
 
-  private AI ai;
+  private AIShooter aiShooter;
   private Shooter shooter;
   private int shootInterval = 0;
 
@@ -20,7 +20,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   //=========================================================================// 
   public Turret(ENTITY tag){
     super(tag, Map.getInstance().getTurretScale());
-    this.ai = new AI();
+    this.aiShooter = new AIShooter();
     this.shooter = new Shooter(this.tag, 5);
     this.setLocation(new Vector2D(Math.random() * Map.getInstance()
                                                      .getMapWidth(), 
@@ -57,7 +57,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   //=========================================================================//
   @Override
   public void updateAI(){
-    this.ai.update(this.getAITarget(), this.getAILocation());
+    this.aiShooter.update(this.getAITarget(), this.getAILocation());
   }
 
   @Override
@@ -79,7 +79,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   }
 
   public double getAIHeading(){
-    return this.ai.getHeading();
+    return this.aiShooter.getHeading();
   }
 
   //=========================================================================//
@@ -87,7 +87,7 @@ public class Turret extends AbstractEntity implements IAIShooter{
   //=========================================================================//
   @Override
   public boolean isAIShoot(){
-    if(this.shootInterval() && this.ai.getInRange()){
+    if(this.shootInterval() && this.aiShooter.getInRange()){
       return true;
     }
     return false;

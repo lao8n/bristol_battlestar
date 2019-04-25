@@ -3,7 +3,7 @@ package swarm_wars_library.graphics;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
-public class RenderTurretBullet extends RenderMapObject{
+public class RenderTurretBullet extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getBulletScale();
 

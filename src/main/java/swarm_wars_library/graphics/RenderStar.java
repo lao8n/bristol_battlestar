@@ -5,7 +5,7 @@ import processing.core.PApplet;
 
 import swarm_wars_library.map.Map;
 
-public class RenderStar extends RenderMapObject{
+public class RenderStar extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getStarScale();
 

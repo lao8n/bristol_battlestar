@@ -3,7 +3,7 @@ package swarm_wars_library.engine;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefensiveShell;
 import swarm_wars_library.swarm_algorithms.BoidsFlock;
 import swarm_wars_library.swarm_algorithms.ScoutShell;
@@ -35,7 +35,7 @@ public class SwarmLogic {
   private RigidBody rb;
   private Transform transform;
   private int id;
-  private SwarmAlgorithm swarm_algo;
+  private AbstractSwarmAlgorithm swarm_algo;
 
   public SwarmLogic(ENTITY tag, Transform transform, RigidBody rb, int id){
     this.tag = tag;

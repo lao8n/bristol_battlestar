@@ -4,13 +4,13 @@ import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
-public abstract class RenderMapObject{
+public abstract class AbstractRenderMapObject{
 
   protected PApplet sketch;
   protected Vector2D objectRenderLocation = new Vector2D(0, 0);
   private ParticleExplosion PE;
 
-  public RenderMapObject(PApplet sketch){
+  public AbstractRenderMapObject(PApplet sketch){
     this.sketch = sketch;
   }
 

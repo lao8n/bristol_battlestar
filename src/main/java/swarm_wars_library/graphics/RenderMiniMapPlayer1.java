@@ -2,7 +2,7 @@ package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 
-public class RenderMiniMapPlayer1 extends RenderMiniMapObject{
+public class RenderMiniMapPlayer1 extends AbstractRenderMiniMapObject{
 
   private int scale = 5;
 

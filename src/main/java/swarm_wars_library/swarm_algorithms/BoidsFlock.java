@@ -6,7 +6,7 @@ import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 
 /**
  * BoidsFlock Class is an implementation of the previous SwarmLogic
@@ -31,7 +31,7 @@ import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
  * 2. Iterating over each rule, despite being what the Nature of Code guy does,
  *    might be really inefficient. I don't understand what is fast/slow in Java.
  */
-public class BoidsFlock extends SwarmAlgorithm {
+public class BoidsFlock extends AbstractSwarmAlgorithm {
   private int id;
   public RigidBody rb;
   public Transform transform;
@@ -90,7 +90,7 @@ public class BoidsFlock extends SwarmAlgorithm {
     return target;
   }
 
-  private class SeparateRule extends SwarmRule {  
+  private class SeparateRule extends AbstractSwarmRule {  
     public SeparateRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
       super(rule_id, rule_rb, rule_transform);
@@ -114,7 +114,7 @@ public class BoidsFlock extends SwarmAlgorithm {
     }
   }
 
-  private class AlignRule extends SwarmRule {  
+  private class AlignRule extends AbstractSwarmRule {  
     public AlignRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
       super(rule_id, rule_rb, rule_transform);
@@ -136,7 +136,7 @@ public class BoidsFlock extends SwarmAlgorithm {
     }
   }
 
-  private class CoheseRule extends SwarmRule {  
+  private class CoheseRule extends AbstractSwarmRule {  
     public CoheseRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
       super(rule_id, rule_rb, rule_transform);

@@ -6,7 +6,7 @@ import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
-import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 
 
 /**
@@ -42,7 +42,7 @@ import swarm_wars_library.swarm_algorithms.SwarmAlgorithm;
  *    something on the map to seek, like resources, HP or bullets etc.
  * 
  */
-public class ScoutShell extends SwarmAlgorithm {
+public class ScoutShell extends AbstractSwarmAlgorithm {
 
   private int id;
   private double orbitDistance = 70;
@@ -140,7 +140,7 @@ public class ScoutShell extends SwarmAlgorithm {
     }
   }
 
-  private class SeparateRule extends SwarmRule {  
+  private class SeparateRule extends AbstractSwarmRule {  
     public SeparateRule(int rule_id,
       RigidBody rule_rb, Transform rule_transform){
       super(rule_id, rule_rb, rule_transform);

@@ -32,13 +32,13 @@ import swarm_wars_library.physics.Transform;
  *    for the former and pushdown automata (for the latter) are worth considering.
  *
  */
-public abstract class SwarmAlgorithm{
+public abstract class AbstractSwarmAlgorithm{
 
   protected Transform transform;
   protected Map map;
   protected ENTITY tag;
 
-  public SwarmAlgorithm(ENTITY tag, Transform transform){
+  public AbstractSwarmAlgorithm(ENTITY tag, Transform transform){
     this.transform = transform;
     this.tag = tag;
     map = Map.getInstance();

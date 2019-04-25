@@ -6,7 +6,7 @@ import java.util.Collections;
 
 import swarm_wars_library.physics.Vector2D;
 
-public class AI {
+public class AIShooter {
 
   double heading = 50;
   Vector2D target = new Vector2D(0, 0);

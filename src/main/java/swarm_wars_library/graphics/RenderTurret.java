@@ -4,7 +4,7 @@ import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import processing.core.PApplet;
 
-public class RenderTurret extends RenderMapObject{
+public class RenderTurret extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getTurretScale();
 

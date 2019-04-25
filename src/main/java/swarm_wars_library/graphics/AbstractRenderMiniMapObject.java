@@ -5,7 +5,7 @@ import swarm_wars_library.map.Map;
 
 import processing.core.PApplet;
 
-public abstract class RenderMiniMapObject{
+public abstract class AbstractRenderMiniMapObject{
 
   protected PApplet sketch;
   protected Vector2D objectRenderLocation = new Vector2D(0, 0);
@@ -13,7 +13,7 @@ public abstract class RenderMiniMapObject{
   protected float miniMapDim = 200;
   protected float miniMapOffset = 20;
 
-  public RenderMiniMapObject(PApplet sketch){
+  public AbstractRenderMiniMapObject(PApplet sketch){
     this.sketch = sketch;
     this.map = Map.getInstance();
   }

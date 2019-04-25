@@ -35,7 +35,7 @@ import java.util.ArrayList;
  *    only doing the iteration once, and calculating all the SwarmRules together
  *    in one go?
  */
-public abstract class SwarmRule{
+public abstract class AbstractSwarmRule{
   protected double rule_dist;
   protected int rule_id;
   protected int rule_neighbourCount;
@@ -44,7 +44,7 @@ public abstract class SwarmRule{
   protected RigidBody rule_rb;
   protected Transform rule_transform;
 
-  public SwarmRule(int rule_id,
+  public AbstractSwarmRule(int rule_id,
     RigidBody rule_rb, Transform rule_transform){
     this.rule_id = rule_id;
     this.rule_rb = rule_rb;

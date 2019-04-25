@@ -6,7 +6,7 @@ import java.util.List;
 import processing.core.PApplet;
 
 import swarm_wars_library.comms.CommsGlobal;
-import swarm_wars_library.engine.AI;
+import swarm_wars_library.engine.AIShooter;
 import swarm_wars_library.engine.AIMovement;
 import swarm_wars_library.engine.Health;
 import swarm_wars_library.engine.Shooter;
@@ -20,7 +20,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
 
   private Health health;
   private int score;
-  private AI ai;
+  private AIShooter aiShooter;
   private AIMovement aiMovement;
   private Shooter shooter;
   private int shootInterval = 0;
@@ -30,7 +30,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   //=========================================================================//
   public PlayerAI(PApplet sketch, ENTITY tag){
     super(tag, Map.getInstance().getPlayerScale());
-    this.ai = new AI();
+    this.aiShooter = new AIShooter();
     this.aiMovement = new AIMovement(this.tag);
     this.setLocation(Map.getInstance().getPlayerStartingLocation(this.tag));
     this.health = new Health(this.tag);
@@ -64,7 +64,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   //=========================================================================//
   @Override
   public void updateAI(){
-    this.ai.update(this.getAITarget(), this.getAILocation());
+    this.aiShooter.update(this.getAITarget(), this.getAILocation());
   }
 
   @Override
@@ -89,7 +89,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   }
 
   public double getAIHeading(){
-    return this.ai.getHeading();
+    return this.aiShooter.getHeading();
   }
 
   //=========================================================================//
@@ -111,7 +111,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   //=========================================================================//
   @Override
   public boolean isAIShoot(){
-    if(this.shootInterval() && this.ai.getInRange()){
+    if(this.shootInterval() && this.aiShooter.getInRange()){
       return true;
     }
     return false;

@@ -3,7 +3,7 @@ package swarm_wars_library.graphics;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 
-public class RenderPlayer1 extends RenderMapObject{
+public class RenderPlayer1 extends AbstractRenderMapObject{
 
   private float scale;
 
