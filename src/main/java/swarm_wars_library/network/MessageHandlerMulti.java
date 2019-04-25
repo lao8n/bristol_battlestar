@@ -30,13 +30,13 @@ public class MessageHandlerMulti{
         Map<String, Object> tmp = null;
         while(q != null && q.size() != 0) {
             tmp = q.peek();
-            // System.out.println("Player Number: " + playerNumber + " , Frame Number: " + tmp.get(Headers.FRAME));
+             System.out.println("Player Number: " + playerNumber + " , Frame Number: " + tmp.get(Headers.FRAME));
             int frameNow = (Integer) tmp.get(Headers.FRAME);
             if (frameNow < frame){
                 System.out.println("Current package frame is less than wanted");
                 q.poll();
             }else if (frameNow == frame){
-                // System.out.println("Successfully got one frame package, frame: " + tmp.get(Headers.FRAME));
+                System.out.println("Successfully got one frame package, frame: " + tmp.get(Headers.FRAME));
                 tmp = q.poll();
                 break;
             }else if (frameNow > frame) {
@@ -53,7 +53,7 @@ public class MessageHandlerMulti{
 
     public static void clientReceivePackage(int playerNumber, Map<String, Object> m) {
         // TODO: About starting
-        // System.out.println("Received player: " + m.get(Headers.PLAYER) + " frame: " + m.get(Headers.FRAME));
+         System.out.println("Received player: " + m.get(Headers.PLAYER) + " frame: " + m.get(Headers.FRAME));
         clientReceiveBuffer.get(playerNumber).offer(m);
     }
 

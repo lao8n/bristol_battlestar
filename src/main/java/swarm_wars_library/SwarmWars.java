@@ -1,6 +1,7 @@
 package swarm_wars_library;
 
 import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.CollisionDetection;
@@ -15,14 +16,21 @@ import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.network.NetworkClientFunctions;
+import swarm_wars_library.network.GameClient;
 import swarm_wars_library.ui.UI;
 
 
 public class SwarmWars extends PApplet {
 
+  // Player Id for networking
+  private static int playerId;
+  private static int enemyId;
+  private int frameNumber;
+
   // Players
   PlayerN player1;
-  PlayerAI player2;
+  PlayerN player2;
 
   // Entity lists that has all our game things.
   ArrayList <AbstractEntity> player1TakeDamage;  
@@ -57,6 +65,7 @@ public class SwarmWars extends PApplet {
     this.entitiesSetup();
     CommsGlobal.update();
     this.renderSetup();
+    this.networkSetup();
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
@@ -85,12 +94,36 @@ public class SwarmWars extends PApplet {
   // Processing Main                                                         //
   //=========================================================================//
   public static void main(String[] passedArgs) {
+    // Start networking client
+    playerId = NetworkClientFunctions.getPlayerIdFromUser();
+    enemyId = playerId == 1 ? 0 : 1;
+
+    new Thread(new Runnable() {
+      public void run() {
+        try {
+          GameClient.run();
+        }catch (Exception e){
+          e.printStackTrace();
+        }
+      }
+    }).start();
+
+    try {
+      GameClient.countDownLatch.await();
+      Thread.sleep(10000);
+    } catch (Exception e) {
+      System.out.println("FAILED");
+      e.printStackTrace();
+    }
+
+    // Start PApplet
     String[] appletArgs = new String[] {
-      "swarm_wars_library.SwarmWars"
+            "swarm_wars_library.SwarmWars"
     };
+
     PApplet.main(appletArgs);
   }
-  
+
   //=========================================================================//
   // Comms Setup                                                             //
   //=========================================================================//
@@ -137,7 +170,7 @@ public class SwarmWars extends PApplet {
     }
 
     // player2 setup
-    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
+    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
     this.player2TakeDamage.add(this.player2);
     this.player2DealDamage.addAll(player2.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
@@ -168,6 +201,19 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // Network Setup                                                           //
+  //=========================================================================//
+  public void networkSetup(){
+    this.frameNumber = 0;
+    NetworkClientFunctions.cleanBuffer();
+    NetworkClientFunctions.sendConnect(this.playerId);
+    NetworkClientFunctions.sendSetup(this.playerId);
+
+    NetworkClientFunctions.sendStart(this.playerId);
+    NetworkClientFunctions.awaitStart();
+  }
+
+  //=========================================================================//
   // Collision checks                                                        //
   //=========================================================================//
   public void checkCollisions() {
@@ -195,6 +241,15 @@ public class SwarmWars extends PApplet {
   // Entities update                                                         //
   //=========================================================================//
   public void entitiesUpdate(){
+
+    NetworkClientFunctions.sendOperation(playerId, frameNumber, player1.getInput());
+    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(playerId, frameNumber++);
+    if(messageIn.containsKey("W")) player2.getInput().setMoveUp((Integer) messageIn.get("W"));
+    if(messageIn.containsKey("A")) player2.getInput().setMoveLeft((Integer) messageIn.get("A"));
+    if(messageIn.containsKey("S")) player2.getInput().setMoveDown((Integer) messageIn.get("S"));
+    if(messageIn.containsKey("D")) player2.getInput().setMoveRight((Integer) messageIn.get("D"));
+
+
     // Update game entities
     for(int i = 0; i < this.gameObjectsTakeDamage.size(); i++){
       this.gameObjectsTakeDamage.get(i).update();
@@ -279,5 +334,9 @@ public class SwarmWars extends PApplet {
       default:
         // TODO Add error
     }
+  }
+
+  public static int getPlayerId() {
+    return playerId;
   }
 }

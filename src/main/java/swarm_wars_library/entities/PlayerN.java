@@ -109,6 +109,11 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
+  public Input getInput(){
+    return this.input;
+  }
+
+  @Override
   public Vector2D getInputLocation(){
     return this.input.getLocation();
   }

@@ -109,4 +109,28 @@ public class Input {
   public int getMouse(){
     return mouse;
   }
+
+  public int getMoveForce() {
+    return moveForce;
+  }
+
+  public void setMoveForce(int moveForce) {
+    this.moveForce = moveForce;
+  }
+
+  public int getMoveLeft() { return moveLeft; }
+
+  public void setMoveLeft(int moveLeft) { this.moveLeft = moveLeft; }
+
+  public int getMoveRight() { return moveRight; }
+
+  public void setMoveRight(int moveRight) { this.moveRight = moveRight; }
+
+  public int getMoveUp() { return moveUp; }
+
+  public void setMoveUp(int moveUp) { this.moveUp = moveUp; }
+
+  public int getMoveDown() { return moveDown; }
+
+  public void setMoveDown(int moveDown) { this.moveDown = moveDown; }
 }
