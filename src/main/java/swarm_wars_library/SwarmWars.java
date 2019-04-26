@@ -132,7 +132,7 @@ public class SwarmWars extends PApplet {
     this.player1TakeDamage.add(this.player1);
     this.player1DealDamage.addAll(player1.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYER1_BOT, "boids_flock", i);
+      Bot bot = new Bot(ENTITY.PLAYER1_BOT, "scout_shell", i);
       this.player1TakeDamage.add(bot);
     }
 

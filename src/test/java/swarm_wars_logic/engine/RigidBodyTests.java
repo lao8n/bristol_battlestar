@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import swarm_wars_library.engine.RigidBody;
+import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
 
 class RigidBodyTests {
