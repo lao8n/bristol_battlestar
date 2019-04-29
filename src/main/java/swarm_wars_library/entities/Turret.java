@@ -9,7 +9,7 @@ import swarm_wars_library.engine.Shooter;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
-public class Turret extends AbstractEntity implements IAIShooter{
+public class Turret extends AbstractEntity implements IAIShooter, ISound{
 
   private AIShooter aiShooter;
   private Shooter shooter;
@@ -140,5 +140,13 @@ public class Turret extends AbstractEntity implements IAIShooter{
   @Override
   public ArrayList<Bullet> getBullets(){
     return this.shooter.getMagazine();
+  }
+
+  //=========================================================================//
+  // Sound methods                                                           //
+  //=========================================================================//
+  @Override
+  public void updateSounds(){
+    // TODO add conditional sound
   }
 }

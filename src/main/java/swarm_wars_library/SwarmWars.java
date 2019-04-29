@@ -15,8 +15,8 @@ import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.ui.UI;
-
 
 public class SwarmWars extends PApplet {
 
@@ -36,6 +36,7 @@ public class SwarmWars extends PApplet {
   Map map = Map.getInstance();
   RenderLayers renderLayers;
   UI ui;
+  PlayBackgroundMusic playBackgroundMusic;
 
   // Game screens 
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
@@ -57,6 +58,7 @@ public class SwarmWars extends PApplet {
     this.entitiesSetup();
     CommsGlobal.update();
     this.renderSetup();
+    this.soundSetup();
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
@@ -158,6 +160,13 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void renderSetup(){
     this.renderLayers = new RenderLayers(this);
+  }
+
+  //=========================================================================//
+  // Sound  Setup                                                            //
+  //=========================================================================//
+  public void soundSetup(){
+    this.playBackgroundMusic = new PlayBackgroundMusic(this);
   }
 
   //=========================================================================//
