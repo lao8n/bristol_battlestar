@@ -14,7 +14,7 @@ import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
 public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
-  IScore{
+  IScore, ISound{
 
   private Health health;
   private Input input;
@@ -185,6 +185,14 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   @Override
   public ArrayList<Bullet> getBullets(){
     return this.shooter.getMagazine();
+  }
+
+  //=========================================================================//
+  // Sound methods                                                           //
+  //=========================================================================//
+  @Override
+  public void updateSounds(){
+    // TODO add conditional sound
   }
 
 }
