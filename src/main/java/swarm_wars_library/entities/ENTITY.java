@@ -1,0 +1,20 @@
+package swarm_wars_library.entities;
+
+public enum ENTITY {
+  EMPTY, 
+  PLAYER1,
+  PLAYER1_BOT,
+  PLAYER1_BULLET,
+  PLAYER2,
+  PLAYER2_BOT,
+  PLAYER2_BULLET, 
+  PLAYER3, 
+  PLAYER3_BOT,
+  PLAYER3_BULLET, 
+  PLAYER4, 
+  PLAYER4_BOT,
+  PLAYER4_BULLET, 
+  TURRET, 
+  TURRET_BULLET, 
+  STAR; 
+}
