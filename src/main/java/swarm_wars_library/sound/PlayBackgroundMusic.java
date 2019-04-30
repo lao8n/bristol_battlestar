@@ -8,7 +8,7 @@ public class PlayBackgroundMusic{
   
   public PlayBackgroundMusic(PApplet sketch){
     this.soundFile = new SoundFile(sketch, 
-      "resources/sound/TWICE_트와이스_-FANCY.aiff");
+      "resources/sound/star_wars.aiff");
     this.soundFile.loop();
   }
 }
