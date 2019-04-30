@@ -129,7 +129,7 @@ public class UI{
                                          new Vector2D(30, 0)));
   }
 
-  private void updateArrows(){
+  private void updateArrows() {
     this.arrow1.update();
     this.arrow2.update();
     this.arrow3.update();
@@ -320,20 +320,20 @@ public class UI{
   //=========================================================================//
   private void setupLocations(){
     this.location1 = new Vector2D(this.sketch.width * 0.5,
-                                  this.sketch.height * 0.15);
-    this.location2 = new Vector2D(this.sketch.width * 0.9,
-                                  this.sketch.height * 0.4);                                  
-    this.location3 = new Vector2D(this.sketch.width * 0.1,
-                                  this.sketch.height * 0.4);
-    this.location4 = new Vector2D(this.sketch.width * 0.25,
-                                  this.sketch.height * 0.75);
-    this.location5 = new Vector2D(this.sketch.width * 0.75,
-                                  this.sketch.height * 0.75);
+                                  this.sketch.height * 0.2);
+    this.location2 = new Vector2D(this.sketch.width * 0.75,
+                                  this.sketch.height * 0.5);
+    this.location3 = new Vector2D(this.sketch.width * 0.25,
+                                  this.sketch.height * 0.5);
+    this.location4 = new Vector2D(this.sketch.width * 0.35,
+                                  this.sketch.height * 0.85);
+    this.location5 = new Vector2D(this.sketch.width * 0.65,
+                                  this.sketch.height * 0.85);
   }
 
   private Vector2D getMidPoint(Vector2D location1, Vector2D location2){
     return new Vector2D((location1.getX() + location2.getX()) / 2,
-                        (location2.getY() + location2.getY()) / 2);
+                        (location1.getY() + location2.getY()) / 2);
   }
 
   //=========================================================================//
@@ -341,27 +341,52 @@ public class UI{
   //=========================================================================// 
   public void updateMousePressStar(){
     // Swap label1 for star
-    if(this.checkMousePressStar(this.location1, this.label1)){
-      this.star1.changeColour();
+    if(this.checkMousePressStar(this.location1, 10, this.label1) == true){
+      if (this.swapLabel(label1) == false) {
+        this.star1.changeColour();
+      }
+      else {
+        checkForColourChanges();
+      }
     }
     // Swap label2 for star
-    else if(this.checkMousePressStar(this.location2, this.label2)){
-      this.star2.changeColour();
+    else if(this.checkMousePressStar(this.location2, 10,  this.label2) == true){
+      if (this.swapLabel(label2) == false) {
+        this.star2.changeColour();
+      }
+      else {
+        checkForColourChanges();
+      }
     }
     // Swap label3 for star
-    else if(this.checkMousePressStar(this.location3, this.label3)){
-      this.star3.changeColour();
+    else if(this.checkMousePressStar(this.location3, 10, this.label3) == true){
+      if (this.swapLabel(label3) == false) {
+        this.star3.changeColour();
+      }
+      else {
+        checkForColourChanges();
+      }
+
     }
     // Swap label4 for star
-    else if(this.checkMousePressStar(this.location4, this.label4)){
-      this.star4.changeColour();
+    else if(this.checkMousePressStar(this.location4, 10, this.label4) == true){
+      if (this.swapLabel(label4) == false) {
+        this.star4.changeColour();
+      }
+      else {
+        checkForColourChanges();
+      }
+
     }
     // Swap label5 for star
-    else if(this.checkMousePressStar(this.location5, this.label5)){
-      this.star5.changeColour();
-    }
-    else {
-      this.checkForColourChanges();
+    else if(this.checkMousePressStar(this.location5, 10, this.label5) == true){
+      if (this.swapLabel(label5) == false) {
+        this.star5.changeColour();
+      }
+      else {
+        checkForColourChanges();
+      }
+
     }
   }
 
@@ -435,7 +460,21 @@ public class UI{
     return false;
   }
 
-  private boolean checkMousePressStar(Vector2D location, Label label){
+  private boolean checkMousePressStar(Vector2D location, int radius, Label label) {
+    if(this.mousePressed){
+      if(this.sketch.mouseX >= location.getX() - radius &&
+              this.sketch.mouseX <= location.getX() + radius &&
+              this.sketch.mouseY >= location.getY() - radius &&
+              this.sketch.mouseY <= location.getY() + radius){
+        //this.swapLabel(label);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ==========================
+  /*private boolean checkMousePressStar(Vector2D location, Label label){
     if(this.mousePressed && !this.swapLabel(label)){
       if(Vector2D.sub(new Vector2D(this.sketch.mouseX, this.sketch.mouseY),
                       location)
@@ -444,7 +483,8 @@ public class UI{
       }
     }
     return false;
-  }
+  }*/
+  // ==========================
 
   public void listenMousePressed(){
     this.mousePressed = true;
@@ -478,16 +518,16 @@ public class UI{
     if (this.star1.getColourR() == 255) {
       this.star1.changeColour();
     }
-    if (this.star2.getColourR() == 255) {
+    else if (this.star2.getColourR() == 255) {
       this.star2.changeColour();
     }
-    if (this.star3.getColourR() == 255) {
+    else if (this.star3.getColourR() == 255) {
       this.star3.changeColour();
     }
-    if (star4.getColourR() == 255) {
-      star4.changeColour();
+    else if (this.star4.getColourR() == 255) {
+      this.star4.changeColour();
     }
-    if (this.star5.getColourR() == 255) {
+    else if (this.star5.getColourR() == 255) {
       this.star5.changeColour();
     }
   }
@@ -711,10 +751,10 @@ public class UI{
       return false;
     }
     else if (lab[1] == null && 
-            lab[0].getLabelString() != oldLabel.getLabelString()) {
+             lab[0].getLabelString() != oldLabel.getLabelString()) {
       lab[1] = oldLabel;
-      System.out.println("hey1 " + lab[0].getLabelString());
-      System.out.println("hey2 " + lab[1].getLabelString());
+      //System.out.println("hey1 " + lab[0].getLabelString());
+      //System.out.println("hey2 " + lab[1].getLabelString());
 
       this.swapAction();
       // reset

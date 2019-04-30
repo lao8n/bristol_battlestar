@@ -4,7 +4,7 @@ import swarm_wars_library.engine.SwarmLogic;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
-public class Bot extends AbstractEntity implements ISwarm{
+public class Bot extends AbstractEntity implements ISwarm, ISound{
 
   private int id;
   private SwarmLogic swarmLogic;
@@ -90,6 +90,14 @@ public class Bot extends AbstractEntity implements ISwarm{
   @Override
   public double getSwarmHeading(){
     return this.swarmLogic.getTransform().getHeading();
+  }
+
+  //=========================================================================//
+  // Sound methods                                                           //
+  //=========================================================================//
+  @Override
+  public void updateSounds(){
+    // TODO add conditional sound
   }
 
 }
