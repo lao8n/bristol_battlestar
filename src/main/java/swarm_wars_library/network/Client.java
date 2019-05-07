@@ -26,7 +26,7 @@ public class Client {
         int frame = 0;
 
         GameClient.countDownLatch.await();
-        System.out.println("Start sending messages");
+//        System.out.println("Start sending messages");
         Thread.sleep(5000);
         Map<String, Object> m = new HashMap<String, Object>();
 
@@ -35,8 +35,8 @@ public class Client {
         int interval = 1000 / 60;
 
         while(times < 5) {
-            System.out.println("***************");
-            System.out.println("Round " + times + " begins");
+//            System.out.println("***************");
+//            System.out.println("Round " + times + " begins");
 
             // Clean the whole buffer
             MessageHandlerMulti.refreshClientReceiveBuffer();
@@ -46,7 +46,7 @@ public class Client {
             m.put(Headers.TYPE, Constants.CONNECT);
             m.put(Headers.PLAYER, id);
             MessageHandlerMulti.putPackage(m);
-            System.out.println("Sent CONNECT");
+//            System.out.println("Sent CONNECT");
             Thread.sleep(interval);
 
             // Then sends a SETUP package to server
@@ -55,7 +55,7 @@ public class Client {
             m.put(Headers.TYPE, Constants.SETUP);
             m.put(Headers.PLAYER, id);
             MessageHandlerMulti.putPackage(m);
-            System.out.println("Sent SETUP");
+//            System.out.println("Sent SETUP");
             Thread.sleep(interval);
 
             // If this is player 0, try to start the game
@@ -66,7 +66,7 @@ public class Client {
                 m = new HashMap();
                 m.put(Headers.TYPE, Constants.START);
                 MessageHandlerMulti.putPackage(m);
-                System.out.println("Tried to send START, but game not ready");
+//                System.out.println("Tried to send START, but game not ready");
                 Thread.sleep(interval);
             }
 
@@ -74,7 +74,7 @@ public class Client {
 
             // Then keeps sending OPERATION package to server
             while (!MessageHandlerMulti.gameStarted) {
-                System.out.println("Game not started yet");
+//                System.out.println("Game not started yet");
                 Thread.sleep(interval);
             }
 
@@ -86,10 +86,10 @@ public class Client {
                 m.put(Headers.A, 1);
                 MessageHandlerMulti.putPackage(m);
                 while (rev == null) {
-                    System.out.println("Player " + id + " trying to get package with frame number " + frame);
+//                    System.out.println("Player " + id + " trying to get package with frame number " + frame);
                     rev = MessageHandlerMulti.getPackage(Math.abs(id - 1), frame);
                     if (rev == null) {
-                        System.out.println("Did not get wanted package, try again, main game waiting");
+//                        System.out.println("Did not get wanted package, try again, main game waiting");
                     }
                     Thread.sleep(interval);
                 }
@@ -102,7 +102,7 @@ public class Client {
             m.put(Headers.TYPE, Constants.END);
             m.put(Headers.PLAYER, id);
             MessageHandlerMulti.putPackage(m);
-            System.out.println("Player " + id + " Game ends");
+//            System.out.println("Player " + id + " Game ends");
 
             times++;
             frame = 0;

@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class NetworkClientFunctions {
 
-    private static int interval = 10000 / 60;
+    private static int interval = 0;
 
     public static int getPlayerIdFromUser() {
         System.out.println("Enter your id");
@@ -86,15 +86,15 @@ public class NetworkClientFunctions {
         m.put(Headers.D, i.getMoveRight());
         m.put(Headers.S, i.getMoveDown());
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
+//        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
 
     public static Map getPackage(int id, int frame) {
         Map<String, Object> rev = null;
         int getId = Math.abs(id - 1);
-         System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
+//         System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
         while (rev == null) {
-            System.out.println("Player " + id + " trying to get player " + Math.abs(id - 1) + "s package with frame number " + frame);
+//            System.out.println("Player " + id + " trying to get player " + Math.abs(id - 1) + "s package with frame number " + frame);
             rev = MessageHandlerMulti.getPackage(getId, frame);
             if (rev == null) {
                 // System.out.println("Did not get wanted package, try again, main game waiting");
@@ -106,7 +106,7 @@ public class NetworkClientFunctions {
             }
         }
 
-        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
+//        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
 
         return rev;
     }
