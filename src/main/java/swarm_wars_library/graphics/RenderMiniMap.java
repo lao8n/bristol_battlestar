@@ -5,11 +5,13 @@ import processing.core.PApplet;
 public class RenderMiniMap{
 
   private PApplet sketch;
-  private float miniMapDim = 200;
-  private float miniMapOffset = 20;
+  private float miniMapDim;
+  private float miniMapOffset;
 
-  public RenderMiniMap(PApplet sketch){
+  public RenderMiniMap(PApplet sketch, int miniMapDim, int miniMapOffset){
     this.sketch = sketch;
+    this.miniMapDim = (float) miniMapDim;
+    this.miniMapOffset = (float) miniMapOffset;
   }
 
   public void update(){

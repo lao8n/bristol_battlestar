@@ -20,11 +20,17 @@ public class AIMovement{
 
   public void update(){
     // go in random new direction every 10s
-    if(this.movementCount % 60 == 0){
+    if(this.movementCount % 70 == 0){
       this.moveRight = -1 + 2 * Math.random();
       this.moveDown = -1 + 2 * Math.random();
       this.movementCount = 0;
     }
+    // tend to go towards the middle
+    this.moveRight += -0.02 * (this.location.getX() - map.getMapWidth() / 2) / 
+                      map.getMapWidth();
+    this.moveDown += -0.02 * (this.location.getY() - map.getMapHeight() / 2) / 
+                      map.getMapHeight();
+    
     this.location.setXY(this.location.getX() + 
                         (int) this.moveForce * this.moveRight,
                         this.location.getY() + 

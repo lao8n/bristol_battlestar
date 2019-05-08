@@ -16,7 +16,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
     super(tag, Map.getInstance().getBotScale());
     Vector2D motherShipLocation = 
       Map.getInstance()
-         .getPlayerStartingLocation(Tag.getMothershipTag(tag));
+         .getPlayerStartingLocation(Tag.getMotherShipTag(tag));
     this.setLocation(
       new Vector2D(motherShipLocation.getX() - 100 + 200 * Math.random(),
                    motherShipLocation.getY() - 100 + 200 * Math.random()));

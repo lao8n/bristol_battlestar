@@ -45,7 +45,7 @@ public abstract class AbstractSwarmAlgorithm{
   }
 
   public abstract void applySwarmAlgorithm();
-  protected abstract Vector2D seekMotherShip(Vector2D mothership_location);
+  protected abstract Vector2D seekMotherShip();
 
   protected void avoidEdge(double scale){
     if(transform.getLocation().getX() < 0){
