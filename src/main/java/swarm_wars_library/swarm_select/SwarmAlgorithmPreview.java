@@ -27,7 +27,7 @@ public class SwarmAlgorithmPreview {
     this.player1 = new PlayerUI(sketch, ENTITY.PLAYERUI);
     this.listBots = new ArrayList<AbstractEntity>();
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, "defendFlock", i);
+      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, "defendShell", i);
       this.listBots.add(bot);
     }
     CommsGlobal.update();

@@ -4,9 +4,9 @@ import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
-// import swarm_wars_library.swarm_algorithms.DefendShellSwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.DefendShellSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefendFlockSwarmAlgorithm;
-// import swarm_wars_library.swarm_algorithms.ScoutRandomSwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.ScoutRandomSwarmAlgorithm;
 
 public class SwarmLogic {
 
@@ -31,21 +31,21 @@ public class SwarmLogic {
   // Swarm Algorithm Selection                                               //
   //=========================================================================//
   public void selectSwarmAlgorithm(String swarm_algorithm){
-    // if(swarm_algorithm == "defendShell"){
-    //   swarm_algo = 
-    //     new DefendShellSwarmAlgorithm(this.tag, this.id, this.transform, 
-    //                                   this.rb);
-    // }
-    if (swarm_algorithm == "defendFlock"){
+    if(swarm_algorithm == "defendShell"){
+      swarm_algo = 
+        new DefendShellSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                      this.rb);
+    }
+    else if (swarm_algorithm == "defendFlock"){
       swarm_algo = 
         new DefendFlockSwarmAlgorithm(this.tag, this.id, this.transform, 
                                       this.rb);
     }
-    // else if (swarm_algorithm == "scoutRandom"){
-    //   swarm_algo = 
-    //     new ScoutRandomSwarmAlgorithm(this.tag, this.id, this.transform, 
-    //                                   this.rb);
-    // }
+    else if (swarm_algorithm == "scoutRandom"){
+      swarm_algo = 
+        new ScoutRandomSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                      this.rb);
+    }
   }
 
   //=========================================================================//

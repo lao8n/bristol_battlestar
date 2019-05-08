@@ -10,10 +10,12 @@ public class DefendFlockSwarmRules extends AbstractSwarmRules {
   private Vector2D separateV2D = new Vector2D(0, 0);
   private Vector2D alignV2D = new Vector2D(0, 0);
   private Vector2D coheseV2D = new Vector2D(0, 0);
+
   // Neighbourhood counts
   private int separateNeighbourhoodCount = 0;
   private int alignNeighbourhoodCount = 0;
   private int coheseNeighbourhoodCount = 0;
+  
   // Rule minimum distances
   private int separateDistance = 20;
   private int alignDistance = 40;
@@ -91,6 +93,5 @@ public class DefendFlockSwarmRules extends AbstractSwarmRules {
     }
     this.rulesV2D.add(2, this.coheseV2D);
     this.coheseNeighbourhoodCount = 0;
-
   }
 }

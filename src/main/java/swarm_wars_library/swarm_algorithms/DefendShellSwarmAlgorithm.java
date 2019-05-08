@@ -10,34 +10,30 @@ import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 
-public class DefendFlockSwarmAlgorithm extends AbstractSwarmAlgorithm {
-  
+public class DefendShellSwarmAlgorithm extends AbstractSwarmAlgorithm {
+
   private int id;
   public RigidBody rb;
   public Transform transform;
-  private DefendFlockSwarmRules defendFlockSwarmRules;
+  private DefendShellSwarmRules defendShellSwarmRules;
+  private double orbitDistance = 70;
+  private double stopDistance = 100;
   private Vector2D separateV2D;
-  private Vector2D alignV2D;
-  private Vector2D coheseV2D;
-  private Vector2D randomV2D;
   private Vector2D seekMotherShipV2D;
-  private double weightSeparate = 0.05;
-  private double weightAlign = 0.004;
-  private double weightCohese = 0.003;
-  private double weightRandom = 0.001;
-  private double weightMotherShip = 0.1;
-  private double weightAvoidEdge = 0.2;
+  private double weightSeparate = 0.2;
+  private double weightMotherShip = 1.5;
+  private double weightAvoidEdge = 0.1;
 
   //=========================================================================//
-  // Defend Flock Constructor                                                //
+  // DefendFlock Constructor                                                 //
   //=========================================================================//
-  public DefendFlockSwarmAlgorithm(ENTITY tag, int id, Transform transform, 
+  public DefendShellSwarmAlgorithm(ENTITY tag, int id, Transform transform, 
     RigidBody rb){
     super(tag, transform);
     this.id = id;
     this.rb = rb;
     this.transform = transform;
-    this.defendFlockSwarmRules = new DefendFlockSwarmRules(this.id, 
+    this.defendShellSwarmRules = new DefendShellSwarmRules(this.id, 
                                                            this.rb,
                                                            this.transform);
   }
@@ -48,30 +44,21 @@ public class DefendFlockSwarmAlgorithm extends AbstractSwarmAlgorithm {
   @Override 
   public void applySwarmAlgorithm(){
     // Get vectors from rules
-    ArrayList<Vector2D> rulesV2D = this.defendFlockSwarmRules
+    ArrayList<Vector2D> rulesV2D = this.defendShellSwarmRules
                                        .iterateOverSwarm(this.tag);
     this.separateV2D = rulesV2D.get(0);
-    this.alignV2D = rulesV2D.get(1);
-    this.coheseV2D = rulesV2D.get(2);
-    this.randomV2D = this.randomRule();
     this.seekMotherShipV2D = this.seekMotherShip();
-    
+
     // Apply weights to vectors
     this.separateV2D.mult(this.weightSeparate);
-    this.alignV2D.mult(this.weightAlign);
-    this.coheseV2D.mult(this.weightCohese);
-    this.randomV2D.mult(this.weightRandom);
     this.seekMotherShipV2D.mult(this.weightMotherShip);
     this.avoidEdge(this.weightAvoidEdge);
 
     // Apply forces
     this.rb.applyForce(this.separateV2D);
-    this.rb.applyForce(this.alignV2D);
-    this.rb.applyForce(this.coheseV2D);
-    this.rb.applyForce(this.randomV2D);
     this.rb.applyForce(this.seekMotherShipV2D);
     this.transform.setHeading(this.rb.getVelocity().heading());
-    this.rb.update(this.transform.getLocation(), this.transform.getHeading());  
+    this.rb.update(this.transform.getLocation(), this.transform.getHeading()); 
   }
 
   //=========================================================================//
@@ -85,14 +72,32 @@ public class DefendFlockSwarmAlgorithm extends AbstractSwarmAlgorithm {
                  .getLocation();
     Vector2D target = Vector2D.sub(locationMotherShip, 
                                    transform.getLocation());
-    target.normalise();
-    target.mult(rb.getMaxSpeed());
+    target = this.findOrbit(target);
+    target = this.checkStopDistance(target);
     target.limit(rb.getMaxForce());
     return target;
   }
 
-  private Vector2D randomRule(){
-    return new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
+  private Vector2D checkStopDistance(Vector2D desired) {
+    double dist = desired.mag();
+    desired.normalise();
+    if (dist > this.stopDistance) {
+      desired.mult(rb.getMaxSpeed());
+    } 
+    else {
+      double mappedSpeed = dist * rb.getMaxSpeed() / (this.stopDistance);
+      desired.mult(mappedSpeed);
+    }
+    return desired;
+  }
+
+  private Vector2D findOrbit(Vector2D desired) {
+    Vector2D orbitTarget = new Vector2D(desired.getX(), desired.getY());
+    orbitTarget.normalise();
+    orbitTarget.mult(this.orbitDistance);
+    desired.sub(orbitTarget);
+
+    return desired;
   }
 
   //=========================================================================//
@@ -104,21 +109,5 @@ public class DefendFlockSwarmAlgorithm extends AbstractSwarmAlgorithm {
 
   public void setWeightSeparate(double weight){
     this.weightSeparate = weight;
-  }
-
-  public double getWeightAlign(){
-    return this.weightAlign;
-  }
-
-  public void setWeightAlign(double weight){
-    this.weightAlign = weight;
-  }
-
-  public double getWeightCohese(){
-    return this.weightCohese;
-  }
-
-  public void setWeightCohese(double weight){
-    this.weightCohese = weight;
   }
 }
