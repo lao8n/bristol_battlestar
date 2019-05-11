@@ -11,6 +11,7 @@ import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.graphics.RenderMiniMap;
 import swarm_wars_library.graphics.RenderUIMiniMapBot;
 import swarm_wars_library.graphics.RenderUIMiniMapPlayer1;
+import swarm_wars_library.graphics.RenderUIMiniMapTurret;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -28,6 +29,7 @@ public class SwarmSelect{
   private RenderMiniMap renderMiniMap;
   private RenderUIMiniMapBot renderUIMiniMapBot;
   private RenderUIMiniMapPlayer1 renderUIMiniMapPlayer1;
+  private RenderUIMiniMapTurret renderUIMiniMapTurret;
 
   // Mouse 
   private boolean mousePressed = false;
@@ -284,21 +286,31 @@ public class SwarmSelect{
   // UI Mini map methods                                                     //
   //=========================================================================// 
   private void setupUIMiniMap(){
-    this.renderMiniMap = new RenderMiniMap(sketch,
+    this.renderMiniMap = new RenderMiniMap(this.sketch,
                                            this.dimMiniMap, 
                                            this.offsetMiniMap);
     this.renderUIMiniMapBot = 
-      new RenderUIMiniMapBot(sketch, 
+      new RenderUIMiniMapBot(this.sketch, 
                              this.dimMiniMap, 
                              this.offsetMiniMap);
     this.renderUIMiniMapPlayer1 = 
-      new RenderUIMiniMapPlayer1(sketch, 
+      new RenderUIMiniMapPlayer1(this.sketch, 
                                  this.dimMiniMap,
                                  this.offsetMiniMap);
+    this.renderUIMiniMapTurret = 
+      new RenderUIMiniMapTurret(this.sketch,
+                                this.dimMiniMap,
+                                this.offsetMiniMap);
   }  
 
   private void updateUIMiniMap(){
     this.renderMiniMap.update();
+    for(int i = 0; i < CommsGlobal.get("TURRET")
+                                  .getNumberOfReceivers(); i++){
+      this.renderUIMiniMapTurret.update(CommsGlobal.get("TURRET")
+                                                   .getPacket(i)
+                                                   .getLocation());
+}
     for(int i = 0; i < CommsGlobal.get("PLAYERUI_BOT")
                                   .getNumberOfReceivers(); i++){
       this.renderUIMiniMapBot.update(CommsGlobal.get("PLAYERUI_BOT")
