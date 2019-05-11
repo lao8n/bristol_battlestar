@@ -30,9 +30,9 @@ public abstract class AbstractRenderMiniMapObject{
     
     this.objectRenderLocation.setX(
       objectMapLocation.getX() / this.map.getMapWidth() *
-      this.miniMapDim);
+      this.miniMapDim * 0.95 + this.miniMapDim * 0.025);
     this.objectRenderLocation.setY(
       objectMapLocation.getY() / this.map.getMapHeight() *
-      this.miniMapDim);
+      this.miniMapDim * 0.95 + this.miniMapDim * 0.025);
   }
 }

@@ -6,10 +6,11 @@ public class RenderUIMiniMapPlayer1 extends AbstractRenderMiniMapObject{
 
   private int scale = 7;
 
-  public RenderUIMiniMapPlayer1(PApplet sketch){
+  public RenderUIMiniMapPlayer1(PApplet sketch, int miniMapDim, 
+    int miniMapOffset){
     super(sketch);
-    this.miniMapDim = (int) (sketch.height / 2.2);
-    this.miniMapOffset = 20;
+    this.miniMapDim = miniMapDim;
+    this.miniMapOffset = miniMapOffset;
   }
 
   @Override 

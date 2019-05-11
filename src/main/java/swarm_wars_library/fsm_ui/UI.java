@@ -7,7 +7,11 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import swarm_wars_library.game_screens.GAMESCREEN;
-import swarm_wars_library.physics.Vector2D;;
+import swarm_wars_library.fsm.FSMCOMPARISON;
+import swarm_wars_library.fsm.FSMManager;
+import swarm_wars_library.fsm.FSMSTATE;
+import swarm_wars_library.fsm.FSMVARIABLE;
+import swarm_wars_library.physics.Vector2D;
 
 public class UI{
 
@@ -66,6 +70,9 @@ public class UI{
   private Star star5;
   private ArrayList<Star> allStars;
 
+  // FSM Manager Methods
+  private FSMManager fsmManager = FSMManager.getInstance();
+
 
   //=========================================================================//
   // Constructor                                                             //
@@ -74,7 +81,7 @@ public class UI{
     this.sketch = sketch;
     this.currentScreen = GAMESCREEN.FSMUI;
     PImage background = sketch.loadImage(
-      "src/main/java/swarm_wars_library/ui/star-blue.jpg");
+      "resources/images/background.png");
     this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
     this.setupLocations();
     this.setupButtons();
@@ -261,15 +268,64 @@ public class UI{
     return transitionsOrder;
   }
 
-    public String[] getStates() {
-      String statesOrder[] = {"", "", "", "", ""};
-      statesOrder[0] = this.label1.getLabelString();
-      statesOrder[1] = this.label1.getLabelString();
-      statesOrder[2] = this.label1.getLabelString();
-      statesOrder[3] = this.label1.getLabelString();
-      statesOrder[4] = this.label1.getLabelString();
-      return statesOrder;
-    }
+  public String[] getStates() {
+    String statesOrder[] = {"", "", "", "", ""};
+    statesOrder[0] = this.label1.getLabelString();
+    statesOrder[1] = this.label1.getLabelString();
+    statesOrder[2] = this.label1.getLabelString();
+    statesOrder[3] = this.label1.getLabelString();
+    statesOrder[4] = this.label1.getLabelString();
+    return statesOrder;
+  }
+
+  //=========================================================================//
+  // FSM Manager methods                                                     //
+  //=========================================================================//
+  public void exampleFSM(){
+    // Add states first
+    this.fsmManager.addFSMState(1, FSMSTATE.DEFEND);
+    this.fsmManager.addFSMState(2, FSMSTATE.SCOUT);
+    this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
+    this.fsmManager.addFSMState(4, FSMSTATE.DEFEND);
+    this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
+
+    // Then add transitions after
+    this.fsmManager.addTransition(1, 
+                                  2, 
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.LESSTHAN,
+                                  100);
+    this.fsmManager.addTransition(2, 
+                                  1,
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.GREATERTHAN,
+                                  300);
+    this.fsmManager.addTransition(4, 
+                                  2, 
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.LESSTHAN,
+                                  200);
+    this.fsmManager.addTransition(3, 
+                                  5,
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.GREATERTHAN,
+                                  100);
+    this.fsmManager.addTransition(5, 
+                                  3, 
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.LESSTHAN,
+                                  200);
+    this.fsmManager.addTransition(1, 
+                                  4,
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.GREATERTHAN,
+                                  100);
+    this.fsmManager.addTransition(2, 
+                                  3,
+                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMCOMPARISON.GREATERTHAN,
+                                  100);
+  }
 
   //=========================================================================//
   // Labels methods                                                          //
@@ -442,7 +498,8 @@ public class UI{
     else if(this.checkMousePressButton(new Vector2D(500, 30),
                                        new Vector2D(100, 50))){
       this.start.changeColour();
-      this.currentScreen = GAMESCREEN.GAME;
+      this.exampleFSM();
+      this.currentScreen = GAMESCREEN.SWARMSELECT;
     }
 
   }

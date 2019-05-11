@@ -49,10 +49,12 @@ public class ScoutRandomSwarmAlgorithm extends AbstractSwarmAlgorithm {
 
     // Apply weights to vectors
     this.separateV2D.mult(this.weightSeparate);
+    this.randomV2D.mult(this.weightRandom);
     this.avoidEdge(this.weightAvoidEdge);
 
     // Apply forces
     this.rb.applyForce(this.separateV2D);
+    this.rb.applyForce(this.randomV2D);
     this.transform.setHeading(this.rb.getVelocity().heading());
     this.rb.update(this.transform.getLocation(), this.transform.getHeading()); 
   }

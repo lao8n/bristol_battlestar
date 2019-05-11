@@ -10,6 +10,7 @@ import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.PlayerAI;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
+import swarm_wars_library.fsm_ui.UI;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
@@ -36,10 +37,11 @@ public class SwarmWars extends PApplet {
   Map map = Map.getInstance();
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
+  UI fsmUI;
   PlayBackgroundMusic playBackgroundMusic;
 
   // Game screens 
-  GAMESCREEN currentScreen = GAMESCREEN.SWARMSELECT;
+  GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
 
   //=========================================================================//
   // Processing Settings                                                     //
@@ -53,8 +55,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
-    // this.uiSetup();
-    this.swarmSelectSetup();
+    this.uiSetup();
     // this.soundSetup();
   }
   //=========================================================================//
@@ -65,7 +66,7 @@ public class SwarmWars extends PApplet {
       case START:
         break;
       case FSMUI:
-        // this.uiUpdate();
+        this.uiUpdate();
         break;
       case SWARMSELECT:
         this.swarmSelectUpdate();
@@ -179,9 +180,9 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   // UI Setup                                                                //
   //=========================================================================//
-  // public void uiSetup(){
-  //   this.ui = new UI(this);
-  // }
+  public void uiSetup(){
+    this.fsmUI = new UI(this);
+  }
 
   //=========================================================================//
   // Collision checks                                                        //
@@ -259,11 +260,13 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   // UI update                                                               //
   //=========================================================================//
-  // public void uiUpdate(){
-  //   this.ui.update();
-  //   this.currentScreen = this.ui.getGameScreen();
-  // }
-
+  public void uiUpdate(){
+    this.fsmUI.update();
+    if(this.fsmUI.getGameScreen() == GAMESCREEN.SWARMSELECT){
+      this.swarmSelectSetup();
+      this.currentScreen = this.fsmUI.getGameScreen();
+    }
+  }
 
   //=========================================================================//
   // Event listeners                                                         //
@@ -284,7 +287,7 @@ public class SwarmWars extends PApplet {
       case START:
         break;
       case FSMUI:
-        // this.ui.listenMousePressed();
+        this.fsmUI.listenMousePressed();
         break;
       case SWARMSELECT:
         this.swarmSelect.listenMousePressed();
@@ -303,7 +306,7 @@ public class SwarmWars extends PApplet {
       case START:
         break;
       case FSMUI:
-        // this.ui.listenMouseReleased();
+        this.fsmUI.listenMouseReleased();
         break;
       case SWARMSELECT:
         this.swarmSelect.listenMouseReleased();

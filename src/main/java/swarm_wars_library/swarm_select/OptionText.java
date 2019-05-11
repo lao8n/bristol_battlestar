@@ -2,10 +2,11 @@ package swarm_wars_library.swarm_select;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
 
 import swarm_wars_library.physics.Vector2D;
 
-public class Button {
+public class OptionText {
 
   private PApplet sketch;
   private String label;
@@ -16,10 +17,10 @@ public class Button {
   private int colourB;
 
   //=========================================================================//
-  // Button constructor                                                      //
+  // Option Text constructor                                                 //
   //=========================================================================//
-  public Button(PApplet sketch, String label, Vector2D topLeftLocation, 
-                Vector2D dimensions, int colourR, int colourG, int colourB) {
+  public OptionText(PApplet sketch, String label, Vector2D topLeftLocation, 
+      Vector2D dimensions, int colourR, int colourG, int colourB){
     this.sketch = sketch;
     this.label = label;
     this.topLeftLocation = topLeftLocation;
@@ -30,22 +31,18 @@ public class Button {
   }
 
   //=========================================================================//
-  // Button update method                                                    //
+  // Option Text update method                                               //
   //=========================================================================//
   public void update() {
-    this.sketch.stroke(255, 255, 255);
+    this.sketch.pushMatrix();
+    this.sketch.translate((float) this.topLeftLocation.getX(), 
+                          (float) this.topLeftLocation.getY());
     this.sketch.fill(this.colourR, this.colourG, this.colourB);
-    this.sketch.rect((float) this.topLeftLocation.getX(), 
-                     (float) this.topLeftLocation.getY(), 
-                     (float) this.dimensions.getX(), 
-                     (float) this.dimensions.getY());
-
-    this.sketch.textAlign(CENTER, CENTER);
-    this.sketch.fill(255);
+    this.sketch.rotate(PApplet.radians(270));
+    this.sketch.textAlign(CENTER);
     this.sketch.text(this.label, 
-                    (float) this.topLeftLocation.getX() + 
-                    (float) this.dimensions.getX() / 2, 
-                    (float) this.topLeftLocation.getY() + 
-                    (float) this.dimensions.getY() / 2);
+                    (float) - this.dimensions.getX() / 2, 
+                    (float) 0);
+    this.sketch.popMatrix();
   }
 }

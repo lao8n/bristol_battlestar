@@ -64,5 +64,4 @@ public class PlayerUI extends AbstractEntity implements IAIMovement {
     this.commsPacket.setState(this.getState());
     this.commsPacket.setVelocity(this.getVelocity());
   }
-
 }

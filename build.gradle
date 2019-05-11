@@ -40,7 +40,9 @@ dependencies {
     compile files('library/core.jar')
     compile files('library/jsyn-20171016.jar')
     compile files('library/sound.jar')
+    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
     provided group: 'org.processing', name: 'core', version: '3.3.6'
+    compile group: 'org.javatuples', name: 'javatuples', version: '1.2'
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.1')
 }

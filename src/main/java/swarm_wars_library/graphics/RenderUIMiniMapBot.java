@@ -11,10 +11,10 @@ public class RenderUIMiniMapBot extends AbstractRenderMiniMapObject{
   protected int botMapLineOfSight = 200;
   protected int botRenderLineOfSight;
 
-  public RenderUIMiniMapBot(PApplet sketch){
+  public RenderUIMiniMapBot(PApplet sketch, int miniMapDim, int miniMapOffset){
     super(sketch);
-    this.miniMapDim = (int) (sketch.height / 2.2);
-    this.miniMapOffset = 20;
+    this.miniMapDim = miniMapDim;
+    this.miniMapOffset = miniMapOffset;
     this.botRenderLineOfSight = (int) this.botMapLineOfSight 
       * (int) this.miniMapDim / Map.getInstance().getMapWidth();
   }

@@ -19,11 +19,9 @@ public class RenderMiniMap{
     this.sketch.stroke(225, 225, 225);
     this.sketch.fill(0, 0, 0);
     this.sketch.rect(
-      this.sketch.width - this.miniMapDim - 
-        this.miniMapOffset - 5 - 1,
-      this.sketch.height - this.miniMapDim - 
-        this.miniMapOffset - 5 - 1,
-      this.miniMapDim + 10 + 1, 
-      this.miniMapDim + 10 + 1);
+      this.sketch.width - this.miniMapDim - this.miniMapOffset,
+      this.sketch.height - this.miniMapDim - this.miniMapOffset,
+      this.miniMapDim, 
+      this.miniMapDim);
   }
 }

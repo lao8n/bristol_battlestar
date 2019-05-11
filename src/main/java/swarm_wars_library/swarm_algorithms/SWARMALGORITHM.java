@@ -1,0 +1,40 @@
+package swarm_wars_library.swarm_algorithms;
+
+import java.util.Map;
+import java.util.HashMap;
+
+public enum SWARMALGORITHM {
+  ATTACK1(0), 
+  ATTACK2(1), 
+  ATTACK3(2), 
+  ATTACK4(3), 
+  DEFENDSHELL(4), 
+  DEFENDFLOCK(5), 
+  DEFEND3(6), 
+  DEFEND4(7), 
+  SCOUTRANDOM(8), 
+  SCOUTBEE(9), 
+  SCOUT3(10), 
+  SCOUT4(11);
+
+  private int value;
+  private static Map<Integer, SWARMALGORITHM> map = new HashMap<>();
+
+  private SWARMALGORITHM(int value) {
+      this.value = value;
+  }
+
+  static {
+      for (SWARMALGORITHM swarmAlgorithm : SWARMALGORITHM.values()) {
+          map.put(swarmAlgorithm.value, swarmAlgorithm);
+      }
+  }
+
+  public static SWARMALGORITHM valueOf(int swarmAlgorithm) {
+      return (SWARMALGORITHM) map.get(swarmAlgorithm);
+  }
+
+  public int getValue() {
+      return value;
+  }
+}
