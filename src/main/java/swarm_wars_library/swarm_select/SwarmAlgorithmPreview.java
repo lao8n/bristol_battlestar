@@ -3,7 +3,6 @@ package swarm_wars_library.swarm_select;
 import java.util.ArrayList;
 import processing.core.PApplet;
 
-import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.PlayerUI;
@@ -11,6 +10,7 @@ import swarm_wars_library.entities.TurretUI;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
 public class SwarmAlgorithmPreview {
 
@@ -30,7 +30,7 @@ public class SwarmAlgorithmPreview {
     this.player1 = new PlayerUI(sketch, ENTITY.PLAYERUI);
     this.listBots = new ArrayList<Bot>();
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, "scoutBee", i);
+      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, SWARMALGORITHM.SCOUTBEE, i);
       this.listBots.add(bot);
     }
     this.listTurrets = new ArrayList<TurretUI>();
@@ -50,5 +50,11 @@ public class SwarmAlgorithmPreview {
       this.listTurrets.get(i).update();
     }
     CommsGlobal.update();
+  }
+
+  public void selectSwarmAlgorithm(SWARMALGORITHM swarmAlgorithm){
+    for(int i = 0; i < this.listBots.size(); i++){
+      this.listBots.get(i).setSwarmAlgorithm(swarmAlgorithm);
+    }
   }
 }

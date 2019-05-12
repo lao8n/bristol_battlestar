@@ -77,4 +77,15 @@ public class OptionButton {
                      (float) this.dimensions.getY());
     this.sketch.fill(255);
   }
+
+  //=========================================================================//
+  // Location/dimension getters/setters                                      //
+  //=========================================================================//
+  public Vector2D getDimensions(){
+    return this.dimensions;
+  }
+
+  public Vector2D getTopLeftLocation(){
+    return this.topLeftLocation;
+  }
 }

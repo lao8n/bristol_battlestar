@@ -3,6 +3,7 @@ package swarm_wars_library.entities;
 import swarm_wars_library.engine.SwarmLogic;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
 public class Bot extends AbstractEntity implements ISwarm, ISound{
 
@@ -12,7 +13,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   //=========================================================================//
   // Constructor                                                             //
   //=========================================================================//
-  public Bot(ENTITY tag, String startingSwarmAlgorithm, int id){
+  public Bot(ENTITY tag, SWARMALGORITHM startingSwarmAlgorithm, int id){
     super(tag, Map.getInstance().getBotScale());
     Vector2D motherShipLocation = 
       Map.getInstance()
@@ -91,6 +92,12 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   public double getSwarmHeading(){
     return this.swarmLogic.getTransform().getHeading();
   }
+
+  @Override 
+  public void setSwarmAlgorithm(SWARMALGORITHM swarmAlgorithm){
+    this.swarmLogic.selectSwarmAlgorithm(swarmAlgorithm);
+  }
+
 
   //=========================================================================//
   // Sound methods                                                           //

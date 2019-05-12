@@ -5,6 +5,7 @@ import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefendShellSwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 import swarm_wars_library.swarm_algorithms.ScoutBeeSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefendFlockSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.ScoutRandomSwarmAlgorithm;
@@ -31,26 +32,30 @@ public class SwarmLogic {
   //=========================================================================//
   // Swarm Algorithm Selection                                               //
   //=========================================================================//
-  public void selectSwarmAlgorithm(String swarm_algorithm){
-    if(swarm_algorithm == "defendShell"){
-      swarm_algo = 
-        new DefendShellSwarmAlgorithm(this.tag, this.id, this.transform, 
-                                      this.rb);
-    }
-    else if (swarm_algorithm == "defendFlock"){
-      swarm_algo = 
-        new DefendFlockSwarmAlgorithm(this.tag, this.id, this.transform, 
-                                      this.rb);
-    }
-    else if (swarm_algorithm == "scoutRandom"){
-      swarm_algo = 
-        new ScoutRandomSwarmAlgorithm(this.tag, this.id, this.transform, 
-                                      this.rb);
-    }
-    else if (swarm_algorithm == "scoutBee"){
-      swarm_algo = 
-        new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
-                                   this.rb);
+  public void selectSwarmAlgorithm(SWARMALGORITHM swarmAlgorithm){
+    switch(swarmAlgorithm){
+      case DEFENDSHELL:
+        this.swarm_algo = 
+          new DefendShellSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                        this.rb);
+        break;
+      case DEFENDFLOCK:
+        this.swarm_algo = 
+          new DefendFlockSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                        this.rb);
+        break;
+      case SCOUTRANDOM:
+        this.swarm_algo = 
+          new ScoutRandomSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                        this.rb);
+        break;
+      case SCOUTBEE:
+        this.swarm_algo = 
+          new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                    this.rb);
+        break;
+      default:
+        break;
     }
   }
 

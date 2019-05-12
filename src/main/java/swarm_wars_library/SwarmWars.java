@@ -17,6 +17,7 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.sound.PlayBackgroundMusic;
+import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 import swarm_wars_library.swarm_select.SwarmSelect;
 
 public class SwarmWars extends PApplet {
@@ -135,7 +136,7 @@ public class SwarmWars extends PApplet {
     this.player1TakeDamage.add(this.player1);
     this.player1DealDamage.addAll(player1.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYER1_BOT, "defendFlock", i);
+      Bot bot = new Bot(ENTITY.PLAYER1_BOT, SWARMALGORITHM.SCOUTBEE, i);
       this.player1TakeDamage.add(bot);
     }
 
@@ -144,7 +145,7 @@ public class SwarmWars extends PApplet {
     this.player2TakeDamage.add(this.player2);
     this.player2DealDamage.addAll(player2.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYER2_BOT, "defendFlock", i);
+      Bot bot = new Bot(ENTITY.PLAYER2_BOT, SWARMALGORITHM.DEFENDFLOCK, i);
       this.player2TakeDamage.add(bot);
     }
 

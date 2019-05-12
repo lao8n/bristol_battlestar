@@ -51,6 +51,7 @@ public class SwarmSelect{
 
   // Swarm Algorithm Preview
   private SwarmAlgorithmPreview swarmAlgorithmPreview;
+  private SWARMALGORITHM swarmAlgorithm = SWARMALGORITHM.DEFENDSHELL;
 
   // Start Button 
   private Vector2D dimStartButton;
@@ -236,6 +237,13 @@ public class SwarmSelect{
 
   private void updateOptions(){
     for(int i = 0; i < this.renderOptionButtons.size(); i++){
+      if(this.checkMousePressButton(
+        this.renderOptionButtons.get(i).getTopLeftLocation(),
+        this.renderOptionButtons.get(i).getDimensions())){
+        System.out.println(SWARMALGORITHM.valueOf(i).toString());
+        this.swarmAlgorithmPreview.selectSwarmAlgorithm(
+          SWARMALGORITHM.valueOf(i));
+      }
       this.renderOptionButtons.get(i)
                               .update(SWARMALGORITHM.valueOf(i));
     }
