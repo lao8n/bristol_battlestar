@@ -5,6 +5,7 @@ import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefendShellSwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.ScoutBeeSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefendFlockSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.ScoutRandomSwarmAlgorithm;
 
@@ -45,6 +46,11 @@ public class SwarmLogic {
       swarm_algo = 
         new ScoutRandomSwarmAlgorithm(this.tag, this.id, this.transform, 
                                       this.rb);
+    }
+    else if (swarm_algorithm == "scoutBee"){
+      swarm_algo = 
+        new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
+                                   this.rb);
     }
   }
 

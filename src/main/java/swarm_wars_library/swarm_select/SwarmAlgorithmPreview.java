@@ -30,7 +30,7 @@ public class SwarmAlgorithmPreview {
     this.player1 = new PlayerUI(sketch, ENTITY.PLAYERUI);
     this.listBots = new ArrayList<Bot>();
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, "scoutRandom", i);
+      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, "scoutBee", i);
       this.listBots.add(bot);
     }
     this.listTurrets = new ArrayList<TurretUI>();

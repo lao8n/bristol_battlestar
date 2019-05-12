@@ -2,9 +2,7 @@ package swarm_wars_library.swarm_algorithms;
 
 import java.util.ArrayList;
 
-import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
-import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
@@ -90,7 +88,4 @@ public class ScoutRandomSwarmAlgorithm extends AbstractSwarmAlgorithm {
   public void setWeightRandom(double weight){
     this.weightRandom = weight;
   }
-
-
-
 }
