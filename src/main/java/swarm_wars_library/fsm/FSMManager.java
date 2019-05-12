@@ -8,7 +8,7 @@ public class FSMManager implements IFSMManagerUI, IFSMManagerSwarmLogic,
   IFSMManagerAlgorithmSelect {
 
   private static FSMManager instance = new FSMManager();
-  private Integer currentFSMStateId;
+  private Integer currentFSMStateId = 1;
   private HashMap<Integer, FSMStateTransition> mapFSMStateTransition = 
     new HashMap<Integer, FSMStateTransition>();
 
@@ -53,6 +53,11 @@ public class FSMManager implements IFSMManagerUI, IFSMManagerSwarmLogic,
                                 .getFSMStateId();
     return this.mapFSMStateTransition.get(this.currentFSMStateId)
                                      .getSwarmAlgorithm();
+  }
+
+  @Override
+  public SWARMALGORITHM getStartingSwarmAlgorithm(){
+    return SWARMALGORITHM.valueOf(this.currentFSMStateId);
   }
 
   @Override

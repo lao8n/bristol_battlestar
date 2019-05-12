@@ -3,7 +3,7 @@ package swarm_wars_library.swarm_select;
 import java.util.ArrayList;
 import processing.core.PApplet;
 
-import swarm_wars_library.entities.Bot;
+import swarm_wars_library.entities.BotUI;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.PlayerUI;
 import swarm_wars_library.entities.TurretUI;
@@ -16,7 +16,7 @@ public class SwarmAlgorithmPreview {
 
   PlayerUI player1;
   ArrayList<TurretUI> listTurrets;
-  ArrayList<Bot> listBots;
+  ArrayList<BotUI> listBots;
   Map map = Map.getInstance();
 
 
@@ -28,9 +28,9 @@ public class SwarmAlgorithmPreview {
     CommsGlobal.add("TURRET", new CommsChannel(map.getNumTurrets()));
 
     this.player1 = new PlayerUI(sketch, ENTITY.PLAYERUI);
-    this.listBots = new ArrayList<Bot>();
+    this.listBots = new ArrayList<BotUI>();
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYERUI_BOT, SWARMALGORITHM.SCOUTBEE, i);
+      BotUI bot = new BotUI(ENTITY.PLAYERUI_BOT, SWARMALGORITHM.SCOUTBEE, i);
       this.listBots.add(bot);
     }
     this.listTurrets = new ArrayList<TurretUI>();

@@ -3,6 +3,7 @@ package swarm_wars_library.engine;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
+import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.DefendShellSwarmAlgorithm;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
@@ -17,6 +18,8 @@ public class SwarmLogic {
   private Transform transform;
   private int id;
   private AbstractSwarmAlgorithm swarm_algo;
+  private FSMManager fsmManager = FSMManager.getInstance();
+  private SWARMALGORITHM lastSwarmAlgorithm = SWARMALGORITHM.DEFENDFLOCK;
 
   //=========================================================================//
   // Constructor                                                             //
@@ -62,8 +65,17 @@ public class SwarmLogic {
   //=========================================================================//
   // Update                                                                  //
   //=========================================================================//
-  public void update(){
-    this.swarm_algo.applySwarmAlgorithm();
+  public void update(boolean transitionsFlag){
+    if(transitionsFlag){
+      if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm()){
+        this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm());
+      }
+      this.swarm_algo.applySwarmAlgorithm();
+      this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm();
+    }
+    else {
+      this.swarm_algo.applySwarmAlgorithm();
+    }
   }
 
   //=========================================================================//

@@ -9,4 +9,5 @@ public interface IFSMManagerSwarmLogic {
   //=========================================================================//
   public SWARMALGORITHM getSwarmAlgorithm();
   public double[] getSwarmAlgorithmWeights();
+  public SWARMALGORITHM getStartingSwarmAlgorithm();
 }

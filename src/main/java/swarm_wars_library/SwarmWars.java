@@ -136,7 +136,7 @@ public class SwarmWars extends PApplet {
     this.player1TakeDamage.add(this.player1);
     this.player1DealDamage.addAll(player1.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYER1_BOT, SWARMALGORITHM.SCOUTBEE, i);
+      Bot bot = new Bot(ENTITY.PLAYER1_BOT, i, true);
       this.player1TakeDamage.add(bot);
     }
 
@@ -145,7 +145,7 @@ public class SwarmWars extends PApplet {
     this.player2TakeDamage.add(this.player2);
     this.player2DealDamage.addAll(player2.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
-      Bot bot = new Bot(ENTITY.PLAYER2_BOT, SWARMALGORITHM.DEFENDFLOCK, i);
+      Bot bot = new Bot(ENTITY.PLAYER2_BOT, i, false);
       this.player2TakeDamage.add(bot);
     }
 
