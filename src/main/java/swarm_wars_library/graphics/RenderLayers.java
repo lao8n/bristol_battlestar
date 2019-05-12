@@ -1,10 +1,10 @@
 package swarm_wars_library.graphics;
 
+import processing.core.PApplet;
+
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
-
-import processing.core.PApplet;
 
 public class RenderLayers{
 
@@ -45,7 +45,7 @@ public class RenderLayers{
     this.renderPlayer2Bot = new RenderPlayer2Bot(sketch);
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
-    this.renderMiniMap = new RenderMiniMap(sketch);
+    this.renderMiniMap = new RenderMiniMap(sketch, 200, 20);
     this.renderMiniMapPlayer1 = new RenderMiniMapPlayer1(sketch);
     this.renderMiniMapPlayer2 = new RenderMiniMapPlayer2(sketch);
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);

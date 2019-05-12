@@ -27,4 +27,8 @@ public class CommsGlobal {
             entry.getValue().update();
         }
     }
+
+    public static void reset(){
+        commsMap = new HashMap<String, CommsChannel>();
+    }
 }

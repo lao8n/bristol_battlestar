@@ -1,28 +1,39 @@
 package swarm_wars_library.entities;
 
 import swarm_wars_library.engine.SwarmLogic;
+import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
 public class Bot extends AbstractEntity implements ISwarm, ISound{
 
   private int id;
   private SwarmLogic swarmLogic;
+  private FSMManager fsmManager = FSMManager.getInstance();
+  private boolean transitionsAllowed = false;
   
   //=========================================================================//
   // Constructor                                                             //
   //=========================================================================//
-  public Bot(ENTITY tag, String startingSwarmAlgorithm, int id){
+  public Bot(ENTITY tag, int id, boolean transitionsAllowed){
     super(tag, Map.getInstance().getBotScale());
     Vector2D motherShipLocation = 
       Map.getInstance()
-         .getPlayerStartingLocation(Tag.getMothershipTag(tag));
+         .getPlayerStartingLocation(Tag.getMotherShipTag(tag));
     this.setLocation(
       new Vector2D(motherShipLocation.getX() - 100 + 200 * Math.random(),
                    motherShipLocation.getY() - 100 + 200 * Math.random()));
     this.swarmLogic = 
       new SwarmLogic(this.tag, this.transform, this.rigidbody, id);
-    this.swarmLogic.selectSwarmAlgorithm(startingSwarmAlgorithm);
+    this.transitionsAllowed = transitionsAllowed;
+    if(this.transitionsAllowed){
+      this.swarmLogic.selectSwarmAlgorithm(
+        this.fsmManager.getStartingSwarmAlgorithm());
+    }
+    else {
+      this.swarmLogic.selectSwarmAlgorithm(SWARMALGORITHM.DEFENDFLOCK);
+    }
     this.id = id;
     this.updateCommsPacket();
     this.sendCommsPacket();
@@ -76,7 +87,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   @Override
   public void updateSwarm(){
     this.swarmLogic.setTransform(this.transform);
-    this.swarmLogic.update();
+    this.swarmLogic.update(this.transitionsAllowed);
     this.transform = this.swarmLogic.getTransform();
     // this.setLocation(this.getSwarmLocation());
     // this.setHeading(this.getSwarmHeading());
@@ -91,6 +102,12 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   public double getSwarmHeading(){
     return this.swarmLogic.getTransform().getHeading();
   }
+
+  @Override 
+  public void setSwarmAlgorithm(SWARMALGORITHM swarmAlgorithm){
+    this.swarmLogic.selectSwarmAlgorithm(swarmAlgorithm);
+  }
+
 
   //=========================================================================//
   // Sound methods                                                           //

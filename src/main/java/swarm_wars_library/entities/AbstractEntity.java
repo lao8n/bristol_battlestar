@@ -8,6 +8,7 @@ import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.Vector2D;
 
 public abstract class AbstractEntity implements IEntity, IComms{
+  
   protected CommsPacket commsPacket;
   protected STATE state;
   protected RigidBody rigidbody;
