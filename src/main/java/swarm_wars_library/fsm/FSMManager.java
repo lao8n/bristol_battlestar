@@ -84,5 +84,4 @@ public class FSMManager implements IFSMManagerUI, IFSMManagerSwarmLogic,
                                                         weight2, 
                                                         weight3);
   }
-
 }

@@ -1,6 +1,9 @@
 package swarm_wars_library.swarm_algorithms;
 
 import java.util.Map;
+
+import swarm_wars_library.fsm.FSMSTATE;
+
 import java.util.HashMap;
 
 public enum SWARMALGORITHM {
@@ -36,5 +39,17 @@ public enum SWARMALGORITHM {
 
   public int getValue() {
       return value;
+  }
+
+  public FSMSTATE getFSMState(){
+    if(this.value <= 3){
+        return FSMSTATE.ATTACK;
+    }
+    else if (this.value <= 7){
+        return FSMSTATE.DEFEND;
+    }
+    else {
+        return FSMSTATE.SCOUT;
+    }
   }
 }

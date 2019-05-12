@@ -285,46 +285,46 @@ public class UI{
     // Add states first
     this.fsmManager.addFSMState(1, FSMSTATE.DEFEND);
     this.fsmManager.addFSMState(2, FSMSTATE.SCOUT);
-    this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
-    this.fsmManager.addFSMState(4, FSMSTATE.DEFEND);
-    this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
+    // this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
+    // this.fsmManager.addFSMState(4, FSMSTATE.DEFEND);
+    // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
     this.fsmManager.addTransition(1, 
                                   2, 
                                   FSMVARIABLE.ENEMYDISTANCE, 
-                                  FSMCOMPARISON.LESSTHAN,
-                                  100);
+                                  FSMCOMPARISON.GREATERTHAN,
+                                  300);
     this.fsmManager.addTransition(2, 
                                   1,
                                   FSMVARIABLE.ENEMYDISTANCE, 
-                                  FSMCOMPARISON.GREATERTHAN,
-                                  300);
-    this.fsmManager.addTransition(4, 
-                                  2, 
-                                  FSMVARIABLE.ENEMYDISTANCE, 
                                   FSMCOMPARISON.LESSTHAN,
-                                  200);
-    this.fsmManager.addTransition(3, 
-                                  5,
-                                  FSMVARIABLE.ENEMYDISTANCE, 
-                                  FSMCOMPARISON.GREATERTHAN,
                                   100);
-    this.fsmManager.addTransition(5, 
-                                  3, 
-                                  FSMVARIABLE.ENEMYDISTANCE, 
-                                  FSMCOMPARISON.LESSTHAN,
-                                  200);
-    this.fsmManager.addTransition(1, 
-                                  4,
-                                  FSMVARIABLE.ENEMYDISTANCE, 
-                                  FSMCOMPARISON.GREATERTHAN,
-                                  100);
-    this.fsmManager.addTransition(2, 
-                                  3,
-                                  FSMVARIABLE.ENEMYDISTANCE, 
-                                  FSMCOMPARISON.GREATERTHAN,
-                                  100);
+    // this.fsmManager.addTransition(2, 
+    //                               3,
+    //                               FSMVARIABLE.ENEMYDISTANCE, 
+    //                               FSMCOMPARISON.GREATERTHAN,
+    //                               100);
+    // this.fsmManager.addTransition(4, 
+    //                               2, 
+    //                               FSMVARIABLE.ENEMYDISTANCE, 
+    //                               FSMCOMPARISON.LESSTHAN,
+    //                               200);
+    // this.fsmManager.addTransition(3, 
+    //                               5,
+    //                               FSMVARIABLE.ENEMYDISTANCE, 
+    //                               FSMCOMPARISON.GREATERTHAN,
+    //                               100);
+    // this.fsmManager.addTransition(5, 
+    //                               3, 
+    //                               FSMVARIABLE.ENEMYDISTANCE, 
+    //                               FSMCOMPARISON.LESSTHAN,
+    //                               200);
+    // this.fsmManager.addTransition(1, 
+    //                               4,
+    //                               FSMVARIABLE.ENEMYDISTANCE, 
+    //                               FSMCOMPARISON.GREATERTHAN,
+    //                               100);
   }
 
   //=========================================================================//

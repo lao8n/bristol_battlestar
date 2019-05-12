@@ -1,10 +1,12 @@
 package swarm_wars_library.swarm_select;
 
 import java.util.ArrayList;
+import org.javatuples.Pair;
 
 import processing.core.PApplet;
 
 import swarm_wars_library.fsm.FSMStateTransition;
+import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.physics.Vector2D;
 
 public class FSMVisualisation {
@@ -13,6 +15,7 @@ public class FSMVisualisation {
   double radiusFSM;
   ArrayList<Vector2D> listPointsOnCircle;
   ArrayList<FSMStateTransition> collFSMStateTransition;
+  FSMSTATE fsmState = FSMSTATE.DEFEND;
 
   //=========================================================================//
   // FSM Visualisation Constructor                                           //
@@ -87,6 +90,19 @@ public class FSMVisualisation {
       }
     }
     this.drawArrows();
+  }
+
+  public Pair<FSMSTATE, Integer> checkMousePressedFSMState(int mouseX, 
+    int mouseY){
+    for(int i = 0; i < this.listPointsOnCircle.size(); i++){
+      if(Vector2D.sub(this.listPointsOnCircle.get(i), 
+                      new Vector2D(mouseX, mouseY)).mag() < 25){
+        return new Pair<FSMSTATE, Integer>(
+          this.collFSMStateTransition.get(i).getFSMState(), i + 1);
+      }
+    }
+    return new Pair<FSMSTATE, Integer>(
+      FSMSTATE.DEFEND, -1);  
   }
 
   //=========================================================================//

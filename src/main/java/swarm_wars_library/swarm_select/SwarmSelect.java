@@ -2,12 +2,15 @@ package swarm_wars_library.swarm_select;
 
 import java.util.ArrayList;
 
+import org.javatuples.Pair;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.fsm.FSMManager;
+import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.graphics.RenderMiniMap;
 import swarm_wars_library.graphics.RenderUIMiniMapBot;
 import swarm_wars_library.graphics.RenderUIMiniMapPlayer1;
@@ -48,6 +51,8 @@ public class SwarmSelect{
   // FSM Graph
   private FSMVisualisation fsmVisualisation;
   private FSMManager fsmManager;
+  private Pair<FSMSTATE, Integer> fsmAddState = 
+    new Pair<FSMSTATE, Integer>(FSMSTATE.DEFEND, -1);
 
   // Swarm Algorithm Preview
   private SwarmAlgorithmPreview swarmAlgorithmPreview;
@@ -109,6 +114,11 @@ public class SwarmSelect{
   }
   
   public void updateFSMVisualisation(){
+    if(this.mousePressed){
+      this.fsmAddState = 
+        this.fsmVisualisation.checkMousePressedFSMState(this.sketch.mouseX, 
+                                                        this.sketch.mouseY);
+    }
     this.fsmVisualisation.update();
   }
 
@@ -240,12 +250,24 @@ public class SwarmSelect{
       if(this.checkMousePressButton(
         this.renderOptionButtons.get(i).getTopLeftLocation(),
         this.renderOptionButtons.get(i).getDimensions())){
-        System.out.println(SWARMALGORITHM.valueOf(i).toString());
         this.swarmAlgorithmPreview.selectSwarmAlgorithm(
           SWARMALGORITHM.valueOf(i));
+        if(SWARMALGORITHM.valueOf(i).getFSMState() == 
+          this.fsmAddState.getValue(0) & (int) this.fsmAddState.getValue(1) >= 0){
+          this.fsmManager.setSwarmAlgorithm((int) this.fsmAddState.getValue(1), 
+                                            SWARMALGORITHM.valueOf(i));
+       }
+      }
+      int selectedCheck = -1;
+      for(int j = 1; j <= this.fsmManager.getMapFSMStateTransition().size(); 
+          j++){        
+        if(this.fsmManager.getMapFSMStateTransition().get(j).getSwarmAlgorithm()
+           == SWARMALGORITHM.valueOf(i)){
+          selectedCheck = j;
+        }
       }
       this.renderOptionButtons.get(i)
-                              .update(SWARMALGORITHM.valueOf(i));
+                              .update(SWARMALGORITHM.valueOf(i), selectedCheck);
     }
     for(int i = 0; i < this.renderOptionTexts.size(); i++){
       this.renderOptionTexts.get(i).update();
