@@ -45,6 +45,10 @@ public class SwarmWars extends PApplet {
   // Game screens 
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
 
+  // Networking things
+  private int playerId;
+  private int enemyId;
+
   //=========================================================================//
   // Processing Settings                                                     //
   //=========================================================================//
