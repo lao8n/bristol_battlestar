@@ -27,4 +27,17 @@ public class RandomGen {
         return r.nextDouble();
     }
 
+    public static int getInt(int bound){
+        int r = (int) Math.round(getRand() * bound);
+        if (r == bound) r -= 1;
+        if (r < 0) r = 0;
+        return r;
+    }
+
+    public static void printSeed() {
+        System.out.print("Random seed ");
+        System.out.println(seed);
+
+    }
+
 }

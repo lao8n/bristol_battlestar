@@ -1,6 +1,8 @@
 package swarm_wars_library;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 import processing.core.PApplet;
 
 import sun.nio.ch.Net;
@@ -18,6 +20,7 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
@@ -62,12 +65,12 @@ public class SwarmWars extends PApplet {
   // Processing Setup                                                        //
   //=========================================================================//
   public void setup() {
+    this.networkSetup();
     this.frameRate(60);
     this.uiSetup();
     // this.soundSetup();
 
     // NETWORKING - Starts server and gets ids
-    this.networkSetup();
     this.frameNumber = 0;
   }
   //=========================================================================//
@@ -137,6 +140,8 @@ public class SwarmWars extends PApplet {
   // Entities Setup                                                          //
   //=========================================================================//
   public void entitiesSetup(){
+
+    RandomGen.printSeed();
 
     this.player1TakeDamage = new ArrayList<AbstractEntity>();  
     this.player1DealDamage = new ArrayList<AbstractEntity>();

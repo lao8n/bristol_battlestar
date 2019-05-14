@@ -37,7 +37,8 @@ public class ProtocolProcessor {
             Map m = j.toMap();
             if (m.get(Headers.TYPE).equals(Constants.START)) {
                 MessageHandlerMulti.gameStarted = true;
-                RandomGen.setSeed((Integer) m.get(Headers.RANDOM_SEED));
+                int randSeed = (Integer) m.get(Headers.RANDOM_SEED);
+                RandomGen.setSeed(randSeed);
                 return;
             }
             // TODO: Only for test
