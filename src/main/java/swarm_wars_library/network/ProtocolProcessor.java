@@ -1,6 +1,7 @@
 package swarm_wars_library.network;
 
 import org.json.JSONObject;
+import swarm_wars_library.map.RandomGen;
 
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class ProtocolProcessor {
             Map m = j.toMap();
             if (m.get(Headers.TYPE).equals(Constants.START)) {
                 MessageHandlerMulti.gameStarted = true;
+                RandomGen.setSeed((Integer) m.get(Headers.RANDOM_SEED));
                 return;
             }
             // TODO: Only for test

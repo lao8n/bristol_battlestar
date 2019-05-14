@@ -69,9 +69,8 @@ public class NetworkClientFunctions {
     }
 
     public static void sendStart(int id) {
-        if(id == 1){
-             System.out.println("Try to send START");
-
+        if(id == 0){
+            System.out.println("Try to send START");
             while (!MessageHandlerMulti.gameStarted) {
                 Map<String, Object> m = new HashMap();
                 m.put(Headers.TYPE, Constants.START);
@@ -82,7 +81,6 @@ public class NetworkClientFunctions {
                     e.printStackTrace();
                 }
             }
-
             System.out.println("Sent START");
         }
     }
