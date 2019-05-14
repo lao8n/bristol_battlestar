@@ -49,7 +49,7 @@ public class SwarmWars extends PApplet {
   int frameNumber;
 
   // Networking
-  private boolean playNetworkGame = false;
+  private boolean playNetworkGame = true;
 
   //=========================================================================//
   // Processing Settings                                                     //
