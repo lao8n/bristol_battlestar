@@ -1,11 +1,12 @@
 package swarm_wars_library.network;
 
 import org.json.JSONObject;
-import swarm_wars_library.SwarmWars;
 
 import java.util.Map;
 
 public class ProtocolProcessor {
+
+    swarm_wars_library.map.Map map;
 
     private final static ProtocolProcessor processor = new ProtocolProcessor();
 
@@ -14,6 +15,7 @@ public class ProtocolProcessor {
     }
 
     private ProtocolProcessor() {
+        map = swarm_wars_library.map.Map.getInstance();
     }
 
     public void process(GameProtocol msg) {
@@ -37,7 +39,7 @@ public class ProtocolProcessor {
                 return;
             }
             // TODO: Only for test
-            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == Client.id){
+            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == map.getPlayerId()){
                 return;
             }
             // TODO ends here

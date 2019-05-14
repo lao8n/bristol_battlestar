@@ -9,7 +9,8 @@ import java.util.Scanner;
 public class NetworkClientFunctions {
 
     private static int interval = 1000/60;
-    private static int sleepInterval = 1000/60;
+    private static int sleepInterval = 0;
+    private static TerminalLogger tlogger = TerminalLogger.getInstance();
 
     public static void startNewtork() {
         new Thread(new Runnable() {
@@ -68,7 +69,7 @@ public class NetworkClientFunctions {
     }
 
     public static void sendStart(int id) {
-        if(id == 0){
+        if(id == 1){
              System.out.println("Try to send START");
 
             while (!MessageHandlerMulti.gameStarted) {
@@ -87,7 +88,7 @@ public class NetworkClientFunctions {
     }
 
     public static void awaitStart() {
-         System.out.println("Game not started yet");
+        System.out.println("Game not started yet");
         while (!MessageHandlerMulti.gameStarted) {
             try{Thread.sleep(interval);}
             catch (Exception e) {
@@ -103,18 +104,18 @@ public class NetworkClientFunctions {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put(Headers.TYPE, Constants.OPERATION);
         m.put(Headers.PLAYER, id);
-//        m.put(Headers.W, i.getMoveUp());
-//        m.put(Headers.A, i.getMoveLeft());
-//        m.put(Headers.D, i.getMoveRight());
-//        m.put(Headers.S, i.getMoveDown());
-//        MessageHandlerMulti.putPackage(m);
-//        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
+        m.put(Headers.W, i.getMoveUp());
+        m.put(Headers.A, i.getMoveLeft());
+        m.put(Headers.D, i.getMoveRight());
+        m.put(Headers.S, i.getMoveDown());
+        MessageHandlerMulti.putPackage(m);
+        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
 
     public static Map getPackage(int id, int frame) {
         Map<String, Object> rev = null;
         int getId = Math.abs(id - 1);
-//         System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
+//        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
         while (rev == null) {
 //            System.out.println("Player " + id + " trying to get player " + Math.abs(id - 1) + "s package with frame number " + frame);
             rev = MessageHandlerMulti.getPackage(getId, frame);
