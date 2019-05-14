@@ -1,20 +1,27 @@
 package swarm_wars_library.swarm_select;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.javatuples.Pair;
 
+import org.javatuples.Quartet;
 import processing.core.PApplet;
 import processing.core.PImage;
 
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.fsm.*;
 import swarm_wars_library.game_screens.GAMESCREEN;
-import swarm_wars_library.fsm.FSMManager;
-import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.graphics.RenderMiniMap;
 import swarm_wars_library.graphics.RenderUIMiniMapBot;
 import swarm_wars_library.graphics.RenderUIMiniMapPlayer1;
 import swarm_wars_library.graphics.RenderUIMiniMapTurret;
+import swarm_wars_library.input.Input;
+import swarm_wars_library.map.Map;
+import swarm_wars_library.network.Constants;
+import swarm_wars_library.network.Headers;
+import swarm_wars_library.network.MessageHandlerMulti;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -110,7 +117,7 @@ public class SwarmSelect{
       this.sketch, 
       this.locationFSMButton,
       this.dimFSMButton,
-      new ArrayList<>(this.fsmManager.getMapFSMStateTransition().values())); 
+      new ArrayList<>(this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).values()));
   }
   
   public void updateFSMVisualisation(){
@@ -157,9 +164,54 @@ public class SwarmSelect{
     // Start Button
     if(this.checkMousePressButton(this.locationStartButton, 
                                   this.dimStartButton)){
+      // TODO: Send setup package
+      // TODO: Get everything from FSMManger
+      sendSetUp();
       this.currentScreen = GAMESCREEN.GAME;
     }
     // 
+  }
+
+  private void sendSetUp() {
+    java.util.Map<String, Object> packToBeSent = new HashMap<String, Object>();
+    int myPlayId = Map.getInstance().getPlayerId();
+
+    packToBeSent.put(Headers.PLAYER, myPlayId);
+
+    // 不同的FSMState对应的编号
+    java.util.Map<Integer, FSMSTATE> myStates = fsmManager.getFSMStates(myPlayId);
+    java.util.Map<Integer, Integer> states = new HashMap<Integer, Integer>();
+    for (Integer i : myStates.keySet()) {
+      states.put(i, myStates.get(i).ordinal());
+    }
+    packToBeSent.put(Headers.STATES, states);
+
+    HashMap<Integer, FSMStateTransition> myTransitions = fsmManager.getMapFSMStateTransition(myPlayId);
+    List<java.util.Map<Integer, Object>> transitions = new ArrayList<java.util.Map<Integer, Object>>();
+    java.util.Map<Integer, Integer> swarmAlgorithms = new HashMap<Integer, Integer>();
+    // 在i状态下要干啥
+    for (int i : myTransitions.keySet()) {
+      FSMStateTransition fst = myTransitions.get(i);
+      List l = fst.getMyTransitions();
+      // 在此state下的swarmAlgorithm
+      swarmAlgorithms.put(i, fst.getSwarmAlgorithm().ordinal());
+      // 从i到j的转换的list
+      for (int j = 0; j < l.size(); j++) {
+        Quartet q = (Quartet) l.get(j);
+        java.util.Map<Integer, Object> transition = new HashMap<Integer, Object>();
+        transition.put(Constants.FROM_STATE, i);
+        transition.put(Constants.TO_STATE, q.getValue0());
+        transition.put(Constants.FSMVARIABLE, ((FSMVARIABLE) q.getValue1()).ordinal());
+        transition.put(Constants.FSMCOMPARISON, ((FSMCOMPARISON) q.getValue2()).ordinal());
+        transition.put(Constants.VALUE, q.getValue3());
+        transitions.add(transition);
+      }
+    }
+    packToBeSent.put(Headers.TRANSITIONS, transitions);
+
+    packToBeSent.put(Headers.TYPE, Constants.SETUP);
+
+    MessageHandlerMulti.putPackage(packToBeSent);
   }
 
   //=========================================================================//
@@ -254,14 +306,14 @@ public class SwarmSelect{
           SWARMALGORITHM.valueOf(i));
         if(SWARMALGORITHM.valueOf(i).getFSMState() == 
           this.fsmAddState.getValue(0) & (int) this.fsmAddState.getValue(1) >= 0){
-          this.fsmManager.setSwarmAlgorithm((int) this.fsmAddState.getValue(1), 
+          this.fsmManager.setSwarmAlgorithm(Map.getInstance().getPlayerId(), (int) this.fsmAddState.getValue(1),
                                             SWARMALGORITHM.valueOf(i));
        }
       }
       int selectedCheck = -1;
-      for(int j = 1; j <= this.fsmManager.getMapFSMStateTransition().size(); 
+      for(int j = 1; j <= this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).size();
           j++){        
-        if(this.fsmManager.getMapFSMStateTransition().get(j).getSwarmAlgorithm()
+        if(this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).get(j).getSwarmAlgorithm()
            == SWARMALGORITHM.valueOf(i)){
           selectedCheck = j;
         }

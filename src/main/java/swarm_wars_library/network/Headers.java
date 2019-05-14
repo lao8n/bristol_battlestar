@@ -20,15 +20,15 @@ public class Headers {
 
     public static final String PLAYER_NUMBER  ="N";
 
-    public static final String LOGIC = "L";
-
-    public static final String STATE = "S";
-
-    public static final String TRANSFER = "T";
-
     public static final String FRAME = "F";
 
     public static final String PLAYER = "P";
 
     public static final String RANDOM_SEED = "R";
+
+    public static final String STATES = "S";
+
+    public static final String TRANSITIONS = "T";
+
+    public static final String SWARM_LOGIC = "SL";
 }

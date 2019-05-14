@@ -1,6 +1,7 @@
 package swarm_wars_library.fsm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 

@@ -28,8 +28,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
       new SwarmLogic(this.tag, this.transform, this.rigidbody, id);
     this.transitionsAllowed = transitionsAllowed;
     if(this.transitionsAllowed){
-      this.swarmLogic.selectSwarmAlgorithm(
-        this.fsmManager.getStartingSwarmAlgorithm());
+      this.swarmLogic.selectStartingSwarmAlgorithm();
     }
     else {
       this.swarmLogic.selectSwarmAlgorithm(SWARMALGORITHM.DEFENDFLOCK);

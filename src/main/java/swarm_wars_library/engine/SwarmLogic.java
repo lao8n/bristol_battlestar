@@ -20,6 +20,7 @@ public class SwarmLogic {
   private AbstractSwarmAlgorithm swarm_algo;
   private FSMManager fsmManager = FSMManager.getInstance();
   private SWARMALGORITHM lastSwarmAlgorithm = SWARMALGORITHM.DEFENDFLOCK;
+  private int playerId;
 
   //=========================================================================//
   // Constructor                                                             //
@@ -30,6 +31,7 @@ public class SwarmLogic {
     this.transform = transform;
     this.id = id;
     this.rb.setMaxSpeed(15);
+    this.playerId = ENTITY.entityToPlayerId(tag);
   }
 
   //=========================================================================//
@@ -62,16 +64,20 @@ public class SwarmLogic {
     }
   }
 
+  public void selectStartingSwarmAlgorithm() {
+    this.selectSwarmAlgorithm(this.fsmManager.getStartingSwarmAlgorithm(playerId));
+  }
+
   //=========================================================================//
   // Update                                                                  //
   //=========================================================================//
   public void update(boolean transitionsFlag){
     if(transitionsFlag){
-      if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm()){
-        this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm());
+      if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm(playerId)){
+        this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm(playerId));
       }
       this.swarm_algo.applySwarmAlgorithm();
-      this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm();
+      this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm(playerId);
     }
     else {
       this.swarm_algo.applySwarmAlgorithm();

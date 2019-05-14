@@ -11,6 +11,7 @@ import swarm_wars_library.fsm.FSMCOMPARISON;
 import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.fsm.FSMVARIABLE;
+import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
 public class UI{
@@ -281,21 +282,22 @@ public class UI{
   //=========================================================================//
   // FSM Manager methods                                                     //
   //=========================================================================//
-  public void exampleFSM(){
+  public void exampleFSM(int playerId){
     // Add states first
-    this.fsmManager.addFSMState(1, FSMSTATE.DEFEND);
-    this.fsmManager.addFSMState(2, FSMSTATE.SCOUT);
+    System.out.println(playerId);
+    this.fsmManager.addFSMState(playerId, 1, FSMSTATE.DEFEND);
+    this.fsmManager.addFSMState(playerId, 2, FSMSTATE.SCOUT);
     // this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
     // this.fsmManager.addFSMState(3, FSMSTATE.DEFEND);
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
-    this.fsmManager.addTransition(1, 
+    this.fsmManager.addTransition(playerId, 1,
                                   2, 
                                   FSMVARIABLE.ENEMYDISTANCE, 
                                   FSMCOMPARISON.GREATERTHAN,
                                   500);
-    this.fsmManager.addTransition(2, 
+    this.fsmManager.addTransition(playerId, 2,
                                   1,
                                   FSMVARIABLE.ENEMYDISTANCE, 
                                   FSMCOMPARISON.LESSTHAN,
@@ -503,7 +505,7 @@ public class UI{
     else if(this.checkMousePressButton(new Vector2D(500, 30),
                                        new Vector2D(100, 50))){
       this.start.changeColour();
-      this.exampleFSM();
+      this.exampleFSM(Map.getInstance().getPlayerId());
       this.currentScreen = GAMESCREEN.SWARMSELECT;
     }
 

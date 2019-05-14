@@ -198,12 +198,15 @@ public class SwarmWars extends PApplet {
 
   public void networkSetup() {
     if(!playNetworkGame) {
-      map.setPlayerId(1);
-      map.setEnemyId(2);
+      // map.setPlayerId(1);
+      // map.setEnemyId(2);
+      Map.getInstance().setPlayerId(1);
+      Map.getInstance().setEnemyId(2);
     } else {
       NetworkClientFunctions.startNewtork();
-      map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
-      map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
+      // TODO: Make a UI
+      Map.getInstance().setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
+      Map.getInstance().setEnemyId(Map.getInstance().getPlayerId() == 1 ? 2:1);
     }
   }
 
@@ -308,6 +311,7 @@ public class SwarmWars extends PApplet {
   // a switch statement inside them?
 
   public void keyPressed() {
+    if(!this.currentScreen.equals(GAMESCREEN.GAME)) return;
     this.player1.listenKeyPressed(this.keyCode);
   }
 

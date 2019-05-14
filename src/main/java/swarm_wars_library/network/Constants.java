@@ -12,6 +12,16 @@ public class Constants {
 
     public static final String TYPE = "type";
 
+    public static final int FROM_STATE = 0;
+
+    public static final int TO_STATE = 1;
+
+    public static final int FSMVARIABLE = 2;
+
+    public static final int FSMCOMPARISON = 3;
+
+    public static final int VALUE = 4;
+
     public static final int SETUP = 0;
 
     public static final int OPERATION = 1;

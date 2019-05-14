@@ -37,7 +37,8 @@ public class ProtocolProcessor {
                 return;
             }
             // TODO: Only for test
-            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == Client.id){
+            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER)
+                    == swarm_wars_library.map.Map.getInstance().getPlayerId()){
                 return;
             }
             // TODO ends here

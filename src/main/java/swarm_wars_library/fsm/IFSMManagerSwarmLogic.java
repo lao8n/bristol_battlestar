@@ -7,7 +7,7 @@ public interface IFSMManagerSwarmLogic {
   //=========================================================================//
   // FSM Manager Swarm Logic methods                                         //
   //=========================================================================//
-  public SWARMALGORITHM getSwarmAlgorithm();
-  public double[] getSwarmAlgorithmWeights();
-  public SWARMALGORITHM getStartingSwarmAlgorithm();
+  public SWARMALGORITHM getSwarmAlgorithm(int playerId);
+  public double[] getSwarmAlgorithmWeights(int playerId);
+  public SWARMALGORITHM getStartingSwarmAlgorithm(int playerId);
 }
