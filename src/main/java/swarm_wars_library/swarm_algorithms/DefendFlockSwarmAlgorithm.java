@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.Tag;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
@@ -92,7 +93,7 @@ public class DefendFlockSwarmAlgorithm extends AbstractSwarmAlgorithm {
   }
 
   private Vector2D randomRule(){
-    return new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
+    return new Vector2D(RandomGen.getRand() - 0.5, RandomGen.getRand() - 0.5);
   }
 
   //=========================================================================//

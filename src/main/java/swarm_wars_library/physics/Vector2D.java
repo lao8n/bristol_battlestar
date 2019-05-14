@@ -1,7 +1,9 @@
 package swarm_wars_library.physics;
 
+import swarm_wars_library.map.RandomGen;
+
 public class Vector2D {
-	
+
 	private double x;
 	private double y;
 
@@ -120,8 +122,8 @@ public class Vector2D {
 
 
 	void random2D() {
-		x = Math.random();
-		y = Math.random();
+		x = RandomGen.getRand();
+		y = RandomGen.getRand();
 	}
 
 	void lerp(Vector2D v, double i){

@@ -64,16 +64,16 @@ public class Map {
   private Map(){
     this.backgroundStars = new ArrayList<Vector2D>();
     for(int i = 0; i < this.numStars; i++){
-      Vector2D v2d = new Vector2D(Math.random() * map_width, 
-                                  Math.random() * map_height);
+      Vector2D v2d = new Vector2D(RandomGen.getRand() * map_width,
+                                  RandomGen.getRand() * map_height);
       backgroundStars.add(i, v2d);
     }
     this.player1StartingLocation = 
-      new Vector2D(this.map_width * Math.random(), 
-                   this.map_height * Math.random());
+      new Vector2D(this.map_width * RandomGen.getRand(),
+                   this.map_height * RandomGen.getRand());
     this.player2StartingLocation = 
-      new Vector2D(this.map_width * Math.random(), 
-                   this.map_height * Math.random());
+      new Vector2D(this.map_width * RandomGen.getRand(),
+                   this.map_height * RandomGen.getRand());
   }
 
   //Get the only object available

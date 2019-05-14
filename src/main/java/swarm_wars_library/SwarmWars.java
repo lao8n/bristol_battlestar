@@ -3,6 +3,7 @@ package swarm_wars_library;
 import java.util.ArrayList;
 import processing.core.PApplet;
 
+import sun.nio.ch.Net;
 import swarm_wars_library.engine.CollisionDetection;
 import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
@@ -46,7 +47,7 @@ public class SwarmWars extends PApplet {
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
 
   // Metworking
-  private boolean playNetworkGame = true;
+  private boolean playNetworkGame = false;
 
 
   //=========================================================================//
@@ -204,13 +205,18 @@ public class SwarmWars extends PApplet {
       NetworkClientFunctions.startNewtork();
       map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
       map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
+      NetworkClientFunctions.cleanBuffer();
     }
   }
 
   public void networkingGameStart() {
     if(!playNetworkGame) return;
+    NetworkClientFunctions.sendConnect(map.getPlayerId());
+    NetworkClientFunctions.sendSetup(map.getPlayerId());
+  }
 
-
+  public void networkingGameInputs() {
+    
   }
 
   //=========================================================================//
@@ -334,6 +340,7 @@ public class SwarmWars extends PApplet {
         // TODO Add error
     }
   }
+
   public void mouseReleased() {
     switch(this.currentScreen){
       case START:

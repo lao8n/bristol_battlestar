@@ -9,9 +9,10 @@ public class RandomGen {
 
     private static Random r;
 
-    private static long seed;
+    private static long seed = 10;
 
     private RandomGen(){
+        r = new Random(seed);
     }
 
     public static void setSeed(int seed){
@@ -19,7 +20,7 @@ public class RandomGen {
     }
 
     public static int generateSeed(){
-        return (int) Math.round(Math.random() * 10000);
+        return (int) Math.round(RandomGen.getRand() * 10000);
     }
 
     public static double getRand() {

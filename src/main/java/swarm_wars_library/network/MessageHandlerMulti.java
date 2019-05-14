@@ -2,6 +2,7 @@ package swarm_wars_library.network;
 
 import io.netty.channel.Channel;
 import org.json.JSONObject;
+import swarm_wars_library.map.RandomGen;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -123,7 +124,7 @@ public class MessageHandlerMulti{
                     for (Map<String, Object> m : setupBuffer.values()) {
                         serverBuffer.offer(m);
                     }
-                    pack.put(Headers.RANDOM_SEED, (int)(Math.random()*Integer.MAX_VALUE));
+                    pack.put(Headers.RANDOM_SEED, (int)(RandomGen.getRand()*Integer.MAX_VALUE));
                     serverBuffer.offer(pack);
                     setupBuffer = new HashMap<Integer, Map<String, Object>>();
                     try {
