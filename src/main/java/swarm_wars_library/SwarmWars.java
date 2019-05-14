@@ -16,6 +16,7 @@ import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 import swarm_wars_library.swarm_select.SwarmSelect;
@@ -89,9 +90,13 @@ public class SwarmWars extends PApplet {
   // Processing Main                                                         //
   //=========================================================================//
   public static void main(String[] passedArgs) {
+    // NETWORKING START
+    NetworkClientFunctions.startNewtork();
+
     String[] appletArgs = new String[] {
       "swarm_wars_library.SwarmWars"
     };
+
     PApplet.main(appletArgs);
   }
   
@@ -213,6 +218,10 @@ public class SwarmWars extends PApplet {
   // Entities update                                                         //
   //=========================================================================//
   public void entitiesUpdate(){
+    // NETWORKING CAN WE PUT A BLOCKER HERE TO STOP ANY CHANGES HAPPENING BETWEEN PUT AND GET?
+    // NETWORKING PUT DATA HERE
+    // NETWORKING GET DATA HERE
+
     // Update game entities
     for(int i = 0; i < this.gameObjectsTakeDamage.size(); i++){
       this.gameObjectsTakeDamage.get(i).update();

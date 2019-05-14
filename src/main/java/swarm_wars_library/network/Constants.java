@@ -6,9 +6,9 @@ public class Constants {
 
     public static int LAST_SEEN = 0;
 
-    public static int ServerSleep = 0;
+    public static int ServerSleep = 1;
 
-    public static int ClientSleep = 0;
+    public static int ClientSleep = 1;
 
     public static final String TYPE = "type";
 
