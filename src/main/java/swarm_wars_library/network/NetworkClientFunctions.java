@@ -76,7 +76,7 @@ public class NetworkClientFunctions {
         }
         System.out.println("Game started");
     }
-
+    /*
     public static void sendOperation(int id, int frame, Input i) {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put(Headers.TYPE, Constants.OPERATION);
@@ -88,6 +88,7 @@ public class NetworkClientFunctions {
         MessageHandlerMulti.putPackage(m);
 //        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
+    */
 
     public static Map getPackage(int id, int frame) {
         Map<String, Object> rev = null;
