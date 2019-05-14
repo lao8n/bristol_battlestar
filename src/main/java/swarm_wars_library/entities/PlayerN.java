@@ -63,6 +63,11 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.commsPacket.setScore(this.getScore());
     this.commsPacket.setState(this.getState());
     this.commsPacket.setVelocity(this.getVelocity());
+    this.commsPacket.setMotherShipHeading(this.getHeading());
+    this.commsPacket.setMoveLeft(this.getInputLeft());
+    this.commsPacket.setMoveRight(this.getInputRight());
+    this.commsPacket.setMoveUp(this.getInputUp());
+    this.commsPacket.setMoveDown(this.getInputDown());
   }
 
   //=========================================================================//
@@ -119,6 +124,26 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
+  public boolean getInputLeft(){
+    return this.input.getMoveLeft();
+  }
+
+  @Override
+  public boolean getInputRight(){
+    return this.input.getMoveRight();
+  }
+
+  @Override 
+  public boolean getInputUp(){
+    return this.input.getMoveUp();
+  }
+
+  @Override 
+  public boolean getInputDown(){
+    return this.input.getMoveDown();
+  }
+
+  @Override
   public void listenKeyPressed(int keyCode){
     this.input.setMove(keyCode, 1);
   }
@@ -137,6 +162,8 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   public void listenMouseReleased(){
     this.input.setMouse(0);
   }
+
+
 
   //=========================================================================//
   // Input-Shooter methods                                                   //
