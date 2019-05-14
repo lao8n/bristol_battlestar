@@ -138,6 +138,10 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.input.setMouse(0);
   }
 
+  public Input getInput() {
+    return input;
+  }
+
   //=========================================================================//
   // Input-Shooter methods                                                   //
   //=========================================================================//

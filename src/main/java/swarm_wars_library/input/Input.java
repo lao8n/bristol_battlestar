@@ -86,6 +86,22 @@ public class Input {
     }
   }
 
+  public int getMoveLeft() {
+    return moveLeft;
+  }
+
+  public int getMoveRight() {
+    return moveRight;
+  }
+
+  public int getMoveUp() {
+    return moveUp;
+  }
+
+  public int getMoveDown() {
+    return moveDown;
+  }
+
   public void edgeCheck() {
     if (this.location.getX() < 0) {
       this.location.setX(0);
@@ -109,4 +125,6 @@ public class Input {
   public int getMouse(){
     return mouse;
   }
+
+
 }

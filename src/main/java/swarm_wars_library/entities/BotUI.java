@@ -2,6 +2,7 @@ package swarm_wars_library.entities;
 
 import swarm_wars_library.engine.SwarmLogic;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -19,8 +20,8 @@ public class BotUI extends AbstractEntity implements ISwarm{
       Map.getInstance()
          .getPlayerStartingLocation(Tag.getMotherShipTag(tag));
     this.setLocation(
-      new Vector2D(motherShipLocation.getX() - 100 + 200 * Math.random(),
-                   motherShipLocation.getY() - 100 + 200 * Math.random()));
+      new Vector2D(motherShipLocation.getX() - 100 + 200 * RandomGen.getRand(),
+                   motherShipLocation.getY() - 100 + 200 * RandomGen.getRand()));
     this.swarmLogic = 
       new SwarmLogic(this.tag, this.transform, this.rigidbody, id);
     this.swarmLogic.selectSwarmAlgorithm(startingSwarmAlgorithm);

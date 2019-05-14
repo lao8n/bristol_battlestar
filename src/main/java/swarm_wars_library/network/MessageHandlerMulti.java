@@ -2,12 +2,15 @@ package swarm_wars_library.network;
 
 import io.netty.channel.Channel;
 import org.json.JSONObject;
+import swarm_wars_library.map.RandomGen;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.util.*;
 
 public class MessageHandlerMulti{
+
+    private static TerminalLogger tlogger = TerminalLogger.getInstance();
 
     private static Queue<Map<String, Object>> serverBuffer =
             new LinkedList<Map<String, Object>>();
@@ -30,17 +33,17 @@ public class MessageHandlerMulti{
         Map<String, Object> tmp = null;
         while(q != null && q.size() != 0) {
             tmp = q.peek();
-//             System.out.println("Player Number: " + playerNumber + " , Frame Number: " + tmp.get(Headers.FRAME));
+            tlogger.log("Player Number: " + playerNumber + " , Frame Number: " + tmp.get(Headers.FRAME));
             int frameNow = (Integer) tmp.get(Headers.FRAME);
             if (frameNow < frame){
-//                System.out.println("Current package frame is less than wanted");
+                tlogger.log("Current package frame is less than wanted");
                 q.poll();
             }else if (frameNow == frame){
-//                System.out.println("Successfully got one frame package, frame: " + tmp.get(Headers.FRAME));
+                tlogger.log("Successfully got one frame package, frame: " + tmp.get(Headers.FRAME));
                 tmp = q.poll();
                 break;
             }else if (frameNow > frame) {
-//                System.out.println("No package found");
+                tlogger.log("No package found");
                 break;
             }
         }
@@ -53,7 +56,7 @@ public class MessageHandlerMulti{
 
     public static void clientReceivePackage(int playerNumber, Map<String, Object> m) {
         // TODO: About starting
-//         System.out.println("Received player: " + m.get(Headers.PLAYER) + " frame: " + m.get(Headers.FRAME));
+        tlogger.log("Received player: " + m.get(Headers.PLAYER) + " frame: " + m.get(Headers.FRAME));
         clientReceiveBuffer.get(playerNumber).offer(m);
     }
 
@@ -64,7 +67,7 @@ public class MessageHandlerMulti{
         // Create a new queue
         Queue<Map<String, Object>> q = new LinkedList<Map<String, Object>>();
         clientReceiveBuffer.put(playerNumber, q);
-//        System.out.println("New player buffer created, player ID:" + playerNumber);
+        tlogger.log("New player buffer created, player ID:" + playerNumber);
     }
 
     public static synchronized void putPackage(Map<String, Object> pack){
@@ -73,7 +76,7 @@ public class MessageHandlerMulti{
 
     public static synchronized void sendpackage() throws InterruptedException{
         if (serverBuffer.size() == 0) {
-            // System.out.println("No message in sending buffer" + i++);
+            // tlogger.log("No message in sending buffer");
             // TODO: 决定发送频率
             Thread.sleep(Constants.ServerSleep);
             return;
@@ -95,7 +98,7 @@ public class MessageHandlerMulti{
     public static void refreshClientReceiveBuffer() {
         clientReceiveBuffer =
                 new HashMap<Integer, Queue<Map<String, Object>>>();
-//        System.out.println("Refreshed client receiving buffer");
+        tlogger.log("Refreshed client receiving buffer");
     }
 
     public static synchronized void serverReceivePackage(Map<String, Object> pack){
@@ -103,7 +106,7 @@ public class MessageHandlerMulti{
         // If the package is START, then the frame counter starts
         switch ((Integer) pack.get(Headers.TYPE)) {
             case Constants.OPERATION:
-//                System.out.println("Case: OPERATION");
+                tlogger.log("Case: OPERATION");
                 // Add a new header frame
                 pack.put(Headers.FRAME, Frames.get((Integer)pack.get(Headers.PLAYER)));
                 int frame = Frames.get((Integer)pack.get(Headers.PLAYER));
@@ -112,18 +115,18 @@ public class MessageHandlerMulti{
                 break;
             case Constants.SETUP:
                 // Receiving all setup packages means all ready, game starts
-//                System.out.println("Case: SETUP");
+                tlogger.log("Case: SETUP");
                 pack.put(Headers.FRAME, 0);
                 setupBuffer.put((Integer) pack.get(Headers.PLAYER), pack);
                 readyPlayers++;
                 break;
             case Constants.START:
-//                System.out.println("Case: START");
+                tlogger.log("Case: START");
                 if (readyPlayers == Frames.size() && Frames.size() > 1){
                     for (Map<String, Object> m : setupBuffer.values()) {
                         serverBuffer.offer(m);
                     }
-                    pack.put(Headers.RANDOM_SEED, (int)(Math.random()*Integer.MAX_VALUE));
+                    pack.put(Headers.RANDOM_SEED, (int)(RandomGen.getRand()*Integer.MAX_VALUE));
                     serverBuffer.offer(pack);
                     setupBuffer = new HashMap<Integer, Map<String, Object>>();
                     try {
@@ -134,11 +137,11 @@ public class MessageHandlerMulti{
                 }
                 break;
             case Constants.CONNECT:
-//                System.out.println("Case: CONNECT");
+                tlogger.log("Case: CONNECT");
                 Frames.put((Integer)pack.get(Headers.PLAYER), 1);
                 break;
             case Constants.END:
-//                System.out.println("Case: END");
+                tlogger.log("Case: END");
                 Frames.remove((Integer)pack.get(Headers.PLAYER));
                 clientReceiveBuffer.remove((Integer)pack.get(Headers.PLAYER));
                 readyPlayers--;
@@ -149,7 +152,7 @@ public class MessageHandlerMulti{
 
     public static synchronized void sendPackageClient() throws InterruptedException{
         if (clientSendBuffer.size() == 0){
-            // System.out.println("No message in sending buffer" + i++);
+//            tlogger.log("No message in sending buffer");
             // TODO: 确定发送频率
             Thread.sleep(Constants.ClientSleep);
             return;

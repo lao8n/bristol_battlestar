@@ -8,6 +8,7 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.Tag;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
@@ -63,9 +64,9 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
       }
       else {
         // Random target
-        this.scoutBeeTarget = new Vector2D(Math.random() * 
+        this.scoutBeeTarget = new Vector2D(RandomGen.getRand() *
                                             this.map.getMapWidth(), 
-                                            Math.random() * 
+                                            RandomGen.getRand() *
                                             this.map.getMapHeight());
       }
       this.heading = this.seekScoutTarget(this.scoutBeeTarget);
@@ -150,7 +151,7 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
   }
 
   private Vector2D randomRule(){
-    return new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
+    return new Vector2D(RandomGen.getRand() - 0.5, RandomGen.getRand() - 0.5);
   }
 
   public void addTargetEntity(ENTITY type){

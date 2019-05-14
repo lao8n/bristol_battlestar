@@ -1,11 +1,13 @@
 package swarm_wars_library.network;
 
 import org.json.JSONObject;
-import swarm_wars_library.SwarmWars;
+import swarm_wars_library.map.RandomGen;
 
 import java.util.Map;
 
 public class ProtocolProcessor {
+
+    swarm_wars_library.map.Map map;
 
     private final static ProtocolProcessor processor = new ProtocolProcessor();
 
@@ -14,6 +16,7 @@ public class ProtocolProcessor {
     }
 
     private ProtocolProcessor() {
+        map = swarm_wars_library.map.Map.getInstance();
     }
 
     public void process(GameProtocol msg) {
@@ -34,11 +37,12 @@ public class ProtocolProcessor {
             Map m = j.toMap();
             if (m.get(Headers.TYPE).equals(Constants.START)) {
                 MessageHandlerMulti.gameStarted = true;
+                RandomGen.setSeed((Integer) m.get(Headers.RANDOM_SEED));
                 return;
             }
             // TODO: Only for test
-            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER)
-                    == swarm_wars_library.map.Map.getInstance().getPlayerId()){
+
+            if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == map.getPlayerId()){
                 return;
             }
             // TODO ends here
