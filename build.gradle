@@ -39,6 +39,7 @@ sourceSets {
 dependencies {
     compile files('library/core.jar')
     compile files('library/jsyn-20171016.jar')
+    compile_files('library/jogl-2.3.2.jar')
     compile files('library/sound.jar')
     provided group: 'org.processing', name: 'core', version: '3.3.6'
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')

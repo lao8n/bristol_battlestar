@@ -11,6 +11,7 @@ import swarm_wars_library.entities.PlayerAI;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
 import swarm_wars_library.game_screens.GAMESCREEN;
+import swarm_wars_library.game_screens.StartText;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
@@ -36,16 +37,18 @@ public class SwarmWars extends PApplet {
   Map map = Map.getInstance();
   RenderLayers renderLayers;
   UI ui;
+  StartText startText;
   PlayBackgroundMusic playBackgroundMusic;
 
   // Game screens 
-  GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
+  GAMESCREEN currentScreen = GAMESCREEN.START;
 
   //=========================================================================//
   // Processing Settings                                                     //
   //=========================================================================//
   public void settings() {
-    this.size(1200, 800, "processing.awt.PGraphicsJava2D");
+    this.size(1200, 800,
+              "processing.opengl.PGraphicsOpenGL");
   }
 
   //=========================================================================//
@@ -53,6 +56,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
+    this.startTextSetup();
     this.uiSetup();
     this.commsSetup();
     this.entitiesSetup();
@@ -66,6 +70,7 @@ public class SwarmWars extends PApplet {
   public void draw() {
     switch(this.currentScreen){
       case START:
+        this.startTextUpdate();
         break;
       case FSMUI:
         this.uiUpdate();
@@ -170,6 +175,14 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // Start Screen  Setup                                                            //
+  //=========================================================================//
+  public void startTextSetup(){
+
+    this.startText = new StartText(this);
+  }
+
+  //=========================================================================//
   // UI Setup                                                                //
   //=========================================================================//
   public void uiSetup(){
@@ -240,6 +253,14 @@ public class SwarmWars extends PApplet {
   public void uiUpdate(){
     this.ui.update();
     this.currentScreen = this.ui.getGameScreen();
+  }
+
+  //=========================================================================//
+  // Start Text  update                                                     //
+  //=========================================================================//
+  public void startTextUpdate(){
+    this.startText.update();
+    this.currentScreen = this.startText.getGameScreen();
   }
 
 
