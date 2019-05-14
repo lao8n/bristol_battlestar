@@ -56,6 +56,9 @@ public class Map {
   private Vector2D player1StartingLocation;
   private Vector2D player2StartingLocation;
 
+  private int playerId;
+  private int enemyId;
+
   //make the constructor private so that this class cannot be
   //instantiated
   private Map(){
@@ -126,5 +129,21 @@ public class Map {
       return this.player1StartingLocation;
     }
     return this.player2StartingLocation;
+  }
+
+  public int getPlayerId() {
+    return playerId;
+  }
+
+  public void setPlayerId(int playerId) {
+    this.playerId = playerId;
+  }
+
+  public int getEnemyId() {
+    return enemyId;
+  }
+
+  public void setEnemyId(int enemyId) {
+    this.enemyId = enemyId;
   }
 }

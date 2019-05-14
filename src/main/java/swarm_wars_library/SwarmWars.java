@@ -45,9 +45,9 @@ public class SwarmWars extends PApplet {
   // Game screens 
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
 
-  // Networking things
-  private int playerId;
-  private int enemyId;
+  // Metworking
+  private boolean playNetworkGame = true;
+
 
   //=========================================================================//
   // Processing Settings                                                     //
@@ -63,6 +63,9 @@ public class SwarmWars extends PApplet {
     this.frameRate(60);
     this.uiSetup();
     // this.soundSetup();
+
+    // NETWORKING - Starts server and gets ids
+    this.networkSetup();
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
@@ -76,6 +79,7 @@ public class SwarmWars extends PApplet {
         break;
       case SWARMSELECT:
         this.swarmSelectUpdate();
+        this.networkingGameStart();
         break;
       case GAME:
         this.checkCollisions();
@@ -94,8 +98,6 @@ public class SwarmWars extends PApplet {
   // Processing Main                                                         //
   //=========================================================================//
   public static void main(String[] passedArgs) {
-    // NETWORKING START
-    NetworkClientFunctions.startNewtork();
 
     String[] appletArgs = new String[] {
       "swarm_wars_library.SwarmWars"
@@ -192,6 +194,23 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void uiSetup(){
     this.fsmUI = new UI(this);
+  }
+
+  public void networkSetup() {
+    if(!playNetworkGame) {
+      map.setPlayerId(1);
+      map.setEnemyId(2);
+    } else {
+      NetworkClientFunctions.startNewtork();
+      map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
+      map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
+    }
+  }
+
+  public void networkingGameStart() {
+    if(!playNetworkGame) return;
+
+
   }
 
   //=========================================================================//
