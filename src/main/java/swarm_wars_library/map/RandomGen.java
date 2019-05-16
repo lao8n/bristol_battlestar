@@ -15,7 +15,6 @@ public class RandomGen {
     private RandomGen(){
         r = new Random();
         r.setSeed(seed);
-        i = 0;
     }
 
     public static void setSeed(int newSeed){
