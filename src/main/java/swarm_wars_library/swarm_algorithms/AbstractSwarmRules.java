@@ -17,6 +17,8 @@ public abstract class AbstractSwarmRules{
   protected ArrayList<Vector2D> rulesV2D;
   protected RigidBody ruleRb;
   protected Transform ruleTransform;
+  protected ArrayList<ENTITY> targets = new ArrayList<ENTITY>();
+
 
   public AbstractSwarmRules(int ruleId, RigidBody ruleRb, 
     Transform ruleTransform){
@@ -24,6 +26,7 @@ public abstract class AbstractSwarmRules{
     this.ruleRb = ruleRb;
     this.ruleTransform = ruleTransform;
     this.rulesV2D = new ArrayList<Vector2D>();
+    this.targets.add(ENTITY.TURRET);
   }
 
   public ArrayList<Vector2D> iterateOverSwarm(ENTITY tag){

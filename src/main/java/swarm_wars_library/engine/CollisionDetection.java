@@ -29,7 +29,7 @@ public class CollisionDetection {
 
 	public static boolean hasCollision(AbstractEntity dealDamage, 
 		AbstractEntity takeDamage){
-		if(dealDamage.isState(STATE.ALIVE) &&
+		if((dealDamage.isState(STATE.ALIVE) || dealDamage.isState(STATE.SUICIDE)) &&
 			 takeDamage.isState(STATE.ALIVE) &&
 			 (Vector2D.sub(dealDamage.getLocation(),takeDamage.getLocation()).mag()
 			 < dealDamage.getScale() + takeDamage.getScale())){

@@ -286,21 +286,32 @@ public class UI{
     // Add states first
     this.fsmManager.addFSMState(1, FSMSTATE.DEFEND);
     this.fsmManager.addFSMState(2, FSMSTATE.SCOUT);
-    // this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
+    this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
     // this.fsmManager.addFSMState(3, FSMSTATE.DEFEND);
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
-    this.fsmManager.addTransition(1, 
-                                  2, 
-                                  FSMVARIABLE.ENEMYDISTANCE, 
+    this.fsmManager.addTransition(1,
+                                  2,
+                                  FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.GREATERTHAN,
                                   500);
-    this.fsmManager.addTransition(2, 
+    this.fsmManager.addTransition(2,
                                   1,
-                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.LESSTHAN,
-                                  300);
+                                  10);
+    this.fsmManager.addTransition(1,
+                                  3,
+                                  FSMVARIABLE.ENEMYDISTANCE,
+                                  FSMCOMPARISON.LESSTHAN,
+                                  200);
+    this.fsmManager.addTransition(3,
+                                  2,
+                                  FSMVARIABLE.ENEMYDISTANCE,
+                                  FSMCOMPARISON.LESSTHAN,
+                                  200);
+
     // this.fsmManager.addTransition(3, 
     //                               1,
     //                               FSMVARIABLE.ENEMYDISTANCE, 

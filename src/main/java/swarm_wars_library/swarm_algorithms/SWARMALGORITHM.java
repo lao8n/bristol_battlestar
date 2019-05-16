@@ -7,7 +7,7 @@ import swarm_wars_library.fsm.FSMSTATE;
 import java.util.HashMap;
 
 public enum SWARMALGORITHM {
-  ATTACK1(0), 
+  ATTACKSUICIDE(0),
   ATTACK2(1), 
   ATTACK3(2), 
   ATTACK4(3), 
