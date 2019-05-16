@@ -28,15 +28,18 @@ import swarm_wars_library.swarm_select.SwarmSelect;
 public class SwarmWars extends PApplet {
 
   // Networking
-  private boolean playNetworkGame = true;
+  private boolean playNetworkGame = false;
 
-  // To play single player set playNetworkGame to false,
-  // set player2 to PlayerAI object and set the constructor for player 2 in entitiesSetup() to PlayerAI
+  // To play single player:
+  //  set playNetworkGame to false,
+  //  set player2 to PlayerAI object
+  //  set the constructor for player 2 in entitiesSetup() to PlayerAI
+  //  comment out getInput functions in networkingGetEnemyInputs()
 
   // Players
   PlayerN player1;
-  PlayerN player2;
-//  PlayerAI player2;
+//  PlayerN player2;
+  PlayerAI player2;
 
 
   // Entity lists that has all our game things.
@@ -165,8 +168,8 @@ public class SwarmWars extends PApplet {
     }
 
     // player2 setup
-    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
-//    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
+//    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
+    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
     this.player2TakeDamage.add(this.player2);
     this.player2DealDamage.addAll(player2.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
@@ -253,10 +256,10 @@ public class SwarmWars extends PApplet {
     if(!playNetworkGame) return;
     java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getPlayerId(), frameNumber++);
 
-    if(messageIn.containsKey("W")) player2.getInput().setMove(UP, (Integer) messageIn.get("W"));
-    if(messageIn.containsKey("A")) player2.getInput().setMove(LEFT, (Integer) messageIn.get("A"));
-    if(messageIn.containsKey("S")) player2.getInput().setMove(DOWN, (Integer) messageIn.get("S"));
-    if(messageIn.containsKey("D")) player2.getInput().setMove(RIGHT, (Integer) messageIn.get("D"));
+//    if(messageIn.containsKey("W")) player2.getInput().setMove(UP, (Integer) messageIn.get("W"));
+//    if(messageIn.containsKey("A")) player2.getInput().setMove(LEFT, (Integer) messageIn.get("A"));
+//    if(messageIn.containsKey("S")) player2.getInput().setMove(DOWN, (Integer) messageIn.get("S"));
+//    if(messageIn.containsKey("D")) player2.getInput().setMove(RIGHT, (Integer) messageIn.get("D"));
 
   }
 

@@ -12,8 +12,6 @@ public class RandomGen {
 
     private static boolean  seedSet = false;
 
-    private static int i = 0;
-
     private RandomGen(){
         r = new Random();
         r.setSeed(seed);
@@ -38,10 +36,6 @@ public class RandomGen {
 
     public static double getRand() {
         double rand = r.nextDouble();
-        if(i++ - 1000 > 0) {
-            System.out.println(rand);
-            i = 0;
-        }
         return rand;
     }
 
