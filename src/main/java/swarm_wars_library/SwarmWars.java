@@ -31,7 +31,7 @@ public class SwarmWars extends PApplet {
   // To play single player set playNetworkGame to false
 
   // Networking
-  public static boolean playNetworkGame = true;
+  public static boolean playNetworkGame = false;
 
   // Players
   PlayerN playerMe;
@@ -92,6 +92,8 @@ public class SwarmWars extends PApplet {
         this.swarmSelectUpdate();
         break;
       case GAME:
+        this.updateMouse();
+        this.playerMe.updateInputBuffer();
         this.networkUpdate();
         this.checkCollisions();
         this.entitiesUpdate();
@@ -115,6 +117,18 @@ public class SwarmWars extends PApplet {
     };
 
     PApplet.main(appletArgs);
+  }
+
+  //=========================================================================//
+  // Game Setup                                                              //
+  //=========================================================================//
+  public void gameSetup(){
+    RandomGen.resetSeed();
+    CommsGlobal.reset();
+    this.commsSetup();
+    this.entitiesSetup();
+    CommsGlobal.update();
+    this.renderSetup();
   }
   
   //=========================================================================//
@@ -238,7 +252,7 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
-  // Networking                                                              //
+  // Networking Setup                                                        //
   //=========================================================================//
 
   public void networkSetup() {
@@ -261,7 +275,6 @@ public class SwarmWars extends PApplet {
     map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
     NetworkClientFunctions.cleanBuffer();
 
-
     // NETWORKING this needs to be integrated with FSM and selection
     NetworkClientFunctions.sendConnect(map.getPlayerId());
     System.out.println("Step 2");
@@ -272,28 +285,6 @@ public class SwarmWars extends PApplet {
     if(!playNetworkGame) return;
     NetworkClientFunctions.sendStart(map.getPlayerId());
     NetworkClientFunctions.awaitStart();
-  }
-
-  public void networkingSendPlayerInputs() {
-    if(!playNetworkGame) return;
-    int id = map.getPlayerId();
-    java.util.Map<String, Object> m = new HashMap<String, Object>();
-    m.put(Headers.TYPE, Constants.OPERATION);
-    m.put(Headers.PLAYER, id);
-    m.put(Headers.W, playerMe.getInputUp());
-    m.put(Headers.S, playerMe.getInputDown());
-    m.put(Headers.A, playerMe.getInputLeft());
-    m.put(Headers.D, playerMe.getInputRight());
-    NetworkClientFunctions.sendOperation(id, frameNumber, m);
-  }
-
-  public void networkingGetEnemyInputs() {
-    if(!playNetworkGame) return;
-    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getEnemyId(), frameNumber);
-    if(messageIn.containsKey("W")) playerEnemy.setInputUp((Integer) messageIn.get("W"));
-    if(messageIn.containsKey("S")) playerEnemy.setInputDown((Integer) messageIn.get("S"));
-    if(messageIn.containsKey("A")) playerEnemy.setInputLeft((Integer) messageIn.get("A"));
-    if(messageIn.containsKey("D")) playerEnemy.setInputRight((Integer) messageIn.get("D"));
   }
 
   /*
@@ -312,10 +303,43 @@ public class SwarmWars extends PApplet {
   }
   */
 
+  //=========================================================================//
+  // Networking Update                                                       //
+  //=========================================================================//
+
   public void networkUpdate() {
     this.networkingSendPlayerInputs();
     this.networkingGetEnemyInputs();
     frameNumber++;
+  }
+
+  public void networkingSendPlayerInputs() {
+    if(!playNetworkGame) return;
+    int id = map.getPlayerId();
+    java.util.Map<String, Object> m = new HashMap<String, Object>();
+    m.put(Headers.TYPE, Constants.OPERATION);
+    m.put(Headers.PLAYER, id);
+    m.put(Headers.W, playerMe.getInputUp());
+    m.put(Headers.S, playerMe.getInputDown());
+    m.put(Headers.A, playerMe.getInputLeft());
+    m.put(Headers.D, playerMe.getInputRight());
+    m.put(Headers.MOUSE_X, playerMe.getInputMouseX());
+    m.put(Headers.MOUSE_Y, playerMe.getInputMouseY());
+    m.put(Headers.MOUSE_PRESSED, playerMe.getInputMouse());
+    NetworkClientFunctions.sendOperation(id, frameNumber, m);
+  }
+
+  public void networkingGetEnemyInputs() {
+    if(!playNetworkGame) return;
+    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getEnemyId(), frameNumber);
+    if(messageIn.containsKey("W")) playerEnemy.setInputUp((Integer) messageIn.get("W"));
+    if(messageIn.containsKey("S")) playerEnemy.setInputDown((Integer) messageIn.get("S"));
+    if(messageIn.containsKey("A")) playerEnemy.setInputLeft((Integer) messageIn.get("A"));
+    if(messageIn.containsKey("D")) playerEnemy.setInputRight((Integer) messageIn.get("D"));
+
+    if(messageIn.containsKey("X")) playerEnemy.setInputMouseX((Integer) messageIn.get("X"));
+    if(messageIn.containsKey("Y")) playerEnemy.setInputMouseY((Integer) messageIn.get("Y"));
+    if(messageIn.containsKey("C")) playerEnemy.setInputMouse((Integer) messageIn.get("C"));
   }
 
   //=========================================================================//
@@ -390,12 +414,7 @@ public class SwarmWars extends PApplet {
   public void swarmSelectUpdate(){
     this.swarmSelect.update();
     if(this.swarmSelect.getGameScreen() == GAMESCREEN.GAME){
-      RandomGen.resetSeed();
-      CommsGlobal.reset();
-      this.commsSetup();
-      this.entitiesSetup();
-      CommsGlobal.update();
-      this.renderSetup();
+      this.gameSetup();
       this.currentScreen = this.swarmSelect.getGameScreen();
     }
   }
@@ -418,15 +437,13 @@ public class SwarmWars extends PApplet {
   // a switch statement inside them?
 
   public void keyPressed() {
-    if(this.currentScreen.equals(GAMESCREEN.GAME)){
-      this.playerMe.listenKeyPressed(this.keyCode);
-    }
+    if(!this.currentScreen.equals(GAMESCREEN.GAME)) return;
+    this.playerMe.listenKeyPressed(this.keyCode);
   }
 
   public void keyReleased() {
-    if(this.currentScreen.equals(GAMESCREEN.GAME)) {
-      this.playerMe.listenKeyReleased(this.keyCode);
-    }
+    if(!this.currentScreen.equals(GAMESCREEN.GAME)) return;
+    this.playerMe.listenKeyReleased(this.keyCode);
   }
 
   public void mousePressed() {
@@ -467,5 +484,10 @@ public class SwarmWars extends PApplet {
       default:
         // TODO Add error
     }
+  }
+
+  private void updateMouse() {
+    this.playerMe.setInputMouseX(this.mouseX);
+    this.playerMe.setInputMouseY(this.mouseY);
   }
 }

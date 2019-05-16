@@ -109,7 +109,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   //=========================================================================//
-  // Input     methods                                                       //
+  // Input methods                                                           //
   //=========================================================================//
   @Override
   public void updateInput(){
@@ -149,6 +149,21 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
+  public int getInputMouseX(){
+    return this.input.getMouseX();
+  }
+
+  @Override
+  public int getInputMouseY(){
+    return this.input.getMouseY();
+  }
+
+  @Override
+  public int getInputMouse(){
+    return this.input.getMouse();
+  }
+
+  @Override
   public void setInputUp(int b){
     this.input.setMove(UP, b);
   }
@@ -168,29 +183,51 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.input.setMove(RIGHT, b);
   }
 
+  @Override
+  public void setInputMouseX(int mouseX) {
+    this.input.setMouseX(mouseX);
+  }
+
+  @Override
+  public void setInputMouseY(int mouseY) {
+    this.input.setMouseY(mouseY);
+  }
+
+  @Override
+  public void setInputMouse(int input) {
+    this.input.setMouse(input);
+  }
+
+
   //=========================================================================//
   // Input listeners                                                         //
   //=========================================================================//
 
   @Override
-  public void listenKeyPressed(int keyCode){
-    this.input.setMove(keyCode, 1);
+  public void listenKeyPressed(int keyCode) {
+    this.input.setMoveBuffer(keyCode, 1);
   }
 
   @Override
-  public void listenKeyReleased(int keyCode){
-    this.input.setMove(keyCode, 0);
+  public void listenKeyReleased(int keyCode) {
+    this.input.setMoveBuffer(keyCode, 0);
   }
 
   @Override
-  public void listenMousePressed(){
-    this.input.setMouse(1);
+  public void listenMousePressed() {
+    this.input.setMouseBuffer(1);
   }
 
   @Override
-  public void listenMouseReleased(){
-    this.input.setMouse(0);
+  public void listenMouseReleased() {
+    this.input.setMouseBuffer(0);
   }
+
+  @Override
+  public void updateInputBuffer() {
+    this.input.updateBuffer();
+  }
+
 
   //=========================================================================//
   // Input-Shooter methods                                                   //

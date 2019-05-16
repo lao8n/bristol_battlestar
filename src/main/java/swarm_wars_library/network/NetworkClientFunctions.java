@@ -101,7 +101,7 @@ public class NetworkClientFunctions {
 
     public static void sendOperation(int id, int frame, Map<String, Object> m) {
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
+//        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
 
     public static Map getPackage(int id, int frame) {
