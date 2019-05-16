@@ -284,7 +284,6 @@ public class UI{
   //=========================================================================//
   public void exampleFSM(int playerId){
     // Add states first
-    System.out.println(playerId);
     this.fsmManager.addFSMState(playerId, 1, FSMSTATE.DEFEND);
     this.fsmManager.addFSMState(playerId, 2, FSMSTATE.SCOUT);
     // this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);

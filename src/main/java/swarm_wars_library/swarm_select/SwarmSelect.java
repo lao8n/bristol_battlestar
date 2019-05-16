@@ -10,6 +10,7 @@ import org.javatuples.Quartet;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.fsm.*;
 import swarm_wars_library.game_screens.GAMESCREEN;
@@ -22,6 +23,7 @@ import swarm_wars_library.map.Map;
 import swarm_wars_library.network.Constants;
 import swarm_wars_library.network.Headers;
 import swarm_wars_library.network.MessageHandlerMulti;
+import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -166,8 +168,12 @@ public class SwarmSelect{
                                   this.dimStartButton)){
       // TODO: Send setup package
       // TODO: Get everything from FSMManger
-      sendSetUp();
       this.currentScreen = GAMESCREEN.GAME;
+      if(SwarmWars.playNetworkGame) {
+        sendSetUp();
+        NetworkClientFunctions.sendStart(Map.getInstance().getPlayerId());
+        NetworkClientFunctions.awaitStart();
+      }
     }
     // 
   }
@@ -181,6 +187,7 @@ public class SwarmSelect{
     // 不同的FSMState对应的编号
     java.util.Map<Integer, FSMSTATE> myStates = fsmManager.getFSMStates(myPlayId);
     java.util.Map<Integer, Integer> states = new HashMap<Integer, Integer>();
+    // <用户设定值，state在枚举类中的坐标>
     for (Integer i : myStates.keySet()) {
       states.put(i, myStates.get(i).ordinal());
     }
@@ -208,10 +215,11 @@ public class SwarmSelect{
       }
     }
     packToBeSent.put(Headers.TRANSITIONS, transitions);
-
+    packToBeSent.put(Headers.SWARM_LOGIC, swarmAlgorithms);
     packToBeSent.put(Headers.TYPE, Constants.SETUP);
 
     MessageHandlerMulti.putPackage(packToBeSent);
+    System.out.println("Step 3");
   }
 
   //=========================================================================//

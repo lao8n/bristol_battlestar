@@ -2,7 +2,7 @@ package swarm_wars_library.network;
 
 public class TerminalLogger {
 
-    private boolean isLogging = true;
+    private boolean isLogging = false;
 
     private static TerminalLogger logger = new TerminalLogger();
 
@@ -13,6 +13,6 @@ public class TerminalLogger {
     }
 
     public void log(String msg) {
-        System.out.println(msg);
+        if (isLogging) System.out.println(msg);
     }
 }

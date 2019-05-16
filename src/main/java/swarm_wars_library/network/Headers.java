@@ -28,7 +28,7 @@ public class Headers {
 
     public static final String STATES = "S";
 
-    public static final String TRANSITIONS = "T";
+    public static final String TRANSITIONS = "TR";
 
     public static final String SWARM_LOGIC = "SL";
 }

@@ -11,6 +11,7 @@ import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.PlayerAI;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
+import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.fsm_ui.UI;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderLayers;
@@ -18,6 +19,7 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.network.MessageHandlerMulti;
 import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
@@ -49,7 +51,7 @@ public class SwarmWars extends PApplet {
   int frameNumber;
 
   // Networking
-  private boolean playNetworkGame = true;
+  public static boolean playNetworkGame = true;
 
   //=========================================================================//
   // Processing Settings                                                     //
@@ -63,12 +65,13 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
-    this.uiSetup();
     // this.soundSetup();
 
     // NETWORKING - Starts server and gets ids
     this.networkSetup();
-    this.frameNumber = 0;
+    this.frameNumber = 1;
+
+    this.uiSetup();
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
@@ -76,6 +79,7 @@ public class SwarmWars extends PApplet {
   public void draw() {
     switch(this.currentScreen){
       case START:
+        // TODO: Let the user select mode
         break;
       case FSMUI:
         this.uiUpdate();
@@ -197,6 +201,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void uiSetup(){
     this.fsmUI = new UI(this);
+    if (playNetworkGame) networkConnect();
   }
 
   public void networkSetup() {
@@ -208,19 +213,21 @@ public class SwarmWars extends PApplet {
     } else {
       // start network
       NetworkClientFunctions.startNewtork();
-
-      // TODO: Make a UI
-      map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
-      map.setEnemyId(map.getPlayerId() == 0 ? 1 : 0);
-      NetworkClientFunctions.cleanBuffer();
-
-
-      // NETWORKING this needs to be integrated with FSM and selection
-      NetworkClientFunctions.sendConnect(map.getPlayerId());
-      NetworkClientFunctions.sendSetup(map.getPlayerId());
-
-      networkingGameStart();
+      System.out.println("Step 1");
     }
+  }
+
+  public void networkConnect() {
+    // TODO: Make a UI
+    map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
+    map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
+    NetworkClientFunctions.cleanBuffer();
+
+
+    // NETWORKING this needs to be integrated with FSM and selection
+    NetworkClientFunctions.sendConnect(map.getPlayerId());
+    System.out.println("Step 2");
+    // NetworkClientFunctions.sendSetup(map.getPlayerId());
   }
 
   public void networkingGameStart() {
@@ -240,7 +247,7 @@ public class SwarmWars extends PApplet {
 
   public void networkingGetEnemyInputs() {
     if(!playNetworkGame) return;
-    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getPlayerId(), frameNumber++);
+    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getEnemyId(), frameNumber++);
 
     if(messageIn.containsKey("W")) player2.getInput().setMove(UP, (Integer) messageIn.get("W"));
     if(messageIn.containsKey("A")) player2.getInput().setMove(LEFT, (Integer) messageIn.get("A"));
@@ -248,6 +255,22 @@ public class SwarmWars extends PApplet {
     if(messageIn.containsKey("D")) player2.getInput().setMove(RIGHT, (Integer) messageIn.get("D"));
 
   }
+
+  /*
+  public void networkingGetEnemySetup() {
+    if (!playNetworkGame) return;
+    java.util.Map<String, Object> setup = null;
+    while((setup = NetworkClientFunctions.getPackage(map.getEnemyId(), 0)) == null) {
+      try{
+        Thread.sleep(1000/60);
+      }catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+    OtherFSMBuilder otherFSMBuilder = new OtherFSMBuilder();
+    otherFSMBuilder.setOtherFSM(setup);
+  }
+  */
 
   public void networkUpdate() {
     this.networkingSendPlayerInputs();
