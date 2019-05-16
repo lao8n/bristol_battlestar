@@ -99,14 +99,7 @@ public class NetworkClientFunctions {
     }
 
 
-    public static void sendOperation(int id, int frame, PlayerN p) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put(Headers.TYPE, Constants.OPERATION);
-        m.put(Headers.PLAYER, id);
-        m.put(Headers.W, p.getInputUp());
-        m.put(Headers.S, p.getInputDown());
-        m.put(Headers.A, p.getInputLeft());
-        m.put(Headers.D, p.getInputRight());
+    public static void sendOperation(int id, int frame, Map<String, Object> m) {
         MessageHandlerMulti.putPackage(m);
         System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }

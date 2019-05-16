@@ -1,6 +1,7 @@
 package swarm_wars_library;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import processing.core.PApplet;
 
@@ -18,6 +19,8 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.map.RandomGen;
+import swarm_wars_library.network.Constants;
+import swarm_wars_library.network.Headers;
 import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_select.SwarmSelect;
@@ -30,7 +33,7 @@ public class SwarmWars extends PApplet {
   private boolean playNetworkGame = true;
 
   // Players
-  PlayerN player1;
+  PlayerN playerMe;
   PlayerN playerEnemy;
   PlayerAI playerAI;
 
@@ -150,26 +153,43 @@ public class SwarmWars extends PApplet {
 
     this.map.generateStartingPositions();
 
-    // player1 setup
-    this.player1 = new PlayerN(this, ENTITY.PLAYER1);
-    this.player1TakeDamage.add(this.player1);
-    this.player1DealDamage.addAll(player1.getBullets());
+
+    // networking and player1
+    if(playNetworkGame && map.getPlayerId() == 0) {
+      this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
+      this.playerEnemy = new PlayerN(this, ENTITY.PLAYER2);
+      this.player1TakeDamage.add(this.playerMe);
+      this.player1DealDamage.addAll(playerMe.getBullets());
+      this.player2TakeDamage.add(this.playerEnemy);
+      this.player2DealDamage.addAll(playerEnemy.getBullets());
+    }
+
+    // networking and player2
+    if(playNetworkGame && map.getPlayerId() == 1) {
+      this.playerEnemy = new PlayerN(this, ENTITY.PLAYER1);
+      this.playerMe = new PlayerN(this, ENTITY.PLAYER2);
+      this.player1TakeDamage.add(this.playerEnemy);
+      this.player1DealDamage.addAll(playerEnemy.getBullets());
+      this.player2TakeDamage.add(this.playerMe);
+      this.player2DealDamage.addAll(playerMe.getBullets());
+    }
+
+    // not networking
+    if(!playNetworkGame){
+      this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
+      this.playerAI = new PlayerAI(this, ENTITY.PLAYER2);
+      this.player1TakeDamage.add(this.playerMe);
+      this.player1DealDamage.addAll(playerMe.getBullets());
+      this.player2TakeDamage.add(this.playerAI);
+      this.player2DealDamage.addAll(playerAI.getBullets());
+    }
+
+    // setup bots
+
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
       Bot bot = new Bot(ENTITY.PLAYER1_BOT, i, true);
       this.player1TakeDamage.add(bot);
       this.player1DealDamage.add(bot);
-    }
-
-
-    // player2 setup
-    if(playNetworkGame) {
-      this.playerEnemy = new PlayerN(this, ENTITY.PLAYER2);
-      this.player2TakeDamage.add(this.playerEnemy);
-      this.player2DealDamage.addAll(playerEnemy.getBullets());
-    } else {
-      this.playerAI = new PlayerAI(this, ENTITY.PLAYER2);
-      this.player2TakeDamage.add(this.playerAI);
-      this.player2DealDamage.addAll(playerAI.getBullets());
     }
 
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
@@ -177,7 +197,6 @@ public class SwarmWars extends PApplet {
       this.player2TakeDamage.add(bot);
       this.player2DealDamage.add(bot);
     }
-
 
     // turrets setup
     for(int i = 0; i < this.map.getNumTurrets(); i++){
@@ -230,7 +249,6 @@ public class SwarmWars extends PApplet {
       map.setEnemyId(map.getPlayerId() == 0 ? 1 : 0);
       NetworkClientFunctions.cleanBuffer();
 
-
       // NETWORKING this needs to be integrated with FSM and selection
       NetworkClientFunctions.sendConnect(map.getPlayerId());
       NetworkClientFunctions.sendSetup(map.getPlayerId());
@@ -247,20 +265,23 @@ public class SwarmWars extends PApplet {
 
   public void networkingSendPlayerInputs() {
     if(!playNetworkGame) return;
-    NetworkClientFunctions.sendOperation(
-            map.getPlayerId(),
-            frameNumber,
-            player1
-    );
+    int id = map.getPlayerId();
+    java.util.Map<String, Object> m = new HashMap<String, Object>();
+    m.put(Headers.TYPE, Constants.OPERATION);
+    m.put(Headers.PLAYER, id);
+    m.put(Headers.W, playerMe.getInputUp());
+    m.put(Headers.S, playerMe.getInputDown());
+    m.put(Headers.A, playerMe.getInputLeft());
+    m.put(Headers.D, playerMe.getInputRight());
+    NetworkClientFunctions.sendOperation(id, frameNumber, m);
   }
 
   public void networkingGetEnemyInputs() {
     if(!playNetworkGame) return;
-    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getPlayerId(), frameNumber++);
-
+    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getPlayerId(), frameNumber);
     if(messageIn.containsKey("W")) playerEnemy.setInputUp((Integer) messageIn.get("W"));
-    if(messageIn.containsKey("A")) playerEnemy.setInputDown((Integer) messageIn.get("A"));
-    if(messageIn.containsKey("S")) playerEnemy.setInputLeft((Integer) messageIn.get("S"));
+    if(messageIn.containsKey("S")) playerEnemy.setInputDown((Integer) messageIn.get("S"));
+    if(messageIn.containsKey("A")) playerEnemy.setInputLeft((Integer) messageIn.get("A"));
     if(messageIn.containsKey("D")) playerEnemy.setInputRight((Integer) messageIn.get("D"));
 
   }
@@ -268,6 +289,7 @@ public class SwarmWars extends PApplet {
   public void networkUpdate() {
     this.networkingSendPlayerInputs();
     this.networkingGetEnemyInputs();
+    frameNumber++;
   }
 
   //=========================================================================//
@@ -371,13 +393,13 @@ public class SwarmWars extends PApplet {
 
   public void keyPressed() {
     if(this.currentScreen.equals(GAMESCREEN.GAME)){
-      this.player1.listenKeyPressed(this.keyCode);
+      this.playerMe.listenKeyPressed(this.keyCode);
     }
   }
 
   public void keyReleased() {
     if(this.currentScreen.equals(GAMESCREEN.GAME)) {
-      this.player1.listenKeyReleased(this.keyCode);
+      this.playerMe.listenKeyReleased(this.keyCode);
     }
   }
 
@@ -392,7 +414,7 @@ public class SwarmWars extends PApplet {
         this.swarmSelect.listenMousePressed();
         break;
       case GAME:
-        this.player1.listenMousePressed();
+        this.playerMe.listenMousePressed();
         break;
       case GAMEOVER:
         break;
@@ -412,7 +434,7 @@ public class SwarmWars extends PApplet {
         this.swarmSelect.listenMouseReleased();
         break;
       case GAME:
-        this.player1.listenMouseReleased();
+        this.playerMe.listenMouseReleased();
         break;
       case GAMEOVER:
         break;
