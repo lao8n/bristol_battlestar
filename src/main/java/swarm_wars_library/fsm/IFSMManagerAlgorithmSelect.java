@@ -9,9 +9,10 @@ public interface IFSMManagerAlgorithmSelect {
   //=========================================================================//
   // FSM Manager Swarm Algorithm Select methods                              //
   //=========================================================================//
-  public HashMap<Integer, FSMStateTransition> getMapFSMStateTransition();
-  public void setSwarmAlgorithm(Integer stateId, 
+  public HashMap<Integer, FSMStateTransition> getMapFSMStateTransition(int playerId);
+  public HashMap getFSMStates(int playerId);
+  public void setSwarmAlgorithm(int playerId, Integer stateId,
     SWARMALGORITHM swarmAlgorithm);
-  public void setSwarmAlgorithmWeights(Integer stateId, double weight1, 
+  public void setSwarmAlgorithmWeights(int playerId, Integer stateId, double weight1,
     double weight2, double weight3);
 }

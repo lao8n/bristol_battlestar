@@ -1,12 +1,14 @@
 package swarm_wars_library.graphics;
 
 import swarm_wars_library.map.Map;
-
+import processing.core.PImage;
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class RenderPlayer2Bot extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getBotScale();
+  private PImage droneSingle = this.sketch.loadImage("resources/images/droneSinglePlayer2.png");
 
   public RenderPlayer2Bot(PApplet sketch){
     super(sketch);
@@ -14,28 +16,22 @@ public class RenderPlayer2Bot extends AbstractRenderMapObject{
 
   @Override 
   public void renderMapObject(){
-
     this.sketch.noStroke();
-    this.sketch.fill(225, 225, 30); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale, 
-                        this.scale); 
-    // Dark Inside 
-    this.sketch.fill(150, 150, 50); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale - 2, 
-                        this.scale - 2); 
-    // Add Glow
-    this.sketch.fill(255, 245, 50, 60); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale + 5, 
-                        this.scale + 5); 
+    this.sketch.imageMode(0);
+
+    // Draw sprite : rotate screen (pop/push matrix)
+    this.sketch.pushMatrix();
+    this.sketch.translate((float) this.objectRenderLocation.getX(),  (float) this.objectRenderLocation.getY());
+    this.sketch.imageMode(PConstants.CENTER);
+    //this.sketch.image(sprites[currentSprite], 
+    this.sketch.image(droneSingle, 
+                                  //(float) this.objectRenderLocation.getX(), 
+                                  //(float) this.objectRenderLocation.getY(), 
+                                  0, 0,
+                                  this.scale * 3, 
+                                  this.scale * 3); 
+                
+    this.sketch.popMatrix();
   }
 
   @Override 

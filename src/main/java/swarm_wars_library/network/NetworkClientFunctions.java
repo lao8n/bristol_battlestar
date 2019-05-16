@@ -70,13 +70,13 @@ public class NetworkClientFunctions {
     }
 
     public static void sendStart(int id) {
-        if(id == 0){
+        if(id == 1){
             System.out.println("Try to send START");
             while (!MessageHandlerMulti.gameStarted) {
                 Map<String, Object> m = new HashMap();
                 m.put(Headers.TYPE, Constants.START);
                 MessageHandlerMulti.putPackage(m);
-                try{Thread.sleep(interval);}
+                try{Thread.sleep(3000);}
                 catch (Exception e) {
                     System.out.println("FAILED");
                     e.printStackTrace();
@@ -99,21 +99,14 @@ public class NetworkClientFunctions {
     }
 
 
-    public static void sendOperation(int id, int frame, PlayerN p) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put(Headers.TYPE, Constants.OPERATION);
-        m.put(Headers.PLAYER, id);
-        m.put(Headers.W, p.getInputUp());
-        m.put(Headers.S, p.getInputDown());
-        m.put(Headers.A, p.getInputLeft());
-        m.put(Headers.D, p.getInputRight());
+    public static void sendOperation(int id, int frame, Map<String, Object> m) {
         MessageHandlerMulti.putPackage(m);
-        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
+//        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
 
     public static Map getPackage(int id, int frame) {
         Map<String, Object> rev = null;
-        int getId = Math.abs(id - 1);
+        int getId = id;
 //        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
         while (rev == null) {
 //            System.out.println("Player " + id + " trying to get player " + Math.abs(id - 1) + "s package with frame number " + frame);

@@ -18,16 +18,33 @@ public class Input {
   private Vector2D location;
   private int moveForce;
   private int moveLeft, moveRight, moveUp, moveDown;
+  private int moveLeftBuffer, moveRightBuffer, moveUpBuffer, moveDownBuffer;
   private double heading;
   private int mouse;
+  private int mouseBuffer;
   private Map map;
+  private int mouseX;
+  private int mouseY;
 
   public Input(ENTITY tag, PApplet sketch) {
     this.sketch = sketch;
     this.map = Map.getInstance();
     this.location = this.map.getPlayerStartingLocation(tag);
-    this.moveForce = 6;
+    this.moveForce = Map.getInstance().getPlayerMoveForce();
     this.heading = 0;
+
+    this.moveLeft = 0;
+    this.moveRight = 0;
+    this.moveUp = 0;
+    this.moveDown = 0;
+    this.mouse = 0;
+
+    this.moveLeftBuffer = 0;
+    this.moveRightBuffer = 0;
+    this.moveUpBuffer = 0;
+    this.moveDownBuffer = 0;
+    this.mouseBuffer = 0;
+
   }
 
   public void update() {
@@ -35,7 +52,7 @@ public class Input {
     location.setXY(location.getX() + 
                    (int) moveForce * (moveRight - moveLeft),
                    location.getY() + 
-                   (int) moveForce * 0.8 * (moveDown - moveUp));
+                   (int) moveForce * (moveDown - moveUp));
 
     // We want to do the comparison between the player and the mouseXY
     // purely in terms of actual map coordinates. 
@@ -57,8 +74,8 @@ public class Input {
     else if(location.getY() < sketch.height/2){
       yAdj = - sketch.height/2 + location.getY();
     }
-    double comparativeMouseX= sketch.mouseX - this.sketch.width/2 - xAdj;
-    double comparativeMouseY = sketch.mouseY - this.sketch.height/2 - yAdj;
+    double comparativeMouseX = mouseX - this.sketch.width/2 - xAdj;
+    double comparativeMouseY = mouseY - this.sketch.height/2 - yAdj;
     heading = Math.atan2(comparativeMouseY,
                          comparativeMouseX);
     edgeCheck();
@@ -88,14 +105,13 @@ public class Input {
     return this.moveDown;
   }
 
-
   public int setMove(int k, int b) {
     if (k == 'W' || k == 'w' || k == UP) {
       return moveUp = b;
-    } else if (k == 'A' || k == 'a' || k == LEFT) {
-      return moveLeft = b;
     } else if (k == 'S' || k == 's' || k == DOWN) {
       return moveDown = b;
+    } else if (k == 'A' || k == 'a' || k == LEFT) {
+      return moveLeft = b;
     } else if (k == 'D' || k == 'd' || k == RIGHT) {
        return moveRight = b;      
     } else {
@@ -127,5 +143,64 @@ public class Input {
     return mouse;
   }
 
+  public int getMouseX() {
+    return mouseX;
+  }
 
+  public void setMouseX(int mouseX) {
+    this.mouseX = mouseX;
+  }
+
+  public int getMouseY() {
+    return mouseY;
+  }
+
+  public void setMouseY(int mouseY) {
+    this.mouseY = mouseY;
+  }
+
+  // BUFFER SYSTEM TO SYNC MULTIPLAYER
+
+  public int setMoveBuffer(int k, int b) {
+    if (k == 'W' || k == 'w' || k == UP) {
+      return moveUpBuffer = b;
+    } else if (k == 'S' || k == 's' || k == DOWN) {
+      return moveDownBuffer = b;
+    } else if (k == 'A' || k == 'a' || k == LEFT) {
+      return moveLeftBuffer = b;
+    } else if (k == 'D' || k == 'd' || k == RIGHT) {
+      return moveRightBuffer = b;
+    } else {
+      return b;
+    }
+  }
+
+  public void setMoveLeftBuffer(int moveLeftBuffer) {
+    this.moveLeftBuffer = moveLeftBuffer;
+  }
+
+  public void setMoveRightBuffer(int moveRightBuffer) {
+    this.moveRightBuffer = moveRightBuffer;
+  }
+
+  public void setMoveUpBuffer(int moveUpBuffer) {
+    this.moveUpBuffer = moveUpBuffer;
+  }
+
+  public void setMoveDownBuffer(int moveDownBuffer) {
+    this.moveDownBuffer = moveDownBuffer;
+  }
+
+  public void setMouseBuffer(int mouseBuffer) {
+    this.mouseBuffer = mouseBuffer;
+  }
+
+  public void updateBuffer() {
+    this.moveUp = this.moveUpBuffer;
+    this.moveDown = this.moveDownBuffer;
+    this.moveLeft = this.moveLeftBuffer;
+    this.moveRight = this.moveRightBuffer;
+    this.mouse = this.mouseBuffer;
+    this.mouseBuffer = 0;
+  }
 }

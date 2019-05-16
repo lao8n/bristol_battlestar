@@ -73,7 +73,7 @@ public class MessageHandlerMulti{
         clientSendBuffer.offer(pack);
     }
 
-    public static synchronized void sendpackage() throws InterruptedException{
+    public static void sendpackage() throws InterruptedException{
         if (serverBuffer.size() == 0) {
             // tlogger.log("No message in sending buffer");
             // TODO: 决定发送频率
@@ -100,7 +100,7 @@ public class MessageHandlerMulti{
         tlogger.log("Refreshed client receiving buffer");
     }
 
-    public static synchronized void serverReceivePackage(Map<String, Object> pack){
+    public static void serverReceivePackage(Map<String, Object> pack){
         // TODO: Add logic
         // If the package is START, then the frame counter starts
         switch ((Integer) pack.get(Headers.TYPE)) {
@@ -149,7 +149,7 @@ public class MessageHandlerMulti{
 
     }
 
-    public static synchronized void sendPackageClient() throws InterruptedException{
+    public static void sendPackageClient() throws InterruptedException{
         if (clientSendBuffer.size() == 0){
 //            tlogger.log("No message in sending buffer");
             // TODO: 确定发送频率

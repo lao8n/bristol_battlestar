@@ -12,10 +12,9 @@ import java.util.ArrayList;
 public class RenderPlayer1 extends AbstractRenderMapObject{
 
   private float scale;
+
   // sprite information
-  //private PImage shipSprite = this.sketch.loadImage("resources/images/shipSprite.png");
   private PImage shipSprite = this.sketch.loadImage("resources/images/shipSingle.png");
-  //private PImage shipThrust = this.sketch.loadImage("resources/images/shipThrustSingle.png");
   private PImage shipThrustSprite = this.sketch.loadImage("resources/images/shipThrustSprite.png");
   private int shipThrustStrength = 250; 
 
@@ -58,10 +57,7 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
   public void renderMapObject(){
     // image setup 
     this.sketch.noStroke();
-    this.sketch.imageMode(0); //need to figure out what codes for CENTER
-    // can tint for player1 / player2 
-    //tint(R, G, B, A); 
-    //noTint();
+    this.sketch.imageMode(0); 
 
     // used to determine if thrust is present
     int moveLeft = CommsGlobal.get("PLAYER1").getPacket(0).getMoveLeft();
@@ -82,7 +78,7 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
       }
     }
 
-    //currentSprite = 2; 
+    //currentSprite = 2;  FOR ANIMATED SHIP
     /* WEIRD ROTATION on LEFT / RIGHT - changing perspective of ship not reflected in drawing?
     // set correct sprite box for ship movement
     if (moveLeft && !moveRight) {
@@ -113,13 +109,9 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
     if (shipThrustStrength > 0){
       this.sketch.tint(255, shipThrustStrength);
       this.sketch.image(sprites[currentSprite], 
-      //this.sketch.image(shipThrust, 
-                                  //(float) this.objectRenderLocation.getX(), 
-                                  //(float) this.objectRenderLocation.getY(), 
                                   0, 0,
                                   this.scale * 9, 
                                   this.scale * 9); 
-          //move the sprite -> use for animations!
       currentSprite++;
       currentSprite %= totalSprites;
     }
@@ -127,74 +119,10 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
     // Draw ship
     this.sketch.tint(255, 255);
     this.sketch.image(shipSprite, 
-                                  //(float) this.objectRenderLocation.getX(), 
-                                  //(float) this.objectRenderLocation.getY(), 
                                   0, 0,
                                   this.scale * 5, 
                                   this.scale * 5); 
     this.sketch.popMatrix();
-
-    /*
-    // SMOKE TRAIL
-    if (renderCount < 0){
-      this.sketch.tint(255, 255);
-      int transparency = 100; 
-      for (int i = 0; i < shipLocList.size(); i++){
-        // TODO reduce transparency, farther away...
-        Vector2D pos = getObjectRenderLocation(shipLocList.get(i), 
-            this.objectMapLocation);
-        this.sketch.image(shipSprite, 
-                                    (float) pos.getX(),
-                                    (float) pos.getY(),
-                                    this.scale * 5, 
-                                    this.scale * 5); 
-        transparency-=10; 
-      }
-      renderCount = maxRenderCount; 
-    } else {
-      renderCount--;
-    }
-    // Add ship location to shipLocList for rendering trail
-    // convert this.objectRenderLocation
-    shipLocList.add(shipLocListIndex++, CommsGlobal.get("PLAYER1").getPacket(0).getLocation());
-    shipLocListIndex = shipLocListIndex % maxShipLocCount; 
-    */
-
-    /* OLD VERSION
-    this.sketch.noStroke();
-    this.sketch.fill(70, 102, 255); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale, 
-                        this.scale); 
-    // Dark inside
-    this.sketch.fill(17, 8, 117, 50); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale - 2, 
-                        this.scale - 2);     
-    this.sketch.fill(9, 3, 71); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale - 3, 
-                        this.scale - 3);      
-    // Add glow
-    this.sketch.fill(21, 0, 255, 60); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale + 2, 
-                        this.scale + 2);     
-    this.sketch.fill(21, 0, 255, 40); 
-    this.sketch.ellipseMode(2);
-    this.sketch.ellipse((float) this.objectRenderLocation.getX(), 
-                        (float) this.objectRenderLocation.getY(), 
-                        this.scale + 3, 
-                        this.scale + 3);  
-    */     
   }
 
   @Override 
@@ -206,5 +134,10 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
                         (float) this.objectRenderLocation.getY(), 
                         this.scale, 
                         this.scale); 
+  }
+  
+  // for render background to calculate screen position over map
+  Vector2D getObjectRenderLocation(){
+    return objectRenderLocation;
   }
 }

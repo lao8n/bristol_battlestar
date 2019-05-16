@@ -19,5 +19,14 @@ public enum ENTITY {
   STAR,
   PLAYERUI,
   PLAYERUI_BOT,
-  PLAYERUI_BULLET,
+  PLAYERUI_BULLET;
+
+  public static int entityToPlayerId(ENTITY e) {
+    if (e.equals(PLAYER1) || e.equals(PLAYER1_BOT)) {
+      return 1;
+    }else if (e.equals(PLAYER2) || e.equals(PLAYER2_BOT)) {
+      return 2;
+    }
+    return -1;
+  }
 }

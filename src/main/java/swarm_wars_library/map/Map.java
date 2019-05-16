@@ -2,7 +2,6 @@ package swarm_wars_library.map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.physics.Vector2D;
@@ -42,17 +41,34 @@ import swarm_wars_library.physics.Vector2D;
 public class Map {
 
   private static Map instance = new Map();
-  private int map_width = 2500;
-  private int map_height = 2500;
+  private int map_width = 1800;
+  private int map_height = 1200;
+
+  // Entity sizes
   private int playerScale = 15;
   private int turretScale = 15;
-  private int botScale = 8;
+  private int botScale = 5;
   private int bulletScale = 5;
+
+  // Stars
   private int starScale = 1;
   private int numStars = 0;
-  private int numBotsPerPlayer = 30;
-  private int numTurrets = 5;
+
+  // Number of Entities
+  private int numBotsPerPlayer = 150;
+  private int numTurrets = 3;
+
+  // Shooters
+  private int shooterTimer = 1;
   private int numBulletsPerMagazine = 20;
+  private int turretBulletForce = 15;
+  private int playerNBulletForce = 25;
+  private int playerAIBulletForce = 15;
+
+  // Movement
+  private int playerMoveForce = 16;
+  private int botMaxSpeed = 20;
+
   private List<Vector2D> backgroundStars;
   private Vector2D player1StartingLocation;
   private Vector2D player2StartingLocation;
@@ -153,5 +169,29 @@ public class Map {
 
   public void setEnemyId(int enemyId) {
     this.enemyId = enemyId;
+  }
+
+  public int getTurretBulletForce() {
+    return turretBulletForce;
+  }
+
+  public int getShooterTimer() {
+    return shooterTimer;
+  }
+
+  public int getPlayerNBulletForce() {
+    return playerNBulletForce;
+  }
+
+  public int getPlayerAIBulletForce() {
+    return playerAIBulletForce;
+  }
+
+  public int getPlayerMoveForce() {
+    return playerMoveForce;
+  }
+
+  public int getBotMaxSpeed() {
+    return botMaxSpeed;
   }
 }

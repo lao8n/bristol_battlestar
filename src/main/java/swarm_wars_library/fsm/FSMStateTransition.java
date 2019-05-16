@@ -1,6 +1,8 @@
 package swarm_wars_library.fsm;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.javatuples.Quartet;
 
 import swarm_wars_library.comms.CommsGlobal;
@@ -55,6 +57,10 @@ public class FSMStateTransition implements IFSMStateTransition{
     this.transitionList.add(
       new Quartet<Integer, FSMVARIABLE, FSMCOMPARISON, Double>(
         toStateId, variable, comparison, value)); 
+  }
+
+  public List getMyTransitions() {
+    return this.transitionList;
   }
 
   @Override 

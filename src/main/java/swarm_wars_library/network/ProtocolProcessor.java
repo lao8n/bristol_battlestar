@@ -1,6 +1,7 @@
 package swarm_wars_library.network;
 
 import org.json.JSONObject;
+import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.map.RandomGen;
 
 import java.util.Map;
@@ -46,6 +47,11 @@ public class ProtocolProcessor {
                     gotSeed = true;
                 }
 
+                return;
+            }
+            if ((Integer) m.get(Headers.TYPE) == Constants.SETUP) {
+                OtherFSMBuilder otherFSMBuilder = new OtherFSMBuilder();
+                otherFSMBuilder.setOtherFSM(m);
                 return;
             }
             // TODO: Only for test

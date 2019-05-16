@@ -1,6 +1,7 @@
 package swarm_wars_library.engine;
 
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.fsm.FSMManager;
@@ -15,6 +16,8 @@ public class SwarmLogic {
   private AbstractSwarmAlgorithm swarm_algo;
   private FSMManager fsmManager = FSMManager.getInstance();
   private SWARMALGORITHM lastSwarmAlgorithm = SWARMALGORITHM.DEFENDFLOCK;
+  private int playerId;
+  private int botMaxSpeed = Map.getInstance().getBotMaxSpeed();
 
   //=========================================================================//
   // Constructor                                                             //
@@ -24,7 +27,8 @@ public class SwarmLogic {
     this.rb = rb;
     this.transform = transform;
     this.id = id;
-    this.rb.setMaxSpeed(15);
+    this.rb.setMaxSpeed(botMaxSpeed);
+    this.playerId = ENTITY.entityToPlayerId(tag);
   }
 
   //=========================================================================//
@@ -62,16 +66,20 @@ public class SwarmLogic {
     }
   }
 
+  public void selectStartingSwarmAlgorithm() {
+    this.selectSwarmAlgorithm(this.fsmManager.getStartingSwarmAlgorithm(playerId));
+  }
+
   //=========================================================================//
   // Update                                                                  //
   //=========================================================================//
   public void update(boolean transitionsFlag){
     if(transitionsFlag){
-      if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm()){
-        this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm());
+      if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm(playerId)){
+        this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm(playerId));
       }
       this.swarm_algo.applySwarmAlgorithm();
-      this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm();
+      this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm(playerId);
     }
     else {
       this.swarm_algo.applySwarmAlgorithm();
