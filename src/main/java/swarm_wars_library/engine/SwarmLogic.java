@@ -57,6 +57,11 @@ public class SwarmLogic {
           new AttackSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
                                           this.rb);
         break;
+      case SPECIALGHOST:
+        this.swarm_algo =
+                new AttackSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
+                        this.rb);
+        break;
       default:
         break;
     }

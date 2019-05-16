@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public enum SWARMALGORITHM {
   ATTACKSUICIDE(0),
-  ATTACK2(1), 
-  ATTACK3(2), 
+  SPECIALGHOST(1),
+  SPECIALSTAR(2),
   ATTACK4(3), 
   DEFENDSHELL(4), 
   DEFENDFLOCK(5), 
@@ -17,7 +17,7 @@ public enum SWARMALGORITHM {
   DEFEND4(7), 
   SCOUTRANDOM(8), 
   SCOUTBEE(9), 
-  SCOUT3(10), 
+  SCOUTANT(10),
   SCOUT4(11);
 
   private int value;
