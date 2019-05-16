@@ -5,7 +5,6 @@ import processing.core.PImage;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
-
 public class RenderPlayer1Bot extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getBotScale();
@@ -28,9 +27,9 @@ public class RenderPlayer1Bot extends AbstractRenderMapObject{
     this.sketch.imageMode(PConstants.CENTER);
     //this.sketch.image(sprites[currentSprite], 
     this.sketch.image(droneSingle, 
-                                  (float) this.objectRenderLocation.getX(), 
-                                  (float) this.objectRenderLocation.getY(), 
-                                  //0, 0,
+                                  //(float) this.objectRenderLocation.getX(), 
+                                  //float) this.objectRenderLocation.getY(), 
+                                  0, 0,
                                   this.scale * 3, 
                                   this.scale * 3); 
                 

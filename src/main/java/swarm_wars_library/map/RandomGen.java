@@ -2,6 +2,8 @@ package swarm_wars_library.map;
 
 import java.util.Random;
 
+// double R = RandomGen.getRand();
+
 public class RandomGen {
 
     private static RandomGen instance = new RandomGen();
