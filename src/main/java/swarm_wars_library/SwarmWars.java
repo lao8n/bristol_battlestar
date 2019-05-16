@@ -268,7 +268,6 @@ public class SwarmWars extends PApplet {
     }
   }
 
-
   public void networkConnect() {
     // TODO: Make a UI
     map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
