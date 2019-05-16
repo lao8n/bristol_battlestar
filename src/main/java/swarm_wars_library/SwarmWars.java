@@ -34,12 +34,12 @@ public class SwarmWars extends PApplet {
   //  comment out getInput functions in networkingGetEnemyInputs()
 
   // Networking
-  private boolean playNetworkGame = false;
+  private boolean playNetworkGame = true;
 
   // Players
   PlayerN player1;
-//  PlayerN player2;
-  PlayerAI player2;
+  PlayerN player2;
+//  PlayerAI player2;
 
 
   // Entity lists that has all our game things.
@@ -169,8 +169,8 @@ public class SwarmWars extends PApplet {
     }
 
     // player2 setup
-//    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
-    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
+    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
+//    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
     this.player2TakeDamage.add(this.player2);
     this.player2DealDamage.addAll(player2.getBullets());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
