@@ -27,10 +27,7 @@ public class RenderPlayer1Bot extends AbstractRenderMapObject{
     this.sketch.translate((float) this.objectRenderLocation.getX(),  (float) this.objectRenderLocation.getY());
     this.sketch.imageMode(PConstants.CENTER);
     //this.sketch.image(sprites[currentSprite], 
-    this.sketch.image(droneSingle, 
-                                  (float) this.objectRenderLocation.getX(), 
-                                  (float) this.objectRenderLocation.getY(), 
-                                  //0, 0,
+    this.sketch.image(droneSingle, 0, 0,
                                   this.scale * 3, 
                                   this.scale * 3); 
                 

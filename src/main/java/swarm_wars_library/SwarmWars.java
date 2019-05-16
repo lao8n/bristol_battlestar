@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 
-import sun.nio.ch.Net;
 import swarm_wars_library.engine.CollisionDetection;
 import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
@@ -17,30 +16,23 @@ import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
-import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
-import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 import swarm_wars_library.swarm_select.SwarmSelect;
 
 public class SwarmWars extends PApplet {
 
-  // To play single player:
-  //  set playNetworkGame to false,
-  //  set player2 to PlayerAI object
-  //  set the constructor for player 2 in entitiesSetup() to PlayerAI
-  //  comment out getInput functions in networkingGetEnemyInputs()
+  // To play single player set playNetworkGame to false
 
   // Networking
   private boolean playNetworkGame = true;
 
   // Players
   PlayerN player1;
-  PlayerN player2;
-//  PlayerAI player2;
-
+  PlayerN playerEnemy;
+  PlayerAI playerAI;
 
   // Entity lists that has all our game things.
   ArrayList <AbstractEntity> player1TakeDamage;  
@@ -168,16 +160,24 @@ public class SwarmWars extends PApplet {
       this.player1DealDamage.add(bot);
     }
 
+
     // player2 setup
-    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
-//    this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
-    this.player2TakeDamage.add(this.player2);
-    this.player2DealDamage.addAll(player2.getBullets());
+    if(playNetworkGame) {
+      this.playerEnemy = new PlayerN(this, ENTITY.PLAYER2);
+      this.player2TakeDamage.add(this.playerEnemy);
+      this.player2DealDamage.addAll(playerEnemy.getBullets());
+    } else {
+      this.playerAI = new PlayerAI(this, ENTITY.PLAYER2);
+      this.player2TakeDamage.add(this.playerAI);
+      this.player2DealDamage.addAll(playerAI.getBullets());
+    }
+
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
       Bot bot = new Bot(ENTITY.PLAYER2_BOT, i, false);
       this.player2TakeDamage.add(bot);
       this.player2DealDamage.add(bot);
     }
+
 
     // turrets setup
     for(int i = 0; i < this.map.getNumTurrets(); i++){
@@ -258,15 +258,14 @@ public class SwarmWars extends PApplet {
     if(!playNetworkGame) return;
     java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getPlayerId(), frameNumber++);
 
-//    if(messageIn.containsKey("W")) player2.setInputUp((Integer) messageIn.get("W"));
-//    if(messageIn.containsKey("A")) player2.setInputDown((Integer) messageIn.get("A"));
-//    if(messageIn.containsKey("S")) player2.setInputLeft((Integer) messageIn.get("S"));
-//    if(messageIn.containsKey("D")) player2.setInputRight((Integer) messageIn.get("D"));
+    if(messageIn.containsKey("W")) playerEnemy.setInputUp((Integer) messageIn.get("W"));
+    if(messageIn.containsKey("A")) playerEnemy.setInputDown((Integer) messageIn.get("A"));
+    if(messageIn.containsKey("S")) playerEnemy.setInputLeft((Integer) messageIn.get("S"));
+    if(messageIn.containsKey("D")) playerEnemy.setInputRight((Integer) messageIn.get("D"));
 
   }
 
   public void networkUpdate() {
-//    RandomGen.setSeed(10);
     this.networkingSendPlayerInputs();
     this.networkingGetEnemyInputs();
   }
