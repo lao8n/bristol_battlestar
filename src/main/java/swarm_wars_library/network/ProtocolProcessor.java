@@ -9,6 +9,8 @@ public class ProtocolProcessor {
 
     swarm_wars_library.map.Map map;
 
+    private boolean gotSeed = false;
+
     private final static ProtocolProcessor processor = new ProtocolProcessor();
 
     public static ProtocolProcessor getProcessorInstance() {
@@ -37,8 +39,13 @@ public class ProtocolProcessor {
             Map m = j.toMap();
             if (m.get(Headers.TYPE).equals(Constants.START)) {
                 MessageHandlerMulti.gameStarted = true;
-                int randSeed = (Integer) m.get(Headers.RANDOM_SEED);
-                RandomGen.setSeed(randSeed);
+
+                if(!gotSeed) {
+                    int randSeed = (Integer) m.get(Headers.RANDOM_SEED);
+                    RandomGen.setSeed(randSeed);
+                    gotSeed = true;
+                }
+
                 return;
             }
             // TODO: Only for test

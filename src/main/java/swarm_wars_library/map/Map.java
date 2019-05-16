@@ -2,6 +2,7 @@ package swarm_wars_library.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.physics.Vector2D;
@@ -48,8 +49,8 @@ public class Map {
   private int botScale = 8;
   private int bulletScale = 5;
   private int starScale = 1;
-  private int numStars = 100;
-  private int numBotsPerPlayer = 100;
+  private int numStars = 0;
+  private int numBotsPerPlayer = 30;
   private int numTurrets = 5;
   private int numBulletsPerMagazine = 20;
   private List<Vector2D> backgroundStars;
@@ -62,18 +63,25 @@ public class Map {
   //make the constructor private so that this class cannot be
   //instantiated
   private Map(){
+    RandomGen.resetSeed();
     this.backgroundStars = new ArrayList<Vector2D>();
     for(int i = 0; i < this.numStars; i++){
       Vector2D v2d = new Vector2D(RandomGen.getRand() * map_width,
                                   RandomGen.getRand() * map_height);
       backgroundStars.add(i, v2d);
     }
-    this.player1StartingLocation = 
-      new Vector2D(this.map_width * RandomGen.getRand(),
-                   this.map_height * RandomGen.getRand());
-    this.player2StartingLocation = 
-      new Vector2D(this.map_width * RandomGen.getRand(),
-                   this.map_height * RandomGen.getRand());
+
+    this.generateStartingPositions();
+
+  }
+
+  public void generateStartingPositions() {
+    this.player1StartingLocation =
+            new Vector2D(this.map_width * RandomGen.getRand(),
+                    this.map_height * RandomGen.getRand());
+    this.player2StartingLocation =
+            new Vector2D(this.map_width * RandomGen.getRand(),
+                    this.map_height * RandomGen.getRand());
   }
 
   //Get the only object available

@@ -1,30 +1,50 @@
 package swarm_wars_library.map;
 
-import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomGen {
 
     private static RandomGen instance = new RandomGen();
 
+//    private static ThreadLocalRandom r;
     private static Random r;
 
     private static long seed = 10;
 
+    private static boolean  seedSet = false;
+
+    private static int i = 0;
+
     private RandomGen(){
-        r = new Random(seed);
+        r = new Random();
+        r.setSeed(seed);
+        i = 0;
     }
 
-    public static void setSeed(int seed){
-        r = new Random(seed);
+    public static void setSeed(int newSeed){
+        if(seedSet) return;
+        seed = newSeed;
+        r.setSeed(seed);
+        seedSet = true;
     }
+
+    public static void resetSeed(){
+        r.setSeed(seed);
+    }
+
 
     public static int generateSeed(){
         return (int) Math.round(RandomGen.getRand() * 10000);
     }
 
     public static double getRand() {
-        return r.nextDouble();
+        double rand = r.nextDouble();
+        if(i++ - 1000 > 0) {
+            System.out.println(rand);
+            i = 0;
+        }
+        return rand;
     }
 
     public static int getInt(int bound){

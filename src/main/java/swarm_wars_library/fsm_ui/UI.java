@@ -154,10 +154,10 @@ public class UI{
     
     for(int i = 0; i <= 10; i++){
       this.sketch.fill(255, 255, 204);
-      this.sketch.ellipse((float) RandomGen.getRand() * this.sketch.width,
-              (float) RandomGen.getRand() * this.sketch.height,
-              2,
-              2);
+//      this.sketch.ellipse((float) RandomGen.getRand() * this.sketch.width,
+//              (float) RandomGen.getRand() * this.sketch.height,
+//              2,
+//              2);
     }
   }
 

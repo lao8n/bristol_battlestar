@@ -1,7 +1,6 @@
 package swarm_wars_library;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import processing.core.PApplet;
 
@@ -41,7 +40,7 @@ public class SwarmWars extends PApplet {
   ArrayList <AbstractEntity> gameObjectsDealDamage;
 
   // Game Backend Objects
-  Map map = Map.getInstance();
+  Map map;
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
   UI fsmUI;
@@ -65,8 +64,9 @@ public class SwarmWars extends PApplet {
   // Processing Setup                                                        //
   //=========================================================================//
   public void setup() {
-    this.networkSetup();
     this.frameRate(60);
+    this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
+    this.networkSetup();
     this.uiSetup();
     // this.soundSetup();
 
@@ -141,14 +141,14 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void entitiesSetup(){
 
-    RandomGen.printSeed();
-
     this.player1TakeDamage = new ArrayList<AbstractEntity>();  
     this.player1DealDamage = new ArrayList<AbstractEntity>();
     this.player2TakeDamage = new ArrayList<AbstractEntity>();
     this.player2DealDamage = new ArrayList<AbstractEntity>();
     this.gameObjectsTakeDamage = new ArrayList<AbstractEntity>();
     this.gameObjectsDealDamage = new ArrayList<AbstractEntity>();
+
+    this.map.generateStartingPositions();
 
     // player1 setup
     this.player1 = new PlayerN(this, ENTITY.PLAYER1);
@@ -204,6 +204,10 @@ public class SwarmWars extends PApplet {
     this.fsmUI = new UI(this);
   }
 
+  //=========================================================================//
+  // Networking                                                              //
+  //=========================================================================//
+
   public void networkSetup() {
     if(!playNetworkGame) {
       map.setPlayerId(1);
@@ -251,6 +255,7 @@ public class SwarmWars extends PApplet {
   }
 
   public void networkUpdate() {
+//    RandomGen.setSeed(10);
     this.networkingSendPlayerInputs();
     this.networkingGetEnemyInputs();
   }
@@ -323,6 +328,7 @@ public class SwarmWars extends PApplet {
   public void swarmSelectUpdate(){
     this.swarmSelect.update();
     if(this.swarmSelect.getGameScreen() == GAMESCREEN.GAME){
+      RandomGen.resetSeed();
       CommsGlobal.reset();
       this.commsSetup();
       this.entitiesSetup();
