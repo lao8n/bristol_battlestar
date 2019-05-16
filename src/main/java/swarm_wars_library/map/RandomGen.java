@@ -1,13 +1,11 @@
 package swarm_wars_library.map;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomGen {
 
     private static RandomGen instance = new RandomGen();
 
-//    private static ThreadLocalRandom r;
     private static Random r;
 
     private static long seed = 10;
