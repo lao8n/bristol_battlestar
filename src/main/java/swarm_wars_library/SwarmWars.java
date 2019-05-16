@@ -230,7 +230,6 @@ public class SwarmWars extends PApplet {
       map.setEnemyId(map.getPlayerId() == 0 ? 1 : 0);
       NetworkClientFunctions.cleanBuffer();
 
-
       // NETWORKING this needs to be integrated with FSM and selection
       NetworkClientFunctions.sendConnect(map.getPlayerId());
       NetworkClientFunctions.sendSetup(map.getPlayerId());

@@ -27,21 +27,20 @@ public class RenderBackground{
         // Draw sprite : rotate screen (pop/push matrix)
     //this.sketch.pushMatrix();
     //this.sketch.translate((float) this.objectRenderLocation.getX(),  (float) this.objectRenderLocation.getY());
-    
     this.sketch.imageMode(PConstants.CORNERS);
 
     // crop 
 
 // grap object 1 
     // player1 info to calculate screen location on map
-    Vector2D mapLoc = CommsGlobal.get("PLAYER1").getPacket(0).getLocation();
-    Vector2D renderLoc = RenderPlayer1.getObjectRenderLocation();
+    //Vector2D mapLoc = CommsGlobal.get("PLAYER1").getPacket(0).getLocation();
+    //Vector2D renderLoc = RenderPlayer1.getObjectRenderLocation();
 
-    Vector2D visibleScreen = Vector2D.sub(mapLoc, renderLoc);
+    //Vector2D visibleScreen = Vector2D.sub(mapLoc, renderLoc);
 
-    this.backgroundImage = background.get(
-                                  visibleScreen.getX(), 
-                                  visibleScreen.getY(), 
+    this.backgroundImage = background.get(0,0,
+                                  //visibleScreen.getX(), 
+                                  //visibleScreen.getY(), 
                                   sketch.width, sketch.height);
 
     // draw 
