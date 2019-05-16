@@ -65,12 +65,29 @@ public class Input {
   }
 
   public Vector2D getLocation() {
-    return location;
+    return this.location;
   }
 
   public double getHeading() {
-    return heading;
+    return this.heading;
   }
+
+  public int getMoveLeft(){
+    return this.moveLeft;
+  }
+
+  public int getMoveRight(){
+    return this.moveRight;
+  }
+
+  public int getMoveUp(){
+    return this.moveUp;
+  }
+
+  public int getMoveDown(){
+    return this.moveDown;
+  }
+
 
   public int setMove(int k, int b) {
     if (k == 'W' || k == 'w' || k == UP) {
@@ -84,22 +101,6 @@ public class Input {
     } else {
       return b;
     }
-  }
-
-  public int getMoveLeft() {
-    return moveLeft;
-  }
-
-  public int getMoveRight() {
-    return moveRight;
-  }
-
-  public int getMoveUp() {
-    return moveUp;
-  }
-
-  public int getMoveDown() {
-    return moveDown;
   }
 
   public void edgeCheck() {

@@ -1,5 +1,5 @@
 package swarm_wars_library.entities;
 
 public enum STATE {
-  ALIVE, DEAD, EXPLODE; 
+  ALIVE, DEAD, EXPLODE, SUICIDE;
 }

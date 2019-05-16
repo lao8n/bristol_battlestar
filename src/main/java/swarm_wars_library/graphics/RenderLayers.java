@@ -3,11 +3,11 @@ package swarm_wars_library.graphics;
 import processing.core.PApplet;
 
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
 
 public class RenderLayers{
-
   private Map map;
   private RenderBackground renderBackground;
   private RenderStar renderStar;
@@ -28,6 +28,8 @@ public class RenderLayers{
   private RenderMiniMapPlayer2 renderMiniMapPlayer2;
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
+  private String playerMe;
+  private String playerEnemy;
 
   public RenderLayers(PApplet sketch){
     this.map = Map.getInstance();
@@ -50,6 +52,11 @@ public class RenderLayers{
     this.renderMiniMapPlayer2 = new RenderMiniMapPlayer2(sketch);
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
+
+    int playerId = map.getPlayerId();
+    int enemyId = map.getEnemyId();
+    playerMe = "PLAYER" + Integer.toString(playerId);
+    playerEnemy = "PLAYER" + Integer.toString(enemyId);
   }
 
   //=========================================================================//
@@ -71,7 +78,7 @@ public class RenderLayers{
     // Render Stars
     for (int i = 0; i < this.map.getMapStars().size(); i++){
       this.renderStar.update(this.map.getMapStars().get(i),
-                             CommsGlobal.get("PLAYER1")
+                             CommsGlobal.get(playerMe)
                                         .getPacket(0)
                                         .getLocation());
     }
@@ -105,7 +112,7 @@ public class RenderLayers{
         this.renderPlayer1Bot.update(CommsGlobal.get("PLAYER1_BOT")
                                                 .getPacket(i)
                                                 .getLocation(),
-                                      CommsGlobal.get("PLAYER1")
+                                      CommsGlobal.get(playerMe)
                                                 .getPacket(0)
                                                 .getLocation());
       }
@@ -117,7 +124,7 @@ public class RenderLayers{
           this.renderPlayer1Bot.updateExplosion(CommsGlobal.get("PLAYER1_BOT")
                                                           .getPacket(i)
                                                           .getLocation(),
-                                              CommsGlobal.get("PLAYER1")
+                                              CommsGlobal.get(playerMe)
                                                           .getPacket(0)
                                                           .getLocation(),
                                               5);
@@ -139,7 +146,7 @@ public class RenderLayers{
         this.renderPlayer2Bot.update(CommsGlobal.get("PLAYER2_BOT")
                                                 .getPacket(i)
                                                 .getLocation(),
-                                      CommsGlobal.get("PLAYER1")
+                                      CommsGlobal.get(playerMe)
                                                 .getPacket(0)
                                                 .getLocation());
       }
@@ -151,7 +158,7 @@ public class RenderLayers{
           this.renderPlayer2Bot.updateExplosion(CommsGlobal.get("PLAYER2_BOT")
                                                             .getPacket(i)
                                                             .getLocation(),
-                                                CommsGlobal.get("PLAYER1")
+                                                CommsGlobal.get(playerMe)
                                                             .getPacket(0)
                                                             .getLocation(),
                                                 5);
@@ -172,7 +179,7 @@ public class RenderLayers{
         this.renderTurret.update(CommsGlobal.get("TURRET")
                                            .getPacket(i)
                                            .getLocation(),
-                                CommsGlobal.get("PLAYER1")
+                                CommsGlobal.get(playerMe)
                                            .getPacket(0)
                                            .getLocation());
       }
@@ -184,14 +191,14 @@ public class RenderLayers{
           this.renderTurret.updateExplosion(CommsGlobal.get("TURRET")
                                                       .getPacket(i)
                                                       .getLocation(),
-                                           CommsGlobal.get("PLAYER1")
+                                           CommsGlobal.get(playerMe)
                                                       .getPacket(0)
                                                       .getLocation(),
                                            5);
           this.renderTurret.updateVoid(CommsGlobal.get("TURRET")
                                                  .getPacket(i)
                                                  .getLocation(),
-                                       CommsGlobal.get("PLAYER1")
+                                       CommsGlobal.get(playerMe)
                                                  .getPacket(0)
                                                  .getLocation());
       }
@@ -210,7 +217,7 @@ public class RenderLayers{
       this.renderPlayer1.update(CommsGlobal.get("PLAYER1")
                                             .getPacket(0)
                                             .getLocation(),
-                                CommsGlobal.get("PLAYER1")
+                                CommsGlobal.get(playerMe)
                                             .getPacket(0)
                                             .getLocation());
     }
@@ -223,7 +230,7 @@ public class RenderLayers{
       this.renderPlayer1.updateExplosion(CommsGlobal.get("PLAYER1")
                                                     .getPacket(0)
                                                     .getLocation(),
-                                          CommsGlobal.get("PLAYER1")
+                                          CommsGlobal.get(playerMe)
                                                     .getPacket(0)
                                                     .getLocation(),
                                           5);
@@ -242,7 +249,7 @@ public class RenderLayers{
       this.renderPlayer2.update(CommsGlobal.get("PLAYER2")
                                             .getPacket(0)
                                             .getLocation(),
-                                CommsGlobal.get("PLAYER1")
+                                CommsGlobal.get(playerMe)
                                             .getPacket(0)
                                             .getLocation());
       }
@@ -255,7 +262,7 @@ public class RenderLayers{
       this.renderPlayer2.updateExplosion(CommsGlobal.get("PLAYER2")
                                                     .getPacket(0)
                                                     .getLocation(),
-                                          CommsGlobal.get("PLAYER1")
+                                          CommsGlobal.get(playerMe)
                                                     .getPacket(0)
                                                     .getLocation(),
                                           5);
@@ -277,7 +284,7 @@ public class RenderLayers{
         this.renderTurretBullet.update(CommsGlobal.get("TURRET_BULLET")
                                                  .getPacket(i)
                                                  .getLocation(),
-                                      CommsGlobal.get("PLAYER1")
+                                      CommsGlobal.get(playerMe)
                                                  .getPacket(0)
                                                  .getLocation());
       }
@@ -289,7 +296,7 @@ public class RenderLayers{
         this.renderTurretBullet.updateExplosion(CommsGlobal.get("TURRET_BULLET")
                                                           .getPacket(i)
                                                           .getLocation(),
-                                                CommsGlobal.get("PLAYER1")
+                                                CommsGlobal.get(playerMe)
                                                           .getPacket(0)
                                                           .getLocation(),
                                                 3);
@@ -311,7 +318,7 @@ public class RenderLayers{
         this.renderPlayer1Bullet.update(CommsGlobal.get("PLAYER1_BULLET")
                                                     .getPacket(i)
                                                     .getLocation(),
-                                          CommsGlobal.get("PLAYER1")
+                                          CommsGlobal.get(playerMe)
                                                     .getPacket(0)
                                                     .getLocation());
       }
@@ -324,7 +331,7 @@ public class RenderLayers{
                                                       "PLAYER1_BULLET")
                                                               .getPacket(i)
                                                               .getLocation(),
-                                                    CommsGlobal.get("PLAYER1")
+                                                    CommsGlobal.get(playerMe)
                                                               .getPacket(0)
                                                               .getLocation(),
                                                     7);
@@ -346,7 +353,7 @@ public class RenderLayers{
         this.renderPlayer2Bullet.update(CommsGlobal.get("PLAYER2_BULLET")
                                                   .getPacket(i)
                                                   .getLocation(),
-                                        CommsGlobal.get("PLAYER1")
+                                        CommsGlobal.get(playerMe)
                                                   .getPacket(0)
                                                   .getLocation());
       }
@@ -359,7 +366,7 @@ public class RenderLayers{
                                                     "PLAYER2_BULLET")
                                                              .getPacket(i)
                                                              .getLocation(),
-                                                  CommsGlobal.get("PLAYER1")
+                                                  CommsGlobal.get(playerMe)
                                                              .getPacket(0)
                                                              .getLocation(),
                                                   7);

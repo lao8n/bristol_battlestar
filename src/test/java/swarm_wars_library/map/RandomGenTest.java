@@ -29,4 +29,18 @@ class RandomGenTest {
         assertEquals(rand2, RandomGen.getRand());
         assertEquals(rand3, RandomGen.getRand());
     }
+
+    @Test
+    void getInt() {
+        int zeros = 0;
+        int ones = 0;
+        for(int i = 0; i < 100; i++){
+            double rand = RandomGen.getInt(1);
+            if(rand == 0) zeros++;
+            if(rand == 1) ones++;
+            assertTrue(rand <= 1 && rand >= 0);
+        }
+        assertTrue(ones > 10);
+        assertTrue(zeros > 10);
+    }
 }

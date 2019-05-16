@@ -1,7 +1,6 @@
 package swarm_wars_library.swarm_algorithms;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.comms.CommsGlobal;
@@ -25,7 +24,6 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
   private double weightAvoidEdge = 0.9;
   private double weightHeading = 0.3;
   private BEESTATE beeState;
-  private Random random;
   private ScoutBeeTargets scoutBeeTargets;
   private Vector2D scoutBeeTarget;
   private Map map = Map.getInstance();
@@ -43,7 +41,6 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
     this.rb = rb;
     this.transform = transform;
     this.beeState = BEESTATE.ATHIVE;
-    this.random = new Random();
     this.scoutBeeTargets = ScoutBeeTargets.getInstance();
     this.listTargetEntities.add(ENTITY.TURRET);
   }  
@@ -59,7 +56,7 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
       this.transform.setVelocity(0, 0);   
       this.rb.setVelocity(new Vector2D(0, 0));   
       if(this.scoutBeeTargets.getTargetSize() > 0 & 
-         this.random.nextInt(100) > 40){
+         RandomGen.getInt(100) > 40){
         this.scoutBeeTarget = this.scoutBeeTargets.getRandomTarget();
       }
       else {

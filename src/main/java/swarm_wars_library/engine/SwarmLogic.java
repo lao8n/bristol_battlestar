@@ -4,12 +4,7 @@ import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.fsm.FSMManager;
-import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
-import swarm_wars_library.swarm_algorithms.DefendShellSwarmAlgorithm;
-import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
-import swarm_wars_library.swarm_algorithms.ScoutBeeSwarmAlgorithm;
-import swarm_wars_library.swarm_algorithms.DefendFlockSwarmAlgorithm;
-import swarm_wars_library.swarm_algorithms.ScoutRandomSwarmAlgorithm;
+import swarm_wars_library.swarm_algorithms.*;
 
 public class SwarmLogic {
 
@@ -57,7 +52,12 @@ public class SwarmLogic {
       case SCOUTBEE:
         this.swarm_algo = 
           new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
-                                    this.rb);
+                                     this.rb);
+        break;
+      case ATTACKSUICIDE:
+        this.swarm_algo =
+          new AttackSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
+                                          this.rb);
         break;
       default:
         break;

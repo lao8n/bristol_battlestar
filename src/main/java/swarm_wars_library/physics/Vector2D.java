@@ -120,11 +120,11 @@ public class Vector2D {
 		return Math.atan2(y, x);
 	}
 
-
-	void random2D() {
-		x = RandomGen.getRand();
-		y = RandomGen.getRand();
-	}
+//	// DO NOT USE - tve
+//	void random2D() {
+//		x = RandomGen.getRand();
+//		y = RandomGen.getRand();
+//	}
 
 	void lerp(Vector2D v, double i){
 		x = (v.x - x) * i;

@@ -1,5 +1,6 @@
 package swarm_wars_library.network;
 
+import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.input.Input;
 
 import java.util.HashMap;
@@ -98,14 +99,7 @@ public class NetworkClientFunctions {
     }
 
 
-    public static void sendOperation(int id, int frame, Input i) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put(Headers.TYPE, Constants.OPERATION);
-        m.put(Headers.PLAYER, id);
-        m.put(Headers.W, i.getMoveUp());
-        m.put(Headers.A, i.getMoveLeft());
-        m.put(Headers.D, i.getMoveRight());
-        m.put(Headers.S, i.getMoveDown());
+    public static void sendOperation(int id, int frame, Map<String, Object> m) {
         MessageHandlerMulti.putPackage(m);
         System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
