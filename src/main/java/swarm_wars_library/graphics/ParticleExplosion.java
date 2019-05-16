@@ -3,6 +3,7 @@ package swarm_wars_library.graphics;
 import java.util.List;
 import java.util.ArrayList;
 
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 
 public class ParticleExplosion{
@@ -17,9 +18,9 @@ public class ParticleExplosion{
     for (int i = 0; i < numParticles; i++){
       // Create particle in randomised circle around entity
       float startX = (float) (objectMapLocation.getX() + 
-                            (-1 + 2 * (float) Math.random()));
+                            (-1 + 2 * (float) RandomGen.getRand()));
       float startY = (float) (objectMapLocation.getY() + 
-                            (-1 + 2 * (float) Math.random()));
+                            (-1 + 2 * (float) RandomGen.getRand()));
       Vector2D start = new Vector2D(startX, startY);
       Particle p = new Particle(startX, startY);
   

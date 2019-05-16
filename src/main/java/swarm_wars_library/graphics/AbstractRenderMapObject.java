@@ -9,6 +9,7 @@ public abstract class AbstractRenderMapObject{
   protected PApplet sketch;
   protected Vector2D objectRenderLocation = new Vector2D(0, 0);
   private ParticleExplosion PE;
+  protected Vector2D objectMapLocation = new Vector2D(0, 0);
 
   public AbstractRenderMapObject(PApplet sketch){
     this.sketch = sketch;
@@ -20,6 +21,7 @@ public abstract class AbstractRenderMapObject{
 
   public void update(Vector2D objectMapLocation, 
     Vector2D viewCentreMapLocation){
+    this.objectMapLocation = objectMapLocation;
 
     this.setObjectRenderLocation(objectMapLocation, viewCentreMapLocation);
     if(this.objectRenderLocation.getX() >= 0 && 
@@ -82,4 +84,41 @@ public abstract class AbstractRenderMapObject{
       viewCentreMapY + this.sketch.height / 2);
   }
 
+
+  protected Vector2D getObjectRenderLocation(Vector2D objectMapLocation, 
+    Vector2D viewCentreMapLocation){
+
+    double viewCentreMapX;
+    double viewCentreMapY;
+
+    if(Map.getInstance().getMapWidth() - viewCentreMapLocation.getX() < 
+       this.sketch.width /2){
+      viewCentreMapX = Map.getInstance().getMapWidth() - this.sketch.width / 2;
+    }
+    else if (viewCentreMapLocation.getX() < this.sketch.width / 2){
+      viewCentreMapX = this.sketch.width / 2;
+    }
+    else {
+      viewCentreMapX = viewCentreMapLocation.getX();
+    }
+
+    if(Map.getInstance().getMapHeight() - viewCentreMapLocation.getY() < 
+       this.sketch.height /2){
+      viewCentreMapY = Map.getInstance().getMapHeight() - this.sketch.height / 2;
+    }
+    else if (viewCentreMapLocation.getY() < this.sketch.height / 2){
+      viewCentreMapY = this.sketch.height / 2;
+    }
+    else {
+      viewCentreMapY = viewCentreMapLocation.getY();
+    }
+    Vector2D tempVector = new Vector2D(
+      objectMapLocation.getX() - 
+      viewCentreMapX + this.sketch.width / 2,
+      objectMapLocation.getY() - 
+      viewCentreMapY + this.sketch.height / 2
+    );
+
+    return tempVector;
+  }
 }

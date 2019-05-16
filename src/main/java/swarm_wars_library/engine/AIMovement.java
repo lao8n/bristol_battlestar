@@ -1,8 +1,10 @@
 package swarm_wars_library.engine;
 
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.map.Map;
+
 
 public class AIMovement{
 
@@ -21,8 +23,8 @@ public class AIMovement{
   public void update(){
     // go in random new direction every 10s
     if(this.movementCount % 70 == 0){
-      this.moveRight = -1 + 2 * Math.random();
-      this.moveDown = -1 + 2 * Math.random();
+      this.moveRight = -1 + 2 * RandomGen.getRand();
+      this.moveDown = -1 + 2 * RandomGen.getRand();
       this.movementCount = 0;
     }
     // tend to go towards the middle

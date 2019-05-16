@@ -65,12 +65,29 @@ public class Input {
   }
 
   public Vector2D getLocation() {
-    return location;
+    return this.location;
   }
 
   public double getHeading() {
-    return heading;
+    return this.heading;
   }
+
+  public int getMoveLeft(){
+    return this.moveLeft;
+  }
+
+  public int getMoveRight(){
+    return this.moveRight;
+  }
+
+  public int getMoveUp(){
+    return this.moveUp;
+  }
+
+  public int getMoveDown(){
+    return this.moveDown;
+  }
+
 
   public int setMove(int k, int b) {
     if (k == 'W' || k == 'w' || k == UP) {
@@ -109,4 +126,6 @@ public class Input {
   public int getMouse(){
     return mouse;
   }
+
+
 }

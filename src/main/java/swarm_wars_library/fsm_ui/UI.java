@@ -11,6 +11,7 @@ import swarm_wars_library.fsm.FSMCOMPARISON;
 import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.fsm.FSMVARIABLE;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 
 public class UI{
@@ -153,10 +154,10 @@ public class UI{
     
     for(int i = 0; i <= 10; i++){
       this.sketch.fill(255, 255, 204);
-      this.sketch.ellipse(this.sketch.random(this.sketch.width),
-                          this.sketch.random(this.sketch.height),
-                          2, 
-                          2);
+//      this.sketch.ellipse((float) RandomGen.getRand() * this.sketch.width,
+//              (float) RandomGen.getRand() * this.sketch.height,
+//              2,
+//              2);
     }
   }
 
