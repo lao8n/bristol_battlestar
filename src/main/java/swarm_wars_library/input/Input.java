@@ -72,29 +72,21 @@ public class Input {
     return this.heading;
   }
 
-  public boolean getMoveLeft(){
-    return this.int2Boolean(this.moveLeft);
+  public int getMoveLeft(){
+    return this.moveLeft;
   }
 
-  public boolean getMoveRight(){
-    return this.int2Boolean(this.moveRight);
+  public int getMoveRight(){
+    return this.moveRight;
   }
 
-  public boolean getMoveUp(){
-    return this.int2Boolean(this.moveUp);
+  public int getMoveUp(){
+    return this.moveUp;
   }
 
-  public boolean getMoveDown(){
-    return this.int2Boolean(this.moveDown);
+  public int getMoveDown(){
+    return this.moveDown;
   }
-
-  private boolean int2Boolean(int moveNum){
-    if(moveNum == 1){
-      return true;
-    }
-    return false;
-  }
-
 
 
   public int setMove(int k, int b) {
@@ -109,22 +101,6 @@ public class Input {
     } else {
       return b;
     }
-  }
-
-  public int getMoveLeft() {
-    return moveLeft;
-  }
-
-  public int getMoveRight() {
-    return moveRight;
-  }
-
-  public int getMoveUp() {
-    return moveUp;
-  }
-
-  public int getMoveDown() {
-    return moveDown;
   }
 
   public void edgeCheck() {

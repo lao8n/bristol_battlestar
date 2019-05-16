@@ -13,6 +13,11 @@ import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
+import static processing.core.PConstants.DOWN;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
+import static processing.core.PConstants.UP;
+
 public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   IScore, ISound{
 
@@ -104,7 +109,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   //=========================================================================//
-  // Input methods                                                           //
+  // Input     methods                                                       //
   //=========================================================================//
   @Override
   public void updateInput(){
@@ -124,24 +129,48 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
-  public boolean getInputLeft(){
+  public int getInputLeft(){
     return this.input.getMoveLeft();
   }
 
   @Override
-  public boolean getInputRight(){
+  public int getInputRight(){
     return this.input.getMoveRight();
   }
 
   @Override 
-  public boolean getInputUp(){
+  public int getInputUp(){
     return this.input.getMoveUp();
   }
 
   @Override 
-  public boolean getInputDown(){
+  public int getInputDown(){
     return this.input.getMoveDown();
   }
+
+  @Override
+  public void setInputUp(int b){
+    this.input.setMove(UP, b);
+  }
+
+  @Override
+  public void setInputDown(int b){
+    this.input.setMove(DOWN, b);
+  }
+
+  @Override
+  public void setInputLeft(int b){
+    this.input.setMove(LEFT, b);
+  }
+
+  @Override
+  public void setInputRight(int b){
+    this.input.setMove(RIGHT, b);
+  }
+
+  //=========================================================================//
+  // Input listeners                                                         //
+  //=========================================================================//
 
   @Override
   public void listenKeyPressed(int keyCode){
@@ -161,10 +190,6 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   @Override
   public void listenMouseReleased(){
     this.input.setMouse(0);
-  }
-  
-  public Input getInput() {
-    return input;
   }
 
   //=========================================================================//

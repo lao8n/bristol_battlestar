@@ -64,13 +64,13 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
     //noTint();
 
     // used to determine if thrust is present
-    boolean moveLeft = CommsGlobal.get("PLAYER1").getPacket(0).getMoveLeft();
-    boolean moveRight = CommsGlobal.get("PLAYER1").getPacket(0).getMoveRight();
-    boolean moveUp = CommsGlobal.get("PLAYER1").getPacket(0).getMoveUp();
-    boolean moveDown = CommsGlobal.get("PLAYER1").getPacket(0).getMoveDown();
+    int moveLeft = CommsGlobal.get("PLAYER1").getPacket(0).getMoveLeft();
+    int moveRight = CommsGlobal.get("PLAYER1").getPacket(0).getMoveRight();
+    int moveUp = CommsGlobal.get("PLAYER1").getPacket(0).getMoveUp();
+    int moveDown = CommsGlobal.get("PLAYER1").getPacket(0).getMoveDown();
     double angle = CommsGlobal.get("PLAYER1").getPacket(0).getMotherShipHeading() + Math.PI/2;
 
-    if (moveLeft || moveRight || moveUp || moveDown){
+    if (moveLeft == 1 || moveRight  == 1 || moveUp  == 1 || moveDown == 1 ){
       shipThrustStrength += 10;
       if (shipThrustStrength > 255){
         shipThrustStrength = 255;

@@ -14,10 +14,10 @@ public class CommsPacket {
   private int health;
   private int score;
   private double motherShipHeading;
-  private boolean moveLeft;
-  private boolean moveRight;
-  private boolean moveUp;
-  private boolean moveDown;
+  private int moveLeft;
+  private int moveRight;
+  private int moveUp;
+  private int moveDown;
 
   public int getId() {
     return id;
@@ -69,20 +69,36 @@ public class CommsPacket {
   public void setState(STATE state){
     this.state = state;
   }
+
+  public  void setMoveUp(int moveUp){
+    this.moveUp = moveUp;
+  }
+
+  public int getMoveUp(){
+    return this.moveUp;
+  }
+
+  public  void setMoveDown(int moveDown){
+    this.moveDown = moveDown;
+  }
+
+  public int getMoveDown(){
+    return this.moveDown;
+  }
   
-  public boolean getMoveLeft(){
+  public int getMoveLeft(){
     return this.moveLeft; 
   }
 
-  public boolean getMoveRight(){
+  public int getMoveRight(){
     return this.moveRight; 
   }
 
-  public  void setMoveLeft(boolean moveLeft){
+  public  void setMoveLeft(int moveLeft){
     this.moveLeft = moveLeft;
   }
 
-  public  void setMoveRight(boolean moveRight){
+  public  void setMoveRight(int moveRight){
     this.moveRight = moveRight;
   }
 
@@ -94,20 +110,5 @@ public class CommsPacket {
     this.motherShipHeading = heading; 
   }
 
-  public  void setMoveUp(boolean moveUp){
-    this.moveUp = moveUp;
-  }
-
-  public boolean getMoveUp(){
-    return this.moveUp; 
-  }
-
-  public  void setMoveDown(boolean moveDown){
-    this.moveDown = moveDown;
-  }
-
-  public boolean getMoveDown(){
-    return this.moveDown; 
-  }
 
 }
