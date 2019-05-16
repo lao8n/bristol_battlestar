@@ -1,8 +1,10 @@
 package swarm_wars_library;
 
 import java.util.ArrayList;
+
 import processing.core.PApplet;
 
+import sun.nio.ch.Net;
 import swarm_wars_library.engine.CollisionDetection;
 import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
@@ -15,16 +17,30 @@ import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
+import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
+import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 import swarm_wars_library.swarm_select.SwarmSelect;
 
 public class SwarmWars extends PApplet {
 
+  // To play single player:
+  //  set playNetworkGame to false,
+  //  set player2 to PlayerAI object
+  //  set the constructor for player 2 in entitiesSetup() to PlayerAI
+  //  comment out getInput functions in networkingGetEnemyInputs()
+
+  // Networking
+  private boolean playNetworkGame = false;
+
   // Players
   PlayerN player1;
+//  PlayerN player2;
   PlayerAI player2;
+
 
   // Entity lists that has all our game things.
   ArrayList <AbstractEntity> player1TakeDamage;  
@@ -35,7 +51,7 @@ public class SwarmWars extends PApplet {
   ArrayList <AbstractEntity> gameObjectsDealDamage;
 
   // Game Backend Objects
-  Map map = Map.getInstance();
+  Map map;
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
   UI fsmUI;
@@ -43,6 +59,7 @@ public class SwarmWars extends PApplet {
 
   // Game screens 
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
+  int frameNumber;
 
   //=========================================================================//
   // Processing Settings                                                     //
@@ -56,8 +73,13 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
+    this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
+    this.networkSetup();
     this.uiSetup();
     // this.soundSetup();
+
+    // NETWORKING - Starts server and gets ids
+    this.frameNumber = 0;
   }
   //=========================================================================//
   // Processing Game Loop                                                    //
@@ -73,6 +95,7 @@ public class SwarmWars extends PApplet {
         this.swarmSelectUpdate();
         break;
       case GAME:
+        this.networkUpdate();
         this.checkCollisions();
         this.entitiesUpdate();
         this.renderLayersUpdate();
@@ -89,9 +112,11 @@ public class SwarmWars extends PApplet {
   // Processing Main                                                         //
   //=========================================================================//
   public static void main(String[] passedArgs) {
+
     String[] appletArgs = new String[] {
       "swarm_wars_library.SwarmWars"
     };
+
     PApplet.main(appletArgs);
   }
   
@@ -131,6 +156,8 @@ public class SwarmWars extends PApplet {
     this.gameObjectsTakeDamage = new ArrayList<AbstractEntity>();
     this.gameObjectsDealDamage = new ArrayList<AbstractEntity>();
 
+    this.map.generateStartingPositions();
+
     // player1 setup
     this.player1 = new PlayerN(this, ENTITY.PLAYER1);
     this.player1TakeDamage.add(this.player1);
@@ -142,6 +169,7 @@ public class SwarmWars extends PApplet {
     }
 
     // player2 setup
+//    this.player2 = new PlayerN(this, ENTITY.PLAYER2);
     this.player2 = new PlayerAI(this, ENTITY.PLAYER2);
     this.player2TakeDamage.add(this.player2);
     this.player2DealDamage.addAll(player2.getBullets());
@@ -188,6 +216,62 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // Networking                                                              //
+  //=========================================================================//
+
+  public void networkSetup() {
+    if(!playNetworkGame) {
+      map.setPlayerId(1);
+      map.setEnemyId(2);
+    } else {
+      // start network
+      NetworkClientFunctions.startNewtork();
+      map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
+      map.setEnemyId(map.getPlayerId() == 0 ? 1 : 0);
+      NetworkClientFunctions.cleanBuffer();
+
+
+      // NETWORKING this needs to be integrated with FSM and selection
+      NetworkClientFunctions.sendConnect(map.getPlayerId());
+      NetworkClientFunctions.sendSetup(map.getPlayerId());
+
+      networkingGameStart();
+    }
+  }
+
+  public void networkingGameStart() {
+    if(!playNetworkGame) return;
+    NetworkClientFunctions.sendStart(map.getPlayerId());
+    NetworkClientFunctions.awaitStart();
+  }
+
+  public void networkingSendPlayerInputs() {
+    if(!playNetworkGame) return;
+    NetworkClientFunctions.sendOperation(
+            map.getPlayerId(),
+            frameNumber,
+            player1
+    );
+  }
+
+  public void networkingGetEnemyInputs() {
+    if(!playNetworkGame) return;
+    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getPlayerId(), frameNumber++);
+
+//    if(messageIn.containsKey("W")) player2.setInputUp((Integer) messageIn.get("W"));
+//    if(messageIn.containsKey("A")) player2.setInputDown((Integer) messageIn.get("A"));
+//    if(messageIn.containsKey("S")) player2.setInputLeft((Integer) messageIn.get("S"));
+//    if(messageIn.containsKey("D")) player2.setInputRight((Integer) messageIn.get("D"));
+
+  }
+
+  public void networkUpdate() {
+//    RandomGen.setSeed(10);
+    this.networkingSendPlayerInputs();
+    this.networkingGetEnemyInputs();
+  }
+
+  //=========================================================================//
   // Collision checks                                                        //
   //=========================================================================//
   public void checkCollisions() {
@@ -215,6 +299,10 @@ public class SwarmWars extends PApplet {
   // Entities update                                                         //
   //=========================================================================//
   public void entitiesUpdate(){
+    // NETWORKING CAN WE PUT A BLOCKER HERE TO STOP ANY CHANGES HAPPENING BETWEEN PUT AND GET?
+    // NETWORKING PUT DATA HERE
+    // NETWORKING GET DATA HERE
+
     // Update game entities
     for(int i = 0; i < this.gameObjectsTakeDamage.size(); i++){
       this.gameObjectsTakeDamage.get(i).update();
@@ -255,6 +343,7 @@ public class SwarmWars extends PApplet {
   public void swarmSelectUpdate(){
     this.swarmSelect.update();
     if(this.swarmSelect.getGameScreen() == GAMESCREEN.GAME){
+      RandomGen.resetSeed();
       CommsGlobal.reset();
       this.commsSetup();
       this.entitiesSetup();
@@ -282,11 +371,15 @@ public class SwarmWars extends PApplet {
   // a switch statement inside them?
 
   public void keyPressed() {
-    this.player1.listenKeyPressed(this.keyCode);
+    if(this.currentScreen.equals(GAMESCREEN.GAME)){
+      this.player1.listenKeyPressed(this.keyCode);
+    }
   }
 
   public void keyReleased() {
-    this.player1.listenKeyReleased(this.keyCode);
+    if(this.currentScreen.equals(GAMESCREEN.GAME)) {
+      this.player1.listenKeyReleased(this.keyCode);
+    }
   }
 
   public void mousePressed() {
@@ -308,6 +401,7 @@ public class SwarmWars extends PApplet {
         // TODO Add error
     }
   }
+
   public void mouseReleased() {
     switch(this.currentScreen){
       case START:

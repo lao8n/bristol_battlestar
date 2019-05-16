@@ -1,13 +1,13 @@
 package swarm_wars_library.swarm_algorithms;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.Tag;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
@@ -24,7 +24,6 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
   private double weightAvoidEdge = 0.9;
   private double weightHeading = 0.3;
   private BEESTATE beeState;
-  private Random random;
   private ScoutBeeTargets scoutBeeTargets;
   private Vector2D scoutBeeTarget;
   private Map map = Map.getInstance();
@@ -42,7 +41,6 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
     this.rb = rb;
     this.transform = transform;
     this.beeState = BEESTATE.ATHIVE;
-    this.random = new Random();
     this.scoutBeeTargets = ScoutBeeTargets.getInstance();
     this.listTargetEntities.add(ENTITY.TURRET);
   }  
@@ -58,14 +56,14 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
       this.transform.setVelocity(0, 0);   
       this.rb.setVelocity(new Vector2D(0, 0));   
       if(this.scoutBeeTargets.getTargetSize() > 0 & 
-         this.random.nextInt(100) > 40){
+         RandomGen.getInt(100) > 40){
         this.scoutBeeTarget = this.scoutBeeTargets.getRandomTarget();
       }
       else {
         // Random target
-        this.scoutBeeTarget = new Vector2D(Math.random() * 
+        this.scoutBeeTarget = new Vector2D(RandomGen.getRand() *
                                             this.map.getMapWidth(), 
-                                            Math.random() * 
+                                            RandomGen.getRand() *
                                             this.map.getMapHeight());
       }
       this.heading = this.seekScoutTarget(this.scoutBeeTarget);
@@ -150,7 +148,7 @@ public class ScoutBeeSwarmAlgorithm extends AbstractSwarmAlgorithm {
   }
 
   private Vector2D randomRule(){
-    return new Vector2D(Math.random() - 0.5, Math.random() - 0.5);
+    return new Vector2D(RandomGen.getRand() - 0.5, RandomGen.getRand() - 0.5);
   }
 
   public void addTargetEntity(ENTITY type){

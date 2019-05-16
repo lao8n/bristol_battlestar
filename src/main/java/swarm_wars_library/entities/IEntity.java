@@ -1,5 +1,6 @@
 package swarm_wars_library.entities;
 
+import swarm_wars_library.input.Input;
 import swarm_wars_library.physics.Vector2D;
 
 public interface IEntity {

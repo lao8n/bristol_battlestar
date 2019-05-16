@@ -1,6 +1,9 @@
 package swarm_wars_library.comms;
 
 import swarm_wars_library.physics.Vector2D;
+
+import javax.sound.sampled.BooleanControl;
+
 import swarm_wars_library.entities.STATE;
 
 public class CommsPacket {
@@ -10,6 +13,11 @@ public class CommsPacket {
   private int id;
   private int health;
   private int score;
+  private double motherShipHeading;
+  private int moveLeft;
+  private int moveRight;
+  private int moveUp;
+  private int moveDown;
 
   public int getId() {
     return id;
@@ -61,4 +69,46 @@ public class CommsPacket {
   public void setState(STATE state){
     this.state = state;
   }
+
+  public  void setMoveUp(int moveUp){
+    this.moveUp = moveUp;
+  }
+
+  public int getMoveUp(){
+    return this.moveUp;
+  }
+
+  public  void setMoveDown(int moveDown){
+    this.moveDown = moveDown;
+  }
+
+  public int getMoveDown(){
+    return this.moveDown;
+  }
+  
+  public int getMoveLeft(){
+    return this.moveLeft; 
+  }
+
+  public int getMoveRight(){
+    return this.moveRight; 
+  }
+
+  public  void setMoveLeft(int moveLeft){
+    this.moveLeft = moveLeft;
+  }
+
+  public  void setMoveRight(int moveRight){
+    this.moveRight = moveRight;
+  }
+
+  public double getMotherShipHeading(){
+    return this.motherShipHeading; 
+  }
+
+  public  void setMotherShipHeading(double heading){
+    this.motherShipHeading = heading; 
+  }
+
+
 }
