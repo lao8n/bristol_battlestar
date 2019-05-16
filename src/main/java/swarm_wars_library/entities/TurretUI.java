@@ -1,6 +1,7 @@
 package swarm_wars_library.entities;
 
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 
 public class TurretUI extends AbstractEntity{
@@ -10,9 +11,9 @@ public class TurretUI extends AbstractEntity{
   //=========================================================================// 
   public TurretUI(ENTITY tag){
     super(tag, Map.getInstance().getTurretScale());
-    this.setLocation(new Vector2D(Math.random() * Map.getInstance()
+    this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
                                                      .getMapWidth(), 
-                                  Math.random() * Map.getInstance()
+                                  RandomGen.getRand() * Map.getInstance()
                                                      .getMapHeight()));
     this.updateCommsPacket();
     this.sendCommsPacket();  
@@ -27,9 +28,9 @@ public class TurretUI extends AbstractEntity{
     }
     if(this.isState(STATE.DEAD)){
       this.setState(STATE.ALIVE);
-      this.setLocation(new Vector2D(Math.random() * Map.getInstance()
+      this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
                                                        .getMapWidth(), 
-                                    Math.random() * Map.getInstance()
+                                    RandomGen.getRand() * Map.getInstance()
                                                        .getMapHeight()));
     }
     // Comms & explode last

@@ -10,10 +10,14 @@ public interface IInput{
   public void updateInput();
   public Vector2D getInputLocation();
   public double getInputHeading();
-  public boolean getInputLeft();
-  public boolean getInputRight();
-  public boolean getInputUp();
-  public boolean getInputDown();
+  public int getInputLeft();
+  public int getInputRight();
+  public int getInputUp();
+  public int getInputDown();
+  public void setInputUp(int b);
+  public void setInputDown(int b);
+  public void setInputLeft(int b);
+  public void setInputRight(int b);
   public void listenKeyPressed(int keyCode);
   public void listenKeyReleased(int keyCode);
   public void listenMousePressed();

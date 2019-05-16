@@ -17,6 +17,7 @@ public class OptionButton {
   private PImage defendFlock;
   private PImage scoutRandom;
   private PImage scoutBee;
+  private PImage attackSuicide;
 
   //=========================================================================//
   // Option Button constructor                                               //
@@ -31,6 +32,7 @@ public class OptionButton {
     this.defendFlock = sketch.loadImage("resources/images/defendFlock.png");
     this.scoutRandom = sketch.loadImage("resources/images/scoutRandom.png");
     this.scoutBee = sketch.loadImage("resources/images/scoutBee.png");
+    this.attackSuicide = sketch.loadImage("resources/images/attackSuicide.png");
   }
 
   //=========================================================================//
@@ -53,6 +55,8 @@ public class OptionButton {
       case SCOUTBEE:
         x = this.scoutBee;
         break;
+      case ATTACKSUICIDE:
+        x = this.attackSuicide;
       default:
         break;
     }

@@ -7,6 +7,7 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.engine.AIShooter;
 import swarm_wars_library.engine.Shooter;
 import swarm_wars_library.map.Map;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 
 public class Turret extends AbstractEntity implements IAIShooter, ISound{
@@ -22,9 +23,9 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
     super(tag, Map.getInstance().getTurretScale());
     this.aiShooter = new AIShooter();
     this.shooter = new Shooter(this.tag, 5);
-    this.setLocation(new Vector2D(Math.random() * Map.getInstance()
+    this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
                                                      .getMapWidth(), 
-                                  Math.random() * Map.getInstance()
+                                  RandomGen.getRand() * Map.getInstance()
                                                      .getMapHeight()));
     this.updateCommsPacket();
     this.sendCommsPacket();  
@@ -41,9 +42,9 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
     }
     if(this.isState(STATE.DEAD)){
       this.setState(STATE.ALIVE);
-      this.setLocation(new Vector2D(Math.random() * Map.getInstance()
+      this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
                                                        .getMapWidth(), 
-                                    Math.random() * Map.getInstance()
+                                    RandomGen.getRand() * Map.getInstance()
                                                        .getMapHeight()));
     }
     // Comms & explode last

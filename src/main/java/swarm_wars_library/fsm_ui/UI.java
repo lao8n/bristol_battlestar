@@ -11,6 +11,7 @@ import swarm_wars_library.fsm.FSMCOMPARISON;
 import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.fsm.FSMVARIABLE;
+import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 
 public class UI{
@@ -153,10 +154,10 @@ public class UI{
     
     for(int i = 0; i <= 10; i++){
       this.sketch.fill(255, 255, 204);
-      this.sketch.ellipse(this.sketch.random(this.sketch.width),
-                          this.sketch.random(this.sketch.height),
-                          2, 
-                          2);
+//      this.sketch.ellipse((float) RandomGen.getRand() * this.sketch.width,
+//              (float) RandomGen.getRand() * this.sketch.height,
+//              2,
+//              2);
     }
   }
 
@@ -285,21 +286,32 @@ public class UI{
     // Add states first
     this.fsmManager.addFSMState(1, FSMSTATE.DEFEND);
     this.fsmManager.addFSMState(2, FSMSTATE.SCOUT);
-    // this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
+    this.fsmManager.addFSMState(3, FSMSTATE.ATTACK);
     // this.fsmManager.addFSMState(3, FSMSTATE.DEFEND);
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
-    this.fsmManager.addTransition(1, 
-                                  2, 
-                                  FSMVARIABLE.ENEMYDISTANCE, 
+    this.fsmManager.addTransition(1,
+                                  2,
+                                  FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.GREATERTHAN,
                                   500);
-    this.fsmManager.addTransition(2, 
+    this.fsmManager.addTransition(2,
                                   1,
-                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.LESSTHAN,
-                                  300);
+                                  10);
+    this.fsmManager.addTransition(1,
+                                  3,
+                                  FSMVARIABLE.ENEMYDISTANCE,
+                                  FSMCOMPARISON.LESSTHAN,
+                                  200);
+    this.fsmManager.addTransition(3,
+                                  2,
+                                  FSMVARIABLE.ENEMYDISTANCE,
+                                  FSMCOMPARISON.LESSTHAN,
+                                  200);
+
     // this.fsmManager.addTransition(3, 
     //                               1,
     //                               FSMVARIABLE.ENEMYDISTANCE, 
