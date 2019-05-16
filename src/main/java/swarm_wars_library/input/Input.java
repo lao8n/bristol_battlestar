@@ -30,7 +30,7 @@ public class Input {
     this.sketch = sketch;
     this.map = Map.getInstance();
     this.location = this.map.getPlayerStartingLocation(tag);
-    this.moveForce = 20;
+    this.moveForce = Map.getInstance().getPlayerMoveForce();
     this.heading = 0;
 
     this.moveLeft = 0;
@@ -201,5 +201,6 @@ public class Input {
     this.moveLeft = this.moveLeftBuffer;
     this.moveRight = this.moveRightBuffer;
     this.mouse = this.mouseBuffer;
+    this.mouseBuffer = 0;
   }
 }

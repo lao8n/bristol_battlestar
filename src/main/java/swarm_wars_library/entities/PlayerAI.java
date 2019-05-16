@@ -24,6 +24,8 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   private AIMovement aiMovement;
   private Shooter shooter;
   private int shootInterval = 0;
+  private int bulletForce = Map.getInstance().getPlayerAIBulletForce();
+
 
   //=========================================================================//
   // Constructor                                                             //
@@ -35,7 +37,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
     this.setLocation(Map.getInstance().getPlayerStartingLocation(this.tag));
     this.health = new Health(this.tag);
     this.score = 0;
-    this.shooter = new Shooter(this.tag, 10);
+    this.shooter = new Shooter(this.tag, bulletForce);
     this.updateCommsPacket();
     this.sendCommsPacket();  
   }

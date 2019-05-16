@@ -169,28 +169,29 @@ public class SwarmWars extends PApplet {
 
     this.map.generateStartingPositions();
 
-
-    // networking and player1
-    if(playNetworkGame && map.getPlayerId() == 1) {
-      this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
-      this.playerEnemy = new PlayerN(this, ENTITY.PLAYER2);
-      this.player1TakeDamage.add(this.playerMe);
-      this.player1DealDamage.addAll(playerMe.getBullets());
-      this.player2TakeDamage.add(this.playerEnemy);
-      this.player2DealDamage.addAll(playerEnemy.getBullets());
+    // setup networking game
+    if(playNetworkGame) {
+      // setup if player is player 1
+      if (playNetworkGame && map.getPlayerId() == 1) {
+        this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
+        this.playerEnemy = new PlayerN(this, ENTITY.PLAYER2);
+        this.player1TakeDamage.add(this.playerMe);
+        this.player1DealDamage.addAll(playerMe.getBullets());
+        this.player2TakeDamage.add(this.playerEnemy);
+        this.player2DealDamage.addAll(playerEnemy.getBullets());
+      }
+      // setup if player is player 2
+      if (map.getPlayerId() == 2) {
+        this.playerEnemy = new PlayerN(this, ENTITY.PLAYER1);
+        this.playerMe = new PlayerN(this, ENTITY.PLAYER2);
+        this.player1TakeDamage.add(this.playerEnemy);
+        this.player1DealDamage.addAll(playerEnemy.getBullets());
+        this.player2TakeDamage.add(this.playerMe);
+        this.player2DealDamage.addAll(playerMe.getBullets());
+      }
     }
 
-    // networking and player2
-    if(playNetworkGame && map.getPlayerId() == 2) {
-      this.playerEnemy = new PlayerN(this, ENTITY.PLAYER1);
-      this.playerMe = new PlayerN(this, ENTITY.PLAYER2);
-      this.player1TakeDamage.add(this.playerEnemy);
-      this.player1DealDamage.addAll(playerEnemy.getBullets());
-      this.player2TakeDamage.add(this.playerMe);
-      this.player2DealDamage.addAll(playerMe.getBullets());
-    }
-
-    // not networking
+    // single player
     if(!playNetworkGame){
       this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
       this.playerAI = new PlayerAI(this, ENTITY.PLAYER2);
@@ -201,7 +202,6 @@ public class SwarmWars extends PApplet {
     }
 
     // setup bots
-
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
       Bot bot = new Bot(ENTITY.PLAYER1_BOT, i, true);
       this.player1TakeDamage.add(bot);
@@ -369,9 +369,6 @@ public class SwarmWars extends PApplet {
   // Entities update                                                         //
   //=========================================================================//
   public void entitiesUpdate(){
-    // NETWORKING CAN WE PUT A BLOCKER HERE TO STOP ANY CHANGES HAPPENING BETWEEN PUT AND GET?
-    // NETWORKING PUT DATA HERE
-    // NETWORKING GET DATA HERE
 
     // Update game entities
     for(int i = 0; i < this.gameObjectsTakeDamage.size(); i++){
@@ -436,13 +433,21 @@ public class SwarmWars extends PApplet {
   // a switch statement inside them?
 
   public void keyPressed() {
-    if(!this.currentScreen.equals(GAMESCREEN.GAME)) return;
-    this.playerMe.listenKeyPressed(this.keyCode);
+    switch(this.currentScreen) {
+      case GAME:
+        this.playerMe.listenKeyPressed(this.keyCode);
+        break;
+      default:
+    }
   }
 
   public void keyReleased() {
-    if(!this.currentScreen.equals(GAMESCREEN.GAME)) return;
-    this.playerMe.listenKeyReleased(this.keyCode);
+      switch(this.currentScreen) {
+        case GAME:
+          this.playerMe.listenKeyReleased(this.keyCode);
+          break;
+        default:
+      }
   }
 
   public void mousePressed() {
@@ -456,7 +461,8 @@ public class SwarmWars extends PApplet {
         this.swarmSelect.listenMousePressed();
         break;
       case GAME:
-        this.playerMe.listenMousePressed();
+//        System.out.println("Pressed..");
+//        this.playerMe.listenMousePressed();
         break;
       case GAMEOVER:
         break;
@@ -476,12 +482,23 @@ public class SwarmWars extends PApplet {
         this.swarmSelect.listenMouseReleased();
         break;
       case GAME:
-        this.playerMe.listenMouseReleased();
+//        System.out.println("Released..");
+//        this.playerMe.listenMouseReleased();
         break;
       case GAMEOVER:
         break;
       default:
         // TODO Add error
+    }
+  }
+
+  public void mouseClicked() {
+    switch(this.currentScreen) {
+      case GAME:
+        System.out.println("Clicked..");
+        this.playerMe.listenMouseClicked();
+        break;
+      default:
     }
   }
 

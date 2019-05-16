@@ -1,6 +1,7 @@
 package swarm_wars_library.engine;
 
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.fsm.FSMManager;
@@ -16,6 +17,7 @@ public class SwarmLogic {
   private FSMManager fsmManager = FSMManager.getInstance();
   private SWARMALGORITHM lastSwarmAlgorithm = SWARMALGORITHM.DEFENDFLOCK;
   private int playerId;
+  private int botMaxSpeed = Map.getInstance().getBotMaxSpeed();
 
   //=========================================================================//
   // Constructor                                                             //
@@ -25,7 +27,7 @@ public class SwarmLogic {
     this.rb = rb;
     this.transform = transform;
     this.id = id;
-    this.rb.setMaxSpeed(15);
+    this.rb.setMaxSpeed(botMaxSpeed);
     this.playerId = ENTITY.entityToPlayerId(tag);
   }
 

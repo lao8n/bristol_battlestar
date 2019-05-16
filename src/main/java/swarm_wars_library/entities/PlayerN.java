@@ -7,8 +7,6 @@ import processing.core.PApplet;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.engine.Health;
 import swarm_wars_library.engine.Shooter;
-import swarm_wars_library.entities.ENTITY;
-import swarm_wars_library.entities.STATE;
 import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
@@ -25,6 +23,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   private Input input;
   private int score;
   private Shooter shooter;
+  private int bulletForce = Map.getInstance().getPlayerNBulletForce();
 
   //=========================================================================//
   // Constructor                                                             //
@@ -35,7 +34,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.health = new Health(this.tag);
     this.input = new Input(this.tag, sketch);
     this.score = 0;
-    this.shooter = new Shooter(this.tag, 10);
+    this.shooter = new Shooter(this.tag, bulletForce);
     this.updateCommsPacket();
     this.sendCommsPacket();  
   }
@@ -221,6 +220,11 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   @Override
   public void listenMouseReleased() {
     this.input.setMouseBuffer(0);
+  }
+
+  @Override
+  public void listenMouseClicked() {
+    this.input.setMouseBuffer(1);
   }
 
   @Override

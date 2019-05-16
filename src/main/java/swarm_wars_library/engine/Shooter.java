@@ -1,6 +1,7 @@
 package swarm_wars_library.engine;
 
 import java.util.ArrayList;
+
 import swarm_wars_library.entities.Bullet;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.entities.ENTITY;
@@ -14,7 +15,7 @@ public class Shooter{
   int magCount = 0;
   int numBullets = Map.getInstance().getNumBulletsPerMagazine();
   int shooterCount = 0;
-  int shooterTimer = 10;
+  int shooterTimer = Map.getInstance().getShooterTimer();
 
   //=========================================================================//
   // Constructor                                                             //

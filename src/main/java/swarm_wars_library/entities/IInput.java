@@ -28,5 +28,6 @@ public interface IInput{
   public void listenKeyReleased(int keyCode);
   public void listenMousePressed();
   public void listenMouseReleased();
+  public void listenMouseClicked();
   public void updateInputBuffer();
 }

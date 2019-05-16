@@ -15,6 +15,7 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   private AIShooter aiShooter;
   private Shooter shooter;
   private int shootInterval = 0;
+  private int bulletForce = Map.getInstance().getTurretBulletForce();
 
   //=========================================================================//
   // Constructor                                                             //
@@ -22,7 +23,7 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   public Turret(ENTITY tag){
     super(tag, Map.getInstance().getTurretScale());
     this.aiShooter = new AIShooter();
-    this.shooter = new Shooter(this.tag, 5);
+    this.shooter = new Shooter(this.tag, bulletForce);
     this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
                                                      .getMapWidth(), 
                                   RandomGen.getRand() * Map.getInstance()
