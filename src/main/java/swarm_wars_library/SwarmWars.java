@@ -138,6 +138,7 @@ public class SwarmWars extends PApplet {
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
       Bot bot = new Bot(ENTITY.PLAYER1_BOT, i, true);
       this.player1TakeDamage.add(bot);
+      this.player1DealDamage.add(bot);
     }
 
     // player2 setup
@@ -147,6 +148,7 @@ public class SwarmWars extends PApplet {
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
       Bot bot = new Bot(ENTITY.PLAYER2_BOT, i, false);
       this.player2TakeDamage.add(bot);
+      this.player2DealDamage.add(bot);
     }
 
     // turrets setup
@@ -225,14 +227,18 @@ public class SwarmWars extends PApplet {
       this.player1TakeDamage.get(i).update();
     }
     for(int i = 0; i < this.player1DealDamage.size(); i++){
-      this.player1DealDamage.get(i).update();
+      if(!this.player1DealDamage.getClass().equals(Bot.class)){
+        this.player1DealDamage.get(i).update();
+      }
     }
     // Update player2
     for(int i = 0; i < this.player2TakeDamage.size(); i++){
       this.player2TakeDamage.get(i).update();
     }
     for(int i = 0; i < this.player2DealDamage.size(); i++){
-      this.player2DealDamage.get(i).update();
+      if(!this.player1DealDamage.getClass().equals(Bot.class)){
+        this.player2DealDamage.get(i).update();
+      }
     }
   }
 

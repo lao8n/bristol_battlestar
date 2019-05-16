@@ -290,16 +290,16 @@ public class UI{
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
-    this.fsmManager.addTransition(1, 
-                                  2, 
-                                  FSMVARIABLE.ENEMYDISTANCE, 
+    this.fsmManager.addTransition(1,
+                                  2,
+                                  FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.GREATERTHAN,
                                   500);
-    this.fsmManager.addTransition(2, 
+    this.fsmManager.addTransition(2,
                                   1,
-                                  FSMVARIABLE.ENEMYDISTANCE, 
+                                  FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.LESSTHAN,
-                                  300);
+                                  10);
     this.fsmManager.addTransition(1,
                                   3,
                                   FSMVARIABLE.ENEMYDISTANCE,

@@ -3,14 +3,13 @@ package swarm_wars_library.swarm_select;
 import java.util.ArrayList;
 import processing.core.PApplet;
 
-import swarm_wars_library.entities.BotUI;
-import swarm_wars_library.entities.ENTITY;
-import swarm_wars_library.entities.PlayerUI;
-import swarm_wars_library.entities.TurretUI;
+import swarm_wars_library.entities.*;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
+import swarm_wars_library.engine.CollisionDetection;
+import swarm_wars_library.physics.Vector2D;
 
 public class SwarmAlgorithmPreview {
 
@@ -18,6 +17,7 @@ public class SwarmAlgorithmPreview {
   ArrayList<TurretUI> listTurrets;
   ArrayList<BotUI> listBots;
   Map map = Map.getInstance();
+
 
 
   public SwarmAlgorithmPreview(PApplet sketch){
@@ -38,10 +38,23 @@ public class SwarmAlgorithmPreview {
       TurretUI turret = new TurretUI(ENTITY.TURRET);
       this.listTurrets.add(turret);
     }
+
     CommsGlobal.update();
   }
 
   public void update(){
+    // Collision detection
+    for(int i = 0; i < this.listBots.size(); i++){
+      for(int j = 0; j < this.listTurrets.size(); j++){
+        if(hasCollision(this.listBots.get(i),
+                        this.listTurrets.get(j))){
+          this.listBots.get(i)
+                       .collidedWith(this.listTurrets.get(j).getTag());
+          this.listTurrets.get(j)
+                       .collidedWith(this.listBots.get(i).getTag());
+        }
+      }
+    }
     this.player1.update();
     for(int i = 0; i < this.listBots.size(); i++){
       this.listBots.get(i).update();
@@ -56,5 +69,16 @@ public class SwarmAlgorithmPreview {
     for(int i = 0; i < this.listBots.size(); i++){
       this.listBots.get(i).setSwarmAlgorithm(swarmAlgorithm);
     }
+  }
+
+  public static boolean hasCollision(AbstractEntity dealDamage,
+                                     AbstractEntity takeDamage){
+    if((dealDamage.isState(STATE.ALIVE) || dealDamage.isState(STATE.SUICIDE)) &&
+            takeDamage.isState(STATE.ALIVE) &&
+            (Vector2D.sub(dealDamage.getLocation(),takeDamage.getLocation()).mag()
+                    < dealDamage.getScale() + takeDamage.getScale())){
+      return true;
+    }
+    return false;
   }
 }
