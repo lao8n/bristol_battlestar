@@ -25,6 +25,7 @@ import swarm_wars_library.network.Headers;
 import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_select.SwarmSelect;
+import swarm_wars_library.sound.SoundMixer; 
 
 public class SwarmWars extends PApplet {
 
@@ -57,6 +58,9 @@ public class SwarmWars extends PApplet {
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
   int frameNumber;
 
+  // sound setup
+  SoundMixer soundMixer;
+
   //=========================================================================//
   // Processing Settings                                                     //
   //=========================================================================//
@@ -72,7 +76,7 @@ public class SwarmWars extends PApplet {
     this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
     this.networkSetup();
     this.uiSetup();
-    // this.soundSetup();
+    this.soundSetup();
 
     // NETWORKING - Starts server and gets ids
     this.frameNumber = 1;
@@ -234,6 +238,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void soundSetup(){
     this.playBackgroundMusic = new PlayBackgroundMusic(this);
+    this.soundMixer = new SoundMixer(this);
   }
 
   //=========================================================================//
@@ -461,8 +466,8 @@ public class SwarmWars extends PApplet {
         this.swarmSelect.listenMousePressed();
         break;
       case GAME:
-//        System.out.println("Pressed..");
-//        this.playerMe.listenMousePressed();
+      //  System.out.println("Pressed..");
+       this.playerMe.listenMousePressed();
         break;
       case GAMEOVER:
         break;
@@ -482,8 +487,8 @@ public class SwarmWars extends PApplet {
         this.swarmSelect.listenMouseReleased();
         break;
       case GAME:
-//        System.out.println("Released..");
-//        this.playerMe.listenMouseReleased();
+      //  System.out.println("Released..");
+       this.playerMe.listenMouseReleased();
         break;
       case GAMEOVER:
         break;
@@ -495,8 +500,8 @@ public class SwarmWars extends PApplet {
   public void mouseClicked() {
     switch(this.currentScreen) {
       case GAME:
-        System.out.println("Clicked..");
-        this.playerMe.listenMouseClicked();
+        // System.out.println("Clicked..");
+        // this.playerMe.listenMouseClicked();
         break;
       default:
     }

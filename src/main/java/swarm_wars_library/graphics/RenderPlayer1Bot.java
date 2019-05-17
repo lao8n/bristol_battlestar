@@ -4,6 +4,8 @@ import swarm_wars_library.map.Map;
 import processing.core.PImage;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import swarm_wars_library.sound.SoundMixer;
+
 
 public class RenderPlayer1Bot extends AbstractRenderMapObject{
 
@@ -57,6 +59,8 @@ public class RenderPlayer1Bot extends AbstractRenderMapObject{
 
   @Override 
   public void renderMapObjectExplosion(int alpha){
+
+    SoundMixer.playShipExplosion();
     // this.sketch.noStroke();
     // this.sketch.fill(0, 0, 0, 100); 
     // this.sketch.ellipseMode(2);

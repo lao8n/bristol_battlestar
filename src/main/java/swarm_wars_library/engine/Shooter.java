@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import swarm_wars_library.entities.Bullet;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.sound.SoundMixer;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.STATE;
 import swarm_wars_library.entities.Tag;
@@ -52,6 +53,7 @@ public class Shooter{
   //=========================================================================//
   public void shoot(Vector2D location, double heading){
     if(this.shooterCount++ % this.shooterTimer == 0){
+
       this.magazine.get(this.magCount).shootBullet(location, heading);
       this.magCount++;
       if(this.magCount >= magazine.size()){

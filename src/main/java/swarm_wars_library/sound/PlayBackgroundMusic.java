@@ -7,8 +7,8 @@ public class PlayBackgroundMusic{
   private SoundFile soundFile;
   
   public PlayBackgroundMusic(PApplet sketch){
-    this.soundFile = new SoundFile(sketch, 
-      "resources/sound/star_wars.aiff");
-    this.soundFile.loop();
+    //this.soundFile = new SoundFile(sketch, 
+    //  "resources/sound/star_wars.aiff");
+    //this.soundFile.loop();
   }
 }
