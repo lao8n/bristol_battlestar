@@ -112,6 +112,10 @@ public class UI{
     return this.currentScreen;
   }
 
+  public void resetGameScreen() {
+    this.currentScreen = GAMESCREEN.FSMUI;
+  }
+
   //=========================================================================//
   // Arrow methods                                                           //
   //=========================================================================//
