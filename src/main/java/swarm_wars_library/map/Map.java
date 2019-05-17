@@ -41,8 +41,8 @@ import swarm_wars_library.physics.Vector2D;
 public class Map {
 
   private static Map instance = new Map();
-  private int map_width = 1800;
-  private int map_height = 1200;
+  private int map_width = 2000;
+  private int map_height = 2000;
 
   // Entity sizes
   private int playerScale = 15;

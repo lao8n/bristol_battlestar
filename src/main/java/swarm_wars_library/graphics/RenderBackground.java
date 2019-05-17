@@ -1,56 +1,36 @@
 package swarm_wars_library.graphics;
 
-import swarm_wars_library.map.Map;
-import processing.core.PImage;
 import processing.core.PApplet;
-import processing.core.PConstants;
-import swarm_wars_library.comms.CommsGlobal;
-import swarm_wars_library.physics.Vector2D;
-import swarm_wars_library.graphics.RenderPlayer1;
+import processing.core.PImage;
+import static processing.core.PConstants.CORNER;
 
-public class RenderBackground{
 
-  private PApplet sketch;
-  private PImage background; 
-  private PImage backgroundImage;
+public class RenderBackground extends AbstractRenderMapObject{
+
+  PImage backgroundImage;
 
   public RenderBackground(PApplet sketch){
-    this.sketch = sketch;
-    background = sketch.loadImage("resources/images/gameMap.png");
-    this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
+    super(sketch);
+    this.backgroundImage = sketch.loadImage("resources/images/gameMap.png");
   }
 
-  public void update(){
-    // move around the section? 
-    //this.sketch.background(0, 0, 0);
-    this.sketch.noStroke();
-        // Draw sprite : rotate screen (pop/push matrix)
-    //this.sketch.pushMatrix();
-    //this.sketch.translate((float) this.objectRenderLocation.getX(),  (float) this.objectRenderLocation.getY());
-    this.sketch.imageMode(PConstants.CORNERS);
+  @Override 
+  public void renderMapObject(){
+    this.sketch.imageMode(CORNER);
+    PImage croppedImage = this.backgroundImage.get(
+      (int) (this.objectMapLocation.getX() - this.objectRenderLocation.getX()),
+      (int) (this.objectMapLocation.getY() - this.objectRenderLocation.getY()),
+      this.sketch.width, 
+      this.sketch.height);
+    this.sketch.image(croppedImage,
+                      0,
+                      0,
+                      this.sketch.width,
+                      this.sketch.height);
+  }
 
-    // crop 
-
-// grap object 1 
-    // player1 info to calculate screen location on map
-    //Vector2D mapLoc = CommsGlobal.get("PLAYER1").getPacket(0).getLocation();
-    //Vector2D renderLoc = RenderPlayer1.getObjectRenderLocation();
-
-    //Vector2D visibleScreen = Vector2D.sub(mapLoc, renderLoc);
-
-    this.backgroundImage = background.get(0,0,
-                                  //visibleScreen.getX(), 
-                                  //visibleScreen.getY(), 
-                                  sketch.width, sketch.height);
-
-    // draw 
-    this.sketch.image(this.backgroundImage, 
-                                  //(float) this.objectRenderLocation.getX(), 
-                                  //float) this.objectRenderLocation.getY(), 
-                                  0, 0,
-                                  this.sketch.width, 
-                                  this.sketch.height); 
-                
-    //this.sketch.popMatrix();
+  @Override 
+  public void renderMapObjectExplosion(int alpha){
+    // DO NOTHING
   }
 }

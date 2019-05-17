@@ -74,7 +74,12 @@ public class RenderLayers{
   //=========================================================================//
   private void renderBackgroundLayer(){
     // Render background
-    this.renderBackground.update();
+    this.renderBackground.update(CommsGlobal.get(playerMe)
+                                            .getPacket(0)
+                                            .getLocation(),
+                                 CommsGlobal.get(playerMe)
+                                            .getPacket(0)
+                                            .getLocation());
     // Render Stars
     for (int i = 0; i < this.map.getMapStars().size(); i++){
       this.renderStar.update(this.map.getMapStars().get(i),
