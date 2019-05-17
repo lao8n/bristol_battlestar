@@ -122,6 +122,7 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   @Override
   public void collidedWith(ENTITY tag){
     this.setState(STATE.EXPLODE);
+    SoundMixer.playTurretExplosion();
   }
 
   //=========================================================================//

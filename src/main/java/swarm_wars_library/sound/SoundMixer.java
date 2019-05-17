@@ -10,11 +10,10 @@ import processing.core.PApplet;
 public class SoundMixer{
   private static SoundFile thruster;
   private static SoundFile player1Shoot; 
-  private static SoundFile player2Shoot;
   private static SoundFile turretShoot;
-  private static SoundFile shipExplode;
-  private static SoundFile droneExplode;
   private static SoundFile explosion1; 
+  private static SoundFile explosion2; 
+
   //private PApplet sketch; 
   
   public SoundMixer(PApplet sketch){
@@ -24,16 +23,21 @@ public class SoundMixer{
     player1Shoot = new SoundFile(sketch, "resources/sound/laser_3.aif");
     turretShoot = new SoundFile(sketch, "resources/sound/laser_2.aif");
     explosion1 = new SoundFile(sketch, "resources/sound/deep_laser.aif");
+    explosion2 = new SoundFile(sketch, "resources/sound/explosion2.aif");
 
     // TODO set volume ratio for all sound files
   }
 
   public static void playPlayer1Shoot(){
-    player1Shoot.play();
+    if (!player1Shoot.isPlaying()){
+      player1Shoot.play();
+    }
   }
 
   public static void turretShoot(){
+    //if (!turretShoot.isPlaying()){
     turretShoot.play();
+    //}
   }
 
   public static void playThruster(){
@@ -49,5 +53,9 @@ public class SoundMixer{
 
   public static void playShipExplosion(){
     explosion1.play();
+  }
+
+  public static void playTurretExplosion(){
+    explosion2.play();
   }
 }

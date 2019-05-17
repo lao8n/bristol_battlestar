@@ -28,8 +28,8 @@ public class RenderPlayer2Bot extends AbstractRenderMapObject{
                                   //(float) this.objectRenderLocation.getX(), 
                                   //(float) this.objectRenderLocation.getY(), 
                                   0, 0,
-                                  this.scale * 3, 
-                                  this.scale * 3); 
+                                  this.scale * 4, 
+                                  this.scale * 4); 
                 
     this.sketch.popMatrix();
   }

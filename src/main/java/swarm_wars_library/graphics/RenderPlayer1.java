@@ -36,6 +36,9 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
   private int spriteH;
   private int index = 0;
 
+  // for limiting explosion audio
+  private boolean playedExplosionSound = false;
+
   public RenderPlayer1(PApplet sketch){
     super(sketch);
     this.scale = (float) Map.getInstance().getPlayerScale();
@@ -81,6 +84,11 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
       }
       SoundMixer.stopThruster();
     } 
+
+    // TODO  turn off thruster sound if player dies
+    //if(!CommsGlobal.get("PLAYER1").getPacket(0).getState().equals(STATE.ALIVE)){
+    //  SoundMixer.stopThruster();
+    //}
 
     //currentSprite = 2;  FOR ANIMATED SHIP
     /* WEIRD ROTATION on LEFT / RIGHT - changing perspective of ship not reflected in drawing?
@@ -132,7 +140,10 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
   @Override 
   public void renderMapObjectExplosion(int alpha){
     // sound
-    SoundMixer.playShipExplosion();
+    if (!playedExplosionSound){
+      playedExplosionSound = true;
+      SoundMixer.playShipExplosion();
+    }
 
     // visuals
     this.sketch.noStroke();

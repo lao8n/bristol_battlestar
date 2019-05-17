@@ -4,7 +4,7 @@ import processing.sound.SoundFile;
 import processing.core.PApplet;
 
 public class PlayBackgroundMusic{
-  private SoundFile soundFile;
+  //private SoundFile soundFile;
   
   public PlayBackgroundMusic(PApplet sketch){
     //this.soundFile = new SoundFile(sketch, 

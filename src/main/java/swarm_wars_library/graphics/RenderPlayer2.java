@@ -8,6 +8,7 @@ import processing.core.PConstants;
 import processing.core.PImage;
 import java.util.concurrent.*;
 import java.util.ArrayList;
+import swarm_wars_library.sound.SoundMixer;
 
 public class RenderPlayer2 extends AbstractRenderMapObject{
 
@@ -25,6 +26,9 @@ public class RenderPlayer2 extends AbstractRenderMapObject{
   private int spriteW;
   private int spriteH;
   private int index = 0;
+
+  // for limiting explosion audio
+  private boolean playedExplosionSound = false;
 
   public RenderPlayer2(PApplet sketch){
     super(sketch);
@@ -97,6 +101,12 @@ public class RenderPlayer2 extends AbstractRenderMapObject{
 
   @Override 
   public void renderMapObjectExplosion(int alpha){
+    // sound
+    if (!playedExplosionSound){
+      playedExplosionSound = true;
+      SoundMixer.playShipExplosion();
+    }
+
     this.sketch.noStroke();
     this.sketch.fill(240, 240, 50, alpha); 
     this.sketch.ellipseMode(2);
