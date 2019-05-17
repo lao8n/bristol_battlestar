@@ -8,6 +8,7 @@ import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
 
 public class RenderLayers{
+  private PApplet sketch;
   private Map map;
   private RenderBackground renderBackground;
   private RenderStar renderStar;
@@ -28,10 +29,15 @@ public class RenderLayers{
   private RenderMiniMapPlayer2 renderMiniMapPlayer2;
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
+  private int playerId;
+  private int enemyId;
   private String playerMe;
+  private String playerMeBot;
   private String playerEnemy;
+  private String playerEnemyBot;
 
   public RenderLayers(PApplet sketch){
+    this.sketch = sketch;
     this.map = Map.getInstance();
     this.renderBackground = new RenderBackground(sketch);
     this.renderStar = new RenderStar(sketch);
@@ -53,10 +59,13 @@ public class RenderLayers{
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
 
-    int playerId = map.getPlayerId();
-    int enemyId = map.getEnemyId();
+    playerId = map.getPlayerId();
+    enemyId = map.getEnemyId();
     playerMe = "PLAYER" + Integer.toString(playerId);
+    playerMeBot = playerMe + "_BOT";
     playerEnemy = "PLAYER" + Integer.toString(enemyId);
+    playerEnemyBot = playerEnemy + "_BOT";
+
   }
 
   //=========================================================================//
@@ -409,21 +418,22 @@ public class RenderLayers{
     boolean player2Flag = false;
 
     // Render Bots
-    for (int i = 0; i < CommsGlobal.get("PLAYER1_BOT")
+    for (int i = 0; i < CommsGlobal.get(playerMeBot)
                                    .getNumberOfReceivers(); i++){
       // Render entity if alive
-      if(CommsGlobal.get("PLAYER1_BOT")
+      if(CommsGlobal.get(playerMeBot)
                     .getPacket(i)
                     .getState()
                     .equals(STATE.ALIVE)){
-        this.renderMiniMapBot.update(CommsGlobal.get("PLAYER1_BOT")
+        this.setMiniMapBotColor(this.playerId);
+        this.renderMiniMapBot.update(CommsGlobal.get(playerMeBot)
                                                 .getPacket(i)
                                                 .getLocation());
         // Render any turrets in line of sight of bots
         for (int j = 0; j < CommsGlobal.get("TURRET")
                                       .getNumberOfReceivers(); j++){
           turretFlag = this.renderMiniMapBot.checkInLineOfSight(
-            CommsGlobal.get("PLAYER1_BOT")
+            CommsGlobal.get(playerMeBot)
                       .getPacket(i)
                       .getLocation(),
             CommsGlobal.get("TURRET")
@@ -440,23 +450,40 @@ public class RenderLayers{
         }
         // Render any Players in line of sight of bots
         player2Flag = this.renderMiniMapBot.checkInLineOfSight(
-          CommsGlobal.get("PLAYER1_BOT")
+          CommsGlobal.get(playerMeBot)
                      .getPacket(i)
                      .getLocation(),
-          CommsGlobal.get("PLAYER2")
+          CommsGlobal.get(playerEnemy)
                      .getPacket(0)
                      .getLocation(),
           this.renderMiniMapBot.botMapLineOfSight);
         if(player2Flag){
-          this.renderMiniMapPlayer2.update(CommsGlobal.get("PLAYER2")
+          this.setMiniMapPlayerColor(this.enemyId);
+          this.renderMiniMapPlayer2.update(CommsGlobal.get(playerEnemy)
                                                       .getPacket(0)
                                                       .getLocation());
         }
       }
     }
     // Render Player1
-    this.renderMiniMapPlayer1.update(CommsGlobal.get("PLAYER1")
+    this.setMiniMapPlayerColor(this.playerId);
+    this.renderMiniMapPlayer1.update(CommsGlobal.get(playerMe)
                                               .getPacket(0)
                                               .getLocation());
   }
+
+  private void setMiniMapBotColor(int id) {
+    if(id == 1) {
+      this.sketch.fill(21, 0, 255, 60);
+    }
+    this.sketch.fill(255, 225, 32, 60);
+  }
+
+  private void setMiniMapPlayerColor(int id) {
+    if(id == 1) {
+      this.sketch.fill(70, 102, 255);
+    }
+    this.sketch.fill(255, 225, 32);
+  }
+
 }
