@@ -32,7 +32,7 @@ public class SwarmWars extends PApplet {
   // To play single player set playNetworkGame to false
 
   // Networking
-  public static boolean playNetworkGame = false;
+  public static boolean playNetworkGame = true;
 
   // Players
   PlayerN playerMe;
@@ -334,6 +334,11 @@ public class SwarmWars extends PApplet {
   public void networkingGetEnemyInputs() {
     if(!playNetworkGame) return;
     java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getEnemyId(), frameNumber);
+
+    if(messageIn == null && map.gameEnded()){
+      return;
+    }
+
     if(messageIn.containsKey("W")) playerEnemy.setInputUp((Integer) messageIn.get("W"));
     if(messageIn.containsKey("S")) playerEnemy.setInputDown((Integer) messageIn.get("S"));
     if(messageIn.containsKey("A")) playerEnemy.setInputLeft((Integer) messageIn.get("A"));
@@ -442,16 +447,21 @@ public class SwarmWars extends PApplet {
   public void checkForGameOver() {
     if(playerMe.getHealth() <= 0){
       System.out.println("Dead....");
-      this.currentScreen = GAMESCREEN.GAMEOVER;
+      map.setGameEnded(true);
     }
     if(playNetworkGame && playerEnemy.getHealth() <= 0){
       System.out.println("Enemy dead...");
-      this.currentScreen = GAMESCREEN.GAMEOVER;
+      map.setGameEnded(true);
     }
 
     if(!playNetworkGame && playerAI.getHealth() <= 0){
       System.out.println("Enemy dead...");
+      map.setGameEnded(true);
+    }
+
+    if(map.gameEnded()){
       this.currentScreen = GAMESCREEN.GAMEOVER;
+      if(playNetworkGame) NetworkClientFunctions.sendEnd(map.getPlayerId());
     }
   }
 
@@ -461,6 +471,8 @@ public class SwarmWars extends PApplet {
       this.currentScreen = this.gameOver.getGameScreen();
       this.gameOver.resetCurrentScreen();
       this.uiSetup();
+      this.frameNumber = 1;
+      map.setGameEnded(false);
     }
   }
 

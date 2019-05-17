@@ -1,6 +1,7 @@
 package swarm_wars_library.network;
 
 import org.json.JSONObject;
+import swarm_wars_library.SwarmWars;
 import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.map.RandomGen;
 
@@ -59,6 +60,13 @@ public class ProtocolProcessor {
                 return;
             }
             // TODO ends here
+
+            if(m.get(Headers.TYPE).equals(Constants.END)) {
+                System.out.println("Received game ended....");
+                swarm_wars_library.map.Map.getInstance().setGameEnded(true);
+                return;
+            }
+
             if (!MessageHandlerMulti.isBufferExist((Integer) m.get(Headers.PLAYER))) {
                 try{
                     MessageHandlerMulti.createNewBuffer((Integer) m.get(Headers.PLAYER));
@@ -66,6 +74,7 @@ public class ProtocolProcessor {
                     e.printStackTrace();
                 }
             }
+
             MessageHandlerMulti.clientReceivePackage((Integer)j.toMap().get(Headers.PLAYER), j.toMap());
         }
     }

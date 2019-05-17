@@ -76,6 +76,9 @@ public class Map {
   private int playerId;
   private int enemyId;
 
+
+  private boolean gameEnded = false;
+
   //make the constructor private so that this class cannot be
   //instantiated
   private Map(){
@@ -193,5 +196,13 @@ public class Map {
 
   public int getBotMaxSpeed() {
     return botMaxSpeed;
+  }
+
+  public boolean gameEnded() {
+    return gameEnded;
+  }
+
+  public void setGameEnded(boolean gameEnded) {
+    this.gameEnded = gameEnded;
   }
 }
