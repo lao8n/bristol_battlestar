@@ -293,13 +293,14 @@ public class UI{
     // Add states first
     this.fsmManager.addFSMState(playerId,1, FSMSTATE.DEFEND);
     this.fsmManager.addFSMState(playerId,2, FSMSTATE.SCOUT);
-    this.fsmManager.addFSMState(playerId,3, FSMSTATE.ATTACK);
+    // this.fsmManager.addFSMState(playerId,3, FSMSTATE.ATTACK);
     // this.fsmManager.addFSMState(3, FSMSTATE.DEFEND);
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
 
-    this.fsmManager.addTransition(playerId, 1,
+    this.fsmManager.addTransition(playerId, 
+                                  1,
                                   2,
                                   FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.GREATERTHAN,
@@ -309,16 +310,16 @@ public class UI{
                                   FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.LESSTHAN,
                                   10);
-    this.fsmManager.addTransition(playerId, 1,
-                                  3,
-                                  FSMVARIABLE.ENEMYDISTANCE,
-                                  FSMCOMPARISON.LESSTHAN,
-                                  200);
-    this.fsmManager.addTransition(playerId, 3,
-                                  2,
-                                  FSMVARIABLE.ENEMYDISTANCE,
-                                  FSMCOMPARISON.LESSTHAN,
-                                  200);
+    // this.fsmManager.addTransition(playerId, 1,
+    //                               3,
+    //                               FSMVARIABLE.ENEMYDISTANCE,
+    //                               FSMCOMPARISON.LESSTHAN,
+    //                               200);
+    // this.fsmManager.addTransition(playerId, 3,
+    //                               2,
+    //                               FSMVARIABLE.ENEMYDISTANCE,
+    //                               FSMCOMPARISON.LESSTHAN,
+    //                               200);
 
     // this.fsmManager.addTransition(3, 
     //                               1,
