@@ -35,6 +35,12 @@ public class BotUI extends AbstractEntity implements ISwarm{
   //=========================================================================//
   @Override
   public void update(){
+    try {
+      this.setState(swarmLogic.getState());
+    } catch (Exception e) {
+
+    }
+
     if(this.isState(STATE.ALIVE)){
       this.updateBot();
     }

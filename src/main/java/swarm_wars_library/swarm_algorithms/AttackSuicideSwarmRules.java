@@ -3,6 +3,7 @@ package swarm_wars_library.swarm_algorithms;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
@@ -23,7 +24,6 @@ public class AttackSuicideSwarmRules extends AbstractSwarmRules {
 
   private double orbitDistance = 70;
   private double stopDistance = 100;
-
 
 
   //=========================================================================//

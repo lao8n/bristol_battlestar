@@ -1,6 +1,7 @@
 package swarm_wars_library.engine;
 
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.fsm.FSMManager;
@@ -15,6 +16,7 @@ public class SwarmLogic {
   private AbstractSwarmAlgorithm swarm_algo;
   private FSMManager fsmManager = FSMManager.getInstance();
   private SWARMALGORITHM lastSwarmAlgorithm = SWARMALGORITHM.DEFENDFLOCK;
+  private STATE state = STATE.ALIVE;
 
   //=========================================================================//
   // Constructor                                                             //
@@ -52,16 +54,27 @@ public class SwarmLogic {
           new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
                                      this.rb);
         break;
+      case SCOUTANT:
+        this.swarm_algo =
+                new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform,
+                        this.rb);
+        break;
       case ATTACKSUICIDE:
         this.swarm_algo =
           new AttackSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
                                           this.rb);
+        this.setState(swarm_algo.getstate());
         break;
       case SPECIALGHOST:
         this.swarm_algo =
-                new AttackSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
+                new SpecialGhostSwarmAlgorithm (this.tag, this.id, this.transform,
                         this.rb);
         break;
+      case SPECIALSTAR:
+      this.swarm_algo =
+              new AttackSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
+                      this.rb);
+      break;
       default:
         break;
     }
@@ -97,4 +110,8 @@ public class SwarmLogic {
   public int getId(){
     return this.id;
   }
+
+  public STATE getState() { return this.state; }
+
+  public void setState(STATE state) { this.state = state; }
 }

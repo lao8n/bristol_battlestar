@@ -8,6 +8,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.fsm.FSMManager;
 import swarm_wars_library.fsm.FSMSTATE;
@@ -333,22 +334,28 @@ public class SwarmSelect{
                                 this.offsetMiniMap);
   }  
 
-  private void updateUIMiniMap(){
+  private void updateUIMiniMap() {
     this.renderMiniMap.update();
-    for(int i = 0; i < CommsGlobal.get("TURRET")
-                                  .getNumberOfReceivers(); i++){
+    for (int i = 0; i < CommsGlobal.get("TURRET")
+            .getNumberOfReceivers(); i++) {
       this.renderUIMiniMapTurret.update(CommsGlobal.get("TURRET")
-                                                   .getPacket(i)
-                                                   .getLocation());
-}
-    for(int i = 0; i < CommsGlobal.get("PLAYERUI_BOT")
-                                  .getNumberOfReceivers(); i++){
-      this.renderUIMiniMapBot.update(CommsGlobal.get("PLAYERUI_BOT")
-                                                .getPacket(i)
-                                                .getLocation());
+              .getPacket(i)
+              .getLocation());
     }
-    this.renderUIMiniMapPlayer1.update(CommsGlobal.get("PLAYERUI")
-                                                  .getPacket(0)
-                                                  .getLocation());
+    for (int i = 0; i < CommsGlobal.get("PLAYERUI_BOT")
+            .getNumberOfReceivers(); i++) {
+      // Render entity if alive
+      if (CommsGlobal.get("PLAYERUI_BOT")
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)) {
+        this.renderUIMiniMapBot.update(CommsGlobal.get("PLAYERUI_BOT")
+                .getPacket(i)
+                .getLocation());
+      }
+      this.renderUIMiniMapPlayer1.update(CommsGlobal.get("PLAYERUI")
+              .getPacket(0)
+              .getLocation());
+    }
   }
 }

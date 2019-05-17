@@ -13,7 +13,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   private SwarmLogic swarmLogic;
   private FSMManager fsmManager = FSMManager.getInstance();
   private boolean transitionsAllowed = false;
-  
+
   //=========================================================================//
   // Constructor                                                             //
   //=========================================================================//
@@ -45,6 +45,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   //=========================================================================//
   @Override
   public void update(){
+    this.state = swarmLogic.getState();
     if(this.isState(STATE.ALIVE)){
       this.updateBot();
     }
