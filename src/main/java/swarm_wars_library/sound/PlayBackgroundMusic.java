@@ -4,11 +4,11 @@ import processing.sound.SoundFile;
 import processing.core.PApplet;
 
 public class PlayBackgroundMusic{
-  //private SoundFile soundFile;
+  private SoundFile soundFile;
   
   public PlayBackgroundMusic(PApplet sketch){
-    //this.soundFile = new SoundFile(sketch, 
-    //  "resources/sound/star_wars.aiff");
-    //this.soundFile.loop();
+    this.soundFile = new SoundFile(sketch, 
+      "resources/sound/Envision.aif");
+    this.soundFile.loop();
   }
 }
