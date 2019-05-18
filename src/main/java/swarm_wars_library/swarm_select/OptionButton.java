@@ -4,7 +4,7 @@ import processing.core.PApplet;
 
 import processing.core.PConstants;
 import processing.core.PImage;
-import swarm_wars_library.fsm.FSMSTATE;
+import static processing.core.PConstants.CENTER;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -40,7 +40,29 @@ public class OptionButton {
   // Option Button update method                                             //
   //=========================================================================//
   public void update(SWARMALGORITHM swarmAlgorithm, int i) {
-    this.sketch.stroke(255, 255, 255);
+    int r = 255;
+    int g = 255;
+    int b = 255;
+    switch(swarmAlgorithm.getFSMState()){
+      case ATTACK:
+        r = 252;
+        g = 74;
+        b = 85;
+        break;
+      case DEFEND:
+        r = 65;
+        g = 136;
+        b = 65;
+        break;
+      case SCOUT:
+        r = 241;
+        g = 189;
+        b = 0;
+        break;
+      default: 
+        break;
+    }
+    this.sketch.stroke(r, g, b);
     this.sketch.fill(0, 0, 0);
     PImage x = this.defaultImage;
     switch(swarmAlgorithm){
@@ -74,28 +96,6 @@ public class OptionButton {
                      (float) this.dimensions.getY());
 
     if(i > 0){
-      int r = 255;
-      int g = 255;
-      int b = 255;
-      switch(swarmAlgorithm.getFSMState()){
-        case ATTACK:
-          r = 252;
-          g = 74;
-          b = 85;
-          break;
-        case DEFEND:
-          r = 65;
-          g = 136;
-          b = 65;
-          break;
-        case SCOUT:
-          r = 241;
-          g = 189;
-          b = 0;
-          break;
-        default: 
-          break;
-      }
       this.sketch.fill(r, g, b, (float) 99.9);
       this.sketch.rect((float) this.topLeftLocation.getX(), 
                        (float) this.topLeftLocation.getY(), 
@@ -104,6 +104,7 @@ public class OptionButton {
       this.sketch.pushMatrix();
       this.sketch.fill(255, 255, 255);
       this.sketch.textSize(60);
+      this.sketch.textAlign(CENTER, CENTER);
       this.sketch.text(Integer.toString(i), 
                        (float) this.topLeftLocation.getX(), 
                        (float) this.topLeftLocation.getY(), 

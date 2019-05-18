@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.javatuples.Pair;
-
 import org.javatuples.Quartet;
+
 import processing.core.PApplet;
 import processing.core.PImage;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.TOP;
 
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
@@ -18,7 +21,6 @@ import swarm_wars_library.graphics.RenderMiniMap;
 import swarm_wars_library.graphics.RenderUIMiniMapBot;
 import swarm_wars_library.graphics.RenderUIMiniMapPlayer1;
 import swarm_wars_library.graphics.RenderUIMiniMapTurret;
-import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.network.Constants;
 import swarm_wars_library.network.Headers;
@@ -67,6 +69,14 @@ public class SwarmSelect{
   private SwarmAlgorithmPreview swarmAlgorithmPreview;
   private SWARMALGORITHM swarmAlgorithm = SWARMALGORITHM.DEFENDSHELL;
 
+  // Swarm Explanation
+  private Vector2D dimSwarmSelection;
+  private Vector2D locationSwarmSelection;
+  private TextButton renderSwarmSelection;
+  private Vector2D dimSwarmExplanation;
+  private Vector2D locationSwarmExplanation;
+  private TextExplanation renderSwarmExplanation;
+
   // Start Button 
   private Vector2D dimStartButton;
   private Vector2D locationStartButton;
@@ -81,11 +91,14 @@ public class SwarmSelect{
     this.currentScreen = GAMESCREEN.SWARMSELECT;
     PImage background = sketch.loadImage("resources/images/background.png");
     this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
+    this.sketch.strokeWeight(1);
     this.setupUIMiniMap();
     this.setupOptions();
     this.setupStartButton();
     this.setupSwarmAlgorithmPreview();
     this.setupFSMVisualisation();
+    this.setupSwarmExplanation();
+    this.setupSwarmSelection();
   }
 
   //=========================================================================//
@@ -99,6 +112,8 @@ public class SwarmSelect{
     this.updateMousePressButton();
     this.updateStartButton();
     this.updateFSMVisualisation();
+    this.updateSwarmExplanation();
+    this.updateSwarmSelection();
   }
 
   //=========================================================================//
@@ -119,7 +134,8 @@ public class SwarmSelect{
       this.sketch, 
       this.locationFSMButton,
       this.dimFSMButton,
-      new ArrayList<>(this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).values()));
+      new ArrayList<>(this.fsmManager.getMapFSMStateTransition(
+        Map.getInstance().getPlayerId()).values()));
   }
   
   public void updateFSMVisualisation(){
@@ -256,7 +272,7 @@ public class SwarmSelect{
     // Option Texts
     this.renderOptionTexts = new ArrayList<OptionText>();
     OptionText attackOptionText = new OptionText(
-      this.sketch, "ATTACK", 
+      this.sketch, "SPECIAL", 
       Vector2D.add(this.locationOptionButton, 
                    new Vector2D(-this.offsetMiniMap, 0)), 
       new Vector2D(dimButton, this.offsetMiniMap), 
@@ -316,6 +332,12 @@ public class SwarmSelect{
         this.renderOptionButtons.get(i).getDimensions())){
         this.swarmAlgorithmPreview.selectSwarmAlgorithm(
           SWARMALGORITHM.valueOf(i));
+        this.renderSwarmSelection.setLabel("SELECT SWARM ALGORITHMS: " + 
+                                           SWARMALGORITHM.valueOf(i).toString());
+        this.renderSwarmSelection.setRGB(SWARMALGORITHM.valueOf(i));
+        this.renderSwarmExplanation.setLabel(this.getTextExplanation(
+          SWARMALGORITHM.valueOf(i)
+        ));
         if(SWARMALGORITHM.valueOf(i).getFSMState() == 
           this.fsmAddState.getValue(0) & (int) this.fsmAddState.getValue(1) >= 0){
           this.fsmManager.setSwarmAlgorithm(Map.getInstance().getPlayerId(), (int) this.fsmAddState.getValue(1),
@@ -333,6 +355,7 @@ public class SwarmSelect{
       this.renderOptionButtons.get(i)
                               .update(SWARMALGORITHM.valueOf(i), selectedCheck);
     }
+    this.sketch.textSize(15);
     for(int i = 0; i < this.renderOptionTexts.size(); i++){
       this.renderOptionTexts.get(i).update();
     }
@@ -361,7 +384,7 @@ public class SwarmSelect{
                    this.offsetMiniMap);
     this.renderStartButton = new TextButton(
       this.sketch, 
-      "START GAME",
+      "READY",
       this.locationStartButton,
       this.dimStartButton, 
       177,
@@ -371,9 +394,116 @@ public class SwarmSelect{
   }
 
   private void updateStartButton(){
+    this.sketch.textAlign(LEFT, CENTER);
     this.sketch.textSize(25);
     this.renderStartButton.update();
+  }
+
+  //=========================================================================//
+  // Swarm Algorithm Selection / algorithms                                  //
+  //=========================================================================//
+  private void setupSwarmSelection(){
+    this.dimSwarmSelection = new Vector2D(this.sketch.width - 
+                                          this.dimStartButton.getX() - 
+                                          this.offsetMiniMap * 3, 
+                                          this.dimStartButton.getY());
+    this.locationSwarmSelection = new Vector2D(this.offsetMiniMap, 
+                                               this.offsetMiniMap);
+    this.renderSwarmSelection = new TextButton(
+      this.sketch,
+      "SELECT YOUR SWARM ALGORITHM: CHOOSE NOW!!",
+      this.locationSwarmSelection,
+      this.dimSwarmSelection,
+      177, 
+      177, 
+      177
+    );
+  }
+  
+  private void setupSwarmExplanation(){
+    this.dimSwarmExplanation = new Vector2D(this.sketch.width - 2 * 
+                                            this.offsetMiniMap,
+                                            this.sketch.height - 
+                                            this.dimMiniMap - 
+                                            this.dimStartButton.getY() - 4 *
+                                            this.offsetMiniMap);
+    this.locationSwarmExplanation = new Vector2D(this.offsetMiniMap,
+                                                 this.offsetMiniMap * 2 + 
+                                                 this.dimStartButton.getY());
+    this.renderSwarmExplanation = new TextExplanation(
+      this.sketch,
+      "Welcome to the Swarm Algorithm selection screen!!\n" + 
+      "Use this screen to try out different swarm algorithms by clicking on " + 
+      "the icons below and see their behaviour in the preview screen.\n" + 
+      "Fill in your finite state machine by clicking on a coloured node and " + 
+      "then choosing a correspondingly coloured swarm algorithm.\n",
+      this.locationSwarmExplanation,
+      this.dimSwarmExplanation,
+      0, 
+      0, 
+      0
+    );
+  }
+
+  private void updateSwarmExplanation(){
+    this.sketch.textAlign(LEFT, TOP);
+    this.sketch.textSize(15);
+    this.renderSwarmExplanation.update();
+  }
+
+  private void updateSwarmSelection(){
+    this.sketch.textSize(25);
+    this.sketch.textAlign(LEFT, CENTER);
+    this.renderSwarmSelection.update();
     this.sketch.textSize(12);
+  }
+
+  private String getTextExplanation(SWARMALGORITHM swarmAlgorithm){
+    switch(swarmAlgorithm){
+      case ATTACKSUICIDE:
+        return "The suicide algorithm is a dangerous strategy. Your bots leave " + 
+               "the mothership and hunt down turrets. You may rack up the \n" + 
+               "points but you leave yourself extremely exposed to any potential " + 
+               "attackers.";
+      case ATTACK2:
+        return "";
+      case ATTACK3:
+        return  "";
+      case ATTACK4:
+        return "";
+      case DEFENDSHELL:
+        return "";
+      case DEFENDFLOCK:  
+        return "Sometimes the best form of attack is defense. Flock behaviour is " + 
+                "a classic swarm algorithm. \n" + 
+                "Just like a flock of birds, each bot in the swarm follows three rules:\n" + 
+                " 1. Separate = if distance to another bot is less than 20 then apply a force to " + 
+                " separate them. \n" + 
+                " 2. Cohese = if the distance to another bot is less than 40 then apply a force " + 
+                " draw them closer together. \n" + 
+                " 3. Align = for all the bots within a radius of 40, apply the average velocity" + 
+                " of the group\n" + 
+                "When combined with tracking of the mothership, flocks are a powerful way to " + 
+                "defend yourself.";
+      case DEFEND3:
+        return "";
+      case DEFEND4:
+        return "";
+      case SCOUTRANDOM:
+        return "In war, information is everything. Use this scout algorithm to search the map " + 
+               "for enemies. \n" + 
+               "The bots randomly diffuse over the map like brownian motion. Given enough time " + 
+               "no hiding place is safe!";
+      case SCOUTBEE:
+        return "Nothing is scarier than a swarm of angry bees! Use this algorithm to scout for " + 
+               "turrets and find them before your enemy does.\n";
+      case SCOUT3:
+        return "";
+      case SCOUT4:
+        return "";
+      default:
+        return "";
+    }
   }
 
   //=========================================================================//

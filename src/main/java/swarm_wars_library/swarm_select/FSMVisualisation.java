@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import org.javatuples.Pair;
 
 import processing.core.PApplet;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.TOP;
 
 import swarm_wars_library.fsm.FSMStateTransition;
 import swarm_wars_library.fsm.FSMSTATE;
@@ -33,7 +35,6 @@ public class FSMVisualisation {
   }
 
   //=========================================================================//
-  // Render FSM                                                              //
   //=========================================================================//
   public void update(){
     for(int i = 0; i < this.listPointsOnCircle.size(); i++){
@@ -78,6 +79,7 @@ public class FSMVisualisation {
       this.sketch.noStroke();
       this.sketch.textSize(15);
       this.sketch.fill(255, 255, 255);
+      this.sketch.textAlign(CENTER, TOP);
       if(this.listPointsOnCircle.get(i).getX() - this.centreFSM.getX() > 0){
         this.sketch.text(i + 1, 
         (float) this.listPointsOnCircle.get(i).getX() + 20,

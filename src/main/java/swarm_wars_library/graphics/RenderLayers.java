@@ -3,7 +3,6 @@ package swarm_wars_library.graphics;
 import processing.core.PApplet;
 
 import swarm_wars_library.comms.CommsGlobal;
-import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
 
