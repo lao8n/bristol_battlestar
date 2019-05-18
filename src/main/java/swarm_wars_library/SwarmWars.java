@@ -69,7 +69,9 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
-    this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
+    // NETWORK - networking setup needs map for Id but map uses randgen before 
+    // seed.....
+    this.map = Map.getInstance();
     this.networkSetup();
     this.uiSetup();
     // this.soundSetup();

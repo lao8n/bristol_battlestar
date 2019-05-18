@@ -49,7 +49,7 @@ public class AttackSuicideSwarmRules extends AbstractSwarmRules {
       this.separateNeighbourhoodCount++;
     }
     // Hunt target and explode
-    if (this.ruleId % 2 == 0) {
+    if (this.ruleId % 1 == 0) {
       Vector2D locationTarget =
               CommsGlobal.get(ENTITY.TURRET.toString())
                       .getPacket(0)
