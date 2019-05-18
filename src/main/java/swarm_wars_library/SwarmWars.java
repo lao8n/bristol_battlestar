@@ -33,7 +33,7 @@ public class SwarmWars extends PApplet {
   // To play single player set playNetworkGame to false
 
   // Networking
-  public static boolean playNetworkGame = true;
+  public static boolean playNetworkGame = false;
 
   // Players
   PlayerN playerMe;
