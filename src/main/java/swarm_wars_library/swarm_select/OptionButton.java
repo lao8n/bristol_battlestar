@@ -3,6 +3,7 @@ package swarm_wars_library.swarm_select;
 import processing.core.PApplet;
 
 import processing.core.PImage;
+import static processing.core.PConstants.CENTER;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -101,6 +102,7 @@ public class OptionButton {
       this.sketch.pushMatrix();
       this.sketch.fill(255, 255, 255);
       this.sketch.textSize(60);
+      this.sketch.textAlign(CENTER, CENTER);
       this.sketch.text(Integer.toString(i), 
                        (float) this.topLeftLocation.getX(), 
                        (float) this.topLeftLocation.getY(), 
