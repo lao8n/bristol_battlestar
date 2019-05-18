@@ -16,18 +16,19 @@ public interface IInput{
   public int getInputDown();
   public int getInputMouseX();
   public int getInputMouseY();
-  public int getInputMouse();
+  public int getInputMouseLeft();
+  public int getInputMouseRight();
   public void setInputUp(int b);
   public void setInputDown(int b);
   public void setInputLeft(int b);
   public void setInputRight(int b);
   public void setInputMouseX(int mouseX);
   public void setInputMouseY(int mouseY);
-  public void setInputMouse(int input);
+  public void setInputMouseLeft(int input);
+  public void setInputMouseRight(int input);
   public void listenKeyPressed(int keyCode);
   public void listenKeyReleased(int keyCode);
-  public void listenMousePressed();
+  public void listenMousePressed(boolean flag);
   public void listenMouseReleased();
-  public void listenMouseClicked();
   public void updateInputBuffer();
 }

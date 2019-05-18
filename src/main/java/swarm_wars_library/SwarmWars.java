@@ -153,6 +153,8 @@ public class SwarmWars extends PApplet {
       new CommsChannel(map.getNumBotsPerPlayer()));
     CommsGlobal.add("PLAYER1_BULLET", 
       new CommsChannel(1 * map.getNumBulletsPerMagazine()));
+    CommsGlobal.add("PLAYER1_MISSILE",
+            new CommsChannel(1 * map.getNumMissilesPerMagazine()));
 
     // player2 setup
     CommsGlobal.add("PLAYER2", new CommsChannel(1));
@@ -160,6 +162,8 @@ public class SwarmWars extends PApplet {
       new CommsChannel(map.getNumBotsPerPlayer()));
     CommsGlobal.add("PLAYER2_BULLET", 
       new CommsChannel(1 * map.getNumBulletsPerMagazine()));
+    CommsGlobal.add("PLAYER2_MISSILE",
+          new CommsChannel(1 * map.getNumMissilesPerMagazine()));
 
     // game objects setup
     CommsGlobal.add("TURRET", new CommsChannel(map.getNumTurrets()));
@@ -188,18 +192,22 @@ public class SwarmWars extends PApplet {
         this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
         this.playerEnemy = new PlayerN(this, ENTITY.PLAYER2);
         this.player1TakeDamage.add(this.playerMe);
-        this.player1DealDamage.addAll(playerMe.getBullets());
+        this.player1DealDamage.addAll(this.playerMe.getBullets());
+        this.player1DealDamage.addAll(this.playerMe.getMissiles());
         this.player2TakeDamage.add(this.playerEnemy);
-        this.player2DealDamage.addAll(playerEnemy.getBullets());
+        this.player2DealDamage.addAll(this.playerEnemy.getBullets());
+        this.player2DealDamage.addAll(this.playerEnemy.getMissiles());
       }
       // setup if player is player 2
       if (map.getPlayerId() == 2) {
         this.playerEnemy = new PlayerN(this, ENTITY.PLAYER1);
         this.playerMe = new PlayerN(this, ENTITY.PLAYER2);
         this.player1TakeDamage.add(this.playerEnemy);
-        this.player1DealDamage.addAll(playerEnemy.getBullets());
+        this.player1DealDamage.addAll(this.playerEnemy.getBullets());
+        this.player1DealDamage.addAll(this.playerEnemy.getMissiles());
         this.player2TakeDamage.add(this.playerMe);
-        this.player2DealDamage.addAll(playerMe.getBullets());
+        this.player2DealDamage.addAll(this.playerMe.getBullets());
+        this.player2DealDamage.addAll(this.playerMe.getMissiles());
       }
     }
 
@@ -208,9 +216,10 @@ public class SwarmWars extends PApplet {
       this.playerMe = new PlayerN(this, ENTITY.PLAYER1);
       this.playerAI = new PlayerAI(this, ENTITY.PLAYER2);
       this.player1TakeDamage.add(this.playerMe);
-      this.player1DealDamage.addAll(playerMe.getBullets());
+      this.player1DealDamage.addAll(this.playerMe.getBullets());
+      this.player1DealDamage.addAll(this.playerMe.getMissiles());
       this.player2TakeDamage.add(this.playerAI);
-      this.player2DealDamage.addAll(playerAI.getBullets());
+      this.player2DealDamage.addAll(this.playerAI.getBullets());
     }
 
     // setup bots
@@ -233,6 +242,11 @@ public class SwarmWars extends PApplet {
       this.gameObjectsDealDamage.addAll(turret.getBullets());
     }
   }
+
+  //=========================================================================//
+  // Turret Setup                                                            //
+  //=========================================================================//
+
 
   //=========================================================================//
   // Render Setup                                                            //
@@ -334,7 +348,8 @@ public class SwarmWars extends PApplet {
     m.put(Headers.D, playerMe.getInputRight());
     m.put(Headers.MOUSE_X, playerMe.getInputMouseX());
     m.put(Headers.MOUSE_Y, playerMe.getInputMouseY());
-    m.put(Headers.MOUSE_PRESSED, playerMe.getInputMouse());
+    m.put(Headers.MOUSE_LEFT, playerMe.getInputMouseLeft());
+    m.put(Headers.MOUSE_RIGHT, playerMe.getInputMouseRight());
     NetworkClientFunctions.sendOperation(id, frameNumber, m);
   }
 
@@ -346,14 +361,15 @@ public class SwarmWars extends PApplet {
       return;
     }
 
-    if(messageIn.containsKey("W")) playerEnemy.setInputUp((Integer) messageIn.get("W"));
-    if(messageIn.containsKey("S")) playerEnemy.setInputDown((Integer) messageIn.get("S"));
-    if(messageIn.containsKey("A")) playerEnemy.setInputLeft((Integer) messageIn.get("A"));
-    if(messageIn.containsKey("D")) playerEnemy.setInputRight((Integer) messageIn.get("D"));
+    if(messageIn.containsKey(Headers.W)) playerEnemy.setInputUp((Integer) messageIn.get(Headers.W));
+    if(messageIn.containsKey(Headers.S)) playerEnemy.setInputDown((Integer) messageIn.get(Headers.S));
+    if(messageIn.containsKey(Headers.A)) playerEnemy.setInputLeft((Integer) messageIn.get(Headers.A));
+    if(messageIn.containsKey(Headers.D)) playerEnemy.setInputRight((Integer) messageIn.get(Headers.D));
 
-    if(messageIn.containsKey("X")) playerEnemy.setInputMouseX((Integer) messageIn.get("X"));
-    if(messageIn.containsKey("Y")) playerEnemy.setInputMouseY((Integer) messageIn.get("Y"));
-    if(messageIn.containsKey("C")) playerEnemy.setInputMouse((Integer) messageIn.get("C"));
+    if(messageIn.containsKey(Headers.MOUSE_X)) playerEnemy.setInputMouseX((Integer) messageIn.get(Headers.MOUSE_X));
+    if(messageIn.containsKey(Headers.MOUSE_Y)) playerEnemy.setInputMouseY((Integer) messageIn.get(Headers.MOUSE_Y));
+    if(messageIn.containsKey(Headers.MOUSE_LEFT)) playerEnemy.setInputMouseLeft((Integer) messageIn.get(Headers.MOUSE_LEFT));
+    if(messageIn.containsKey(Headers.MOUSE_RIGHT)) playerEnemy.setInputMouseRight((Integer) messageIn.get(Headers.MOUSE_RIGHT));
   }
 
   //=========================================================================//
@@ -517,9 +533,16 @@ public class SwarmWars extends PApplet {
       case SWARMSELECT:
         this.swarmSelect.listenMousePressed();
         break;
-      case GAME:
-        this.playerMe.listenMousePressed();
-        break;
+      case GAME:{
+        if(this.mouseButton == RIGHT){
+          this.playerMe.listenMousePressed(false);
+          break;
+        }
+        else{
+          this.playerMe.listenMousePressed(true);
+          break;
+        }
+      }
       case GAMEOVER:
         this.gameOver.listenMousePressed();
         break;
@@ -540,7 +563,6 @@ public class SwarmWars extends PApplet {
         break;
       case GAME:
         this.playerMe.listenMouseReleased();
-
         break;
       case GAMEOVER:
         this.gameOver.listenMouseReleased();

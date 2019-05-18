@@ -13,6 +13,7 @@ public class CommsPacket {
   private int id;
   private int health;
   private int score;
+  private int missileNum;
   private double motherShipHeading;
   private int moveLeft;
   private int moveRight;
@@ -110,5 +111,8 @@ public class CommsPacket {
     this.motherShipHeading = heading; 
   }
 
+  public  void setMissileNum(int num){this.missileNum=num;}
+
+  public  int getMissileNum(){return this.missileNum;}
 
 }
