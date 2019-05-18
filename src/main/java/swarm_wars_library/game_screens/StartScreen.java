@@ -34,6 +34,8 @@ public class StartScreen {
     private TextButton render2Player1stButton;
     private TextButton render2Player2ndButton;
 
+    private boolean twoPlayer = false;
+
     // Mouse
     private boolean mousePressed = false;
 
@@ -180,6 +182,7 @@ public class StartScreen {
             SwarmWars.playNetworkGame = true;
             Map.getInstance().setPlayerId(1);
             Map.getInstance().setEnemyId(2);
+            twoPlayer = true;
             this.currentScreen = GAMESCREEN.FSMUI;
         }
 
@@ -188,7 +191,7 @@ public class StartScreen {
             SwarmWars.playNetworkGame = true;
             Map.getInstance().setPlayerId(2);
             Map.getInstance().setEnemyId(1);
-
+            twoPlayer = true;
             this.currentScreen = GAMESCREEN.FSMUI;
         }
     }
@@ -217,5 +220,9 @@ public class StartScreen {
 
     public void resetCurrentScreen() {
         this.currentScreen = GAMESCREEN.START;
+    }
+
+    public boolean is2Player(){
+        return twoPlayer;
     }
 }

@@ -80,7 +80,7 @@ public class SwarmWars extends PApplet {
   public void setup() {
     this.frameRate(60);
     this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
-    this.networkSetup();
+    //this.networkSetup(); moving to button click
     this.uiSetup();
     this.soundSetup();
     this.gameOverSetup();
@@ -286,8 +286,8 @@ public class SwarmWars extends PApplet {
 
   public void networkConnect() {
     // TODO: Make a UI
-    map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
-    map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
+    //map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
+    //map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
     NetworkClientFunctions.cleanBuffer();
 
     // NETWORKING this needs to be integrated with FSM and selection
@@ -440,6 +440,10 @@ public class SwarmWars extends PApplet {
   public void startUpdate(){
     this.startScreen.update();
     if(this.startScreen.getGameScreen() == GAMESCREEN.FSMUI){
+      if (this.startScreen.is2Player()){
+        this.networkSetup();
+      }
+
       this.currentScreen = this.startScreen.getGameScreen();
       //this.startScreen.resetCurrentScreen();
       this.uiSetup();
