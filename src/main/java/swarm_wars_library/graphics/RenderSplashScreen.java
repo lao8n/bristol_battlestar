@@ -1,0 +1,28 @@
+package swarm_wars_library.graphics;
+
+import processing.core.PImage;
+import processing.core.PApplet;
+import processing.core.PConstants;
+
+public class RenderSplashScreen{
+
+  private PApplet sketch;
+  private PImage splashScreen; 
+
+  public RenderSplashScreen(PApplet sketch){
+    this.sketch = sketch;
+    splashScreen = sketch.loadImage("resources/images/splashScreen.png");
+    //this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
+  }
+
+  public void update(){
+    this.sketch.noStroke();
+    this.sketch.imageMode(PConstants.CORNERS);
+
+    this.sketch.image(this.splashScreen, 
+                                  0, 0,
+                                  this.sketch.width, 
+                                  this.sketch.height); 
+                
+  }
+}

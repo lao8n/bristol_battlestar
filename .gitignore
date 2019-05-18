@@ -1,11 +1,7 @@
 ### Java ###
 *.class
 
-# Package Files #
-*.jar
-
 # Images
-*.png
 
 # Intellij
 *.idea
@@ -15,10 +11,12 @@
 /build/
 
 ### 
-/library/
 /library/classes/
+/library/distributions/
+/library/generated
 /library/tmp/
 /library/reports/
+/library/scripts
 /library/test-results/
 /library/battlestar.jar
 
@@ -27,3 +25,6 @@ gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+# Logs
+*.txt
