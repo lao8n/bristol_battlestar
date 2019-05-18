@@ -51,7 +51,7 @@ public class RenderPlayer2 extends AbstractRenderMapObject{
   // @Override 
   public void renderMapObject(){
     this.sketch.noStroke();
-    this.sketch.imageMode(0); //need to figure out what codes for CENTER
+    this.sketch.imageMode(0);
 
     // used to determine if thrust is present
     int moveLeft = CommsGlobal.get("PLAYER2").getPacket(0).getMoveLeft();
