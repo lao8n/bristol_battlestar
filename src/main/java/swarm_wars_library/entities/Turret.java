@@ -9,6 +9,8 @@ import swarm_wars_library.engine.Shooter;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.sound.SoundMixer; 
+
 
 public class Turret extends AbstractEntity implements IAIShooter, ISound{
 
@@ -120,6 +122,7 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   @Override
   public void collidedWith(ENTITY tag){
     this.setState(STATE.EXPLODE);
+    SoundMixer.playTurretExplosion();
   }
 
   //=========================================================================//
@@ -135,6 +138,8 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   @Override
   public void shoot(){
     if(isAIShoot()){
+
+      SoundMixer.turretShoot();
       this.shooter.shoot(this.getAILocation(), this.getAIHeading());
     }
   }

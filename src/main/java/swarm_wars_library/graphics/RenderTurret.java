@@ -6,6 +6,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import java.util.concurrent.*;
+import swarm_wars_library.sound.SoundMixer;
 
 public class RenderTurret extends AbstractRenderMapObject{
   private float scale = (float) Map.getInstance().getTurretScale();
@@ -22,8 +23,8 @@ public class RenderTurret extends AbstractRenderMapObject{
   private int index = 0;
 
   // slow down animations - larger number for slower animation
-  int maxAnimTimer = 7; 
-  int animTimer = maxAnimTimer; 
+  private int maxAnimTimer = 7; 
+  private int animTimer = maxAnimTimer; 
 
   public RenderTurret(PApplet sketch){
     super(sketch);
@@ -106,6 +107,7 @@ public class RenderTurret extends AbstractRenderMapObject{
 
   @Override 
   public void renderMapObjectExplosion(int alpha){
+
     this.sketch.noStroke();
     this.sketch.fill(229, 11, 109, alpha); 
     this.sketch.ellipseMode(2);

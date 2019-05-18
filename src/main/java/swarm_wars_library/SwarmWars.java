@@ -26,6 +26,7 @@ import swarm_wars_library.network.Headers;
 import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_select.SwarmSelect;
+import swarm_wars_library.sound.SoundMixer; 
 
 public class SwarmWars extends PApplet {
 
@@ -59,6 +60,9 @@ public class SwarmWars extends PApplet {
   GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
   int frameNumber;
 
+  // sound setup
+  SoundMixer soundMixer;
+
   //=========================================================================//
   // Processing Settings                                                     //
   //=========================================================================//
@@ -74,7 +78,7 @@ public class SwarmWars extends PApplet {
     this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
     this.networkSetup();
     this.uiSetup();
-    // this.soundSetup();
+    this.soundSetup();
     this.gameOverSetup();
 
     // NETWORKING - Starts server and gets ids
@@ -240,6 +244,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void soundSetup(){
     this.playBackgroundMusic = new PlayBackgroundMusic(this);
+    this.soundMixer = new SoundMixer(this);
   }
 
   //=========================================================================//
@@ -533,21 +538,13 @@ public class SwarmWars extends PApplet {
         break;
       case GAME:
         this.playerMe.listenMouseReleased();
+
         break;
       case GAMEOVER:
         this.gameOver.listenMouseReleased();
         break;
       default:
         // TODO Add error
-    }
-  }
-
-  public void mouseClicked() {
-    switch(this.currentScreen) {
-      case GAME:
-//        this.playerMe.listenMouseClicked();
-        break;
-      default:
     }
   }
 

@@ -3,6 +3,7 @@ package swarm_wars_library.graphics;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.sound.SoundMixer;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
@@ -34,6 +35,9 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
   private int spriteW;
   private int spriteH;
   private int index = 0;
+
+  // for limiting explosion audio
+  private boolean playedExplosionSound = false;
 
   public RenderPlayer1(PApplet sketch){
     super(sketch);
@@ -67,6 +71,8 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
     double angle = CommsGlobal.get("PLAYER1").getPacket(0).getMotherShipHeading() + Math.PI/2;
 
     if (moveLeft == 1 || moveRight  == 1 || moveUp  == 1 || moveDown == 1 ){
+      SoundMixer.playThruster();
+
       shipThrustStrength += 10;
       if (shipThrustStrength > 255){
         shipThrustStrength = 255;
@@ -76,7 +82,13 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
       if (shipThrustStrength < 0){
         shipThrustStrength = 0;
       }
-    }
+      SoundMixer.stopThruster();
+    } 
+
+    // TODO  turn off thruster sound if player dies
+    //if(!CommsGlobal.get("PLAYER1").getPacket(0).getState().equals(STATE.ALIVE)){
+    //  SoundMixer.stopThruster();
+    //}
 
     //currentSprite = 2;  FOR ANIMATED SHIP
     /* WEIRD ROTATION on LEFT / RIGHT - changing perspective of ship not reflected in drawing?
@@ -127,6 +139,13 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
 
   @Override 
   public void renderMapObjectExplosion(int alpha){
+    // sound
+    if (!playedExplosionSound){
+      playedExplosionSound = true;
+      SoundMixer.playShipExplosion();
+    }
+
+    // visuals
     this.sketch.noStroke();
     this.sketch.fill(70, 102, 255, alpha); 
     this.sketch.ellipseMode(2);

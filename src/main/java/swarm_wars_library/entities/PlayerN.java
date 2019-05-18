@@ -10,11 +10,13 @@ import swarm_wars_library.engine.Shooter;
 import swarm_wars_library.input.Input;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.sound.SoundMixer; 
 
 import static processing.core.PConstants.DOWN;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
+
 
 public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   IScore, ISound{
@@ -274,6 +276,9 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   public void shoot(){
     if(isInputShoot()){
       this.shooter.shoot(this.getLocation(), this.getHeading());
+
+      // sound
+      SoundMixer.playPlayer1Shoot();
     }
   }
 

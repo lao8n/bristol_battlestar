@@ -198,9 +198,8 @@ public class Input {
   public void updateBuffer() {
     this.moveUp = this.moveUpBuffer;
     this.moveDown = this.moveDownBuffer;
-    this.moveLeft = this.moveLeftBuffer;
+    this.moveLeft = this.moveLeftBuffer; 
     this.moveRight = this.moveRightBuffer;
     this.mouse = this.mouseBuffer;
-//    this.mouseBuffer = 0;
   }
 }
