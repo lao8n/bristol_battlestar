@@ -22,7 +22,7 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   public Turret(ENTITY tag){
     super(tag, Map.getInstance().getTurretScale());
     this.aiShooter = new AIShooter();
-    this.shooter = new Shooter(this.tag, 5);
+    this.shooter = new Shooter(this.tag, 5,false);
     this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
                                                      .getMapWidth(), 
                                   RandomGen.getRand() * Map.getInstance()

@@ -19,7 +19,8 @@ public class Input {
   private int moveForce;
   private int moveLeft, moveRight, moveUp, moveDown;
   private double heading;
-  private int mouse;
+  private int mouseLeft;
+  private int mouseRight;
   private Map map;
 
   public Input(ENTITY tag, PApplet sketch) {
@@ -116,16 +117,26 @@ public class Input {
     }
   }
 
-  public void setMouse(int input) {
+  public void setMouseLeft(int input) {
     if(input==1){
-      mouse=1;
+      mouseLeft=1;
     }
-    else mouse=0;
+    else mouseLeft=0;
   }
 
-  public int getMouse(){
-    return mouse;
+  public void setMouseRight(int input) {
+    if(input==1){
+      mouseRight=1;
+    }
+    else mouseRight=0;
   }
 
+  public int getMouseLeft(){
+    return mouseLeft;
+  }
+
+  public int getMouseRight(){
+    return mouseRight;
+  }
 
 }

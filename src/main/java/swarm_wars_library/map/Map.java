@@ -48,11 +48,13 @@ public class Map {
   private int turretScale = 15;
   private int botScale = 8;
   private int bulletScale = 5;
+  private int missileScale=15;
   private int starScale = 1;
   private int numStars = 0;
   private int numBotsPerPlayer = 30;
   private int numTurrets = 5;
   private int numBulletsPerMagazine = 20;
+  private int numMissilesPerMagzine = 20;
   private List<Vector2D> backgroundStars;
   private Vector2D player1StartingLocation;
   private Vector2D player2StartingLocation;
@@ -115,6 +117,9 @@ public class Map {
   public int getBulletScale(){
     return this.bulletScale;
   }
+  public int getMissileScale(){
+    return this.missileScale;
+  }
 
   public int getStarScale(){
     return this.starScale;
@@ -130,6 +135,10 @@ public class Map {
 
   public int getNumBulletsPerMagazine(){
     return this.numBulletsPerMagazine;
+  }
+
+  public int getNumMissilesPerMagazine(){
+    return this.numMissilesPerMagzine;
   }
 
   public Vector2D getPlayerStartingLocation(ENTITY tag){

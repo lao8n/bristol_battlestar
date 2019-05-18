@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 
-import sun.nio.ch.Net;
 import swarm_wars_library.engine.CollisionDetection;
 import swarm_wars_library.entities.AbstractEntity;
 import swarm_wars_library.entities.Bot;
@@ -34,7 +33,7 @@ public class SwarmWars extends PApplet {
   //  comment out getInput functions in networkingGetEnemyInputs()
 
   // Networking
-  private boolean playNetworkGame = false;
+  private boolean playNetworkGame = true;
 
   // Players
   PlayerN player1;
@@ -130,6 +129,8 @@ public class SwarmWars extends PApplet {
       new CommsChannel(map.getNumBotsPerPlayer()));
     CommsGlobal.add("PLAYER1_BULLET", 
       new CommsChannel(1 * map.getNumBulletsPerMagazine()));
+    CommsGlobal.add("PLAYER1_MISSILE",
+            new CommsChannel(1 * map.getNumMissilesPerMagazine()));
 
     // player2 setup
     CommsGlobal.add("PLAYER2", new CommsChannel(1));
@@ -137,6 +138,8 @@ public class SwarmWars extends PApplet {
       new CommsChannel(map.getNumBotsPerPlayer()));
     CommsGlobal.add("PLAYER2_BULLET", 
       new CommsChannel(1 * map.getNumBulletsPerMagazine()));
+    CommsGlobal.add("PLAYER2_MISSILE",
+          new CommsChannel(1 * map.getNumMissilesPerMagazine()));
 
     // game objects setup
     CommsGlobal.add("TURRET", new CommsChannel(map.getNumTurrets()));
@@ -162,6 +165,7 @@ public class SwarmWars extends PApplet {
     this.player1 = new PlayerN(this, ENTITY.PLAYER1);
     this.player1TakeDamage.add(this.player1);
     this.player1DealDamage.addAll(player1.getBullets());
+    this.player1DealDamage.addAll(player1.getMissiles());
     for(int i = 0; i < this.map.getNumBotsPerPlayer(); i++){
       Bot bot = new Bot(ENTITY.PLAYER1_BOT, i, true);
       this.player1TakeDamage.add(bot);
@@ -392,9 +396,13 @@ public class SwarmWars extends PApplet {
       case SWARMSELECT:
         this.swarmSelect.listenMousePressed();
         break;
-      case GAME:
-        this.player1.listenMousePressed();
-        break;
+      case GAME:{
+        if(mouseButton==RIGHT){
+          this.player1.listenMousePressed(false);
+          break;
+        }
+        else
+          {this.player1.listenMousePressed(true);break;}}
       case GAMEOVER:
         break;
       default:
