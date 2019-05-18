@@ -14,7 +14,6 @@ public class RenderMiniMapPlayer1 extends AbstractRenderMiniMapObject{
   public void renderMiniMapObject(){
 
     this.sketch.noStroke();
-    this.sketch.fill(70, 102, 255);
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset

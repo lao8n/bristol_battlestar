@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 import swarm_wars_library.game_screens.GAMESCREEN;
@@ -112,6 +113,10 @@ public class UI{
     return this.currentScreen;
   }
 
+  public void resetGameScreen() {
+    this.currentScreen = GAMESCREEN.FSMUI;
+  }
+
   //=========================================================================//
   // Arrow methods                                                           //
   //=========================================================================//
@@ -150,6 +155,7 @@ public class UI{
   // Background methods                                                      //
   //=========================================================================//
   private void updateBackground(){
+    this.sketch.imageMode(PConstants.CORNER);
     this.sketch.image(this.backgroundImage, 0, 0, 
                       this.sketch.width, this.sketch.height);
     

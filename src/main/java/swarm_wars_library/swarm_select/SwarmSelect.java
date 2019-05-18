@@ -138,6 +138,10 @@ public class SwarmSelect{
     return this.currentScreen;
   }
 
+  public void resetGameScreen(){
+    this.currentScreen = GAMESCREEN.SWARMSELECT;
+  }
+
   //=========================================================================//
   // Mouse methods                                                           //
   //=========================================================================// 

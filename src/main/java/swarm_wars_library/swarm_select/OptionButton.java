@@ -2,6 +2,7 @@ package swarm_wars_library.swarm_select;
 
 import processing.core.PApplet;
 
+import processing.core.PConstants;
 import processing.core.PImage;
 import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.physics.Vector2D;
@@ -60,6 +61,7 @@ public class OptionButton {
       default:
         break;
     }
+    this.sketch.imageMode(PConstants.CORNER);
     this.sketch.image(x, 
                       (float) this.topLeftLocation.getX(), 
                       (float) this.topLeftLocation.getY(), 
