@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 import swarm_wars_library.game_screens.GAMESCREEN;
@@ -112,6 +113,10 @@ public class UI{
     return this.currentScreen;
   }
 
+  public void resetGameScreen() {
+    this.currentScreen = GAMESCREEN.FSMUI;
+  }
+
   //=========================================================================//
   // Arrow methods                                                           //
   //=========================================================================//
@@ -150,6 +155,7 @@ public class UI{
   // Background methods                                                      //
   //=========================================================================//
   private void updateBackground(){
+    this.sketch.imageMode(PConstants.CORNER);
     this.sketch.image(this.backgroundImage, 0, 0, 
                       this.sketch.width, this.sketch.height);
     
@@ -287,13 +293,14 @@ public class UI{
     // Add states first
     this.fsmManager.addFSMState(playerId,1, FSMSTATE.DEFEND);
     this.fsmManager.addFSMState(playerId,2, FSMSTATE.SCOUT);
-    this.fsmManager.addFSMState(playerId,3, FSMSTATE.ATTACK);
+    // this.fsmManager.addFSMState(playerId,3, FSMSTATE.ATTACK);
     // this.fsmManager.addFSMState(3, FSMSTATE.DEFEND);
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
 
     // Then add transitions after
 
-    this.fsmManager.addTransition(playerId, 1,
+    this.fsmManager.addTransition(playerId, 
+                                  1,
                                   2,
                                   FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.GREATERTHAN,
@@ -303,16 +310,16 @@ public class UI{
                                   FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.LESSTHAN,
                                   10);
-    this.fsmManager.addTransition(playerId, 1,
-                                  3,
-                                  FSMVARIABLE.ENEMYDISTANCE,
-                                  FSMCOMPARISON.LESSTHAN,
-                                  200);
-    this.fsmManager.addTransition(playerId, 3,
-                                  2,
-                                  FSMVARIABLE.ENEMYDISTANCE,
-                                  FSMCOMPARISON.LESSTHAN,
-                                  200);
+    // this.fsmManager.addTransition(playerId, 1,
+    //                               3,
+    //                               FSMVARIABLE.ENEMYDISTANCE,
+    //                               FSMCOMPARISON.LESSTHAN,
+    //                               200);
+    // this.fsmManager.addTransition(playerId, 3,
+    //                               2,
+    //                               FSMVARIABLE.ENEMYDISTANCE,
+    //                               FSMCOMPARISON.LESSTHAN,
+    //                               200);
 
     // this.fsmManager.addTransition(3, 
     //                               1,

@@ -201,6 +201,5 @@ public class Input {
     this.moveLeft = this.moveLeftBuffer; 
     this.moveRight = this.moveRightBuffer;
     this.mouse = this.mouseBuffer;
-    // this.mouseBuffer = 0;
   }
 }

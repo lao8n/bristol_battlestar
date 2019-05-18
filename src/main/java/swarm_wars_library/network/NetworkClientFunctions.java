@@ -101,27 +101,31 @@ public class NetworkClientFunctions {
 
     public static void sendOperation(int id, int frame, Map<String, Object> m) {
         MessageHandlerMulti.putPackage(m);
-//        System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
+        // System.out.println("Sent OPERATION - Player:" + id + " Frame:" + frame);
     }
 
     public static Map getPackage(int id, int frame) {
         Map<String, Object> rev = null;
         int getId = id;
-//        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
         while (rev == null) {
-//            System.out.println("Player " + id + " trying to get player " + Math.abs(id - 1) + "s package with frame number " + frame);
             rev = MessageHandlerMulti.getPackage(getId, frame);
-            if (rev == null) {
-                // System.out.println("Did not get wanted package, try again, main game waiting");
+
+            if(swarm_wars_library.map.Map.getInstance().gameEnded()){
+                System.out.println("Game over but waiting...");
+                return null;
             }
+
             try{Thread.sleep(interval);}
             catch (Exception e) {
-                // System.out.println("FAILED");
                 e.printStackTrace();
             }
         }
-//        System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
+        // System.out.println("Get OPERATION - Player " + id + " try to get player:" + getId + " frame:" + frame);
         return rev;
+    }
+
+    public void checkGameEnd(int id) {
+
     }
 
     public static void sendEnd(int id) {

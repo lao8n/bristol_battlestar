@@ -1,9 +1,11 @@
 package swarm_wars_library.swarm_select;
 
 import processing.core.PApplet;
-import static processing.core.PConstants.CENTER;
 
+import processing.core.PConstants;
 import swarm_wars_library.physics.Vector2D;
+
+import static processing.core.PConstants.*;
 
 public class TextButton {
 
@@ -33,6 +35,7 @@ public class TextButton {
   // Text Button update method                                               //
   //=========================================================================//
   public void update() {
+    this.sketch.rectMode(CORNER);
     this.sketch.stroke(255, 255, 255);
     this.sketch.fill(this.colourR, this.colourG, this.colourB);
     this.sketch.rect((float) this.topLeftLocation.getX(), 
@@ -47,5 +50,6 @@ public class TextButton {
                     (float) this.dimensions.getX() / 2, 
                     (float) this.topLeftLocation.getY() + 
                     (float) this.dimensions.getY() / 2);
+
   }
 }
