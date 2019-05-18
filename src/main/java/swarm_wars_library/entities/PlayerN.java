@@ -26,6 +26,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   private int score;
   private Shooter shooter;
   private int bulletForce = Map.getInstance().getPlayerNBulletForce();
+  int oldScore;
 
   //=========================================================================//
   // Constructor                                                             //
@@ -36,7 +37,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.health = new Health(this.tag);
     this.input = new Input(this.tag, sketch);
     this.score = 0;
-    this.shooter = new Shooter(this.tag, bulletForce);
+    this.shooter = new Shooter(this.tag, bulletForce,true);
     this.updateCommsPacket();
     this.sendCommsPacket();  
   }
@@ -51,6 +52,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
       this.updateInput();
       this.updateShooter();
       this.updateScore();
+      this.updateMissile();
       this.updateState();
     }
     // Comms & explode last
@@ -67,6 +69,7 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.commsPacket.setHealth(this.getHealth());
     this.commsPacket.setLocation(this.getLocation());
     this.commsPacket.setScore(this.getScore());
+    this.commsPacket.setMissileNum(this.shooter.getMissileNum());
     this.commsPacket.setState(this.getState());
     this.commsPacket.setVelocity(this.getVelocity());
     this.commsPacket.setMotherShipHeading(this.getHeading());
@@ -81,7 +84,18 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    this.takeDamage(5);
+    //System.out.println(tag.toString());
+    if (this.tag == ENTITY.PLAYER2) {
+      if (tag == ENTITY.PLAYER1_MISSILE) {
+        this.takeDamage(30);
+      }
+    }else if (this.tag == ENTITY.PLAYER1) {
+      if (tag == ENTITY.PLAYER2_MISSILE) {
+        this.takeDamage(30);
+      }
+    }else {
+      this.takeDamage(5);
+    }
   }
 
   //=========================================================================//
@@ -160,8 +174,13 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
-  public int getInputMouse(){
-    return this.input.getMouse();
+  public int getInputMouseLeft(){
+    return this.input.getMouseLeft();
+  }
+
+  @Override
+  public int getInputMouseRight(){
+    return this.input.getMouseRight();
   }
 
   @Override
@@ -195,10 +214,14 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
-  public void setInputMouse(int input) {
-    this.input.setMouse(input);
+  public void setInputMouseLeft(int input) {
+    this.input.setMouseLeft(input);
   }
 
+  @Override
+  public void setInputMouseRight(int input) {
+    this.input.setMouseRight(input);
+  }
 
   //=========================================================================//
   // Input listeners                                                         //
@@ -215,18 +238,19 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   }
 
   @Override
-  public void listenMousePressed() {
-    this.input.setMouseBuffer(1);
-  }
-
-  @Override
   public void listenMouseReleased() {
-    this.input.setMouseBuffer(0);
+    this.input.setMouseLeftBuffer(0);
+    this.input.setMouseRightBuffer(0);
   }
 
   @Override
-  public void listenMouseClicked() {
-    this.input.setMouseBuffer(1);
+  public void listenMousePressed(boolean isleft){
+    if(isleft){
+      this.input.setMouseLeftBuffer(1);
+    }
+    else {  
+      this.input.setMouseRightBuffer(1);
+    }
   }
 
   @Override
@@ -240,7 +264,14 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   //=========================================================================//
   @Override
   public boolean isInputShoot(){
-    if(this.input.getMouse() == 1){
+    if(this.input.getMouseLeft() == 1){
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isInputShootM(){
+    if(this.input.getMouseRight() == 1){
       return true;
     }
     return false;
@@ -280,11 +311,18 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
       // sound
       SoundMixer.playPlayer1Shoot();
     }
+    if(isInputShootM()){
+      this.shooter.shootM(this.getLocation(), this.getHeading());
+    }
   }
 
   @Override
   public ArrayList<Bullet> getBullets(){
     return this.shooter.getMagazine();
+  }
+
+  public  ArrayList<Missile> getMissiles(){
+    return this.shooter.getMagazine1();
   }
 
   //=========================================================================//
@@ -293,6 +331,17 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   @Override
   public void updateSounds(){
     // TODO add conditional sound
+  }
+
+  public  void updateMissile(){
+
+    if(this.getScore()!=oldScore){
+      oldScore=this.getScore();
+      if(oldScore%30==0){
+        this.shooter.addMissile();
+      }
+    }
+    //System.out.println(shooter.getMissileNum());
   }
 
 }
