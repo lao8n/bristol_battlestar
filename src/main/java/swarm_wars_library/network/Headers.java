@@ -16,9 +16,19 @@ public class Headers {
 
     public static final String MOUSE_Y = "Y";
 
-    public static final String MOUSE_PRESSED = "C";
+    public static final String MOUSE_LEFT = "L";
+
+    public static final String MOUSE_RIGHT = "R";
 
     public static final String PLAYER_NUMBER  ="N";
+
+    public static final String TURRETS = "TS";
+
+    public static final String TURRET_ID = "TI";
+
+    public static final String TURRET_VERSION = "TV";
+
+    public static final String TURRET_LOCATION = "TL";
 
     public static final String FRAME = "F";
 

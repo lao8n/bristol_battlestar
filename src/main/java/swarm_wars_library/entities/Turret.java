@@ -8,6 +8,9 @@ import swarm_wars_library.engine.AIShooter;
 import swarm_wars_library.engine.Shooter;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.map.RandomGen;
+import swarm_wars_library.network.Constants;
+import swarm_wars_library.network.Headers;
+import swarm_wars_library.network.MessageHandlerMulti;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.sound.SoundMixer; 
 
@@ -18,20 +21,22 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   private Shooter shooter;
   private int shootInterval = 0;
   private int bulletForce = Map.getInstance().getTurretBulletForce();
+  private int turretVersion;
+  private int turretId;
 
   //=========================================================================//
   // Constructor                                                             //
   //=========================================================================// 
-  public Turret(ENTITY tag){
+  public Turret(ENTITY tag, int turretId){
     super(tag, Map.getInstance().getTurretScale());
     this.aiShooter = new AIShooter();
-    this.shooter = new Shooter(this.tag, bulletForce);
-    this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
-                                                     .getMapWidth(), 
-                                  RandomGen.getRand() * Map.getInstance()
-                                                     .getMapHeight()));
+    this.shooter = new Shooter(this.tag, bulletForce,false);
+    this.setLocation(new Vector2D(0, 0)); // can delete once working
     this.updateCommsPacket();
     this.sendCommsPacket();  
+    this.turretVersion = 0;
+    this.setState(STATE.DEAD);
+    this.turretId = turretId;
   }
 
   //=========================================================================//
@@ -43,17 +48,22 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
       this.updateAI();
       this.updateShooter();
     }
-    if(this.isState(STATE.DEAD)){
-      this.setState(STATE.ALIVE);
-      this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance()
-                                                       .getMapWidth(), 
-                                    RandomGen.getRand() * Map.getInstance()
-                                                       .getMapHeight()));
+    else if (this.isState(STATE.DEAD)){
+      this.setLocation(Map.getInstance().getTurretVersions().get(this.turretId),
+                       Map.getInstance().getTurretLocations().get(this.turretId));
     }
+
     // Comms & explode last
     this.updateCommsPacket();
     this.sendCommsPacket();
     this.updateExplode2Dead();
+  }
+
+  public void setLocation(int turretVersion, Vector2D location){
+    if(turretVersion >= this.turretVersion){
+      this.setLocation(location);
+      this.setState(STATE.ALIVE);
+    }
   }
 
   //=========================================================================//
@@ -123,6 +133,12 @@ public class Turret extends AbstractEntity implements IAIShooter, ISound{
   public void collidedWith(ENTITY tag){
     this.setState(STATE.EXPLODE);
     SoundMixer.playTurretExplosion();
+    java.util.Map<String, Object> m = new java.util.HashMap<>();
+    m.put(Headers.TYPE, Constants.UPDATE_TURRET);
+    m.put(Headers.TURRET_ID, this.turretId);
+    m.put(Headers.TURRET_VERSION, this.turretVersion);
+    MessageHandlerMulti.putPackage(m);
+    this.turretVersion++;
   }
 
   //=========================================================================//

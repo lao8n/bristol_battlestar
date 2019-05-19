@@ -4,6 +4,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProtocolProcessHandler extends ChannelInboundHandlerAdapter{
 
     private Logger logger = Logger.getInstance();
@@ -35,7 +38,12 @@ public class ProtocolProcessHandler extends ChannelInboundHandlerAdapter{
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception{
-        System.out.println(cause.getMessage());
+        MessageHandlerMulti.Frames = new HashMap<>();
+        MessageHandlerMulti.clientReceiveBuffer = new HashMap<>();
+        MessageHandlerMulti.readyPlayers = 0;
+        Map<String, Object> pack = new HashMap<>();
+        pack.put(Headers.TYPE, Constants.END);
+        MessageHandlerMulti.serverBuffer.offer(pack);
         ctx.close();
     }
 

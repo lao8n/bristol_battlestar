@@ -37,7 +37,7 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
     this.setLocation(Map.getInstance().getPlayerStartingLocation(this.tag));
     this.health = new Health(this.tag);
     this.score = 0;
-    this.shooter = new Shooter(this.tag, bulletForce);
+    this.shooter = new Shooter(this.tag, bulletForce, false);
     this.updateCommsPacket();
     this.sendCommsPacket();  
   }
@@ -145,7 +145,12 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    this.takeDamage(5);
+    //System.out.println(tag.toString());
+    if (tag == ENTITY.PLAYER2_MISSILE || tag == ENTITY.PLAYER1_MISSILE) {
+      this.takeDamage(30);
+    }else {
+      this.takeDamage(5);
+    }
   }
 
   //=========================================================================//

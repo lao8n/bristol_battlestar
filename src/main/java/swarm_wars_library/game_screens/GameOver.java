@@ -6,12 +6,17 @@ import swarm_wars_library.SwarmWars;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_select.TextButton;
+import processing.core.PConstants;
+
 
 public class GameOver {
 
     // Processing
     private PApplet sketch;
-    private PImage backgroundImage;
+    //private PImage backgroundImage;
+    private PImage background;
+    private PImage gameOverLogo;
+    private PImage brokenShipLogo;
 
     // Game Screen
     private GAMESCREEN currentScreen;
@@ -30,8 +35,11 @@ public class GameOver {
 
     public GameOver(PApplet sketch) {
         this.sketch = sketch;
-        PImage background = sketch.loadImage("resources/images/background.png");
-        this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
+        background = sketch.loadImage("resources/images/background.png");
+        //this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
+
+        brokenShipLogo = sketch.loadImage("resources/images/brokenShipLogo.png"); 
+        gameOverLogo = sketch.loadImage("resources/images/gameoverLogo.png");
 
         this.myScore = 0;
         this.enemyScore = 0;
@@ -111,9 +119,18 @@ public class GameOver {
     // Background methods                                                      //
     //=========================================================================//
     private void updateBackground(){
-        this.sketch.background(13, 30, 40);
-//        this.sketch.image(this.backgroundImage, 0, 0,
-//                this.sketch.width, this.sketch.height);
+        //this.sketch.background(13, 30, 40);
+        this.sketch.imageMode(PConstants.CORNERS);
+
+        // draw background stars
+        this.sketch.image(background, 0, 0, this.sketch.width, this.sketch.height);
+
+        // draw gameover & ship logos
+        this.sketch.image(this.gameOverLogo, 0, 0,
+                this.sketch.width, this.sketch.height/2);
+
+        this.sketch.imageMode(PConstants.CENTER);
+        this.sketch.image(this.brokenShipLogo, this.sketch.width/2, (this.sketch.height*3)/4); 
     }
 
     public GAMESCREEN getGameScreen() {

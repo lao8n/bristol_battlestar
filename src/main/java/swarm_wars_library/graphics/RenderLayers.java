@@ -15,11 +15,14 @@ public class RenderLayers{
   private RenderTurretBullet renderTurretBullet;
   private RenderPlayer1 renderPlayer1;
   private RenderPlayer1Bullet renderPlayer1Bullet;
+  private RenderPlayer1Missile renderPlayer1Missile;
   private RenderPlayer1Bot renderPlayer1Bot;
   private RenderPlayer1Score renderPlayer1Score;
+  private RenderPlayer1NumM renderPlayer1NumM;
   private RenderPlayer1Health renderPlayer1Health;
   private RenderPlayer2 renderPlayer2;
   private RenderPlayer2Bullet renderPlayer2Bullet;
+  private RenderPlayer2Missile renderPlayer2Missile;
   private RenderPlayer2Bot renderPlayer2Bot;
   private RenderPlayer2Score renderPlayer2Score;
   private RenderPlayer2Health renderPlayer2Health;
@@ -44,11 +47,14 @@ public class RenderLayers{
     this.renderTurretBullet = new RenderTurretBullet(sketch);
     this.renderPlayer1 = new RenderPlayer1(sketch);
     this.renderPlayer1Bullet = new RenderPlayer1Bullet(sketch);
+    this.renderPlayer1Missile=new RenderPlayer1Missile(sketch);
     this.renderPlayer1Bot = new RenderPlayer1Bot(sketch);
     this.renderPlayer1Score = new RenderPlayer1Score(sketch);
+    this.renderPlayer1NumM=new RenderPlayer1NumM(sketch);
     this.renderPlayer1Health = new RenderPlayer1Health(sketch);
     this.renderPlayer2 = new RenderPlayer2(sketch);
     this.renderPlayer2Bullet = new RenderPlayer2Bullet(sketch);
+    this.renderPlayer2Missile= new RenderPlayer2Missile(sketch);
     this.renderPlayer2Bot = new RenderPlayer2Bot(sketch);
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
@@ -108,7 +114,9 @@ public class RenderLayers{
     this.renderPlayer2();
     this.renderTurretBullets();
     this.renderPlayer1Bullets();
+    this.renderPlayer1Missiles();
     this.renderPlayer2Bullets();
+    this.renderPlayer2Missiles();
   }
 
   //=========================================================================//
@@ -387,6 +395,88 @@ public class RenderLayers{
     }
   }
 
+ //=========================================================================//
+  // Render Player1 Missile Layer                                            //
+  //=========================================================================//
+  private void renderPlayer1Missiles(){
+    for (int i = 0; i < CommsGlobal.get("PLAYER1_MISSILE")
+            .getNumberOfReceivers(); i++){
+      // Render entity if alive
+     //System.out.println("***************** state " +CommsGlobal.get("PLAYER2_MISSILE").getPackets().size() );
+
+
+      if(CommsGlobal.get("PLAYER1_MISSILE")
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
+        this.renderPlayer1Missile.update(CommsGlobal.get("PLAYER1_MISSILE")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get("PLAYER1")
+                        .getPacket(0)
+                        .getLocation(),
+                CommsGlobal.get("PLAYER1_MISSILE")
+                        .getPacket(i)
+                        .getHeading()
+               );
+      }
+      // Render explosions
+      if(CommsGlobal.get("PLAYER1_MISSILE")
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
+                "PLAYER1_BULLET")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get("PLAYER1")
+                        .getPacket(0)
+                        .getLocation(),
+                7);
+      }
+    }
+  }
+
+  //=========================================================================//
+  // Render Player2 Missile Layer                                            //
+  //=========================================================================//
+  private void renderPlayer2Missiles(){
+    if(CommsGlobal.get("PLAYER2_MISSILE").getPackets().size()!=0){
+      for (int i = 0; i < CommsGlobal.get("PLAYER2_MISSILE")
+              .getNumberOfReceivers(); i++){
+        // Render entity if alive
+        if(CommsGlobal.get("PLAYER2_MISSILE")
+                .getPacket(i)
+                .getState()
+                .equals(STATE.ALIVE)){
+          this.renderPlayer1Missile.update(CommsGlobal.get("PLAYER2_MISSILE")
+                          .getPacket(i)
+                          .getLocation(),
+                  CommsGlobal.get("PLAYER1")
+                          .getPacket(0)
+                          .getLocation(),
+                  CommsGlobal.get("PLAYER1_MISSILE")
+                          .getPacket(i)
+                          .getHeading());
+        }
+        // Render explosions
+        if(CommsGlobal.get("PLAYER2_MISSILE")
+                .getPacket(i)
+                .getState()
+                .equals(STATE.EXPLODE)){
+          this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
+                  "PLAYER2_BULLET")
+                          .getPacket(i)
+                          .getLocation(),
+                  CommsGlobal.get("PLAYER1")
+                          .getPacket(0)
+                          .getLocation(),
+                  7);
+        }
+      }
+    }
+  }
+
   //=========================================================================//
   // Render Displays Layer                                                   //
   //=========================================================================//
@@ -395,6 +485,8 @@ public class RenderLayers{
     this.renderPlayer1Score.update(CommsGlobal.get("PLAYER1")
                                              .getPacket(0)
                                              .getScore());
+    //Render player1 missile number
+    this.renderPlayer1NumM.update(CommsGlobal.get("PLAYER1").getPacket(0).getMissileNum());
     // Render player2 score
     this.renderPlayer2Score.update(CommsGlobal.get("PLAYER2")
                                              .getPacket(0)
