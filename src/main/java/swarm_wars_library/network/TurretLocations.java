@@ -33,6 +33,14 @@ public class TurretLocations {
         }
     }
 
+    public void refreshTurrets() {
+        for (int i = 0; i < turretCounts; i++) {
+            versions[i] = 0;
+            locations[i][0] = map_width * Math.random();
+            locations[i][1] = map_height * Math.random();
+        }
+    }
+
     public boolean updateTurretLocation(int id, int version) {
         if (version < versions[id]) {
             return false;
