@@ -53,7 +53,7 @@ public class TurretLocations {
         return false;
     }
 
-    public ArrayList getTurretLocationWithId(int id) {
+    public ArrayList<Double> getTurretLocationWithId(int id) {
         ArrayList<Double> l = new ArrayList<>();
         l.add(locations[id][0]);
         l.add(locations[id][1]);
@@ -64,7 +64,7 @@ public class TurretLocations {
         return versions[id];
     }
 
-    public ArrayList getStartLocations() {
+    public ArrayList<Double> getStartLocations() {
         ArrayList<Double> l = new ArrayList<>();
         for (int i = 0; i < turretCounts; i++){
             l.add(locations[i][0]);

@@ -4,8 +4,11 @@ import org.json.JSONObject;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.map.RandomGen;
+import swarm_wars_library.physics.Vector2D;
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ProtocolProcessor {
 
@@ -53,7 +56,6 @@ public class ProtocolProcessor {
 
     private boolean beforeStart(Map m) {
         if (m.get(Headers.TYPE).equals(Constants.START)) {
-            // TODO: initialize turrets location
             MessageHandlerMulti.gameStarted = true;
             if(!gotSeed) {
                 int randSeed = (Integer) m.get(Headers.RANDOM_SEED);
@@ -69,6 +71,11 @@ public class ProtocolProcessor {
         if ((Integer) m.get(Headers.TYPE) == Constants.SETUP) {
             OtherFSMBuilder otherFSMBuilder = new OtherFSMBuilder();
             otherFSMBuilder.setOtherFSM(m);
+            List<Double> locations = (ArrayList) m.get(Headers.TURRETS);
+            for(int i = 0; i < this.map.getNumTurrets(); i++){
+                this.map.storeTurretLocation(i, 
+                                             new Vector2D(2*i, 2*i+1));
+            }
             return true;
         }
         return false;
@@ -78,6 +85,11 @@ public class ProtocolProcessor {
         if (m.get(Headers.TYPE).equals(Constants.UPDATE_TURRET)) {
             System.out.println(m.get(Headers.TURRET_VERSION));
             System.out.println(m.get(Headers.TURRET_LOCATION));
+            this.map.storeTurretLocation((Integer) m.get(Headers.TURRET_ID), 
+                                            new Vector2D((Double) ((ArrayList)m.get(Headers.TURRET_LOCATION)).get(0),
+                                            (Double) ((ArrayList) m.get(Headers.TURRET_LOCATION)).get(1)));
+            this.map.storeTurretVersion((Integer) m.get(Headers.TURRET_ID), 
+                                         (Integer) m.get(Headers.TURRET_VERSION));
             return true;
         }
         return false;

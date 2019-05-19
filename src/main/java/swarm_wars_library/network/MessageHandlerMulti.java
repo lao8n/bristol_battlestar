@@ -122,11 +122,12 @@ public class MessageHandlerMulti{
             case Constants.START:
                 tlogger.log("Case: START");
                 if (readyPlayers == Frames.size() && Frames.size() > 1){
+                    ArrayList<Double> startingLocations = TurretLocations.getInstance().getStartLocations();
                     for (Map<String, Object> m : setupBuffer.values()) {
+                        m.put(Headers.TURRETS, startingLocations);
                         serverBuffer.offer(m);
                     }
                     pack.put(Headers.RANDOM_SEED, (int) Math.round(Math.random()*Integer.MAX_VALUE));
-                    pack.put(Headers.TURRETS, TurretLocations.getInstance().getStartLocations());
                     serverBuffer.offer(pack);
                     setupBuffer = new HashMap<Integer, Map<String, Object>>();
                     try {
@@ -142,6 +143,7 @@ public class MessageHandlerMulti{
                 int turretVersion = (Integer) pack.get(Headers.TURRET_VERSION);
                 if (TurretLocations.getInstance().updateTurretLocation(turretId, turretVersion)) {
                     Map<String, Object> m = new HashMap<>();
+                    m.put(Headers.TURRET_ID, turretId);
                     m.put(Headers.TYPE, Constants.UPDATE_TURRET);
                     m.put(Headers.TURRET_VERSION, TurretLocations.getInstance().getTurretVersionWithId(turretId));
                     m.put(Headers.TURRET_LOCATION, TurretLocations.getInstance().getTurretLocationWithId(turretId));
