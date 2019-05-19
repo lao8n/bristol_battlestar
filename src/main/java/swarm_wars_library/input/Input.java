@@ -20,8 +20,8 @@ public class Input {
   private int moveLeft, moveRight, moveUp, moveDown;
   private int moveLeftBuffer, moveRightBuffer, moveUpBuffer, moveDownBuffer;
   private double heading;
-  private int mouse;
-  private int mouseBuffer;
+  private int mouseLeft, mouseRight;
+  private int mouseLeftBuffer, mouseRightBuffer;
   private Map map;
   private int mouseX;
   private int mouseY;
@@ -37,14 +37,15 @@ public class Input {
     this.moveRight = 0;
     this.moveUp = 0;
     this.moveDown = 0;
-    this.mouse = 0;
+    this.mouseLeft = 0;
+    this.mouseRight = 0;
 
     this.moveLeftBuffer = 0;
     this.moveRightBuffer = 0;
     this.moveUpBuffer = 0;
     this.moveDownBuffer = 0;
-    this.mouseBuffer = 0;
-
+    this.mouseLeftBuffer = 0;
+    this.mouseRightBuffer = 0;
   }
 
   public void update() {
@@ -132,15 +133,20 @@ public class Input {
     }
   }
 
-  public void setMouse(int input) {
+  public void setMouseLeft(int input) {
     if(input==1){
-      mouse=1;
+      this.mouseLeft=1;
     }
-    else mouse=0;
+    else{
+      this.mouseLeft=0;
+    }
   }
 
-  public int getMouse(){
-    return mouse;
+  public void setMouseRight(int input) {
+    if(input==1){
+      mouseRight=1;
+    }
+    else mouseRight=0;
   }
 
   public int getMouseX() {
@@ -183,6 +189,14 @@ public class Input {
     this.moveRightBuffer = moveRightBuffer;
   }
 
+  public int getMouseLeft(){
+    return mouseLeft;
+  }
+
+  public int getMouseRight(){
+    return mouseRight;
+  }
+
   public void setMoveUpBuffer(int moveUpBuffer) {
     this.moveUpBuffer = moveUpBuffer;
   }
@@ -191,8 +205,12 @@ public class Input {
     this.moveDownBuffer = moveDownBuffer;
   }
 
-  public void setMouseBuffer(int mouseBuffer) {
-    this.mouseBuffer = mouseBuffer;
+  public void setMouseLeftBuffer(int mouseLeftBuffer) {
+    this.mouseLeftBuffer = mouseLeftBuffer;
+  }
+
+  public void setMouseRightBuffer(int mouseRightBuffer){
+    this.mouseRightBuffer = mouseRightBuffer;
   }
 
   public void updateBuffer() {
@@ -200,6 +218,7 @@ public class Input {
     this.moveDown = this.moveDownBuffer;
     this.moveLeft = this.moveLeftBuffer; 
     this.moveRight = this.moveRightBuffer;
-    this.mouse = this.mouseBuffer;
+    this.mouseLeft = this.mouseLeftBuffer;
+    this.mouseRight = this.mouseRightBuffer;
   }
 }

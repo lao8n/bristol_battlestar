@@ -20,6 +20,8 @@ public class GameClient {
 
     private static String ip = "35.246.75.108";
 
+//    private static String ip = "127.0.0.1";
+    
     protected static final int bossGroupSize = Runtime.getRuntime().availableProcessors();
 
     public static CountDownLatch countDownLatch = new CountDownLatch(1);

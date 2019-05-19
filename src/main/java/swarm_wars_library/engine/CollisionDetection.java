@@ -2,8 +2,8 @@ package swarm_wars_library.engine;
 
 import java.util.ArrayList;
 
-import swarm_wars_library.entities.AbstractEntity;
-import swarm_wars_library.entities.STATE;
+import swarm_wars_library.entities.*;
+import swarm_wars_library.network.Player;
 import swarm_wars_library.physics.Vector2D;
 
 public class CollisionDetection {
@@ -27,9 +27,12 @@ public class CollisionDetection {
 		}
 	}
 
-	public static boolean hasCollision(AbstractEntity dealDamage, 
+	public static boolean hasCollision(AbstractEntity dealDamage,
 		AbstractEntity takeDamage){
-		if((dealDamage.isState(STATE.ALIVE) || dealDamage.isState(STATE.SUICIDE)) &&
+		if (dealDamage instanceof Bot && dealDamage.isState(STATE.ALIVE)) {
+			return false;
+		}
+		else if((dealDamage.isState(STATE.ALIVE) || dealDamage.isState(STATE.SUICIDE)) &&
 			 takeDamage.isState(STATE.ALIVE) &&
 			 (Vector2D.sub(dealDamage.getLocation(),takeDamage.getLocation()).mag()
 			 < dealDamage.getScale() + takeDamage.getScale())){

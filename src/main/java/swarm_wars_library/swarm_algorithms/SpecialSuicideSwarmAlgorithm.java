@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.AbstractSwarmAlgorithm;
 
-public class AttackSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
+public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
 
   private int id;
   public RigidBody rb;
   public Transform transform;
-  private AttackSuicideSwarmRules attackSuicideSwarmRules;
+  private SpecialSuicideSwarmRules specialSuicideSwarmRules;
   private double orbitDistance = 70;
   private double stopDistance = 100;
   private Vector2D separateV2D;
@@ -25,17 +26,21 @@ public class AttackSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
   private double weightAvoidEdge = 0.1;
 
   //=========================================================================//
-  // DefendFlock Constructor                                                 //
+  // Special Suicide Constructor                                             //
   //=========================================================================//
-  public AttackSuicideSwarmAlgorithm(ENTITY tag, int id, Transform transform,
-                                   RigidBody rb){
+  public SpecialSuicideSwarmAlgorithm(ENTITY tag, int id, Transform transform,
+                                      RigidBody rb) {
     super(tag, transform);
     this.id = id;
     this.rb = rb;
     this.transform = transform;
-    this.attackSuicideSwarmRules = new AttackSuicideSwarmRules(this.id,
+    this.specialSuicideSwarmRules = new SpecialSuicideSwarmRules(this.id,
             this.rb,
             this.transform);
+    this.setState(STATE.SUICIDE);
+    // if (this.id % 2 == 0) {
+    //   this.setState(STATE.SUICIDE);
+    // }
   }
 
   //=========================================================================//
@@ -44,12 +49,12 @@ public class AttackSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
   @Override
   public void applySwarmAlgorithm(){
     // Get vectors from rules
-    ArrayList<Vector2D> rulesV2D = this.attackSuicideSwarmRules
+    ArrayList<Vector2D> rulesV2D = this.specialSuicideSwarmRules
             .iterateOverSwarm(this.tag);
     this.separateV2D = rulesV2D.get(0);
-    if(this.id % 2 != 0){
-      this.seekMotherShipV2D = this.seekMotherShip();
-    }
+    // if(this.id % 2 != 0){
+    // this.seekMotherShipV2D = this.seekMotherShip();
+    // }
 
     // Apply weights to vectors
     this.separateV2D.mult(this.weightSeparate);

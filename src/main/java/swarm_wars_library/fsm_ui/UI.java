@@ -291,8 +291,8 @@ public class UI{
   //=========================================================================//
   public void exampleFSM(int playerId){
     // Add states first
-    this.fsmManager.addFSMState(playerId,1, FSMSTATE.DEFEND);
-    this.fsmManager.addFSMState(playerId,2, FSMSTATE.SCOUT);
+    this.fsmManager.addFSMState(playerId, 1, FSMSTATE.SPECIAL);
+    this.fsmManager.addFSMState(playerId, 2, FSMSTATE.SCOUT);
     // this.fsmManager.addFSMState(playerId,3, FSMSTATE.ATTACK);
     // this.fsmManager.addFSMState(3, FSMSTATE.DEFEND);
     // this.fsmManager.addFSMState(5, FSMSTATE.SCOUT);
@@ -309,7 +309,7 @@ public class UI{
                                   1,
                                   FSMVARIABLE.ENEMYDISTANCE,
                                   FSMCOMPARISON.LESSTHAN,
-                                  10);
+                                  300);
     // this.fsmManager.addTransition(playerId, 1,
     //                               3,
     //                               FSMVARIABLE.ENEMYDISTANCE,

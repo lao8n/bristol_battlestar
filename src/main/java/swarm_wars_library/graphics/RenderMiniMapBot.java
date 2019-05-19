@@ -2,7 +2,7 @@ package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 
-import swarm_wars_library.map.Map;
+import swarm_wars_library.map.Map; 
 import swarm_wars_library.physics.Vector2D;
 
 public class RenderMiniMapBot extends AbstractRenderMiniMapObject{

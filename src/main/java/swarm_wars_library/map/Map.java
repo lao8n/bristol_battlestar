@@ -49,8 +49,7 @@ public class Map {
   private int turretScale = 15;
   private int botScale = 5;
   private int bulletScale = 5;
-
-  // Stars
+  private int missileScale=15;
   private int starScale = 1;
   private int numStars = 0;
 
@@ -59,11 +58,13 @@ public class Map {
   private int numTurrets = 3;
 
   // Shooters
-  private int shooterTimer = 1;
+  private int shooterBulletTimer = 2;
+  private int shooterMisiileTimer=10;
   private int numBulletsPerMagazine = 20;
   private int turretBulletForce = 15;
   private int playerNBulletForce = 25;
   private int playerAIBulletForce = 15;
+  private int numMissilesPerMagazine = 20;
 
   // Movement
   private int playerMoveForce = 16;
@@ -72,6 +73,8 @@ public class Map {
   private List<Vector2D> backgroundStars;
   private Vector2D player1StartingLocation;
   private Vector2D player2StartingLocation;
+  private ArrayList<Vector2D> turretLocations;
+  private ArrayList<Integer> turretVersions;
 
   private int playerId;
   private int enemyId;
@@ -89,9 +92,16 @@ public class Map {
                                   RandomGen.getRand() * map_height);
       backgroundStars.add(i, v2d);
     }
-
+    this.turretLocations = new ArrayList<Vector2D>();
+    this.initTurretsVersions();
     this.generateStartingPositions();
+  }
 
+  private void initTurretsVersions() {
+    turretVersions = new ArrayList<>();
+    for (int i = 0; i < this.getNumTurrets(); i++) {
+      turretVersions.add(0);
+    }
   }
 
   public void generateStartingPositions() {
@@ -101,6 +111,30 @@ public class Map {
     this.player2StartingLocation =
             new Vector2D(this.map_width * RandomGen.getRand(),
                     this.map_height * RandomGen.getRand());
+  }
+
+  public void storeTurretLocation(int turretId, Vector2D location){
+    if (turretVersions.get(turretId) == 0) {
+      this.turretLocations.add(turretId, location);
+    }else {
+      this.turretLocations.set(turretId, location);
+    }
+  }
+
+  public void storeTurretVersion(int turretId, int turretVersion){
+    if (turretVersion == 0) {
+      this.turretVersions.add(turretId, turretVersion);
+    }else {
+      this.turretVersions.set(turretId, turretVersion);
+    }
+  }
+
+  public ArrayList<Vector2D> getTurretLocations(){
+    return this.turretLocations;
+  }
+
+  public ArrayList<Integer> getTurretVersions(){
+    return this.turretVersions;
   }
 
   //Get the only object available
@@ -134,6 +168,9 @@ public class Map {
   public int getBulletScale(){
     return this.bulletScale;
   }
+  public int getMissileScale(){
+    return this.missileScale;
+  }
 
   public int getStarScale(){
     return this.starScale;
@@ -149,6 +186,10 @@ public class Map {
 
   public int getNumBulletsPerMagazine(){
     return this.numBulletsPerMagazine;
+  }
+
+  public int getNumMissilesPerMagazine(){
+    return this.numMissilesPerMagazine;
   }
 
   public Vector2D getPlayerStartingLocation(ENTITY tag){
@@ -178,8 +219,12 @@ public class Map {
     return turretBulletForce;
   }
 
-  public int getShooterTimer() {
-    return shooterTimer;
+  public int getBulletTimer() {
+    return shooterBulletTimer;
+  }
+
+  public int getMissileTimer() {
+    return shooterMisiileTimer;
   }
 
   public int getPlayerNBulletForce() {

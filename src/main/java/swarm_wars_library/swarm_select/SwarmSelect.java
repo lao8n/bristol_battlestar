@@ -15,7 +15,12 @@ import static processing.core.PConstants.TOP;
 
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
-import swarm_wars_library.fsm.*;
+import swarm_wars_library.fsm.FSMCOMPARISON;
+import swarm_wars_library.fsm.FSMManager;
+import swarm_wars_library.fsm.FSMSTATE;
+import swarm_wars_library.fsm.FSMStateTransition;
+import swarm_wars_library.fsm.FSMVARIABLE;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.graphics.RenderMiniMap;
 import swarm_wars_library.graphics.RenderUIMiniMapBot;
@@ -460,16 +465,16 @@ public class SwarmSelect{
 
   private String getTextExplanation(SWARMALGORITHM swarmAlgorithm){
     switch(swarmAlgorithm){
-      case ATTACKSUICIDE:
+      case SPECIALSUICIDE:
         return "The suicide algorithm is a dangerous strategy. Your bots leave " + 
                "the mothership and hunt down turrets. You may rack up the \n" + 
                "points but you leave yourself extremely exposed to any potential " + 
                "attackers.";
-      case ATTACK2:
+      case SPECIALGHOST:
         return "";
-      case ATTACK3:
+      case SPECIALSTAR:
         return  "";
-      case ATTACK4:
+      case SPECIALSACRIFICE:
         return "";
       case DEFENDSHELL:
         return "";
@@ -485,9 +490,9 @@ public class SwarmSelect{
                 " of the group\n" + 
                 "When combined with tracking of the mothership, flocks are a powerful way to " + 
                 "defend yourself.";
-      case DEFEND3:
+      case DEFENDINVINCIBLE:
         return "";
-      case DEFEND4:
+      case DEFENDHIBERNATE:
         return "";
       case SCOUTRANDOM:
         return "In war, information is everything. Use this scout algorithm to search the map " + 
@@ -497,9 +502,9 @@ public class SwarmSelect{
       case SCOUTBEE:
         return "Nothing is scarier than a swarm of angry bees! Use this algorithm to scout for " + 
                "turrets and find them before your enemy does.\n";
-      case SCOUT3:
+      case SCOUTANT:
         return "";
-      case SCOUT4:
+      case SCOUTPSO:
         return "";
       default:
         return "";
@@ -527,22 +532,28 @@ public class SwarmSelect{
                                 this.offsetMiniMap);
   }  
 
-  private void updateUIMiniMap(){
+  private void updateUIMiniMap() {
     this.renderMiniMap.update();
-    for(int i = 0; i < CommsGlobal.get("TURRET")
-                                  .getNumberOfReceivers(); i++){
+    for (int i = 0; i < CommsGlobal.get("TURRET")
+            .getNumberOfReceivers(); i++) {
       this.renderUIMiniMapTurret.update(CommsGlobal.get("TURRET")
-                                                   .getPacket(i)
-                                                   .getLocation());
-}
-    for(int i = 0; i < CommsGlobal.get("PLAYERUI_BOT")
-                                  .getNumberOfReceivers(); i++){
-      this.renderUIMiniMapBot.update(CommsGlobal.get("PLAYERUI_BOT")
-                                                .getPacket(i)
-                                                .getLocation());
+              .getPacket(i)
+              .getLocation());
     }
-    this.renderUIMiniMapPlayer1.update(CommsGlobal.get("PLAYERUI")
-                                                  .getPacket(0)
-                                                  .getLocation());
+    for (int i = 0; i < CommsGlobal.get("PLAYERUI_BOT")
+            .getNumberOfReceivers(); i++) {
+      // Render entity if alive
+      if (CommsGlobal.get("PLAYERUI_BOT")
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)) {
+        this.renderUIMiniMapBot.update(CommsGlobal.get("PLAYERUI_BOT")
+                .getPacket(i)
+                .getLocation());
+      }
+      this.renderUIMiniMapPlayer1.update(CommsGlobal.get("PLAYERUI")
+              .getPacket(0)
+              .getLocation());
+    }
   }
 }
