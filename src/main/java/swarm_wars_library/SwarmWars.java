@@ -489,16 +489,17 @@ public class SwarmWars extends PApplet {
 
   public void checkForGameOver() {
     if(playerMe.getHealth() <= 0){
-      System.out.println("Dead....");
+      // player 1 dead
+      SoundMixer.stopThruster();
       map.setGameEnded(true);
     }
     if(playNetworkGame && playerEnemy.getHealth() <= 0){
-      System.out.println("Enemy dead...");
+      // player 2 dead
       map.setGameEnded(true);
     }
 
     if(!playNetworkGame && playerAI.getHealth() <= 0){
-      System.out.println("Enemy dead...");
+      // player 2 dead
       map.setGameEnded(true);
     }
 

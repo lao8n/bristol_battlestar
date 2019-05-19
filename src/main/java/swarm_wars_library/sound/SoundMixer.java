@@ -13,19 +13,13 @@ public class SoundMixer{
   private static SoundFile turretShoot;
   private static SoundFile explosion1; 
   private static SoundFile explosion2; 
-
-  //private PApplet sketch; 
   
   public SoundMixer(PApplet sketch){
-    //this.sketch = sketch;
-
     thruster = new SoundFile(sketch, "resources/sound/rocketThrust.aif");
     player1Shoot = new SoundFile(sketch, "resources/sound/laser_3.aif");
     turretShoot = new SoundFile(sketch, "resources/sound/laser_2.aif");
     explosion1 = new SoundFile(sketch, "resources/sound/deep_laser.aif");
     explosion2 = new SoundFile(sketch, "resources/sound/explosion2.aif");
-
-    // TODO set volume ratio for all sound files
   }
 
   public static void playPlayer1Shoot(){
@@ -35,9 +29,7 @@ public class SoundMixer{
   }
 
   public static void turretShoot(){
-    //if (!turretShoot.isPlaying()){
     turretShoot.play();
-    //}
   }
 
   public static void playThruster(){

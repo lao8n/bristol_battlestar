@@ -437,7 +437,7 @@ public class RenderLayers{
               .getState()
               .equals(STATE.EXPLODE)){
         this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
-                "PLAYER1_BULLET")
+                "PLAYER1_MISSILE")
                         .getPacket(i)
                         .getLocation(),
                 CommsGlobal.get("PLAYER1")
@@ -460,13 +460,13 @@ public class RenderLayers{
                 .getPacket(i)
                 .getState()
                 .equals(STATE.ALIVE)){
-          this.renderPlayer1Missile.update(CommsGlobal.get("PLAYER2_MISSILE")
+          this.renderPlayer2Missile.update(CommsGlobal.get("PLAYER2_MISSILE")
                           .getPacket(i)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1")
+                  CommsGlobal.get("PLAYER2")
                           .getPacket(0)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1_MISSILE")
+                  CommsGlobal.get("PLAYER2_MISSILE")
                           .getPacket(i)
                           .getHeading());
         }
@@ -475,11 +475,11 @@ public class RenderLayers{
                 .getPacket(i)
                 .getState()
                 .equals(STATE.EXPLODE)){
-          this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
-                  "PLAYER2_BULLET")
+          this.renderPlayer2Missile.updateExplosion(CommsGlobal.get(
+                  "PLAYER2_MISSILE")
                           .getPacket(i)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1")
+                  CommsGlobal.get("PLAYER2")
                           .getPacket(0)
                           .getLocation(),
                   7);
