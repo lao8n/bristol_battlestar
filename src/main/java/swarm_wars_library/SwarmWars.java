@@ -27,6 +27,7 @@ import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_select.SwarmSelect;
 import swarm_wars_library.sound.SoundMixer; 
+import swarm_wars_library.game_screens.StartScreen; 
 
 public class SwarmWars extends PApplet {
 
@@ -53,11 +54,12 @@ public class SwarmWars extends PApplet {
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
   UI fsmUI;
+  StartScreen startScreen; 
   PlayBackgroundMusic playBackgroundMusic;
   GameOver gameOver;
 
   // Game screens 
-  GAMESCREEN currentScreen = GAMESCREEN.FSMUI;
+  GAMESCREEN currentScreen = GAMESCREEN.START; //GAMESCREEN.FSMUI;
   int frameNumber;
 
   // sound setup
@@ -68,6 +70,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void settings() {
     this.size(1200, 800, "processing.awt.PGraphicsJava2D");
+
   }
 
   //=========================================================================//
@@ -75,10 +78,8 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
-    // NETWORK - networking setup needs map for Id but map uses randgen before 
-    // seed.....
-    this.map = Map.getInstance();
-    this.networkSetup();
+    this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
+    //this.networkSetup(); moving to button click
     this.uiSetup();
     this.soundSetup();
     this.gameOverSetup();
@@ -93,7 +94,7 @@ public class SwarmWars extends PApplet {
   public void draw() {
     switch(this.currentScreen){
       case START:
-        // TODO: Let the user select mode
+        this.startUpdate();
         break;
       case FSMUI:
         this.uiUpdate();
@@ -276,6 +277,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void uiSetup(){
     this.fsmUI = new UI(this);
+    this.startScreen = new StartScreen(this);
     if (playNetworkGame) networkConnect();
   }
 
@@ -297,8 +299,8 @@ public class SwarmWars extends PApplet {
 
   public void networkConnect() {
     // TODO: Make a UI
-    map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
-    map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
+    //map.setPlayerId(NetworkClientFunctions.getPlayerIdFromUser());
+    //map.setEnemyId(map.getPlayerId() == 1 ? 2 : 1);
     NetworkClientFunctions.cleanBuffer();
 
     // NETWORKING this needs to be integrated with FSM and selection
@@ -448,6 +450,24 @@ public class SwarmWars extends PApplet {
   }
 
   //=========================================================================//
+  // START update                                                            //
+  //=========================================================================//
+  public void startUpdate(){
+    this.startScreen.update();
+    if(this.startScreen.getGameScreen() == GAMESCREEN.FSMUI){
+      if (this.startScreen.is2Player()){
+        this.networkSetup();
+      }
+
+      this.currentScreen = this.startScreen.getGameScreen();
+      //this.startScreen.resetCurrentScreen();
+      this.uiSetup();
+      this.frameNumber = 1;
+      //map.setGameEnded(false);
+    }
+  }
+
+  //=========================================================================//
   // UI update                                                               //
   //=========================================================================//
   public void uiUpdate(){
@@ -526,6 +546,7 @@ public class SwarmWars extends PApplet {
   public void mousePressed() {
     switch(this.currentScreen){
       case START:
+        this.startScreen.listenMousePressed();
         break;
       case FSMUI:
         this.fsmUI.listenMousePressed();
@@ -554,6 +575,7 @@ public class SwarmWars extends PApplet {
   public void mouseReleased() {
     switch(this.currentScreen){
       case START:
+        this.startScreen.listenMouseReleased();
         break;
       case FSMUI:
         this.fsmUI.listenMouseReleased();
