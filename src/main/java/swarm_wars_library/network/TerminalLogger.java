@@ -2,7 +2,7 @@ package swarm_wars_library.network;
 
 public class TerminalLogger {
 
-    private boolean isLogging = false;
+    private boolean isLogging = true;
 
     private static TerminalLogger logger = new TerminalLogger();
 

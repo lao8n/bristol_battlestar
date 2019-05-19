@@ -11,21 +11,21 @@ public class MessageHandlerMulti{
 
     private static TerminalLogger tlogger = TerminalLogger.getInstance();
 
-    private static Queue<Map<String, Object>> serverBuffer =
+    public static Queue<Map<String, Object>> serverBuffer =
             new LinkedList<Map<String, Object>>();
 
     private static Queue<Map<String, Object>> clientSendBuffer = new LinkedList<Map<String, Object>>();
 
-    private static volatile Map<Integer, Queue<Map<String, Object>>> clientReceiveBuffer =
+    public static volatile Map<Integer, Queue<Map<String, Object>>> clientReceiveBuffer =
             new HashMap<Integer, Queue<Map<String, Object>>>();
 
     private static Map<Integer, Map<String, Object>> setupBuffer = new HashMap<Integer, Map<String, Object>>();
 
-    private static volatile Map<Integer, Integer> Frames = new HashMap();
+    public static volatile Map<Integer, Integer> Frames = new HashMap();
 
     public static volatile boolean gameStarted = false;
 
-    private static volatile int readyPlayers = 0;
+    public static volatile int readyPlayers = 0;
 
     public static Map<String, Object> getPackage(int playerNumber, int frame){
         Queue<Map<String, Object>> q = clientReceiveBuffer.get(playerNumber);
@@ -126,6 +126,7 @@ public class MessageHandlerMulti{
                         serverBuffer.offer(m);
                     }
                     pack.put(Headers.RANDOM_SEED, (int) Math.round(Math.random()*Integer.MAX_VALUE));
+                    pack.put(Headers.TURRETS, TurretLocations.getInstance().getStartLocations());
                     serverBuffer.offer(pack);
                     setupBuffer = new HashMap<Integer, Map<String, Object>>();
                     try {
@@ -133,6 +134,18 @@ public class MessageHandlerMulti{
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                }
+                break;
+            case Constants.UPDATE_TURRET:
+                tlogger.log("Case: UPDATE_TURRET");
+                int turretId = (Integer) pack.get(Headers.TURRET_ID);
+                int turretVersion = (Integer) pack.get(Headers.TURRET_VERSION);
+                if (TurretLocations.getInstance().updateTurretLocation(turretId, turretVersion)) {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put(Headers.TYPE, Constants.UPDATE_TURRET);
+                    m.put(Headers.TURRET_VERSION, TurretLocations.getInstance().getTurretVersionWithId(turretId));
+                    m.put(Headers.TURRET_LOCATION, TurretLocations.getInstance().getTurretLocationWithId(turretId));
+                    serverBuffer.offer(m);
                 }
                 break;
             case Constants.CONNECT:
@@ -148,7 +161,6 @@ public class MessageHandlerMulti{
                 serverBuffer.offer(pack);
                 break;
         }
-
     }
 
     public static void sendPackageClient() throws InterruptedException{

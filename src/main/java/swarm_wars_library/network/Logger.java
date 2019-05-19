@@ -14,7 +14,7 @@ public class Logger {
     private String path = "./"+
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-    private boolean isLogging = false;
+    private boolean isLogging = true;
 
     private static Logger logger = new Logger();
 
@@ -41,7 +41,6 @@ public class Logger {
 
     public void log(String msg, String side) throws IOException{
         if (isLogging) {
-            System.out.println(path);
             File Logfile = new File(path + " " + side + ".txt");
             if (!Logfile.exists()) {
                 Logfile.createNewFile();
