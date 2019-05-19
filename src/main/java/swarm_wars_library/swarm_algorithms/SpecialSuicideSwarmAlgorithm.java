@@ -29,7 +29,7 @@ public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
   // Special Suicide Constructor                                             //
   //=========================================================================//
   public SpecialSuicideSwarmAlgorithm(ENTITY tag, int id, Transform transform,
-                                   RigidBody rb) {
+                                      RigidBody rb) {
     super(tag, transform);
     this.id = id;
     this.rb = rb;
@@ -37,9 +37,10 @@ public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
     this.specialSuicideSwarmRules = new SpecialSuicideSwarmRules(this.id,
             this.rb,
             this.transform);
-    if (this.id % 2 == 0) {
-      this.setState(STATE.SUICIDE);
-    }
+    this.setState(STATE.SUICIDE);
+    // if (this.id % 2 == 0) {
+    //   this.setState(STATE.SUICIDE);
+    // }
   }
 
   //=========================================================================//
@@ -51,9 +52,9 @@ public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
     ArrayList<Vector2D> rulesV2D = this.specialSuicideSwarmRules
             .iterateOverSwarm(this.tag);
     this.separateV2D = rulesV2D.get(0);
-    if(this.id % 2 != 0){
-      this.seekMotherShipV2D = this.seekMotherShip();
-    }
+    // if(this.id % 2 != 0){
+    // this.seekMotherShipV2D = this.seekMotherShip();
+    // }
 
     // Apply weights to vectors
     this.separateV2D.mult(this.weightSeparate);
