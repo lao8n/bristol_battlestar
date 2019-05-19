@@ -73,6 +73,8 @@ public class Map {
   private List<Vector2D> backgroundStars;
   private Vector2D player1StartingLocation;
   private Vector2D player2StartingLocation;
+  private ArrayList<Vector2D> turretLocations;
+  private ArrayList<Integer> turretVersions;
 
   private int playerId;
   private int enemyId;
@@ -90,9 +92,16 @@ public class Map {
                                   RandomGen.getRand() * map_height);
       backgroundStars.add(i, v2d);
     }
-
+    this.turretLocations = new ArrayList<Vector2D>();
+    this.initTurretsVersions();
     this.generateStartingPositions();
+  }
 
+  private void initTurretsVersions() {
+    turretVersions = new ArrayList<>();
+    for (int i = 0; i < this.getNumTurrets(); i++) {
+      turretVersions.add(0);
+    }
   }
 
   public void generateStartingPositions() {
@@ -102,6 +111,30 @@ public class Map {
     this.player2StartingLocation =
             new Vector2D(this.map_width * RandomGen.getRand(),
                     this.map_height * RandomGen.getRand());
+  }
+
+  public void storeTurretLocation(int turretId, Vector2D location){
+    if (turretVersions.get(turretId) == 0) {
+      this.turretLocations.add(turretId, location);
+    }else {
+      this.turretLocations.set(turretId, location);
+    }
+  }
+
+  public void storeTurretVersion(int turretId, int turretVersion){
+    if (turretVersion == 0) {
+      this.turretVersions.add(turretId, turretVersion);
+    }else {
+      this.turretVersions.set(turretId, turretVersion);
+    }
+  }
+
+  public ArrayList<Vector2D> getTurretLocations(){
+    return this.turretLocations;
+  }
+
+  public ArrayList<Integer> getTurretVersions(){
+    return this.turretVersions;
   }
 
   //Get the only object available

@@ -22,6 +22,14 @@ public class Headers {
 
     public static final String PLAYER_NUMBER  ="N";
 
+    public static final String TURRETS = "TS";
+
+    public static final String TURRET_ID = "TI";
+
+    public static final String TURRET_VERSION = "TV";
+
+    public static final String TURRET_LOCATION = "TL";
+
     public static final String FRAME = "F";
 
     public static final String PLAYER = "P";

@@ -9,6 +9,9 @@ import swarm_wars_library.swarm_select.TextButton;
 import processing.core.PConstants;
 import java.util.concurrent.*;
 
+import swarm_wars_library.comms.CommsGlobal;
+
+
 public class GameOver {
 
     // Processing
@@ -170,4 +173,5 @@ public class GameOver {
     public void resetCurrentScreen() {
         this.currentScreen = GAMESCREEN.GAMEOVER;
     }
+
 }
