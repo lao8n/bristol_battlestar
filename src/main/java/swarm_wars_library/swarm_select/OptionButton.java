@@ -18,7 +18,10 @@ public class OptionButton {
   private PImage defendFlock;
   private PImage scoutRandom;
   private PImage scoutBee;
-  private PImage attackSuicide;
+  private PImage scoutAnt;
+  private PImage specialSuicide;
+  private PImage specialGhost;
+  private PImage specialStar;
 
   //=========================================================================//
   // Option Button constructor                                               //
@@ -33,7 +36,10 @@ public class OptionButton {
     this.defendFlock = sketch.loadImage("resources/images/defendFlock.png");
     this.scoutRandom = sketch.loadImage("resources/images/scoutRandom.png");
     this.scoutBee = sketch.loadImage("resources/images/scoutBee.png");
-    this.attackSuicide = sketch.loadImage("resources/images/attackSuicide.png");
+    this.specialSuicide = sketch.loadImage("resources/images/attackSuicide.png");
+    this.specialGhost = sketch.loadImage("resources/images/specialGhost.png");
+    this.scoutAnt = sketch.loadImage("resources/images/scoutAnt.png");
+    this.specialStar = sketch.loadImage("resources/images/specialStar.png");
   }
 
   //=========================================================================//
@@ -44,7 +50,7 @@ public class OptionButton {
     int g = 255;
     int b = 255;
     switch(swarmAlgorithm.getFSMState()){
-      case ATTACK:
+      case SPECIAL:
         r = 252;
         g = 74;
         b = 85;
@@ -78,8 +84,18 @@ public class OptionButton {
       case SCOUTBEE:
         x = this.scoutBee;
         break;
-      case ATTACKSUICIDE:
-        x = this.attackSuicide;
+      case SCOUTANT:
+        x = this.scoutAnt;
+        break;
+      case SPECIALSUICIDE:
+        x = this.specialSuicide;
+        break;
+      case SPECIALGHOST:
+        x = this.specialGhost;
+        break;
+      case SPECIALSTAR:
+        x = this.specialStar;
+        break;
       default:
         break;
     }

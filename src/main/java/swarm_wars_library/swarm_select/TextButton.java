@@ -60,7 +60,7 @@ public class TextButton {
     int g = 255;
     int b = 255;
     switch(swarmAlgorithm.getFSMState()){
-      case ATTACK:
+      case SPECIAL:
         r = 252;
         g = 74;
         b = 85;
