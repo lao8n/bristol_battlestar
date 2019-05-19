@@ -25,6 +25,7 @@ public class RenderLayers{
   private RenderPlayer2Missile renderPlayer2Missile;
   private RenderPlayer2Bot renderPlayer2Bot;
   private RenderPlayer2Score renderPlayer2Score;
+  private RenderPlayer2NumM renderPlayer2NumM;
   private RenderPlayer2Health renderPlayer2Health;
   private RenderMiniMap renderMiniMap;
   private RenderMiniMapPlayer1 renderMiniMapPlayer1;
@@ -57,6 +58,7 @@ public class RenderLayers{
     this.renderPlayer2Missile= new RenderPlayer2Missile(sketch);
     this.renderPlayer2Bot = new RenderPlayer2Bot(sketch);
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
+    this.renderPlayer2NumM = new RenderPlayer2NumM(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
     this.renderMiniMap = new RenderMiniMap(sketch, 200, 20);
     this.renderMiniMapPlayer1 = new RenderMiniMapPlayer1(sketch);
@@ -452,10 +454,10 @@ public class RenderLayers{
           this.renderPlayer1Missile.update(CommsGlobal.get("PLAYER2_MISSILE")
                           .getPacket(i)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1")
+                  CommsGlobal.get("PLAYER2")
                           .getPacket(0)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1_MISSILE")
+                  CommsGlobal.get("PLAYER2_MISSILE")
                           .getPacket(i)
                           .getHeading());
         }
@@ -465,10 +467,10 @@ public class RenderLayers{
                 .getState()
                 .equals(STATE.EXPLODE)){
           this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
-                  "PLAYER2_BULLET")
+                  "PLAYER2_MISSILE")
                           .getPacket(i)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1")
+                  CommsGlobal.get("PLAYER2")
                           .getPacket(0)
                           .getLocation(),
                   7);
@@ -487,6 +489,9 @@ public class RenderLayers{
                                              .getScore());
     //Render player1 missile number
     this.renderPlayer1NumM.update(CommsGlobal.get("PLAYER1").getPacket(0).getMissileNum());
+    //Render player2 missile number
+    this.renderPlayer2NumM.update(CommsGlobal.get("PLAYER2").getPacket(0).getMissileNum());
+
     // Render player2 score
     this.renderPlayer2Score.update(CommsGlobal.get("PLAYER2")
                                              .getPacket(0)

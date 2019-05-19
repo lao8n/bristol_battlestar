@@ -18,7 +18,7 @@ public class GameClient {
 
     private static Logger logger = Logger.getInstance();
 
-    // private static String ip = "35.246.75.108";
+    //private static String ip = "35.246.75.108";
 
     private static String ip = "127.0.0.1";
     
