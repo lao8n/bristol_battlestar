@@ -18,7 +18,8 @@ public class CommsGlobal {
 
     // returns LIVE CommsChannel
     public static CommsChannel get(String channelName) {
-        if(!commsMap.containsKey(channelName)) throw new Error("Channel doesn't exist");
+        if(!commsMap.containsKey(channelName)) throw new Error(
+            "Channel " + channelName.toString() + " doesn't exist");
         return commsMap.get(channelName);
     }
 
