@@ -19,6 +19,14 @@ public class OptionButton {
   private PImage scoutRandom;
   private PImage scoutBee;
   private PImage attackSuicide;
+  // V add
+  private PImage attackGhost;
+  private PImage attackStar;
+  private PImage attackSacrifice; 
+  private PImage defendInvincible; 
+  private PImage defendHybernate; 
+  private PImage scoutAnt;
+  private PImage scoutPSO; 
 
   //=========================================================================//
   // Option Button constructor                                               //
@@ -34,6 +42,15 @@ public class OptionButton {
     this.scoutRandom = sketch.loadImage("resources/images/scoutRandom.png");
     this.scoutBee = sketch.loadImage("resources/images/scoutBee.png");
     this.attackSuicide = sketch.loadImage("resources/images/attackSuicide.png");
+    
+    // V added
+    this.attackGhost = sketch.loadImage("resources/images/attackGhost.png");
+    this.attackStar = sketch.loadImage("resources/images/attackStar.png");
+    this.attackSacrifice = sketch.loadImage("resources/images/attackSacrifice.png"); 
+    this.defendInvincible = sketch.loadImage("resources/images/defendInvincible.png"); 
+    this.defendHybernate = sketch.loadImage("resources/images/defendHybernate.png"); 
+    this.scoutAnt = sketch.loadImage("resources/images/scoutAnt.png");
+    this.scoutPSO = sketch.loadImage("resources/images/scoutPSO.png"); 
   }
 
   //=========================================================================//
