@@ -25,12 +25,14 @@ public class RenderLayers{
   private RenderPlayer2Missile renderPlayer2Missile;
   private RenderPlayer2Bot renderPlayer2Bot;
   private RenderPlayer2Score renderPlayer2Score;
+  private RenderPlayer2NumM renderPlayer2NumM;
   private RenderPlayer2Health renderPlayer2Health;
   private RenderMiniMap renderMiniMap;
   private RenderMiniMapPlayer1 renderMiniMapPlayer1;
   private RenderMiniMapPlayer2 renderMiniMapPlayer2;
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
+  private RenderMiniMapBot2 renderMiniMapBot2;
   private int playerId;
   private int enemyId;
   private String playerMe;
@@ -57,12 +59,15 @@ public class RenderLayers{
     this.renderPlayer2Missile= new RenderPlayer2Missile(sketch);
     this.renderPlayer2Bot = new RenderPlayer2Bot(sketch);
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
+    this.renderPlayer2NumM= new RenderPlayer2NumM(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
     this.renderMiniMap = new RenderMiniMap(sketch, 200, 20);
     this.renderMiniMapPlayer1 = new RenderMiniMapPlayer1(sketch);
     this.renderMiniMapPlayer2 = new RenderMiniMapPlayer2(sketch);
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
+    this.renderMiniMapBot2 = new RenderMiniMapBot2(sketch);
+
 
     playerId = map.getPlayerId();
     enemyId = map.getEnemyId();
@@ -110,13 +115,13 @@ public class RenderLayers{
     this.renderPlayer1Bots();
     this.renderPlayer2Bots();
     this.renderTurrets();
-    this.renderPlayer1();
-    this.renderPlayer2();
     this.renderTurretBullets();
     this.renderPlayer1Bullets();
     this.renderPlayer1Missiles();
     this.renderPlayer2Bullets();
     this.renderPlayer2Missiles();
+    this.renderPlayer1();
+    this.renderPlayer2();
   }
 
   //=========================================================================//
@@ -341,7 +346,10 @@ public class RenderLayers{
                                                     .getLocation(),
                                           CommsGlobal.get(playerMe)
                                                     .getPacket(0)
-                                                    .getLocation());
+                                                    .getLocation(),
+                                          CommsGlobal.get("PLAYER1_BULLET")
+                                                    .getPacket(i)
+                                                    .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER1_BULLET")
@@ -376,7 +384,10 @@ public class RenderLayers{
                                                   .getLocation(),
                                         CommsGlobal.get(playerMe)
                                                   .getPacket(0)
-                                                  .getLocation());
+                                                  .getLocation(),
+                                        CommsGlobal.get("PLAYER2_BULLET")
+                                                  .getPacket(i)
+                                                  .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER2_BULLET")
@@ -426,7 +437,7 @@ public class RenderLayers{
               .getState()
               .equals(STATE.EXPLODE)){
         this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
-                "PLAYER1_BULLET")
+                "PLAYER1_MISSILE")
                         .getPacket(i)
                         .getLocation(),
                 CommsGlobal.get("PLAYER1")
@@ -449,13 +460,13 @@ public class RenderLayers{
                 .getPacket(i)
                 .getState()
                 .equals(STATE.ALIVE)){
-          this.renderPlayer1Missile.update(CommsGlobal.get("PLAYER2_MISSILE")
+          this.renderPlayer2Missile.update(CommsGlobal.get("PLAYER2_MISSILE")
                           .getPacket(i)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1")
+                  CommsGlobal.get("PLAYER2")
                           .getPacket(0)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1_MISSILE")
+                  CommsGlobal.get("PLAYER2_MISSILE")
                           .getPacket(i)
                           .getHeading());
         }
@@ -464,11 +475,11 @@ public class RenderLayers{
                 .getPacket(i)
                 .getState()
                 .equals(STATE.EXPLODE)){
-          this.renderPlayer1Missile.updateExplosion(CommsGlobal.get(
-                  "PLAYER2_BULLET")
+          this.renderPlayer2Missile.updateExplosion(CommsGlobal.get(
+                  "PLAYER2_MISSILE")
                           .getPacket(i)
                           .getLocation(),
-                  CommsGlobal.get("PLAYER1")
+                  CommsGlobal.get("PLAYER2")
                           .getPacket(0)
                           .getLocation(),
                   7);
@@ -491,6 +502,9 @@ public class RenderLayers{
     this.renderPlayer2Score.update(CommsGlobal.get("PLAYER2")
                                              .getPacket(0)
                                              .getScore());
+                                            
+    this.renderPlayer2NumM.update(CommsGlobal.get("PLAYER2").getPacket(0).getMissileNum());
+
     // Render player1 health bar
     this.renderPlayer1Health.update(CommsGlobal.get("PLAYER1")
                                               .getPacket(0)
@@ -513,7 +527,23 @@ public class RenderLayers{
     boolean turretFlag = false;
     boolean player2Flag = false;
 
-    // Render Bots
+
+    // Render Player 2 Bots
+    for (int i = 0; i < CommsGlobal.get(playerEnemyBot)
+                                   .getNumberOfReceivers(); i++){
+      // Render entity if alive
+      if(CommsGlobal.get(playerEnemyBot)
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.ALIVE)){ 
+        //this.setMiniMapBotColor(2);
+        this.renderMiniMapBot2.update(CommsGlobal.get(playerEnemyBot)
+                                                .getPacket(i)
+                                                .getLocation());
+      }
+    }
+
+    // Render Player 1 Bots
     for (int i = 0; i < CommsGlobal.get(playerMeBot)
                                    .getNumberOfReceivers(); i++){
       // Render entity if alive
@@ -570,16 +600,18 @@ public class RenderLayers{
 
   private void setMiniMapBotColor(int id) {
     if(id == 1) {
-      this.sketch.fill(21, 0, 255, 60);
+      this.sketch.fill(0, 101, 255);
+    } else {
+      this.sketch.fill(255, 22, 65);
     }
-    this.sketch.fill(255, 225, 32, 60);
   }
 
   private void setMiniMapPlayerColor(int id) {
     if(id == 1) {
-      this.sketch.fill(70, 102, 255);
+      this.sketch.fill(0, 150, 255);
+    } else {
+      this.sketch.fill(255, 22, 65);
     }
-    this.sketch.fill(255, 225, 32);
   }
 
 }

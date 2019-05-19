@@ -8,7 +8,6 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import java.util.concurrent.*;
-import java.util.ArrayList;
 
 public class RenderPlayer1 extends AbstractRenderMapObject{
 
@@ -20,7 +19,6 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
   private int shipThrustStrength = 250; 
 
   // for tracking ship trail
-  private ArrayList<Vector2D> shipLocList = new ArrayList<Vector2D>();
   int shipLocListIndex = 0;
   int maxShipLocCount = 20; 
   int maxRenderCount = 10; 
@@ -85,30 +83,7 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
       SoundMixer.stopThruster();
     } 
 
-    // TODO  turn off thruster sound if player dies
-    //if(!CommsGlobal.get("PLAYER1").getPacket(0).getState().equals(STATE.ALIVE)){
-    //  SoundMixer.stopThruster();
-    //}
-
-    //currentSprite = 2;  FOR ANIMATED SHIP
-    /* WEIRD ROTATION on LEFT / RIGHT - changing perspective of ship not reflected in drawing?
-    // set correct sprite box for ship movement
-    if (moveLeft && !moveRight) {
-      currentSprite--;
-    } else if (moveRight && !moveLeft) {
-      currentSprite++;
-    } else {
-      currentSprite = 2; // basic ship
-    }
-    if (currentSprite < 0) {
-      currentSprite = 0;
-    } else if (currentSprite > spriteX){
-      currentSprite = spriteX;
-    }*/
-
     // get direction of heading to rotate sprite
-    //Vector2D mouse = new Vector2D(this.sketch.mouseX, this.sketch.mouseY);
-    //float rotationToApply = (float) mouse.heading();
     float rotationToApply  = (float) angle;
 
     // Draw sprite : rotate screen (pop/push matrix)

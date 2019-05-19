@@ -16,7 +16,7 @@ public class RenderUIMiniMapPlayer1 extends AbstractRenderMiniMapObject{
   @Override 
   public void renderMiniMapObject(){
     this.sketch.noStroke();
-    this.sketch.fill(70, 102, 255);
+    this.sketch.fill(0, 101, 255);
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset

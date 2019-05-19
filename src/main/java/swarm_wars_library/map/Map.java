@@ -58,7 +58,8 @@ public class Map {
   private int numTurrets = 3;
 
   // Shooters
-  private int shooterTimer = 1;
+  private int shooterBulletTimer = 2;
+  private int shooterMisiileTimer=10;
   private int numBulletsPerMagazine = 20;
   private int turretBulletForce = 15;
   private int playerNBulletForce = 25;
@@ -185,8 +186,12 @@ public class Map {
     return turretBulletForce;
   }
 
-  public int getShooterTimer() {
-    return shooterTimer;
+  public int getBulletTimer() {
+    return shooterBulletTimer;
+  }
+
+  public int getMissileTimer() {
+    return shooterMisiileTimer;
   }
 
   public int getPlayerNBulletForce() {

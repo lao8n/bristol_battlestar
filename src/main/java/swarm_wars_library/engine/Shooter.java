@@ -21,7 +21,8 @@ public class Shooter{
   int numBullets = Map.getInstance().getNumBulletsPerMagazine();
   int numMissile = Map.getInstance().getNumMissilesPerMagazine();
   int shooterCount = 0;
-  int shooterTimer = Map.getInstance().getShooterTimer();
+  int BulletTimer = Map.getInstance().getBulletTimer();
+  int MissileTimer=Map.getInstance().getMissileTimer();
   boolean havemissile=false;
   int missileNum = 0;
 
@@ -80,7 +81,7 @@ public class Shooter{
   // Shooter method                                                          //
   //=========================================================================//
   public void shoot(Vector2D location, double heading){
-    if(this.shooterCount++ % this.shooterTimer == 0){
+    if(this.shooterCount++ % this.BulletTimer == 0){
 
       this.magazine.get(this.magCount).shootBullet(location, heading);
       this.magCount++;
@@ -91,7 +92,7 @@ public class Shooter{
   }
 
   public void shootM(Vector2D location, double heading){
-    if(this.shooterCount++ % this.shooterTimer == 0){
+    if(this.shooterCount++ % this.MissileTimer == 0){
       if(this.missileNum>0){
         this.magazine1.get(this.magCount1).shootMissile(location, heading);
         this.magCount1++;

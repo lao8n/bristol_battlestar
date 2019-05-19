@@ -6,7 +6,7 @@ import swarm_wars_library.physics.Vector2D;
 
 public class Bullet extends AbstractEntity{
 
-  int bulletForce;
+  int bulletForce; 
 
   //=========================================================================//
   // Constructor                                                             //
@@ -59,6 +59,7 @@ public class Bullet extends AbstractEntity{
     this.commsPacket.setState(this.getState());
     this.commsPacket.setLocation(this.getLocation());
     this.commsPacket.setVelocity(this.getVelocity());
+    this.commsPacket.setHeading(this.getHeading());
   }
 
   //=========================================================================//
