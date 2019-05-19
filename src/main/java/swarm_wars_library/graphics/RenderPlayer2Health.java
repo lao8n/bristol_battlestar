@@ -25,7 +25,7 @@ public class RenderPlayer2Health{
       30);
     //draw health
     this.sketch.stroke(25, 25, 76);
-    this.sketch.fill(255, 225, 32);
+    this.sketch.fill(255, 22, 65);
     this.sketch.rect(
       sketch.width - this.healthBarLength - this.healthBarOffset, 
       this.healthBarLower,

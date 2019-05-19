@@ -14,7 +14,7 @@ public class RenderPlayer2Score{
   }
 
   public void update(int score){
-    this.sketch.fill(255, 235, 32);
+    this.sketch.fill(255, 22, 65);
     this.sketch.textSize(30);
     this.sketch.textAlign(LEFT, TOP);
     this.sketch.text("SCORE: " + score, 5, 55);

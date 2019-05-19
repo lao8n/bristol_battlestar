@@ -71,8 +71,8 @@ public class RenderPlayer1Missile extends AbstractRenderMapObject {
     this.sketch.tint(255, 255);
     this.sketch.image(sprites[currentSprite],
             0, 0,
-             30,
-             90);
+             60,
+             180);
     this.sketch.popMatrix();}
 
     @Override
