@@ -74,11 +74,11 @@ public class SwarmLogic {
                 new SpecialGhostSwarmAlgorithm (this.tag, this.id, this.transform,
                         this.rb);
         break;
-      case SPECIALSTAR:
-      this.swarm_algo =
-              new SpecialSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
-                      this.rb);
-      break;
+      // case SPECIALSTAR:
+      //   this.swarm_algo =
+      //         new SpecialSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
+      //                 this.rb);
+      //   break;
       default:
         break;
     }

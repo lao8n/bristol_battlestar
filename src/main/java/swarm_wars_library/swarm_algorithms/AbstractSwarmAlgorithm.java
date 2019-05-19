@@ -38,7 +38,7 @@ public abstract class AbstractSwarmAlgorithm{
   protected Transform transform;
   protected Map map;
   protected ENTITY tag;
-  protected STATE state;
+  protected STATE state = STATE.ALIVE;
 
   public AbstractSwarmAlgorithm(ENTITY tag, Transform transform){
     this.transform = transform;
