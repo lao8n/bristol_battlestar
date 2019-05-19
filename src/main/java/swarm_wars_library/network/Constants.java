@@ -10,8 +10,6 @@ public class Constants {
 
     public static int ClientSleep = 1;
 
-    public static final String TYPE = "type";
-
     public static final int FROM_STATE = 0;
 
     public static final int TO_STATE = 1;
@@ -31,4 +29,6 @@ public class Constants {
     public static final int CONNECT = 3;
 
     public static final int END = 4;
+
+    public static final int UPDATE_TURRET = 5;
 }

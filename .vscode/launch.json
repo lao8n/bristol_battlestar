@@ -4,7 +4,13 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Client",
+      "request": "launch",
+      "mainClass": "swarm_wars_library.network_new.Client",
+      "projectName": "battlestar"
+    },
     {
       "type": "java",
       "name": "Debug (Launch) - Current File",

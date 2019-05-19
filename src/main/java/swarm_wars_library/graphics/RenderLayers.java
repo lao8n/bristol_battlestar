@@ -59,7 +59,7 @@ public class RenderLayers{
     this.renderPlayer2Missile= new RenderPlayer2Missile(sketch);
     this.renderPlayer2Bot = new RenderPlayer2Bot(sketch);
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
-    this.renderPlayer2NumM= new RenderPlayer2NumM(sketch);
+    this.renderPlayer2NumM = new RenderPlayer2NumM(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
     this.renderMiniMap = new RenderMiniMap(sketch, 200, 20);
     this.renderMiniMapPlayer1 = new RenderMiniMapPlayer1(sketch);
@@ -498,6 +498,9 @@ public class RenderLayers{
                                              .getScore());
     //Render player1 missile number
     this.renderPlayer1NumM.update(CommsGlobal.get("PLAYER1").getPacket(0).getMissileNum());
+    //Render player2 missile number
+    this.renderPlayer2NumM.update(CommsGlobal.get("PLAYER2").getPacket(0).getMissileNum());
+
     // Render player2 score
     this.renderPlayer2Score.update(CommsGlobal.get("PLAYER2")
                                              .getPacket(0)
