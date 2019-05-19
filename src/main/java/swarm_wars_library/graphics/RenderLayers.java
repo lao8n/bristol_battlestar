@@ -32,6 +32,7 @@ public class RenderLayers{
   private RenderMiniMapPlayer2 renderMiniMapPlayer2;
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
+  private RenderMiniMapBot2 renderMiniMapBot2;
   private int playerId;
   private int enemyId;
   private String playerMe;
@@ -65,6 +66,8 @@ public class RenderLayers{
     this.renderMiniMapPlayer2 = new RenderMiniMapPlayer2(sketch);
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
+    this.renderMiniMapBot2 = new RenderMiniMapBot2(sketch);
+
 
     playerId = map.getPlayerId();
     enemyId = map.getEnemyId();
@@ -524,7 +527,23 @@ public class RenderLayers{
     boolean turretFlag = false;
     boolean player2Flag = false;
 
-    // Render Bots
+
+    // Render Player 2 Bots
+    for (int i = 0; i < CommsGlobal.get(playerEnemyBot)
+                                   .getNumberOfReceivers(); i++){
+      // Render entity if alive
+      if(CommsGlobal.get(playerEnemyBot)
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.ALIVE)){ 
+        //this.setMiniMapBotColor(2);
+        this.renderMiniMapBot2.update(CommsGlobal.get(playerEnemyBot)
+                                                .getPacket(i)
+                                                .getLocation());
+      }
+    }
+
+    // Render Player 1 Bots
     for (int i = 0; i < CommsGlobal.get(playerMeBot)
                                    .getNumberOfReceivers(); i++){
       // Render entity if alive
@@ -581,16 +600,18 @@ public class RenderLayers{
 
   private void setMiniMapBotColor(int id) {
     if(id == 1) {
-      this.sketch.fill(21, 0, 255, 60);
+      this.sketch.fill(0, 101, 255);
+    } else {
+      this.sketch.fill(255, 22, 65);
     }
-    this.sketch.fill(255, 225, 32, 60);
   }
 
   private void setMiniMapPlayerColor(int id) {
     if(id == 1) {
-      this.sketch.fill(70, 102, 255);
+      this.sketch.fill(0, 150, 255);
+    } else {
+      this.sketch.fill(255, 22, 65);
     }
-    this.sketch.fill(255, 225, 32);
   }
 
 }

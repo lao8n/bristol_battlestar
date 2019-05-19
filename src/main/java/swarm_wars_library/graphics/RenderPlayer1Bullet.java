@@ -45,7 +45,6 @@ public class RenderPlayer1Bullet extends AbstractRenderMapObject{
 
   public void update(Vector2D objectMapLocation,
                      Vector2D viewCentreMapLocation,double heading){
-    System.out.println("player 1 bullet updated");
     this.objectMapLocation = objectMapLocation;
 
     this.setObjectRenderLocation(objectMapLocation, viewCentreMapLocation);
@@ -55,8 +54,6 @@ public class RenderPlayer1Bullet extends AbstractRenderMapObject{
             this.objectRenderLocation.getY() <= this.sketch.height){
       this.heading=heading;
       this.renderMapObject();
-
-      System.out.println("player 1 bullet heading: " + heading);
     }
   }
 
