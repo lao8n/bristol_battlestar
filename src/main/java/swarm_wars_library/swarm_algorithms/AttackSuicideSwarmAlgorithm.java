@@ -31,7 +31,7 @@ public class AttackSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
   // DefendFlock Constructor                                                 //
   //=========================================================================//
   public AttackSuicideSwarmAlgorithm(ENTITY tag, int id, Transform transform,
-                                   RigidBody rb){
+                                   RigidBody rb) {
     super(tag, transform);
     this.id = id;
     this.rb = rb;
@@ -39,6 +39,9 @@ public class AttackSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
     this.attackSuicideSwarmRules = new AttackSuicideSwarmRules(this.id,
             this.rb,
             this.transform);
+    if (this.id % 2 == 0) {
+      super.setState(STATE.SUICIDE);
+    }
   }
 
   //=========================================================================//
@@ -52,9 +55,6 @@ public class AttackSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
     this.separateV2D = rulesV2D.get(0);
     if(this.id % 2 != 0){
       this.seekMotherShipV2D = this.seekMotherShip();
-    }
-    else {
-      super.setState(STATE.SUICIDE);
     }
 
     // Apply weights to vectors

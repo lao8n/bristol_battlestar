@@ -73,8 +73,7 @@ public class SwarmAlgorithmPreview {
 
   public static boolean hasCollision(AbstractEntity dealDamage,
                                      AbstractEntity takeDamage){
-    if (dealDamage instanceof BotUI && dealDamage.isState(STATE.ALIVE)) {
-      System.out.println("is bot");
+    if (dealDamage instanceof Bot && dealDamage.isState(STATE.ALIVE)) {
       return false;
     }
     else if((dealDamage.isState(STATE.ALIVE) || dealDamage.isState(STATE.SUICIDE)) &&

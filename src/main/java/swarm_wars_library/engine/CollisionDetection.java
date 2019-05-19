@@ -29,7 +29,7 @@ public class CollisionDetection {
 
 	public static boolean hasCollision(AbstractEntity dealDamage,
 		AbstractEntity takeDamage){
-		if (dealDamage instanceof Bot && dealDamage.getState(STATE.ALIVE)) {
+		if (dealDamage instanceof Bot && dealDamage.isState(STATE.ALIVE)) {
 			return false;
 		}
 		else if((dealDamage.isState(STATE.ALIVE) || dealDamage.isState(STATE.SUICIDE)) &&
