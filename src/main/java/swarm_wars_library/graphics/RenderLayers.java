@@ -110,13 +110,13 @@ public class RenderLayers{
     this.renderPlayer1Bots();
     this.renderPlayer2Bots();
     this.renderTurrets();
-    this.renderPlayer1();
-    this.renderPlayer2();
     this.renderTurretBullets();
     this.renderPlayer1Bullets();
     this.renderPlayer1Missiles();
     this.renderPlayer2Bullets();
     this.renderPlayer2Missiles();
+    this.renderPlayer1();
+    this.renderPlayer2();
   }
 
   //=========================================================================//
@@ -341,7 +341,10 @@ public class RenderLayers{
                                                     .getLocation(),
                                           CommsGlobal.get(playerMe)
                                                     .getPacket(0)
-                                                    .getLocation());
+                                                    .getLocation(),
+                                          CommsGlobal.get("PLAYER1_BULLET")
+                                                    .getPacket(i)
+                                                    .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER1_BULLET")
@@ -376,7 +379,10 @@ public class RenderLayers{
                                                   .getLocation(),
                                         CommsGlobal.get(playerMe)
                                                   .getPacket(0)
-                                                  .getLocation());
+                                                  .getLocation(),
+                                        CommsGlobal.get("PLAYER2_BULLET")
+                                                  .getPacket(i)
+                                                  .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER2_BULLET")
