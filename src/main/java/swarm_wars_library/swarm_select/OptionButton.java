@@ -35,7 +35,7 @@ public class OptionButton {
     this.sketch = sketch;
     this.topLeftLocation = topLeftLocation;
     this.dimensions = dimensions;
-    this.defaultImage = sketch.loadImage("resources/images/defaultImage.png");
+    this.defaultImage = sketch.loadImage("resources/images/default.png");
 
     this.specialSuicide = sketch.loadImage("resources/images/specialSuicide.png");
     this.specialGhost = sketch.loadImage("resources/images/specialGhost.png");
