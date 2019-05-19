@@ -78,8 +78,9 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
-    this.map = Map.getInstance(); // NETWORK - networking setup needs map for Id but map uses randgen before seed.....
-    //this.networkSetup(); moving to button click
+    // NETWORK - networking setup needs map for Id but map uses randgen
+    // before seed.....
+    this.map = Map.getInstance(); 
     this.uiSetup();
     this.soundSetup();
     this.gameOverSetup();
@@ -318,7 +319,8 @@ public class SwarmWars extends PApplet {
   public void networkingGetEnemySetup() {
     if (!playNetworkGame) return;
     java.util.Map<String, Object> setup = null;
-    while((setup = NetworkClientFunctions.getPackage(map.getEnemyId(), 0)) == null) {
+    while((setup = NetworkClientFunctions.getPackage(map.getEnemyId(), 0)) 
+      == null) {
       try{
         Thread.sleep(1000/60);
       }catch (InterruptedException e) {
@@ -357,21 +359,32 @@ public class SwarmWars extends PApplet {
 
   public void networkingGetEnemyInputs() {
     if(!playNetworkGame) return;
-    java.util.Map<String, Object> messageIn = NetworkClientFunctions.getPackage(map.getEnemyId(), frameNumber);
+    java.util.Map<String, Object> messageIn = 
+      NetworkClientFunctions.getPackage(map.getEnemyId(), frameNumber);
 
     if(messageIn == null && map.gameEnded()){
       return;
     }
 
-    if(messageIn.containsKey(Headers.W)) playerEnemy.setInputUp((Integer) messageIn.get(Headers.W));
-    if(messageIn.containsKey(Headers.S)) playerEnemy.setInputDown((Integer) messageIn.get(Headers.S));
-    if(messageIn.containsKey(Headers.A)) playerEnemy.setInputLeft((Integer) messageIn.get(Headers.A));
-    if(messageIn.containsKey(Headers.D)) playerEnemy.setInputRight((Integer) messageIn.get(Headers.D));
+    if(messageIn.containsKey(Headers.W)) 
+      playerEnemy.setInputUp((Integer) messageIn.get(Headers.W));
+    if(messageIn.containsKey(Headers.S)) 
+      playerEnemy.setInputDown((Integer) messageIn.get(Headers.S));
+    if(messageIn.containsKey(Headers.A)) 
+      playerEnemy.setInputLeft((Integer) messageIn.get(Headers.A));
+    if(messageIn.containsKey(Headers.D)) 
+      playerEnemy.setInputRight((Integer) messageIn.get(Headers.D));
 
-    if(messageIn.containsKey(Headers.MOUSE_X)) playerEnemy.setInputMouseX((Integer) messageIn.get(Headers.MOUSE_X));
-    if(messageIn.containsKey(Headers.MOUSE_Y)) playerEnemy.setInputMouseY((Integer) messageIn.get(Headers.MOUSE_Y));
-    if(messageIn.containsKey(Headers.MOUSE_LEFT)) playerEnemy.setInputMouseLeft((Integer) messageIn.get(Headers.MOUSE_LEFT));
-    if(messageIn.containsKey(Headers.MOUSE_RIGHT)) playerEnemy.setInputMouseRight((Integer) messageIn.get(Headers.MOUSE_RIGHT));
+    if(messageIn.containsKey(Headers.MOUSE_X)) 
+      playerEnemy.setInputMouseX((Integer) messageIn.get(Headers.MOUSE_X));
+    if(messageIn.containsKey(Headers.MOUSE_Y)) 
+      playerEnemy.setInputMouseY((Integer) messageIn.get(Headers.MOUSE_Y));
+    if(messageIn.containsKey(Headers.MOUSE_LEFT)) 
+      playerEnemy.setInputMouseLeft((Integer) 
+      messageIn.get(Headers.MOUSE_LEFT));
+    if(messageIn.containsKey(Headers.MOUSE_RIGHT)) 
+      playerEnemy.setInputMouseRight((Integer) 
+      messageIn.get(Headers.MOUSE_RIGHT));
   }
 
   //=========================================================================//
