@@ -2,17 +2,17 @@ package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 
-import swarm_wars_library.map.Map; 
+import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 
-public class RenderMiniMapBot extends AbstractRenderMiniMapObject{
+public class RenderMiniMapBot2 extends AbstractRenderMiniMapObject{
 
   private int scale = 1;
   protected int botMapLineOfSight = 200;
   protected int botRenderLineOfSight = (int) this.botMapLineOfSight 
     * (int) this.miniMapDim / Map.getInstance().getMapWidth();
 
-  public RenderMiniMapBot(PApplet sketch){
+  public RenderMiniMapBot2(PApplet sketch){
     super(sketch);
   }
 
@@ -20,7 +20,7 @@ public class RenderMiniMapBot extends AbstractRenderMiniMapObject{
   public void renderMiniMapObject(){
 
     this.sketch.noStroke();
-    this.sketch.fill(21, 0, 255, 60); 
+    this.sketch.fill(255, 22, 65, 60);
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset
@@ -29,7 +29,7 @@ public class RenderMiniMapBot extends AbstractRenderMiniMapObject{
         + (float) this.objectRenderLocation.getY(),
       (float) this.scale + this.botRenderLineOfSight / 10, 
       (float) this.scale + this.botRenderLineOfSight / 10);  
-    this.sketch.fill(70, 102, 255);
+      this.sketch.fill(255, 22, 65);
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset

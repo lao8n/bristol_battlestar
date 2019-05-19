@@ -5,22 +5,14 @@ import processing.core.PImage;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 import swarm_wars_library.physics.Vector2D;
-
-import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RenderPlayer1Missile extends AbstractRenderMapObject {
 
-
   private float scale;
   // sprite information
-  //private PImage shipSprite = this.sketch.loadImage("resources/images/shipSprite.png");
-  private PImage shipSprite = this.sketch.loadImage("resources/images/missile.png");
+  private PImage missileSprite = this.sketch.loadImage("resources/images/missileSprite.png");
   private double heading=0;
-
-  // for tracking ship trail
-  private ArrayList<Vector2D> shipLocList = new ArrayList<Vector2D>();
-  int maxRenderCount = 10;
 
   // animated sprite infor
   private PImage[] sprites;
@@ -38,18 +30,17 @@ public class RenderPlayer1Missile extends AbstractRenderMapObject {
 
     // animated sprite setp
     sprites = new PImage[totalSprites];
-    spriteW = shipSprite.width / spriteX;
-    spriteH = shipSprite.height / spriteY;
+    spriteW = missileSprite.width / spriteX;
+    spriteH = missileSprite.height / spriteY;
     currentSprite = ThreadLocalRandom.current().nextInt(0, totalSprites);
     index = 0;
     for (int x = 0; x < spriteX; x++) {
       for (int y = 0; y < spriteY; y++) {
-        sprites[index] = shipSprite.get(x * spriteW, y * spriteH, spriteW, spriteH);
+        sprites[index] = missileSprite.get(x * spriteW, y * spriteH, spriteW, spriteH);
         index++;
       }
     }
   }
-
 
   public void update(Vector2D objectMapLocation,
                      Vector2D viewCentreMapLocation,double heading){
@@ -62,7 +53,6 @@ public class RenderPlayer1Missile extends AbstractRenderMapObject {
             this.objectRenderLocation.getY() <= this.sketch.height){
       this.heading=heading;
       this.renderMapObject();
-
     }
   }
 
@@ -70,20 +60,19 @@ public class RenderPlayer1Missile extends AbstractRenderMapObject {
    public void renderMapObject() {
     // image setup
     this.sketch.noStroke();
-    this.sketch.imageMode(0); //need to figure out what codes for CENTER
+    this.sketch.imageMode(0); 
 
     this.sketch.pushMatrix();
     this.sketch.translate((float) this.objectRenderLocation.getX(), (float) this.objectRenderLocation.getY());
     this.sketch.rotate((float)(this.heading+Math.PI / 2));
     this.sketch.imageMode(PConstants.CENTER);
 
-
-    // Draw ship
+    // Draw missile
     this.sketch.tint(255, 255);
-    this.sketch.image(shipSprite,
+    this.sketch.image(sprites[currentSprite],
             0, 0,
-             30,
-             90);
+             60,
+             180);
     this.sketch.popMatrix();}
 
     @Override
