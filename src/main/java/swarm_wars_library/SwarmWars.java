@@ -241,7 +241,7 @@ public class SwarmWars extends PApplet {
     // turrets setup
     for(int i = 0; i < this.map.getNumTurrets(); i++){
       Turret turret = new Turret(ENTITY.TURRET, i);
-      turret.setLocation(0, this.map.getTurretStartingLocation().get(i));
+      turret.setLocation(0, this.map.getTurretLocations().get(i));
       this.gameObjectsTakeDamage.add(turret);
       this.gameObjectsDealDamage.addAll(turret.getBullets());
     }

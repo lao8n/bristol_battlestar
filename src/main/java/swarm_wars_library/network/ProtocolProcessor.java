@@ -72,9 +72,10 @@ public class ProtocolProcessor {
             OtherFSMBuilder otherFSMBuilder = new OtherFSMBuilder();
             otherFSMBuilder.setOtherFSM(m);
             List<Double> locations = (ArrayList) m.get(Headers.TURRETS);
+            System.out.println("Initial locations: " + locations);
             for(int i = 0; i < this.map.getNumTurrets(); i++){
                 this.map.storeTurretLocation(i, 
-                                             new Vector2D(2*i, 2*i+1));
+                                             new Vector2D(locations.get(2*i), locations.get(2*i+1)));
             }
             return true;
         }

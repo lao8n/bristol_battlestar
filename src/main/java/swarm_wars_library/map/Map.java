@@ -92,8 +92,15 @@ public class Map {
       backgroundStars.add(i, v2d);
     }
     this.turretLocations = new ArrayList<Vector2D>();
+    this.initTurretsVersions();
     this.generateStartingPositions();
+  }
 
+  private void initTurretsVersions() {
+    turretVersions = new ArrayList<>();
+    for (int i = 0; i < this.getNumTurrets(); i++) {
+      turretVersions.add(0);
+    }
   }
 
   public void generateStartingPositions() {
@@ -106,11 +113,19 @@ public class Map {
   }
 
   public void storeTurretLocation(int turretId, Vector2D location){
-    this.turretLocations.add(turretId, location);
+    if (turretVersions.get(turretId) == 0) {
+      this.turretLocations.add(turretId, location);
+    }else {
+      this.turretLocations.set(turretId, location);
+    }
   }
 
   public void storeTurretVersion(int turretId, int turretVersion){
-    this.turretVersions.add(turretId, turretVersion);
+    if (turretVersion == 0) {
+      this.turretVersions.add(turretId, turretVersion);
+    }else {
+      this.turretVersions.set(turretId, turretVersion);
+    }
   }
 
   public ArrayList<Vector2D> getTurretLocations(){
