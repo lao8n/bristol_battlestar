@@ -1,5 +1,5 @@
 package swarm_wars_library.fsm;
 
 public enum FSMSTATE {
-  DEFEND, ATTACK, SCOUT;
+  DEFEND, SPECIAL, SCOUT;
 }

@@ -7,18 +7,18 @@ import swarm_wars_library.fsm.FSMSTATE;
 import java.util.HashMap;
 
 public enum SWARMALGORITHM {
-  ATTACKSUICIDE(0),
-  ATTACK2(1), 
-  ATTACK3(2), 
-  ATTACK4(3), 
+  SPECIALSUICIDE(0),
+  SPECIALGHOST(1),
+  SPECIALSTAR(2),
+  SPECIALSACRIFICE(3), 
   DEFENDSHELL(4), 
   DEFENDFLOCK(5), 
-  DEFEND3(6), 
-  DEFEND4(7), 
+  DEFENDINVINCIBLE(6), 
+  DEFENDHIBERNATE(7), 
   SCOUTRANDOM(8), 
   SCOUTBEE(9), 
-  SCOUT3(10), 
-  SCOUT4(11);
+  SCOUTANT(10),
+  SCOUTPSO(11);
 
   private int value;
   private static Map<Integer, SWARMALGORITHM> map = new HashMap<>();
@@ -43,7 +43,7 @@ public enum SWARMALGORITHM {
 
   public FSMSTATE getFSMState(){
     if(this.value <= 3){
-        return FSMSTATE.ATTACK;
+        return FSMSTATE.SPECIAL;
     }
     else if (this.value <= 7){
         return FSMSTATE.DEFEND;

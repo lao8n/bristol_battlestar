@@ -4,6 +4,7 @@ import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.physics.Transform;
+import swarm_wars_library.entities.STATE;
 
 /**
  * SwarmAlgorithm Class holds information about the game map and the Transform
@@ -37,6 +38,7 @@ public abstract class AbstractSwarmAlgorithm{
   protected Transform transform;
   protected Map map;
   protected ENTITY tag;
+  protected STATE state;
 
   public AbstractSwarmAlgorithm(ENTITY tag, Transform transform){
     this.transform = transform;
@@ -46,6 +48,9 @@ public abstract class AbstractSwarmAlgorithm{
 
   public abstract void applySwarmAlgorithm();
   protected abstract Vector2D seekMotherShip();
+
+  public STATE getstate() { return this.state; }
+  public void setState(STATE state) { this.state = state; }
 
   protected void avoidEdge(double scale){
     if(transform.getLocation().getX() < 0){

@@ -3,6 +3,7 @@ package swarm_wars_library.swarm_algorithms;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsPacket;
 import swarm_wars_library.entities.ENTITY;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.entities.Tag;
 import swarm_wars_library.physics.Transform;
 import swarm_wars_library.physics.RigidBody;
@@ -10,7 +11,7 @@ import swarm_wars_library.physics.Vector2D;
 
 import java.util.ArrayList;
 
-public class AttackSuicideSwarmRules extends AbstractSwarmRules {
+public class SpecialSuicideSwarmRules extends AbstractSwarmRules {
 
   // Cumulative vectors
   private Vector2D separateV2D = new Vector2D(0, 0);
@@ -25,17 +26,16 @@ public class AttackSuicideSwarmRules extends AbstractSwarmRules {
   private double stopDistance = 100;
 
 
-
   //=========================================================================//
-  // Defend Shell Swarm Rules Constructor                                    //
+  // Special Suicide Constructor                                             //
   //=========================================================================//
-  public AttackSuicideSwarmRules(int ruleId, RigidBody ruleRb,
+  public SpecialSuicideSwarmRules(int ruleId, RigidBody ruleRb,
                                Transform ruleTransform){
     super(ruleId, ruleRb, ruleTransform);
   }
 
   //=========================================================================//
-  // Attack Shell Swarm Rules                                                //
+  // Special Suicide Swarm Rules                                             //
   //=========================================================================//
   @Override
   public void swarmRules(){
@@ -84,7 +84,7 @@ public class AttackSuicideSwarmRules extends AbstractSwarmRules {
   }
 
   //=========================================================================//
-  // Attack Swarm Shell Neighbourhood Count Rules                                  //
+  // Special Suicide Neighbourhood Count Rules                               //
   //=========================================================================//
   @Override
   public void neighbourCountRules(){

@@ -43,7 +43,7 @@ public class FSMVisualisation {
       int b = 0;
       this.sketch.noStroke();
       switch(this.collFSMStateTransition.get(i).getFSMState()){
-        case ATTACK:
+        case SPECIAL:
           r = 252;
           g = 74;
           b = 85;
