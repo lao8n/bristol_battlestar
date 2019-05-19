@@ -13,7 +13,7 @@ import swarm_wars_library.entities.PlayerAI;
 import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
 import swarm_wars_library.fsm.OtherFSMBuilder;
-import swarm_wars_library.fsm_ui.UI;
+import swarm_wars_library.fsm_ui.FSMSelectScreen;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.game_screens.GameOver;
 import swarm_wars_library.graphics.RenderLayers;
@@ -54,7 +54,7 @@ public class SwarmWars extends PApplet {
   Map map;
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
-  UI fsmUI;
+  FSMSelectScreen fsmUI;
   StartScreen startScreen; 
   PlayBackgroundMusic playBackgroundMusic;
   GameOver gameOver;
@@ -71,7 +71,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void settings() {
     this.size(1200, 800, "processing.awt.PGraphicsJava2D");
-
+    // this.fullScreen();
   }
 
   //=========================================================================//
@@ -281,7 +281,7 @@ public class SwarmWars extends PApplet {
   // UI Setup                                                                //
   //=========================================================================//
   public void uiSetup(){
-    this.fsmUI = new UI(this);
+    this.fsmUI = new FSMSelectScreen(this);
     this.startScreen = new StartScreen(this);
     if (playNetworkGame) networkConnect();
   }

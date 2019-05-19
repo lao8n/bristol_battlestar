@@ -1,4 +1,4 @@
-package swarm_wars_library.fsm_ui;
+package swarm_wars_library.fsm_ui_old;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CLOSE;
@@ -13,22 +13,19 @@ public class Star {
   private Vector2D location;
   private Vector2D dimensions;
   private int nPoints;
-  private int colourR;
-  private int colourG;
-  private int colourB;
+  private int colourR = 0;
+  private int colourG = 237;
+  private int colourB = 255;
 
   //=========================================================================//
   // Star constructor                                                        //
   //=========================================================================//
   public Star (PApplet sketch, Vector2D location, Vector2D dimensions, 
-               int nPoints, int colourR, int colourG, int colourB) {
+               int nPoints) {
     this.sketch = sketch;
     this.location = location;
     this.dimensions = dimensions;
     this.nPoints = nPoints;
-    this.colourR = colourR;
-    this.colourG = colourG;
-    this.colourB = colourB;
   }
 
   //=========================================================================//
@@ -38,7 +35,7 @@ public class Star {
     this.sketch.pushMatrix();
     this.sketch.translate((float) this.location.getX(), 
                           (float) this.location.getY());
-    //this.sketch.rotate(this.sketch.frameCount / (float) -100.0);
+    this.sketch.rotate(this.sketch.frameCount / (float) -100.0);
     this.renderStar();
     this.sketch.popMatrix();
   }
@@ -50,7 +47,7 @@ public class Star {
     float angle = TWO_PI / this.nPoints;
     float halfAngle = angle / (float) 2.0;
 
-    /*this.sketch.beginShape();
+    this.sketch.beginShape();
     this.sketch.fill(this.colourR, this.colourG, this.colourB, 60);
     for (float a = 0; a < TWO_PI; a += angle) {
         float sx = -1 + cos(a) * (float) this.dimensions.getY() + 2;
@@ -74,7 +71,7 @@ public class Star {
         sy = sin(a+halfAngle) * (float) this.dimensions.getX() + 5;
         this.sketch.vertex(sx, sy);
     }
-    this.sketch.endShape(CLOSE);*/
+    this.sketch.endShape(CLOSE);
 
     this.sketch.beginShape();
     this.sketch.fill(this.colourR, this.colourG, this.colourB);
@@ -93,42 +90,17 @@ public class Star {
   // Star change methods                                                     //
   //=========================================================================//   
   public void changeColour() {
-    if (this.colourR == 119) {
-        this.colourR = 178;
-        this.colourG = 248;
+    if (this.colourR == 0) {
+        this.colourR = 255;
+        this.colourG = 0;
+        this.colourB = 199;
+    }
+    else  {
+        this.colourR = 0;
+        this.colourG = 237;
         this.colourB = 255;
     }
-    else if (this.colourR == 181) {
-          this.colourR = 238;
-          this.colourG = 225;
-          this.colourB = 225;
-      }
-    else  if (this.colourR == 221) {
-        this.colourR = 166;
-        this.colourG = 163;
-        this.colourB = 176;
-    }
-
   }
-
-    public void changeColourSwap(String label) {
-        if (label == "Special") {
-            this.colourR = 119;
-            this.colourG = 192;
-            this.colourB = 246;
-        }
-        else if (label == "Defend") {
-            this.colourR = 181;
-            this.colourG = 170;
-            this.colourB = 235;
-        }
-        else  if (label == "Scout") {
-            this.colourR = 221;
-            this.colourG = 218;
-            this.colourB = 232;
-        }
-
-    }
 
   public int getColourR(){
     return this.colourB;
