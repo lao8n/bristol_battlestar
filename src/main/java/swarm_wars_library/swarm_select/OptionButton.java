@@ -14,14 +14,18 @@ public class OptionButton {
   private Vector2D topLeftLocation;
   private Vector2D dimensions;
   private PImage defaultImage;
-  private PImage defendShell;
-  private PImage defendFlock;
-  private PImage scoutRandom;
-  private PImage scoutBee;
-  private PImage scoutAnt;
   private PImage specialSuicide;
   private PImage specialGhost;
   private PImage specialStar;
+  private PImage specialSacrifice;
+  private PImage defendShell;
+  private PImage defendFlock;
+  private PImage defendInvincible; 
+  private PImage defendHibernate; 
+  private PImage scoutRandom;
+  private PImage scoutBee;
+  private PImage scoutAnt;
+  private PImage scoutPSO;
 
   //=========================================================================//
   // Option Button constructor                                               //
@@ -31,15 +35,22 @@ public class OptionButton {
     this.sketch = sketch;
     this.topLeftLocation = topLeftLocation;
     this.dimensions = dimensions;
-    this.defaultImage = sketch.loadImage("resources/images/default.png");
+    this.defaultImage = sketch.loadImage("resources/images/defaultImage.png");
+
+    this.specialSuicide = sketch.loadImage("resources/images/specialSuicide.png");
+    this.specialGhost = sketch.loadImage("resources/images/specialGhost.png");
+    this.specialStar = sketch.loadImage("resources/images/specialStar.png");
+    this.specialSacrifice = sketch.loadImage("resources/images/specialSacrifice.png"); 
+
     this.defendShell = sketch.loadImage("resources/images/defendShell.png");
     this.defendFlock = sketch.loadImage("resources/images/defendFlock.png");
+    this.defendInvincible = sketch.loadImage("resources/images/defendInvincible.png"); 
+    this.defendHibernate = sketch.loadImage("resources/images/defendHibernate.png"); 
+
     this.scoutRandom = sketch.loadImage("resources/images/scoutRandom.png");
     this.scoutBee = sketch.loadImage("resources/images/scoutBee.png");
-    this.specialSuicide = sketch.loadImage("resources/images/attackSuicide.png");
-    this.specialGhost = sketch.loadImage("resources/images/specialGhost.png");
     this.scoutAnt = sketch.loadImage("resources/images/scoutAnt.png");
-    this.specialStar = sketch.loadImage("resources/images/specialStar.png");
+    this.scoutPSO = sketch.loadImage("resources/images/scoutPSO.png"); 
   }
 
   //=========================================================================//
@@ -78,6 +89,12 @@ public class OptionButton {
       case DEFENDFLOCK:
         x = this.defendFlock;
         break;
+      case DEFENDHIBERNATE:
+        x = this.defendHibernate;
+        break;
+      case DEFENDINVINCIBLE:
+        x = this.defendInvincible;
+        break;
       case SCOUTRANDOM:
         x = this.scoutRandom;
         break;
@@ -87,6 +104,9 @@ public class OptionButton {
       case SCOUTANT:
         x = this.scoutAnt;
         break;
+      case SCOUTPSO:
+        x = this.scoutPSO;
+        break;
       case SPECIALSUICIDE:
         x = this.specialSuicide;
         break;
@@ -95,6 +115,9 @@ public class OptionButton {
         break;
       case SPECIALSTAR:
         x = this.specialStar;
+        break;
+      case SPECIALSACRIFICE:
+        x = this.specialSacrifice;
         break;
       default:
         break;
