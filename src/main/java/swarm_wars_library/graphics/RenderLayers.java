@@ -395,7 +395,7 @@ public class RenderLayers{
     }
   }
 
-  //=========================================================================//
+ //=========================================================================//
   // Render Player1 Missile Layer                                            //
   //=========================================================================//
   private void renderPlayer1Missiles(){
@@ -414,7 +414,11 @@ public class RenderLayers{
                         .getLocation(),
                 CommsGlobal.get("PLAYER1")
                         .getPacket(0)
-                        .getLocation());
+                        .getLocation(),
+                CommsGlobal.get("PLAYER1_MISSILE")
+                        .getPacket(i)
+                        .getHeading()
+               );
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER1_MISSILE")
@@ -450,7 +454,10 @@ public class RenderLayers{
                           .getLocation(),
                   CommsGlobal.get("PLAYER1")
                           .getPacket(0)
-                          .getLocation());
+                          .getLocation(),
+                  CommsGlobal.get("PLAYER1_MISSILE")
+                          .getPacket(i)
+                          .getHeading());
         }
         // Render explosions
         if(CommsGlobal.get("PLAYER2_MISSILE")
@@ -468,7 +475,6 @@ public class RenderLayers{
         }
       }
     }
-
   }
 
   //=========================================================================//

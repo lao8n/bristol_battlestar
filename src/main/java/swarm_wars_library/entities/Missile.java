@@ -34,7 +34,7 @@ public class Missile extends AbstractEntity{
   }
 
   //=========================================================================//
-  // Bullet method                                                           //
+  // Missile method                                                          //
   //=========================================================================//
   public void updateMissile(){
     if(this.isState(STATE.ALIVE)){
@@ -59,6 +59,7 @@ public class Missile extends AbstractEntity{
     this.commsPacket.setState(this.getState());
     this.commsPacket.setLocation(this.getLocation());
     this.commsPacket.setVelocity(this.getVelocity());
+    this.commsPacket.setHeading(this.getHeading());
   }
 
   //=========================================================================//

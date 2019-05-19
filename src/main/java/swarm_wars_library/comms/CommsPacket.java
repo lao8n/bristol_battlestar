@@ -1,9 +1,6 @@
 package swarm_wars_library.comms;
 
 import swarm_wars_library.physics.Vector2D;
-
-import javax.sound.sampled.BooleanControl;
-
 import swarm_wars_library.entities.STATE;
 
 public class CommsPacket {
@@ -19,6 +16,7 @@ public class CommsPacket {
   private int moveRight;
   private int moveUp;
   private int moveDown;
+  private double heading;
 
   public int getId() {
     return id;
@@ -111,8 +109,18 @@ public class CommsPacket {
     this.motherShipHeading = heading; 
   }
 
-  public  void setMissileNum(int num){this.missileNum=num;}
+  public  void setMissileNum(int num){
+    this.missileNum = num;
+  }
 
-  public  int getMissileNum(){return this.missileNum;}
+  public  int getMissileNum(){
+    return this.missileNum;
+  }
 
+  public double getHeading(){
+    return  this.heading;
+  }
+  public void setHeading(double Heading)  {
+    this.heading = Heading;
+  }
 }

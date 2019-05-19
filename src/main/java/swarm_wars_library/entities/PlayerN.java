@@ -84,16 +84,10 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    //System.out.println(tag.toString());
-    if (this.tag == ENTITY.PLAYER2) {
-      if (tag == ENTITY.PLAYER1_MISSILE) {
-        this.takeDamage(30);
-      }
-    }else if (this.tag == ENTITY.PLAYER1) {
-      if (tag == ENTITY.PLAYER2_MISSILE) {
-        this.takeDamage(30);
-      }
-    }else {
+    if (tag == ENTITY.PLAYER2_MISSILE|| tag == ENTITY.PLAYER1_MISSILE) {
+      this.takeDamage(30);
+    }
+    else {
       this.takeDamage(5);
     }
   }
