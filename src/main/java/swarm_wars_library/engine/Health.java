@@ -30,6 +30,10 @@ public class Health {
     return currentHealth;
   }
 
+  public void setHealth(int health){
+    this.currentHealth = health;
+  }
+
   public int getMaxHealth(){
     return maxHealth;
   }

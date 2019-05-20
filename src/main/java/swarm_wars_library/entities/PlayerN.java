@@ -117,6 +117,11 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     this.health.takeDamage(damage);
   }
 
+  @Override 
+  public void setHealth(int health){
+    this.health.setHealth(health);
+  }
+
   //=========================================================================//
   // Input methods                                                           //
   //=========================================================================//

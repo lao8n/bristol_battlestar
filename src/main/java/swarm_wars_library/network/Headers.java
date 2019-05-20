@@ -43,4 +43,8 @@ public class Headers {
     public static final String SWARM_LOGIC = "SL";
 
     public static final String WINNERID = "WID";
+
+    public static final String PLAYER_HEALTH = "PH";
+
+    public static final String PLAYER_POINTS = "PP";
 }
