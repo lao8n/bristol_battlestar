@@ -178,8 +178,7 @@ public class Rules {
             int labelColour = 255;
             Vector2D dimensions = new Vector2D(45, 85);
             int nPoints = 5;
-            if (this.checkMousePressButton(new Vector2D(this.sketch.width - 150,
-                            30),
+            if (this.checkMousePressButton(new Vector2D(this.sketch.width - 150, 30),
                     new Vector2D(100, 50))) {
                 this.currentScreen = GAMESCREEN.FSMUI;
             }

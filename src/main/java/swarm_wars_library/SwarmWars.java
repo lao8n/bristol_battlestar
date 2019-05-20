@@ -286,7 +286,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   // UI Setup                                                                //
   //=========================================================================//
-  public void rulesSetup(){
+  public void uiSetup(){
     this.fsmUI = new FSMSelectScreen(this);
     this.startScreen = new StartScreen(this);
     if (playNetworkGame) networkConnect();
@@ -295,7 +295,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   // Rules Setup                                                             //
   //=========================================================================//
-  public void uiSetup(){
+  public void rulesSetup(){
     this.rules = new Rules(this);
     this.startScreen = new StartScreen(this);
     if (playNetworkGame) networkConnect();
@@ -508,7 +508,7 @@ public class SwarmWars extends PApplet {
   public void rulesUpdate(){
     this.rules.update();
     if(this.rules.getGameScreen() == GAMESCREEN.FSMUI){
-      this.uiSetup();
+      this.rulesSetup();
       this.currentScreen = this.rules.getGameScreen();
       this.rules.resetGameScreen();
     }
