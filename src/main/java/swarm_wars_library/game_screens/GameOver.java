@@ -23,6 +23,7 @@ public class GameOver {
     private PImage gameOverLogo;
     private PImage brokenShipLogo;
     private PImage flames;
+    private PImage dummy;
 
     // Game Screen
     private GAMESCREEN currentScreen;
@@ -62,6 +63,7 @@ public class GameOver {
         brokenShipLogo = sketch.loadImage("resources/images/brokenShipLogo.png"); 
         gameOverLogo = sketch.loadImage("resources/images/gameoverLogo.png");
         flames = sketch.loadImage("resources/images/gameOverFlameSingle.png");
+        dummy = sketch.loadImage("resources/images/dummy.png");
 
         this.myScore = 0;
         this.enemyScore = 0;
@@ -96,7 +98,7 @@ public class GameOver {
     }
 
     //=========================================================================//
-    //                                                                         //
+    // Button methods                                                          //
     //=========================================================================//
 
     private void setupReplayButton() {
@@ -162,33 +164,55 @@ public class GameOver {
     //=========================================================================//
     private void updateBackground(){
 
-        if(this.getWinningPlayer() == map.getPlayerId()){
-            System.out.println("WINNER: This player won...");
-        } else if(this.getWinningPlayer() == map.getEnemyId()){
-            System.out.println("WINNER: Enemy won...");
-        } else {
-            System.out.println("WINNER: ERROR");
-        }
+
 
         // draw background stars
         //this.sketch.background(13, 30, 40);
         this.sketch.imageMode(PConstants.CORNERS);
         this.sketch.image(background, 0, 0, this.sketch.width, this.sketch.height);
 
+        if(this.getWinningPlayer() == map.getPlayerId()){
+            // this player is winner
+            System.out.println("WINNER: This Player won...");
+            this.updateBackgroundWinner();
+        } else if(this.getWinningPlayer() == map.getEnemyId()){
+            // this player lost
+            System.out.println("WINNER: Enemy won...");
+            this.updateBackgroundLoser();
+        } else {
+            System.out.println("WINNER: ERROR");
+        }
+
+    }
+
+    private void updateBackgroundWinner() {
         // draw gameover & ship logos
         //this.sketch.image(this.gameOverLogo, this.sketch.width/4, 20,(this.sketch.width/4)*3, (this.sketch.height/8)*3);
         this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
-
         this.sketch.imageMode(PConstants.CENTER);
-        this.sketch.image(this.brokenShipLogo, (this.sketch.width/3)*2, (this.sketch.height/4)*3);
-        
+        this.sketch.image(this.dummy, (this.sketch.width/2), (this.sketch.height/2));
+
+
+    }
+
+    private void updateBackgroundLoser() {
+        // draw gameover & ship logos
+        //this.sketch.image(this.gameOverLogo, this.sketch.width/4, 20,(this.sketch.width/4)*3, (this.sketch.height/8)*3);
+        this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
+        this.sketch.imageMode(PConstants.CENTER);
+        this.sketch.image(this.brokenShipLogo, (this.sketch.width/2)*2, (this.sketch.height/4)*3);
+
         // draw fire
         this.sketch.imageMode(PConstants.CORNERS);
         this.sketch.image(this.sprites[currentSprite], 0, this.sketch.height/3,
-            this.sketch.width, this.sketch.height);
+                this.sketch.width, this.sketch.height);
         currentSprite++;
         currentSprite %= totalSprites;
     }
+
+    //=========================================================================//
+    // Data methods                                                            //
+    //=========================================================================//
 
     public GAMESCREEN getGameScreen() {
         return currentScreen;
