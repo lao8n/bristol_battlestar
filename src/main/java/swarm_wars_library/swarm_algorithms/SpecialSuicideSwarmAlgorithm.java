@@ -17,12 +17,10 @@ public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
   public RigidBody rb;
   public Transform transform;
   private SpecialSuicideSwarmRules specialSuicideSwarmRules;
-  private double orbitDistance = 70;
-  private double stopDistance = 100;
   private Vector2D separateV2D;
   private Vector2D seekMotherShipV2D = new Vector2D(0, 0);
-  private double weightSeparate = 0.2;
-  private double weightMotherShip = 1.5;
+  private double weightSeparate = 0.1;
+  private double weightMotherShip = 0.2;
   private double weightAvoidEdge = 0.1;
 
   //=========================================================================//
@@ -52,6 +50,7 @@ public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
     ArrayList<Vector2D> rulesV2D = this.specialSuicideSwarmRules
             .iterateOverSwarm(this.tag);
     this.separateV2D = rulesV2D.get(0);
+    this.seekMotherShipV2D = this.seekMotherShip();
     // if(this.id % 2 != 0){
     // this.seekMotherShipV2D = this.seekMotherShip();
     // }
@@ -73,38 +72,15 @@ public class SpecialSuicideSwarmAlgorithm extends AbstractSwarmAlgorithm {
   //=========================================================================//
   @Override
   public Vector2D seekMotherShip(){
+    // Actually seeks turret instead
     Vector2D locationMotherShip =
-            CommsGlobal.get(Tag.getMotherShipTag(this.tag).toString())
-                    .getPacket(0)
-                    .getLocation();
+            CommsGlobal.get("TURRET")
+                       .getPacket(0)
+                       .getLocation();
     Vector2D target = Vector2D.sub(locationMotherShip,
             transform.getLocation());
-    target = this.findOrbit(target);
-    target = this.checkStopDistance(target);
     target.limit(rb.getMaxForce());
     return target;
-  }
-
-  private Vector2D checkStopDistance(Vector2D desired) {
-    double dist = desired.mag();
-    desired.normalise();
-    if (dist > this.stopDistance) {
-      desired.mult(rb.getMaxSpeed());
-    }
-    else {
-      double mappedSpeed = dist * rb.getMaxSpeed() / (this.stopDistance);
-      desired.mult(mappedSpeed);
-    }
-    return desired;
-  }
-
-  private Vector2D findOrbit(Vector2D desired) {
-    Vector2D orbitTarget = new Vector2D(desired.getX(), desired.getY());
-    orbitTarget.normalise();
-    orbitTarget.mult(this.orbitDistance);
-    desired.sub(orbitTarget);
-
-    return desired;
   }
 
   //=========================================================================//
