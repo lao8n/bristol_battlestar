@@ -86,6 +86,10 @@ public class FSMSelectScreen{
         this.currentScreen = GAMESCREEN.FSMUI;
     }
 
+    public void resetFSM(){
+        this.fsmManager.reset();
+    }
+
     //=========================================================================//
     // Background methods                                                      //
     //=========================================================================//
