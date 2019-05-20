@@ -10,11 +10,14 @@ import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.fsm.FSMVARIABLE;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
+import processing.core.PConstants;
+
 
 public class FSMSelectScreen{
 
     // Processing
     private PApplet sketch;
+    private PImage background;
     private PImage backgroundImage;
 
     // Game Screen
@@ -60,7 +63,7 @@ public class FSMSelectScreen{
     public FSMSelectScreen(PApplet sketch){
         this.sketch = sketch;
         this.currentScreen = GAMESCREEN.FSMUI;
-        PImage background = sketch.loadImage(
+        this.background = sketch.loadImage(
                 "resources/images/background.png");
         this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
         this.setupButtons();
@@ -96,16 +99,9 @@ public class FSMSelectScreen{
     // Background methods                                                      //
     //=========================================================================//
     private void updateBackground(){
-        this.sketch.image(this.backgroundImage, 0, 0,
+        this.sketch.imageMode(PConstants.CORNERS);
+        this.sketch.image(this.background, 0, 0,
                 this.sketch.width, this.sketch.height);
-
-        // for(int i = 0; i <= 10; i++){
-        //     this.sketch.fill(255, 255, 204);
-        //     this.sketch.ellipse(this.sketch.random(this.sketch.width),
-        //             this.sketch.random(this.sketch.height),
-        //             2,
-        //             2);
-        // }
     }
 
     public void setupOptions() {

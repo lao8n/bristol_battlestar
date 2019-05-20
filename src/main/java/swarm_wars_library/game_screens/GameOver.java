@@ -52,12 +52,8 @@ public class GameOver {
     private int index = 0;
 
     private int winningPlayer = 0;
-
     private Map map;
-
     private boolean clean = false;
-
-
     private GameOver(){};
 
     public void setup(PApplet sketch) {
@@ -182,11 +178,11 @@ public class GameOver {
         } else {
             System.out.println("GameOver.java - WINNER: ERROR");
         }
-
     }
 
     private void updateBackgroundWinner() {
         // draw gameover & ship logos
+        this.sketch.imageMode(PConstants.CORNERS);
         this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
         this.sketch.imageMode(PConstants.CENTER);
         this.sketch.image(this.dummy, this.sketch.width/2, (this.sketch.height/4));
@@ -194,8 +190,8 @@ public class GameOver {
     }
 
     private void updateBackgroundLoser() {
+        this.sketch.imageMode(PConstants.CORNERS);
         // draw gameover & ship logos
-        //this.sketch.image(this.gameOverLogo, this.sketch.width/4, 20,(this.sketch.width/4)*3, (this.sketch.height/8)*3);
         this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
         this.sketch.imageMode(PConstants.CENTER);
         this.sketch.image(this.brokenShipLogo, (this.sketch.width/2)*2, (this.sketch.height/4)*3);
