@@ -40,6 +40,7 @@ public class Images {
     private PImage bullet2Sprite;
     private PImage turretBulletSprite;
     private PImage missile2Sprite;
+    private PImage winnerLogo;
 
     private Images() { }
 
@@ -84,6 +85,7 @@ public class Images {
         this.bullet2Sprite = this.sketch.loadImage("resources/images/bullet2Sprite.png");
         this.turretBulletSprite = this.sketch.loadImage("resources/images/turretBulletSprite.png");
         this.missile2Sprite = this.sketch.loadImage("resources/images/missile2Sprite.png");
+        this.winnerLogo = this.sketch.loadImage("resources/images/winnerLogo.png");
     }
 
     public PImage getDefaultImage() {
@@ -212,5 +214,9 @@ public class Images {
 
     public PImage getMissile2Sprite() {
         return missile2Sprite;
+    }
+
+    public PImage getWinnerLogo() {
+        return winnerLogo;
     }
 }

@@ -34,6 +34,7 @@ public class RenderLayers{
   private RenderMiniMapBot renderMiniMapBot;
   private RenderMiniMapBot2 renderMiniMapBot2;
   private RenderCurrentAlgorithm renderCurrentAlgorithm;
+  private RenderPlus10 renderPlus10;
   private int playerId;
   private int enemyId;
   private String playerMe;
@@ -82,6 +83,8 @@ public class RenderLayers{
             , currentAlgoithmBoxTopLeftX
             , currentAlgoithmBoxTopLeftY
     );
+    
+    this.renderPlus10 = new RenderPlus10(sketch);
 
     playerId = map.getPlayerId();
     enemyId = map.getEnemyId();
@@ -136,6 +139,14 @@ public class RenderLayers{
     this.renderPlayer2Missiles();
     this.renderPlayer1();
     this.renderPlayer2();
+    this.renderPlus10Bonus();
+  }
+
+  //=========================================================================//
+  // Render Plus 10                                                          //
+  //=========================================================================//
+  private void renderPlus10Bonus(){
+      this.renderPlus10.renderMapObject();
   }
 
   //=========================================================================//

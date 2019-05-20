@@ -2,7 +2,6 @@ package swarm_wars_library.fsm_ui;
 
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-
 import swarm_wars_library.physics.Vector2D;
 
 public class FSMBackground {
