@@ -68,7 +68,7 @@ public class Bullet extends AbstractEntity{
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    if(tag!=ENTITY.HEALTHPACK) return;
+    if(tag.equals(ENTITY.HEALTHPACK)) return;
 
     this.setState(STATE.EXPLODE);
     if (SwarmWars.playNetworkGame && Map.getInstance().getPlayerId() == 2) {
