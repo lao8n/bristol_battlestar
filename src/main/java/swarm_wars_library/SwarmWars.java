@@ -533,6 +533,7 @@ public class SwarmWars extends PApplet {
       this.currentScreen = this.gameOver.getGameScreen();
       this.gameOver.resetCurrentScreen();
       this.uiSetup();
+      this.fsmUI.resetFSM();
       this.frameNumber = 1;
       map.setGameEnded(false);
     }

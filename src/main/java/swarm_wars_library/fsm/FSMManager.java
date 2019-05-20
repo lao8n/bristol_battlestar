@@ -34,6 +34,22 @@ public class FSMManager implements IFSMManagerUI, IFSMManagerSwarmLogic,
   }
 
   //=========================================================================//
+  // FSM Manager Reset                                                       //
+  //=========================================================================//
+  public void reset(){
+    this.currentFSMStateId = new HashMap<>();
+    this.mapFSMStateTransition = new HashMap<Integer, 
+      HashMap<Integer, FSMStateTransition>>();
+    this.mapFSMStates = new HashMap<Integer, HashMap<Integer, FSMSTATE>>();
+    this.currentFSMStateId.put(1,1);
+    this.currentFSMStateId.put(2,1);
+    this.mapFSMStateTransition.put(1, new HashMap<Integer, FSMStateTransition>());
+    this.mapFSMStateTransition.put(2, new HashMap<Integer, FSMStateTransition>());
+    this.mapFSMStates.put(1, new HashMap<Integer, FSMSTATE>());
+    this.mapFSMStates.put(2, new HashMap<Integer, FSMSTATE>());
+  }
+
+  //=========================================================================//
   // FSM Manager UI Methods                                                  //
   //=========================================================================//
   @Override
