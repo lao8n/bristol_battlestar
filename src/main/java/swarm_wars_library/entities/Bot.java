@@ -44,7 +44,9 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   //=========================================================================//
   @Override
   public void update(){
-    this.state = swarmLogic.getState();
+    if(swarmLogic.getState().equals(STATE.SUICIDE)){
+      this.state = swarmLogic.getState();
+    }
     if(this.isState(STATE.ALIVE)){
       this.updateBot();
     }
