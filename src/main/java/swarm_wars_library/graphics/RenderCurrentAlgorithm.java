@@ -3,7 +3,9 @@ package swarm_wars_library.graphics;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
+import swarm_wars_library.comms.CommsChannel;
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -47,8 +49,15 @@ public class RenderCurrentAlgorithm {
     }
 
     public void updateCurrentAlgorithm() {
+
         String commsChannel = "PLAYER" + Map.getInstance().getPlayerId() + "_BOT";
-        SWARMALGORITHM swarmAlgorithm = CommsGlobal.get(commsChannel).getPacket(0).getSwarmAlgorithm();
+        CommsChannel cc = CommsGlobal.get(commsChannel);
+        int i = 0;
+        while(cc.getPacket(i).getState().equals(STATE.DEAD) && i < cc.getNumberOfReceivers()){
+            i++;
+        }
+
+        SWARMALGORITHM swarmAlgorithm = cc.getPacket(i).getSwarmAlgorithm();
         switch(swarmAlgorithm){
             case SPECIALSUICIDE:
                 currentAlgorithm = images.getSpecialSuicide();
