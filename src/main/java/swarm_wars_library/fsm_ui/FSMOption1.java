@@ -15,7 +15,8 @@ public class FSMOption1 {
     private FSMBackground information;
     private FSMBackground content;
     private FSMBackground chooseOption1;
-    private boolean showContent = false;
+    private boolean showContent;
+    private boolean selected;
 
 
     //SIZING
@@ -114,18 +115,9 @@ public class FSMOption1 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "Asyclical Finite State Machine",
+                "ASYCLICAL FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
-                0, 0, 0, 90);
-
-        this.content = new FSMBackground(this.sketch,
-                "One of the most common finite state machine you would have encountered, is\n" +
-                        "a traffic light. There are three states: red, orange and green. The lights change\n" +
-                        "under certain conditions. This finite state machine is cylical as it goes in\n" +
-                        "a circle, always in the same direction.",
-                new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(boxWidth, 200),
                 0, 0, 0, 90);
 
         this.chooseOption1 = new FSMBackground(this.sketch,
@@ -139,9 +131,13 @@ public class FSMOption1 {
         this.FSM1.update();
         this.information.update();
         this.chooseOption1.update();
-        if (this.showContent == true) {
-            this.content.update();
+        if (this.selected == true) {
+            this.chooseOption1.changeColour(255, 255, 255, 80);
         }
+        if (this.selected == false) {
+            this.chooseOption1.changeColour(0, 0, 0, 80);
+        }
+
 
     }
 
@@ -254,14 +250,25 @@ public class FSMOption1 {
             this.swapButton3();
         }
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200)) == true && showContent == false) {
-            this.showContent = true;
+                new Vector2D(boxWidth, 50)) == true) {
+                this.information = new FSMBackground(this.sketch,
+                        "ASYCLICAL FINITE STATE MACHINE\n\n" +
+                                "One of the most common finite state machine you would have encountered\n, is " +
+                                "a traffic light. There are three states: red, orange and green\n. The lights change "+
+                                "under certain conditions\n. This finite state machine is acylical as it goes in\n" +
+                                "a circle, always in the same direction.",
+                        new Vector2D(boxX, boxY + boxHeight + 20),
+                        new Vector2D(boxWidth, 190),
+                        0, 0, 0, 90);
         }
-        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200)) == true && showContent == true) {
-            this.showContent = false;
+        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20 + 50),
+                new Vector2D(this.boxWidth, 200)) == true) {
+            this.information = new FSMBackground(this.sketch,
+                    "ASYCLICAL FINITE STATE MACHINE ->",
+                    new Vector2D(boxX, boxY + boxHeight + 20),
+                    new Vector2D(boxWidth, 50),
+                    0, 0, 0, 90);
         }
-
     }
 
 
@@ -388,5 +395,26 @@ public class FSMOption1 {
                 }
             }
         }
+    }
+
+    //=========================================================================//
+    // Getter & Setter methods                                                 //
+    //=========================================================================//
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isShowContent() {
+        return showContent;
+    }
+
+    public void setShowContent(boolean showContent) {
+        this.showContent = showContent;
     }
 }
