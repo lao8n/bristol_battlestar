@@ -33,6 +33,7 @@ public class RenderLayers{
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
   private RenderMiniMapBot2 renderMiniMapBot2;
+  private RenderPlus10 renderPlus10; 
   private int playerId;
   private int enemyId;
   private String playerMe;
@@ -68,7 +69,7 @@ public class RenderLayers{
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
     this.renderMiniMapBot2 = new RenderMiniMapBot2(sketch);
-
+    this.renderPlus10 = new RenderPlus10(sketch);
 
     playerId = map.getPlayerId();
     enemyId = map.getEnemyId();
@@ -123,6 +124,14 @@ public class RenderLayers{
     this.renderPlayer2Missiles();
     this.renderPlayer1();
     this.renderPlayer2();
+    this.renderPlus10Bonus();
+  }
+
+  //=========================================================================//
+  // Render Plus 10                                                          //
+  //=========================================================================//
+  private void renderPlus10Bonus(){
+      this.renderPlus10.renderMapObject();
   }
 
   //=========================================================================//

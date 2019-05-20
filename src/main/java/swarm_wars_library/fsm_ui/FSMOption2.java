@@ -293,7 +293,7 @@ public class FSMOption2 {
                                 "The essence of a finite state machine (FSM), is simply\n"+
                                 "that it has a limited number of fixed states. FSMs can\n"+
                                 "have different shapes, especially when states have more\n"+
-                                "than than one transition. This pyramid-style FSM is may\n"+
+                                "than than one transition. This pyramid-style FSM may\n"+
                                 "surprise you!",
                        new Vector2D(boxX, boxY + boxHeight + 20),
                        new Vector2D(boxWidth, 190),
