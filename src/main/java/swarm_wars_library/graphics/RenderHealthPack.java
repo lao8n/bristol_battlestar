@@ -7,11 +7,14 @@ import swarm_wars_library.physics.Vector2D;
 import java.util.concurrent.ThreadLocalRandom;
 public class RenderHealthPack extends AbstractRenderMapObject{
     // sprite information
-    private PImage healthpack = this.sketch.loadImage("resources/images/p3.png");
-    private int scale=10;
+    private PImage healthPack = this.sketch.loadImage("resources/images/health.png");
+    private int scale = 20;
+    private int renderSize = 35;
+
     public RenderHealthPack(PApplet sketch) {
         super(sketch);
     }
+
     public void update(Vector2D objectMapLocation,
                        Vector2D viewCentreMapLocation){
         this.objectMapLocation = objectMapLocation;
@@ -36,10 +39,10 @@ public class RenderHealthPack extends AbstractRenderMapObject{
 
         // Draw missile
         this.sketch.tint(255, 255);
-        this.sketch.image(healthpack,
+        this.sketch.image(healthPack,
                 0, 0,
-                60,
-                60);
+                renderSize,
+                renderSize);
         this.sketch.popMatrix();
     }
     @Override

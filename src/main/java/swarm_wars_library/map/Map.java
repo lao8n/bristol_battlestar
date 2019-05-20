@@ -71,6 +71,9 @@ public class Map {
   private int playerMoveForce = 16;
   private int botMaxSpeed = 20;
 
+  // Health Packs
+  private int healthPackHealth = 10;
+
   private List<Vector2D> backgroundStars;
   private Vector2D player1StartingLocation;
   private Vector2D player2StartingLocation;
@@ -289,5 +292,9 @@ public class Map {
 
   public void setGameEnded(boolean gameEnded) {
     this.gameEnded = gameEnded;
+  }
+
+  public int getHealthPackHealth() {
+    return healthPackHealth;
   }
 }

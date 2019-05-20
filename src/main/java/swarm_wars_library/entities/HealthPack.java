@@ -10,7 +10,7 @@ import swarm_wars_library.sound.SoundMixer;
 
 public class HealthPack extends AbstractEntity implements ISound {
 
-    private int addHealth = 20;
+    private int addHealth = Map.getInstance().getHealthPackHealth();
 
     private int healthPackId;
 
@@ -72,7 +72,6 @@ public class HealthPack extends AbstractEntity implements ISound {
        // SoundMixer.playTurretExplosion();
         if(tag.equals(ENTITY.PLAYER1)||tag.equals(ENTITY.PLAYER2)){
             this.setState(STATE.EXPLODE);
-            System.out.println("!!!!!!!!!!!!!!!!!!");
         }
         //System.out.println(tag);
         if (playNetworkGame) {
