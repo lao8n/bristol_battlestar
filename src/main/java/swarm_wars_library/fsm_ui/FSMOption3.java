@@ -14,7 +14,8 @@ public class FSMOption3 {
     private FSMBackground information;
     private FSMBackground content;
     private FSMBackground chooseOption3;
-    private boolean showContent = false;
+    private boolean showContent;
+    private boolean selected;
 
 
     //SIZING
@@ -143,17 +144,17 @@ public class FSMOption3 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "Cyclical Finite State machine",
+                "CYCLICAL FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
-        this.content = new FSMBackground(this.sketch,
-                "The number of states in a finite state machine does not necessarily define\n" +
-                        "how you transition from one state to another. You can build and invent any transitions\n" +
-                        "that you like. Here, the transitions are bidirectional and cyclical.",
+      /*  this.content = new FSMBackground(this.sketch,
+                "The number of states in a finite state machine does not\n necessarily define " +
+                        "how you transition from one state to another\n. You can build and invent any transitions " +
+                        "that you like\n. Here, the transitions are bidirectional and cyclical.",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 200),
-                0, 0, 0, 90);
+                0, 0, 0, 90); */
         this.chooseOption3 = new FSMBackground(this.sketch,
             "SELECT CYCLICAL FSM",
             new Vector2D(boxX, boxY - 50 - 20),
@@ -167,6 +168,12 @@ public class FSMOption3 {
         this.chooseOption3.update();
         if (this.showContent == true) {
             this.content.update();
+        }
+        if (this.selected == true) {
+            this.chooseOption3.changeColour(255, 255, 255, 80);
+        }
+        if (this.selected == false) {
+            this.chooseOption3.changeColour(0, 0, 0, 80);
         }
     }
 
@@ -360,14 +367,24 @@ public class FSMOption3 {
             this.swapButton4();
         }
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(this.boxWidth, 200)) == true && showContent == false) {
-            this.showContent = true;
+                new Vector2D(this.boxWidth, 50)) == true) {
+                this.information = new FSMBackground(this.sketch,
+                        "CYCLICAL FINITE STATE MACHINE\n\n" +
+                                "The number of states in a finite state machine does not\n necessarily define " +
+                                "how you transition from one state to another\n. You can build and invent any transitions " +
+                                "that you like\n. Here, the transitions are bidirectional and cyclical.\n",
+                        new Vector2D(boxX, boxY + boxHeight + 20),
+                        new Vector2D(boxWidth, 190),
+                        0, 0, 0, 90);
         }
-        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(this.boxWidth, 200)) == true && showContent == true) {
-            this.showContent = false;
+       else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
+                new Vector2D(this.boxWidth, 200)) == true) {
+            this.information = new FSMBackground(this.sketch,
+                    "CYCLICAL FINITE STATE MACHINE ->",
+                    new Vector2D(boxX, boxY + boxHeight + 20),
+                    new Vector2D(boxWidth, 50),
+                    0, 0, 0, 90);
         }
-
     }
 
 
@@ -559,6 +576,18 @@ public class FSMOption3 {
                 }
             }
         }
+    }
+    //=========================================================================//
+    // Getter & Setter methods for selected                                    //
+    //=========================================================================//
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
 }

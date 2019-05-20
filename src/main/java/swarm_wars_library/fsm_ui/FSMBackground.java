@@ -64,6 +64,25 @@ public class FSMBackground {
 
 
     //=========================================================================//
+    // Button change colour methods                                            //
+    //=========================================================================//
+    public void changeColour(int colourR, int colourG, int colourB, int alpha) {
+        if (colourR == 0) {
+            this.colourR = colourR;
+            this.colourG = colourG;
+            this.colourB = colourB;
+            this.alpha = alpha;
+        }
+        else {
+            this.colourR = colourR;
+            this.colourG = colourG;
+            this.colourB = colourB;
+            this.alpha =   alpha;
+        }
+
+    }
+
+    //=========================================================================//
     // Button label methods                                                    //
     //=========================================================================//
 
