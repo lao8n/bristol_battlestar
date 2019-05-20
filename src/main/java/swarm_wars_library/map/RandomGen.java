@@ -1,5 +1,7 @@
 package swarm_wars_library.map;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 // double R = RandomGen.getRand();
@@ -10,23 +12,39 @@ public class RandomGen {
 
     private static Random r;
 
-    private static long seed = 10;
+    private static int seed = 10;
 
     private static boolean  seedSet = false;
 
+    private static List<Integer> seeds;
+
+    private static int currSeed = 0;
+
     private RandomGen(){
+        seeds = new ArrayList<>();
         r = new Random();
-        r.setSeed(seed);
+        seeds.add(seed);
+        resetSeed();
     }
 
     public static void setSeed(int newSeed){
         if(seedSet) return;
-        seed = newSeed;
+        populateSeeds(newSeed);
+        seed = seeds.get(currSeed++);
         r.setSeed(seed);
         seedSet = true;
     }
 
+    public static void populateSeeds(int seed){
+        Random seedGen = new Random();
+        seedGen.setSeed(seed);
+        for(int i = 0; i < 10; i++) {
+            seeds.add(seedGen.nextInt());
+        }
+    }
+
     public static void resetSeed(){
+        seed = seeds.get((currSeed++) % seeds.size());
         r.setSeed(seed);
     }
 

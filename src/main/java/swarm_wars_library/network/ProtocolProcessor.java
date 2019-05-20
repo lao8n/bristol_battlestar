@@ -101,12 +101,13 @@ public class ProtocolProcessor {
         if(m.get(Headers.TYPE).equals(Constants.END)) {
             System.out.println("Received game ended....");
             this.map.setGameEnded(true);
+
             if(m.containsKey(Headers.WINNERID)){
                 GameOver.getInstance().setWinningPlayer((Integer) m.get(Headers.WINNERID));
-            } else {
-                throw new Error("END package doesn't have winner Id");
-            }
+            } else { throw new Error("END package doesn't have winner Id"); }
 
+            swarm_wars_library.map.Map.getInstance().setGameEnded(true);
+            MessageHandlerMulti.gameStarted = false;
             return true;
         }
         return false;
