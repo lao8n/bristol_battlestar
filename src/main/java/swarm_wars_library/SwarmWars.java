@@ -138,7 +138,7 @@ public class SwarmWars extends PApplet {
   // Game Setup                                                              //
   //=========================================================================//
   public void gameSetup(){
-    RandomGen.resetSeed();
+    if(playNetworkGame) RandomGen.resetSeed();
     CommsGlobal.reset();
     this.commsSetup();
     this.entitiesSetup();

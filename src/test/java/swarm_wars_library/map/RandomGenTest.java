@@ -43,4 +43,5 @@ class RandomGenTest {
         assertTrue(ones > 10);
         assertTrue(zeros > 10);
     }
+
 }
