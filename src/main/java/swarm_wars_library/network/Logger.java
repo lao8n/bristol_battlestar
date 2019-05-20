@@ -14,7 +14,7 @@ public class Logger {
     private String path = "./"+
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-    private boolean isLogging = true;
+    private boolean isLogging = false;
 
     private static Logger logger = new Logger();
 

@@ -30,6 +30,24 @@ public class FSMSelectScreen{
 
     private FSMBackground start;
 
+    // Box dimensions
+    private int boxWidthFSM1;
+    private int boxHeightFSM1;
+    private int boxXFSM1;
+    private int boxYFSM1;
+
+    //FSM 2
+    private int boxWidthFSM2;
+    private int boxHeightFSM2;
+    private int boxXFSM2;
+    private int boxYFSM2;
+
+    //FSM 3
+    private int boxWidthFSM3;
+    private int boxHeightFSM3;
+    private int boxXFSM3;
+    private int boxYFSM3;
+
 
     // FSM Manager Methods
     private FSMManager fsmManager = FSMManager.getInstance();
@@ -87,29 +105,38 @@ public class FSMSelectScreen{
     public void setupOptions() {
 
         //FSM 1
-        int boxWidthFSM1 = this.sketch.width/3-40;
-        int boxHeightFSM1 = this.sketch.width/3-40;
-        int boxXFSM1 = 30;
-        int boxYFSM1 = this.sketch.height/4;
+        this.boxWidthFSM1 = this.sketch.width/3-40;
+        this.boxHeightFSM1 = this.sketch.width/3-40;
+        this.boxXFSM1 = 30;
+        this.boxYFSM1 = this.sketch.height/4;
 
         //FSM 2
-        int boxWidthFSM2 = this.sketch.width/3-40;
-        int boxHeightFSM2 = this.sketch.width/3-40;
-        int boxXFSM2 = this.sketch.width/3+20;
-        int boxYFSM2 = this.sketch.height/4;
+        this.boxWidthFSM2 = this.sketch.width/3-40;
+        this.boxHeightFSM2 = this.sketch.width/3-40;
+        this.boxXFSM2 = this.sketch.width/3+20;
+        this.boxYFSM2 = this.sketch.height/4;
 
         //FSM 3
-        int boxWidthFSM3 = this.sketch.width/3-40;
-        int boxHeightFSM3 = this.sketch.width/3-40;
-        int boxXFSM3 = (this.sketch.width/3)*2+10;
-        int boxYFSM3 = this.sketch.height/4;
+        this.boxWidthFSM3 = this.sketch.width/3-40;
+        this.boxHeightFSM3 = this.sketch.width/3-40;
+        this.boxXFSM3 = (this.sketch.width/3)*2+10;
+        this.boxYFSM3 = this.sketch.height/4;
 
-        this.fsmOption1 = new FSMOption1(this.sketch, boxWidthFSM1, boxHeightFSM1, 
-            boxXFSM1, boxYFSM1);
-        this.fsmOption2 = new FSMOption2(this.sketch, boxWidthFSM2, boxHeightFSM2, 
-            boxXFSM2, boxYFSM2);
-        this.fsmOption3 = new FSMOption3(this.sketch, boxWidthFSM3, boxHeightFSM3, 
-            boxXFSM3, boxYFSM3);
+        this.fsmOption1 = new FSMOption1(this.sketch, 
+                                         this.boxWidthFSM1, 
+                                         this.boxHeightFSM1, 
+                                         this.boxXFSM1, 
+                                         this.boxYFSM1);
+        this.fsmOption2 = new FSMOption2(this.sketch, 
+                                         this.boxWidthFSM2, 
+                                         this.boxHeightFSM2, 
+                                         this.boxXFSM2, 
+                                         this.boxYFSM2);
+        this.fsmOption3 = new FSMOption3(this.sketch, 
+                                         this.boxWidthFSM3, 
+                                         this.boxHeightFSM3, 
+                                         this.boxXFSM3, 
+                                         this.boxYFSM3);
     }
 
     public void updateOptions() {
@@ -143,6 +170,21 @@ public class FSMSelectScreen{
                 new Vector2D(100, 50))) {
             this.buildFSM(Map.getInstance().getPlayerId());
             this.currentScreen = GAMESCREEN.SWARMSELECT;
+        }
+        else if(this.checkMousePressButton(
+            new Vector2D(this.boxXFSM1, this.boxYFSM1 - 50 - 20),
+            new Vector2D(this.boxWidthFSM1, 50))){
+            this.chosenOption = 1;
+        }
+        else if(this.checkMousePressButton(
+            new Vector2D(this.boxXFSM2, this.boxYFSM2 - 50 - 20),
+            new Vector2D(this.boxWidthFSM2, 50))){
+            this.chosenOption = 2;
+        }
+        else if(this.checkMousePressButton(
+            new Vector2D(this.boxXFSM3, this.boxYFSM3 - 50 - 20),
+            new Vector2D(this.boxWidthFSM3, 50))){
+            this.chosenOption = 3;
         }
     }
 
@@ -208,6 +250,113 @@ public class FSMSelectScreen{
                 FSMVARIABLE.PLAYERHEALTH,
                 FSMCOMPARISON.LESSTHAN,
                 30);       
+        }
+        else if (this.chosenOption == 2){
+            for(int i = 0; i < this.fsmOption2.getOrderFSMStates().size(); i++){
+                this.fsmManager.addFSMState(playerId, 
+                                            i + 1, 
+                                            this.fsmOption2.getOrderFSMStates()
+                                                           .get(i)); 
+            } 
+            this.fsmManager.addTransition(
+                playerId,
+                1,
+                2,
+                FSMVARIABLE.ENEMYHEALTH,
+                FSMCOMPARISON.LESSTHAN,
+                70);
+            this.fsmManager.addTransition(
+                playerId,
+                1,
+                3,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.GREATERTHAN,
+                400);
+            this.fsmManager.addTransition(
+                playerId,
+                2,
+                3,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.GREATERTHAN,
+                200);   
+            this.fsmManager.addTransition(
+                playerId,
+                3,
+                4,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.LESSTHAN,
+                200);   
+            this.fsmManager.addTransition(
+                playerId,
+                4,
+                1,
+                FSMVARIABLE.PLAYERHEALTH,
+                FSMCOMPARISON.LESSTHAN,
+                90);        
+        }
+        else if (this.chosenOption == 3){
+            for(int i = 0; i < this.fsmOption3.getOrderFSMStates().size(); i++){
+                this.fsmManager.addFSMState(playerId, 
+                                            i + 1, 
+                                            this.fsmOption3.getOrderFSMStates()
+                                                           .get(i)); 
+            }
+            this.fsmManager.addTransition(
+                playerId,
+                1,
+                2,
+                FSMVARIABLE.ENEMYHEALTH,
+                FSMCOMPARISON.LESSTHAN,
+                30);
+            this.fsmManager.addTransition(
+                playerId,
+                2,
+                1,
+                FSMVARIABLE.ENEMYHEALTH,
+                FSMCOMPARISON.GREATERTHAN,
+                70);
+            this.fsmManager.addTransition(
+                playerId,
+                2,
+                3,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.LESSTHAN,
+                200);
+            this.fsmManager.addTransition(
+                playerId,
+                3,
+                2,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.GREATERTHAN,
+                400);
+            this.fsmManager.addTransition(
+                playerId,
+                3,
+                4,
+                FSMVARIABLE.PLAYERHEALTH,
+                FSMCOMPARISON.LESSTHAN,
+                30);
+            this.fsmManager.addTransition(
+                playerId,
+                4,
+                3,
+                FSMVARIABLE.PLAYERHEALTH,
+                FSMCOMPARISON.GREATERTHAN,
+                70);
+            this.fsmManager.addTransition(
+                playerId,
+                4,
+                1,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.LESSTHAN,
+                200);
+            this.fsmManager.addTransition(
+                playerId,
+                1,
+                4,
+                FSMVARIABLE.ENEMYDISTANCE,
+                FSMCOMPARISON.GREATERTHAN,
+                400);
         }
     }
     

@@ -2,12 +2,7 @@ package swarm_wars_library.fsm_ui;
 
 import java.util.ArrayList;
 import processing.core.PApplet;
-import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.fsm.FSMSTATE;
-import swarm_wars_library.fsm.FSMCOMPARISON;
-import swarm_wars_library.fsm.FSMManager;
-import swarm_wars_library.fsm.FSMSTATE;
-import swarm_wars_library.fsm.FSMVARIABLE;
 import swarm_wars_library.physics.Vector2D;
 
 
@@ -311,7 +306,6 @@ public class FSMOption1 {
     public void swapButton1() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label1.getLabelString();
-            // this.star1.changeColour();
             buttons[0] = true;
         }
         else {
@@ -341,9 +335,7 @@ public class FSMOption1 {
     public void swapButton2() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label2.getLabelString();
-            // this.star2.changeColour();
             buttons[1] = true;
-            System.out.println(this.buttonToSwap);
         }
         else {
             for (int i=0; i <=2; i++) {
@@ -372,7 +364,6 @@ public class FSMOption1 {
     public void swapButton3() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label3.getLabelString();
-            // this.star3.changeColour();
             buttons[2] = true;
         }
         else {

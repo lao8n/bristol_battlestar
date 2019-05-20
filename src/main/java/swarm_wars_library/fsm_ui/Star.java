@@ -92,25 +92,6 @@ public class Star {
   //=========================================================================//
   // Star change methods                                                     //
   //=========================================================================//   
-  public void changeColour() {
-    if (this.colourR == 119) {
-        this.colourR = 178;
-        this.colourG = 248;
-        this.colourB = 255;
-    }
-    else if (this.colourR == 181) {
-          this.colourR = 238;
-          this.colourG = 225;
-          this.colourB = 225;
-      }
-    else  if (this.colourR == 221) {
-        this.colourR = 166;
-        this.colourG = 163;
-        this.colourB = 176;
-    }
-
-  }
-
     public void changeColourSwap(String label) {
         if (label == "Special") {
             this.colourR = 252;
