@@ -8,7 +8,7 @@ import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_select.TextButton;
 import processing.core.PConstants;
-
+import java.util.concurrent.*;
 
 public class StartScreen {
 
@@ -18,6 +18,7 @@ public class StartScreen {
     private PImage background;
     private PImage battlestarLogo;
     private PImage shipLogo;
+    private PImage shipSprite; 
 
     // Game Screen
     private GAMESCREEN currentScreen;
@@ -40,6 +41,17 @@ public class StartScreen {
     // Mouse
     private boolean mousePressed = false;
 
+    // animated sprite info
+    private PImage[] sprites;
+    private final int spriteX = 1;
+    private final int spriteY = 8;
+    private final int totalSprites = spriteX * spriteY;
+    private int currentSprite;
+    private int spriteW;
+    private int spriteH;
+    private int index = 0;
+
+
     public StartScreen(PApplet sketch) {
         this.sketch = sketch;
         background = Images.getInstance().getBackground();
@@ -47,12 +59,26 @@ public class StartScreen {
 
         shipLogo = Images.getInstance().getShipLogo();
         battlestarLogo = Images.getInstance().getBattlestarLogo();
-
+        shipSprite = Images.getInstance().getShipLogoAnimated();
+        
         currentScreen = GAMESCREEN.START;
 
         this.setup1PlayerButton();
         this.setup2Player1stButton();
         this.setup2Player2ndButton();
+
+        // animated sprite setup
+        sprites = new PImage[totalSprites];
+        spriteW = shipSprite.width/spriteX;;
+        spriteH = shipSprite.height/spriteY;
+        currentSprite = ThreadLocalRandom.current().nextInt( 0 , totalSprites );
+        index = 0;
+        for (int x = 0; x < spriteX; x++){
+            for (int y = 0; y < spriteY; y++) {
+                sprites[index] = shipSprite.get(x * spriteW, y * spriteH, spriteW, spriteH);
+                index++;
+            }
+        }
     }
 
     public void update() {
@@ -209,12 +235,15 @@ public class StartScreen {
         // draw background stars
         this.sketch.image(backgroundImage, 0, 0, this.sketch.width, this.sketch.height);
 
-        // draw gameover & ship logos
+        // draw logo & ship logos
         this.sketch.image(this.battlestarLogo, 10, 10,
                 this.sketch.width-10, this.sketch.height/3-10);
 
         //this.sketch.imageMode(PConstants.CENTER);
-        this.sketch.image(this.shipLogo, this.sketch.width/20, this.sketch.height/3, (this.sketch.width/20)*19, (this.sketch.height/5)*4); 
+        //this.sketch.image(this.sprites[currentSprite], this.sketch.width, (this.sketch.height/3)*2); 
+        this.sketch.image(this.sprites[currentSprite], this.sketch.width/20, this.sketch.height/3, (this.sketch.width/20)*19, (this.sketch.height/5)*4); 
+        currentSprite++;
+        currentSprite %= totalSprites;
     }
 
     public GAMESCREEN getGameScreen() {
