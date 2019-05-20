@@ -16,7 +16,7 @@ public class RenderPlayer1NumM {
         this.Mnum=missilenum;
         this.sketch.fill(0, 101, 255);
         this.sketch.textSize(30);
-        this.sketch.textAlign(LEFT, TOP);
-        this.sketch.text("Missile number: " + Mnum, 5, 125);
+        this.sketch.textAlign(PConstants.LEFT,PConstants.TOP);
+        this.sketch.text("Missiles: " + Mnum, this.sketch.width/2-150, 5);
     }
 }
