@@ -41,4 +41,6 @@ public class Headers {
     public static final String TRANSITIONS = "TR";
 
     public static final String SWARM_LOGIC = "SL";
+
+    public static final String WINNERID = "WID";
 }
