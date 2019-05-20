@@ -441,7 +441,7 @@ public class SwarmWars extends PApplet {
       this.player2TakeDamage.get(i).update();
     }
     for(int i = 0; i < this.player2DealDamage.size(); i++){
-      if(!this.player1DealDamage.get(i).getClass().equals(Bot.class)){
+      if(!this.player2DealDamage.get(i).getClass().equals(Bot.class)){
         this.player2DealDamage.get(i).update();
       }
     }
@@ -533,6 +533,7 @@ public class SwarmWars extends PApplet {
       this.currentScreen = this.gameOver.getGameScreen();
       this.gameOver.resetCurrentScreen();
       this.uiSetup();
+      this.fsmUI.resetFSM();
       this.frameNumber = 1;
       map.setGameEnded(false);
     }

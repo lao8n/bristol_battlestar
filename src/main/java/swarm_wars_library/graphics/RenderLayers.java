@@ -39,6 +39,7 @@ public class RenderLayers{
   private String playerMeBot;
   private String playerEnemy;
   private String playerEnemyBot;
+  private boolean player2BotFlag = false;
 
   public RenderLayers(PApplet sketch){
     this.sketch = sketch;
@@ -114,8 +115,8 @@ public class RenderLayers{
   private void renderEntitiesLayer(){
     this.renderPlayer1Bots();
     this.renderPlayer2Bots();
-    this.renderTurrets();
     this.renderTurretBullets();
+    this.renderTurrets();
     this.renderPlayer1Bullets();
     this.renderPlayer1Missiles();
     this.renderPlayer2Bullets();
@@ -312,7 +313,10 @@ public class RenderLayers{
                                                  .getLocation(),
                                       CommsGlobal.get(playerMe)
                                                  .getPacket(0)
-                                                 .getLocation());
+                                                 .getLocation(),
+                                      CommsGlobal.get("TURRET_BULLET")
+                                                  .getPacket(i)
+                                                  .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("TURRET_BULLET")
@@ -530,22 +534,6 @@ public class RenderLayers{
     boolean turretFlag = false;
     boolean player2Flag = false;
 
-
-    // Render Player 2 Bots
-    for (int i = 0; i < CommsGlobal.get(playerEnemyBot)
-                                   .getNumberOfReceivers(); i++){
-      // Render entity if alive
-      if(CommsGlobal.get(playerEnemyBot)
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){ 
-        //this.setMiniMapBotColor(2);
-        this.renderMiniMapBot2.update(CommsGlobal.get(playerEnemyBot)
-                                                .getPacket(i)
-                                                .getLocation());
-      }
-    }
-
     // Render Player 1 Bots
     for (int i = 0; i < CommsGlobal.get(playerMeBot)
                                    .getNumberOfReceivers(); i++){
@@ -558,6 +546,32 @@ public class RenderLayers{
         this.renderMiniMapBot.update(CommsGlobal.get(playerMeBot)
                                                 .getPacket(i)
                                                 .getLocation());
+
+        // render player 2 bots in line of sight of bots
+        for (int k = 0; k < CommsGlobal.get(playerEnemyBot)
+                              .getNumberOfReceivers(); k++){
+            player2BotFlag = this.renderMiniMapBot.checkInLineOfSight(
+              CommsGlobal.get(playerMeBot)
+                        .getPacket(i)
+                        .getLocation(),
+              CommsGlobal.get("PLAYER2_BOT")
+                        .getPacket(k)
+                        .getLocation(),        
+              this.renderMiniMapBot.botMapLineOfSight);
+            if (player2BotFlag){
+              // Render entity if alive
+              if(CommsGlobal.get(playerEnemyBot)
+                            .getPacket(i)
+                            .getState()
+                            .equals(STATE.ALIVE)){ 
+                setMiniMapBotColor(2);
+                this.renderMiniMapBot2.update(CommsGlobal.get(playerEnemyBot)
+                          .getPacket(i)
+                          .getLocation());
+              }
+            }
+        }
+
         // Render any turrets in line of sight of bots
         for (int j = 0; j < CommsGlobal.get("TURRET")
                                       .getNumberOfReceivers(); j++){

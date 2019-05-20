@@ -38,7 +38,7 @@ public abstract class AbstractSwarmAlgorithm{
   protected Transform transform;
   protected Map map;
   protected ENTITY tag;
-  protected STATE state = STATE.ALIVE;
+  protected STATE state = STATE.DEAD;
 
   public AbstractSwarmAlgorithm(ENTITY tag, Transform transform){
     this.transform = transform;
@@ -49,7 +49,7 @@ public abstract class AbstractSwarmAlgorithm{
   public abstract void applySwarmAlgorithm();
   protected abstract Vector2D seekMotherShip();
 
-  public STATE getstate() { return this.state; }
+  public STATE getState() { return this.state; }
   public void setState(STATE state) { this.state = state; }
 
   protected void avoidEdge(double scale){

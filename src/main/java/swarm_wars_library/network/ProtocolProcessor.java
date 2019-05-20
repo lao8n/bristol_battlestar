@@ -100,6 +100,7 @@ public class ProtocolProcessor {
         if(m.get(Headers.TYPE).equals(Constants.END)) {
             System.out.println("Received game ended....");
             swarm_wars_library.map.Map.getInstance().setGameEnded(true);
+            MessageHandlerMulti.gameStarted = false;
             return true;
         }
         return false;
