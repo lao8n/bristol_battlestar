@@ -6,6 +6,7 @@ import java.util.List;
 import org.javatuples.Quartet;
 
 import swarm_wars_library.comms.CommsGlobal;
+import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
@@ -19,6 +20,10 @@ public class FSMStateTransition implements IFSMStateTransition{
   double weight1 = 0;
   double weight2 = 0;
   double weight3 = 0;
+  int playerId = Map.getInstance().getPlayerId();
+  int enemyId = Map.getInstance().getEnemyId();
+  String playerMe = "PLAYER" + Integer.toString(playerId);    
+  String playerEnemy = "PLAYER" + Integer.toString(enemyId);
 
   //=========================================================================//
   // FSM State Constructor                                                   //
@@ -129,7 +134,9 @@ public class FSMStateTransition implements IFSMStateTransition{
       case ENEMYDISTANCE:
         return this.getNearestEnemyDistance();
       case PLAYERHEALTH:
-        return CommsGlobal.get("PLAYER1").getPacket(0).getHealth();
+        return CommsGlobal.get(this.playerMe).getPacket(0).getHealth();
+      case ENEMYHEALTH:
+        return CommsGlobal.get(this.playerEnemy).getPacket(0).getHealth();
       default:
         return 0.0;
     }
@@ -137,10 +144,10 @@ public class FSMStateTransition implements IFSMStateTransition{
 
   private double getNearestEnemyDistance(){
     // TODO get it to work with multiple players
-    return Vector2D.sub(CommsGlobal.get("PLAYER1")
+    return Vector2D.sub(CommsGlobal.get(this.playerMe)
                                    .getPacket(0)
                                    .getLocation(),
-                        CommsGlobal.get("PLAYER2")
+                        CommsGlobal.get(this.playerEnemy)
                                    .getPacket(0)
                                    .getLocation())
                    .mag();

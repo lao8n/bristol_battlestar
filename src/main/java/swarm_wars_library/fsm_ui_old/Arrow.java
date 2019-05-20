@@ -1,4 +1,4 @@
-package swarm_wars_library.fsm_ui;
+package swarm_wars_library.fsm_ui_old;
 
 import processing.core.PApplet;
 
@@ -22,9 +22,9 @@ public class Arrow {
   // Arrow update                                                            //
   //=========================================================================//
   public void update(){
-    this.sketch.stroke(255, 255, 255);
-    this.sketch.strokeWeight(3);
-    this.sketch.fill(255, 255, 255);
+    this.sketch.stroke(0, 235, 255);
+    this.sketch.strokeWeight(5);
+    this.sketch.fill(0, 235, 255);
     float a = PApplet.dist((float) this.fromLocation.getX(), 
                            (float) this.fromLocation.getY(), 
                            (float) this.toLocation.getX(), 
