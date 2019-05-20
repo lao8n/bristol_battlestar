@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 
+import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.engine.Health;
 import swarm_wars_library.engine.Shooter;
@@ -84,7 +85,10 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    if (tag == ENTITY.PLAYER2_MISSILE|| tag == ENTITY.PLAYER1_MISSILE) {
+    if (SwarmWars.playNetworkGame && Map.getInstance().getPlayerId() == 2) {
+      return;
+    }
+    if (tag == ENTITY.PLAYER2_MISSILE || tag == ENTITY.PLAYER1_MISSILE) {
       this.takeDamage(30);
     }
     else {

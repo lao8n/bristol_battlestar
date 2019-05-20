@@ -408,8 +408,8 @@ public class SwarmWars extends PApplet {
       int player1_health = (Integer) health.get(0);
       int player2_health = (Integer) health.get(1);
       if(Map.getInstance().getPlayerId() == 2){
-        this.playerMe.setHealth(player2_health);
-        this.playerEnemy.setHealth(player1_health);
+         this.playerMe.setHealth(player2_health);
+         this.playerEnemy.setHealth(player1_health);
       }
     }
     if(messageIn.containsKey(Headers.PLAYER_POINTS)) {
@@ -419,8 +419,8 @@ public class SwarmWars extends PApplet {
       int player1_points = (Integer) points.get(0);
       int player2_points = (Integer) points.get(1);
       if(Map.getInstance().getPlayerId() == 2){
-        this.playerMe.setScore(player2_points);
-        this.playerEnemy.setScore(player1_points);
+        CommsGlobal.get("PLAYER1").getPacket(0).setScore(player1_points);
+        CommsGlobal.get("PLAYER2").getPacket(0).setScore(player2_points);
       }
     }
   }

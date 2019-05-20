@@ -1,6 +1,10 @@
 package swarm_wars_library.engine;
 
+import swarm_wars_library.SwarmWars;
+import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
+
+import java.util.Map;
 
 public class Health {
 
