@@ -58,11 +58,11 @@ public class SwarmLogic {
           new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
                                      this.rb);
         break;
-      case SCOUTANT:
-        this.swarm_algo =
-                new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform,
-                        this.rb);
-        break;
+      // case SCOUTANT:
+      //   this.swarm_algo =
+      //           new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform,
+      //                   this.rb);
+      //   break;
       case SPECIALSUICIDE:
         this.swarm_algo =
           new SpecialSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
