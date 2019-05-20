@@ -12,10 +12,14 @@ public class FSMOption3 {
 
     private FSMBackground FSM3;
     private FSMBackground information;
-    private FSMBackground content;
     private FSMBackground chooseOption3;
-    private boolean showContent;
     private boolean selected;
+
+    //TRANSITIONS
+    private Button transition1;
+    private Button transition2;
+    private Button transition3;
+    private Button transition4;
 
 
     //SIZING
@@ -94,8 +98,8 @@ public class FSMOption3 {
         this.boxY = boxY;
 
         this.setupLocations();
-        this.setupButtons();
         this.setupArrows();
+        this.setupButtons();
         this.setupStars();
         this.setupLabels();
         this.setOrderFSMStates();
@@ -105,8 +109,8 @@ public class FSMOption3 {
     // Update method                                                           //
     //=========================================================================//
     public void update(){
-        this.updateButtons();
         this.updateArrows();
+        this.updateButtons();
         this.updateStars();
         this.updateLabels();
         this.updateMousePressButton();
@@ -148,33 +152,65 @@ public class FSMOption3 {
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
-      /*  this.content = new FSMBackground(this.sketch,
-                "The number of states in a finite state machine does not\n necessarily define " +
-                        "how you transition from one state to another\n. You can build and invent any transitions " +
-                        "that you like\n. Here, the transitions are bidirectional and cyclical.",
-                new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(boxWidth, 200),
-                0, 0, 0, 90); */
+
         this.chooseOption3 = new FSMBackground(this.sketch,
             "SELECT CYCLICAL FSM",
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
+
+        //transitions
+        Vector2D transitionDimensions = new Vector2D(70, 50);
+        this.transition1  = new Button (
+                this.sketch,
+                "Enemy distance\nmore than\n400 stars",
+                Vector2D.add(this.getMidPoint(this.location1, this.location2),
+                        new Vector2D(-35, -25)),
+                transitionDimensions);
+        this.transition2  = new Button (
+                this.sketch,
+                "Your health\nless than\n30 points",
+                Vector2D.add(this.getMidPoint(this.location2, this.location3),
+                        new Vector2D(-35, -30)),
+                transitionDimensions);
+        this.transition3  = new Button (
+                this.sketch,
+                "Your health\ngreater than\n70 points",
+                Vector2D.add(this.getMidPoint(this.location3, this.location4),
+                        new Vector2D(-35, -25)),
+                transitionDimensions);
+        this.transition4  = new Button (
+                this.sketch,
+                "Enemy distance\nless than\n200 points",
+                Vector2D.add(this.getMidPoint(this.location4, this.location1),
+                        new Vector2D(-35, -30)),
+                transitionDimensions);
     }
 
     private void updateButtons() {
         this.FSM3.update();
         this.information.update();
         this.chooseOption3.update();
-        if (this.showContent == true) {
-            this.content.update();
-        }
+        //if (this.showContent == true) {
+         //   this.content.update();
+        //}
         if (this.selected == true) {
             this.chooseOption3.changeColour(255, 255, 255, 80);
         }
         if (this.selected == false) {
             this.chooseOption3.changeColour(0, 0, 0, 80);
         }
+        this.sketch.textSize(8);
+        this.transition1.update();
+        this.transition2.update();
+        this.transition3.update();
+        this.transition4.update();
+        this.sketch.textSize(13);
+    }
+
+    private Vector2D getMidPoint(Vector2D location1, Vector2D location2){
+        return new Vector2D((location1.getX() + location2.getX()) / 2,
+                (location1.getY() + location2.getY()) / 2);
     }
 
     //=========================================================================//
@@ -233,7 +269,7 @@ public class FSMOption3 {
     // Star methods                                                            //
     //=========================================================================//
     private void setupStars(){
-        Vector2D dimensions = new Vector2D(20, 45);
+        Vector2D dimensions = new Vector2D(25, 55);
         int nPoints = 5;
         this.star1 = new Star(this.sketch, 
                             this.location1, 

@@ -150,13 +150,13 @@ public class Rules {
             this.start.update();
             this.sketch.textSize(20);
             this.background.update();
-            this.sketch.textSize(15);
+            this.sketch.textSize(13);
 
            if (this.show == true) {
                //this.rule.setSetTextSize(false);
-               this.sketch.textSize(20);
+               //this.sketch.textSize(20);
                this.rule.update();
-               this.sketch.textSize(15);
+               //this.sketch.textSize(13);
            }
         }
 

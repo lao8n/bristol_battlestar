@@ -15,6 +15,9 @@ public class FSMOption1 {
     private FSMBackground information;
     private FSMBackground content;
     private FSMBackground chooseOption1;
+    private Button transition1;
+    private Button transition2;
+    private Button transition3;
     private boolean showContent;
     private boolean selected;
 
@@ -66,8 +69,8 @@ public class FSMOption1 {
         this.boxY = boxY;
 
         this.setupLocations();
-        this.setupButtons();
         this.setupArrows();
+        this.setupButtons();
         this.setupStars();
         this.setupLabels();
         this.setOrderFSMStates();
@@ -77,8 +80,8 @@ public class FSMOption1 {
     // Update method                                                           //
     //=========================================================================//
     public void update(){
-        this.updateButtons();
         this.updateArrows();
+        this.updateButtons();
         this.updateStars();
         this.updateLabels();
         this.updateMousePressButton();
@@ -125,6 +128,27 @@ public class FSMOption1 {
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
+
+        //transitions
+        Vector2D transitionDimensions = new Vector2D(70, 50);
+        this.transition1  = new Button (
+                this.sketch,
+                "Enemy distance\nmore than\n300 stars away",
+                Vector2D.add(this.getMidPoint(this.location1, this.location2),
+                        new Vector2D(-60, -27)),
+                transitionDimensions);
+        this.transition2  = new Button (
+                this.sketch,
+                "Enemy health\nless than\n 30 points",
+                Vector2D.add(this.getMidPoint(this.location2, this.location3),
+                        new Vector2D(-30, -27)),
+                transitionDimensions);
+        this.transition3  = new Button (
+                this.sketch,
+                "Your health\nless than\n30 points",
+                Vector2D.add(this.getMidPoint(this.location3, this.location1),
+                        new Vector2D(-30, -27)),
+                transitionDimensions);
     }
 
     private void updateButtons() {
@@ -137,8 +161,16 @@ public class FSMOption1 {
         if (this.selected == false) {
             this.chooseOption1.changeColour(0, 0, 0, 80);
         }
+        this.sketch.textSize(9);
+        this.transition1.update();
+        this.transition2.update();
+        this.transition3.update();
+        this.sketch.textSize(13);
+    }
 
-
+    private Vector2D getMidPoint(Vector2D location1, Vector2D location2){
+        return new Vector2D((location1.getX() + location2.getX()) / 2,
+                (location1.getY() + location2.getY()) / 2);
     }
 
     //=========================================================================//
