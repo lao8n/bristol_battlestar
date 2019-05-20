@@ -1,5 +1,6 @@
 package swarm_wars_library.graphics;
 
+import swarm_wars_library.Images;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 import swarm_wars_library.comms.CommsGlobal;
@@ -13,8 +14,8 @@ import swarm_wars_library.sound.SoundMixer;
 public class RenderPlayer2 extends AbstractRenderMapObject{
 
   private float scale;
-  private PImage shipSprite = this.sketch.loadImage("resources/images/shipSinglePlayer2.png");
-  private PImage shipThrustSprite = this.sketch.loadImage("resources/images/shipThrustSprite.png");
+  private PImage shipSprite = Images.getInstance().getShipSinglePlayer2();
+  private PImage shipThrustSprite = Images.getInstance().getShipThrustSprite();
   private int shipThrustStrength = 250; 
 
   // animated sprite infor

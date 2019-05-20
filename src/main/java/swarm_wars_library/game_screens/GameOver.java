@@ -2,6 +2,7 @@ package swarm_wars_library.game_screens;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import swarm_wars_library.Images;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
@@ -21,6 +22,8 @@ public class GameOver {
     private PImage gameOverLogo;
     private PImage brokenShipLogo;
     private PImage flames;
+
+    private Images images = Images.getInstance();
 
     // Game Screen
     private GAMESCREEN currentScreen;
@@ -49,10 +52,10 @@ public class GameOver {
 
     public GameOver(PApplet sketch) {
         this.sketch = sketch;
-        background = sketch.loadImage("resources/images/background.png");
-        brokenShipLogo = sketch.loadImage("resources/images/brokenShipLogo.png"); 
-        gameOverLogo = sketch.loadImage("resources/images/gameoverLogo.png");
-        flames = sketch.loadImage("resources/images/gameOverFlameSingle.png");
+        this.background = images.getBackground();
+        this.brokenShipLogo = images.getBrokenShipLogo();
+        this.gameOverLogo = images.getGameOverLogo();
+        this.flames = images.getFlames();
 
         this.myScore = 0;
         this.enemyScore = 0;

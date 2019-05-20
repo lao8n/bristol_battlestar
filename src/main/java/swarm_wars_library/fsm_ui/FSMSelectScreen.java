@@ -3,6 +3,7 @@ package swarm_wars_library.fsm_ui;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import swarm_wars_library.Images;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.fsm.FSMCOMPARISON;
 import swarm_wars_library.fsm.FSMManager;
@@ -58,8 +59,7 @@ public class FSMSelectScreen{
     public FSMSelectScreen(PApplet sketch){
         this.sketch = sketch;
         this.currentScreen = GAMESCREEN.FSMUI;
-        PImage background = sketch.loadImage(
-                "resources/images/background.png");
+        PImage background = Images.getInstance().getBackground();
         this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
         this.setupButtons();
         this.setupOptions();

@@ -3,15 +3,17 @@ package swarm_wars_library.graphics;
 import processing.core.PImage;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import swarm_wars_library.Images;
 
 public class RenderSplashScreen{
 
+  private Images images = Images.getInstance();
   private PApplet sketch;
   private PImage splashScreen; 
 
   public RenderSplashScreen(PApplet sketch){
     this.sketch = sketch;
-    splashScreen = sketch.loadImage("resources/images/splashScreen.png");
+    this.splashScreen = images.getSplashScreen();
     //this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
   }
 

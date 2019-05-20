@@ -1,5 +1,6 @@
 package swarm_wars_library.graphics;
 
+import swarm_wars_library.Images;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
@@ -14,8 +15,8 @@ public class RenderPlayer1 extends AbstractRenderMapObject{
   private float scale;
 
   // sprite information
-  private PImage shipSprite = this.sketch.loadImage("resources/images/shipSingle.png");
-  private PImage shipThrustSprite = this.sketch.loadImage("resources/images/shipThrustSprite.png");
+  private PImage shipSprite = Images.getInstance().getShipSingle();
+  private PImage shipThrustSprite = Images.getInstance().getShipThrustSprite();
   private int shipThrustStrength = 250; 
 
   // for tracking ship trail

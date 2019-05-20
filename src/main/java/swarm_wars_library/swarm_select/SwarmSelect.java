@@ -13,6 +13,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
+import swarm_wars_library.Images;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.fsm.FSMCOMPARISON;
@@ -95,7 +96,7 @@ public class SwarmSelect{
     this.sketch = sketch;
     this.dimMiniMap = (int) (this.sketch.height / 2.5);
     this.currentScreen = GAMESCREEN.SWARMSELECT;
-    PImage background = sketch.loadImage("resources/images/background.png");
+    PImage background = Images.getInstance().getBackground();
     this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
     this.sketch.strokeWeight(1);
     this.setupUIMiniMap();

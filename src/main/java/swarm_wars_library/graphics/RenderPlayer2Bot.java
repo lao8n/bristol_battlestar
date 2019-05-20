@@ -1,5 +1,6 @@
 package swarm_wars_library.graphics;
 
+import swarm_wars_library.Images;
 import swarm_wars_library.map.Map;
 import processing.core.PImage;
 import processing.core.PApplet;
@@ -8,7 +9,7 @@ import processing.core.PConstants;
 public class RenderPlayer2Bot extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getBotScale();
-  private PImage droneSingle = this.sketch.loadImage("resources/images/droneSinglePlayer2.png");
+  private PImage droneSingle = Images.getInstance().getDroneSinglePlayer2();
 
   public RenderPlayer2Bot(PApplet sketch){
     super(sketch);

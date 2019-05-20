@@ -51,6 +51,7 @@ public class SwarmWars extends PApplet {
   ArrayList <AbstractEntity> gameObjectsDealDamage;
 
   // Game Backend Objects
+  Images images;
   Map map;
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
@@ -79,6 +80,13 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void setup() {
     this.frameRate(60);
+
+    // load images
+    this.images = Images.getInstance();
+    this.images.setSketch(this);
+    this.images.loadImages();
+
+
     // NETWORK - networking setup needs map for Id but map uses randgen
     // before seed.....
     this.map = Map.getInstance(); 

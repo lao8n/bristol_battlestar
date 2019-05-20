@@ -1,5 +1,6 @@
 package swarm_wars_library.graphics;
 
+import swarm_wars_library.Images;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import processing.core.PApplet;
@@ -10,7 +11,7 @@ import swarm_wars_library.sound.SoundMixer;
 
 public class RenderTurret extends AbstractRenderMapObject{
   private float scale = (float) Map.getInstance().getTurretScale();
-  private PImage turretSprite = this.sketch.loadImage("resources/images/turretSprite.png");
+  private PImage turretSprite = Images.getInstance().getTurretSprite();
 
   // animated sprite infor
   private PImage[] sprites;

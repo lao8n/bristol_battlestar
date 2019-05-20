@@ -2,6 +2,8 @@ package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import swarm_wars_library.Images;
+
 import static processing.core.PConstants.CORNER;
 
 
@@ -11,7 +13,7 @@ public class RenderBackground extends AbstractRenderMapObject{
 
   public RenderBackground(PApplet sketch){
     super(sketch);
-    this.backgroundImage = sketch.loadImage("resources/images/gameMap.png");
+    this.backgroundImage = Images.getInstance().getGameMap();
   }
 
   @Override 

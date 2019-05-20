@@ -2,6 +2,7 @@ package swarm_wars_library.graphics;
 
 import processing.core.PConstants;
 import processing.core.PImage;
+import swarm_wars_library.Images;
 import swarm_wars_library.map.Map;
 import processing.core.PApplet;
 import swarm_wars_library.physics.Vector2D;
@@ -11,7 +12,7 @@ public class RenderPlayer2Missile extends AbstractRenderMapObject {
 
   private float scale;
   // sprite information
-  private PImage missileSprite = this.sketch.loadImage("resources/images/missile2Sprite.png");
+  private PImage missileSprite = Images.getInstance().getMissile2Sprite();
   private double heading=0;
 
   // animated sprite infor
