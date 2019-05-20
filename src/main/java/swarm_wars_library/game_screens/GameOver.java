@@ -14,6 +14,8 @@ import swarm_wars_library.comms.CommsGlobal;
 
 public class GameOver {
 
+    public static GameOver instance = new GameOver();
+
     // Processing
     private PApplet sketch;
     //private PImage backgroundImage;
@@ -37,7 +39,7 @@ public class GameOver {
     // Mouse
     private boolean mousePressed = false;
 
-    // animated sprite infor
+    // animated sprite info
     private PImage[] sprites;
     private final int spriteX = 4;
     private final int spriteY = 1;
@@ -47,7 +49,14 @@ public class GameOver {
     private int spriteH;
     private int index = 0;
 
-    public GameOver(PApplet sketch) {
+    private int winningPlayer = 0;
+
+    private Map map;
+
+
+    private GameOver(){};
+
+    public void setup(PApplet sketch) {
         this.sketch = sketch;
         background = sketch.loadImage("resources/images/background.png");
         brokenShipLogo = sketch.loadImage("resources/images/brokenShipLogo.png"); 
@@ -59,7 +68,7 @@ public class GameOver {
 
         this.setupReplayButton();
 
-        // animated sprite setp
+        // animated sprite setup
         sprites = new PImage[totalSprites];
         spriteW = flames.width/spriteX;;
         spriteH = flames.height/spriteY;
@@ -71,12 +80,19 @@ public class GameOver {
                 index++;
             }
         }
+
+        map = Map.getInstance();
     }
 
     public void update() {
+        if(sketch == null) throw new Error("GameOver screen not setup with sketch");
         this.updateBackground();
         this.updateMousePressButton();
         this.updateReplayButton();
+    }
+
+    public static GameOver getInstance() {
+        return instance;
     }
 
     //=========================================================================//
@@ -145,10 +161,18 @@ public class GameOver {
     // Background methods                                                      //
     //=========================================================================//
     private void updateBackground(){
-        //this.sketch.background(13, 30, 40);
-        this.sketch.imageMode(PConstants.CORNERS);
+
+        if(this.getWinningPlayer() == map.getPlayerId()){
+            System.out.println("WINNER: This player won...");
+        } else if(this.getWinningPlayer() == map.getEnemyId()){
+            System.out.println("WINNER: Enemy won...");
+        } else {
+            System.out.println("WINNER: ERROR");
+        }
 
         // draw background stars
+        //this.sketch.background(13, 30, 40);
+        this.sketch.imageMode(PConstants.CORNERS);
         this.sketch.image(background, 0, 0, this.sketch.width, this.sketch.height);
 
         // draw gameover & ship logos
@@ -174,4 +198,12 @@ public class GameOver {
         this.currentScreen = GAMESCREEN.GAMEOVER;
     }
 
+
+    public int getWinningPlayer() {
+        return winningPlayer;
+    }
+
+    public void setWinningPlayer(int winningPlayer) {
+        this.winningPlayer = winningPlayer;
+    }
 }

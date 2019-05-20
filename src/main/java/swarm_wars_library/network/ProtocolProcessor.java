@@ -3,6 +3,7 @@ package swarm_wars_library.network;
 import org.json.JSONObject;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.fsm.OtherFSMBuilder;
+import swarm_wars_library.game_screens.GameOver;
 import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
 
@@ -99,7 +100,13 @@ public class ProtocolProcessor {
     private boolean endGame(Map m) {
         if(m.get(Headers.TYPE).equals(Constants.END)) {
             System.out.println("Received game ended....");
-            swarm_wars_library.map.Map.getInstance().setGameEnded(true);
+            this.map.setGameEnded(true);
+            if(m.containsKey(Headers.WINNERID)){
+                GameOver.getInstance().setWinningPlayer((Integer) m.get(Headers.WINNERID));
+            } else {
+                throw new Error("END package doesn't have winner Id");
+            }
+
             return true;
         }
         return false;

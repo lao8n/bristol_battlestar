@@ -81,10 +81,12 @@ public class SwarmWars extends PApplet {
     this.frameRate(60);
     // NETWORK - networking setup needs map for Id but map uses randgen
     // before seed.....
-    this.map = Map.getInstance(); 
+    this.map = Map.getInstance();
+    this.gameOver = GameOver.getInstance();
+    this.gameOverSetup();
     this.uiSetup();
     this.soundSetup();
-    this.gameOverSetup();
+
 
     // NETWORKING - Starts server and gets ids
     this.frameNumber = 1;
@@ -502,7 +504,7 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
 
   public void gameOverSetup(){
-    this.gameOver = new GameOver(this);
+    this.gameOver.setup(this);
   }
 
   public void checkForGameOver() {
@@ -510,20 +512,24 @@ public class SwarmWars extends PApplet {
       // player 1 dead
       SoundMixer.stopThruster();
       map.setGameEnded(true);
+      gameOver.setWinningPlayer(map.getEnemyId());
     }
+
     if(playNetworkGame && playerEnemy.getHealth() <= 0){
       // player 2 dead
       map.setGameEnded(true);
+      gameOver.setWinningPlayer(map.getPlayerId());
     }
 
     if(!playNetworkGame && playerAI.getHealth() <= 0){
       // player 2 dead
       map.setGameEnded(true);
+      gameOver.setWinningPlayer(map.getPlayerId());
     }
 
     if(map.gameEnded()){
       this.currentScreen = GAMESCREEN.GAMEOVER;
-      if(playNetworkGame) NetworkClientFunctions.sendEnd(map.getPlayerId());
+      if(playNetworkGame) NetworkClientFunctions.sendEnd(map.getPlayerId(), gameOver.getWinningPlayer());
     }
   }
 
