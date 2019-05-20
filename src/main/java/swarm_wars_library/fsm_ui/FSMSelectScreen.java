@@ -3,18 +3,21 @@ package swarm_wars_library.fsm_ui;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.fsm.FSMCOMPARISON;
 import swarm_wars_library.fsm.FSMManager;
-import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.fsm.FSMVARIABLE;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
+import processing.core.PConstants;
+
 
 public class FSMSelectScreen{
 
     // Processing
     private PApplet sketch;
+    private PImage background;
     private PImage backgroundImage;
 
     // Game Screen
@@ -60,8 +63,7 @@ public class FSMSelectScreen{
     public FSMSelectScreen(PApplet sketch){
         this.sketch = sketch;
         this.currentScreen = GAMESCREEN.FSMUI;
-        PImage background = sketch.loadImage(
-                "resources/images/background.png");
+        this.background = Images.getInstance().getBackground();
         this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
         this.setupButtons();
         this.setupOptions();
@@ -96,16 +98,9 @@ public class FSMSelectScreen{
     // Background methods                                                      //
     //=========================================================================//
     private void updateBackground(){
-        this.sketch.image(this.backgroundImage, 0, 0,
+        this.sketch.imageMode(PConstants.CORNERS);
+        this.sketch.image(this.background, 0, 0,
                 this.sketch.width, this.sketch.height);
-
-        // for(int i = 0; i <= 10; i++){
-        //     this.sketch.fill(255, 255, 204);
-        //     this.sketch.ellipse(this.sketch.random(this.sketch.width),
-        //             this.sketch.random(this.sketch.height),
-        //             2,
-        //             2);
-        // }
     }
 
     public void setupOptions() {
@@ -164,9 +159,9 @@ public class FSMSelectScreen{
                 new Vector2D(100, 50),
                 0, 0, 0, 80);
         this.instructions = new FSMBackground(this.sketch,
-                "INSTRUCTIONS: \n\n Selected your chosen finite state machine by clicking on the" +
+                "INSTRUCTIONS: \n\nSelected your chosen finite state machine by clicking on the" +
                         "'Selected' button above it.\n You can chose the order of the states by clicking " +
-                "on the two stars you wish to swap around.",
+                        "on the two stars you wish to swap around.",
                 new Vector2D(30, 30),
                 new Vector2D(800, 100),
                 0, 0, 0, 80);

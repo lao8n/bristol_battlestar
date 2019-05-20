@@ -6,11 +6,10 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import java.util.concurrent.*;
-import swarm_wars_library.sound.SoundMixer;
 
 public class RenderTurret extends AbstractRenderMapObject{
   private float scale = (float) Map.getInstance().getTurretScale();
-  private PImage turretSprite = this.sketch.loadImage("resources/images/turretSprite.png");
+  private PImage turretSprite = Images.getInstance().getTurretSprite();
 
   // animated sprite infor
   private PImage[] sprites;

@@ -6,12 +6,13 @@ import processing.core.PConstants;
 
 public class RenderSplashScreen{
 
+  private Images images = Images.getInstance();
   private PApplet sketch;
   private PImage splashScreen; 
 
   public RenderSplashScreen(PApplet sketch){
     this.sketch = sketch;
-    splashScreen = sketch.loadImage("resources/images/splashScreen.png");
+    this.splashScreen = images.getSplashScreen();
     //this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
   }
 

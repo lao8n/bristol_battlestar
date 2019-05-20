@@ -2,6 +2,7 @@ package swarm_wars_library.game_screens;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
@@ -41,11 +42,11 @@ public class StartScreen {
 
     public StartScreen(PApplet sketch) {
         this.sketch = sketch;
-        background = sketch.loadImage("resources/images/background.png");
+        background = Images.getInstance().getBackground();
         this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
 
-        shipLogo = sketch.loadImage("resources/images/shipLogo.png"); 
-        battlestarLogo = sketch.loadImage("resources/images/battlestarLogo.png");
+        shipLogo = Images.getInstance().getShipLogo();
+        battlestarLogo = Images.getInstance().getBattlestarLogo();
 
         currentScreen = GAMESCREEN.START;
 

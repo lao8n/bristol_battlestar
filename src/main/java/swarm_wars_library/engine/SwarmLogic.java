@@ -1,5 +1,6 @@
 package swarm_wars_library.engine;
 
+import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.entities.STATE;
@@ -122,4 +123,8 @@ public class SwarmLogic {
   public STATE getState() { return this.state; }
 
   public void setState(STATE state) { this.state = state; }
+
+  public SWARMALGORITHM getSwarmAlgorithm() {
+    return lastSwarmAlgorithm;
+  }
 }

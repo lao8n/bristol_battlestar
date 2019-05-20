@@ -2,6 +2,7 @@ package swarm_wars_library.comms;
 
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.entities.STATE;
+import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
 public class CommsPacket {
   private Vector2D location;
@@ -17,6 +18,7 @@ public class CommsPacket {
   private int moveUp;
   private int moveDown;
   private double heading;
+  private SWARMALGORITHM swarmAlgorithm;
 
   public int getId() {
     return id;
@@ -120,7 +122,16 @@ public class CommsPacket {
   public double getHeading(){
     return  this.heading;
   }
+
   public void setHeading(double Heading)  {
     this.heading = Heading;
+  }
+
+  public SWARMALGORITHM getSwarmAlgorithm() {
+    return swarmAlgorithm;
+  }
+
+  public void setSwarmAlgorithm(SWARMALGORITHM swarmAlgorithm) {
+    this.swarmAlgorithm = swarmAlgorithm;
   }
 }

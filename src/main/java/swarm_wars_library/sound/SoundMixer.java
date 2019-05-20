@@ -13,6 +13,7 @@ public class SoundMixer{
   private static SoundFile turretShoot;
   private static SoundFile explosion1; 
   private static SoundFile explosion2; 
+  private static SoundFile pointsWon; 
   
   public SoundMixer(PApplet sketch){
     thruster = new SoundFile(sketch, "resources/sound/rocketThrust.aif");
@@ -20,6 +21,11 @@ public class SoundMixer{
     turretShoot = new SoundFile(sketch, "resources/sound/laser_2.aif");
     explosion1 = new SoundFile(sketch, "resources/sound/deep_laser.aif");
     explosion2 = new SoundFile(sketch, "resources/sound/explosion2.aif");
+    pointsWon = new SoundFile(sketch, "resources/sound/pointsWon.aif");
+  }
+
+  public static void playPointsWon(){
+    pointsWon.play();
   }
 
   public static void playPlayer1Shoot(){

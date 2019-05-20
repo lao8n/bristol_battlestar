@@ -11,7 +11,7 @@ public class RenderPlayer2Missile extends AbstractRenderMapObject {
 
   private float scale;
   // sprite information
-  private PImage missileSprite = this.sketch.loadImage("resources/images/missile2Sprite.png");
+  private PImage missileSprite = Images.getInstance().getMissile2Sprite();
   private double heading=0;
 
   // animated sprite infor

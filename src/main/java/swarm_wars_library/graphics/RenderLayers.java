@@ -33,6 +33,8 @@ public class RenderLayers{
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
   private RenderMiniMapBot2 renderMiniMapBot2;
+  private RenderCurrentAlgorithm renderCurrentAlgorithm;
+  private RenderPlus10 renderPlus10;
   private int playerId;
   private int enemyId;
   private String playerMe;
@@ -62,13 +64,27 @@ public class RenderLayers{
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
     this.renderPlayer2NumM = new RenderPlayer2NumM(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
-    this.renderMiniMap = new RenderMiniMap(sketch, 200, 20);
+
+    int miniMapWidth = 200;
+    int miniMapBorderOffset = 20;
+    this.renderMiniMap = new RenderMiniMap(sketch, miniMapWidth, miniMapBorderOffset);
     this.renderMiniMapPlayer1 = new RenderMiniMapPlayer1(sketch);
     this.renderMiniMapPlayer2 = new RenderMiniMapPlayer2(sketch);
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
     this.renderMiniMapBot2 = new RenderMiniMapBot2(sketch);
 
+    int currentAlgoithmBoxWidth = miniMapWidth / 2;
+    int currentAlgoithmBoxTopLeftX = sketch.width - miniMapBorderOffset - currentAlgoithmBoxWidth;
+    int currentAlgoithmBoxTopLeftY = sketch.height - miniMapWidth - currentAlgoithmBoxWidth - 2 * miniMapBorderOffset;
+    this.renderCurrentAlgorithm = new RenderCurrentAlgorithm(
+            sketch
+            , currentAlgoithmBoxWidth
+            , currentAlgoithmBoxTopLeftX
+            , currentAlgoithmBoxTopLeftY
+    );
+
+    this.renderPlus10 = new RenderPlus10(sketch);
 
     playerId = map.getPlayerId();
     enemyId = map.getEnemyId();
@@ -123,6 +139,14 @@ public class RenderLayers{
     this.renderPlayer2Missiles();
     this.renderPlayer1();
     this.renderPlayer2();
+    this.renderPlus10Bonus();
+  }
+
+  //=========================================================================//
+  // Render Plus 10                                                          //
+  //=========================================================================//
+  private void renderPlus10Bonus(){
+      this.renderPlus10.renderMapObject();
   }
 
   //=========================================================================//
@@ -524,6 +548,9 @@ public class RenderLayers{
 
     // Render (empty) mini map
     this.renderMiniMap.update();
+
+    // Render current swarm algorithm
+    this.renderCurrentAlgorithm.update();
   }
 
   //=========================================================================//

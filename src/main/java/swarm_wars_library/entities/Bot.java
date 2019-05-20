@@ -74,6 +74,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
     this.commsPacket.setState(this.getState());
     this.commsPacket.setLocation(this.getLocation());
     this.commsPacket.setVelocity(this.getVelocity());
+    this.commsPacket.setSwarmAlgorithm(swarmLogic.getSwarmAlgorithm());
   }
 
   //=========================================================================//

@@ -5,12 +5,15 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import static processing.core.PConstants.CENTER;
+
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 
 public class OptionButton {
 
   private PApplet sketch;
+  private Images images = Images.getInstance();
   private Vector2D topLeftLocation;
   private Vector2D dimensions;
   private PImage defaultImage;
@@ -35,22 +38,22 @@ public class OptionButton {
     this.sketch = sketch;
     this.topLeftLocation = topLeftLocation;
     this.dimensions = dimensions;
-    this.defaultImage = sketch.loadImage("resources/images/default.png");
+    this.defaultImage = images.getDefaultImage();
 
-    this.specialSuicide = sketch.loadImage("resources/images/specialSuicide.png");
-    this.specialGhost = sketch.loadImage("resources/images/specialGhost.png");
-    this.specialStar = sketch.loadImage("resources/images/specialStar.png");
-    this.specialSacrifice = sketch.loadImage("resources/images/specialSacrifice.png"); 
+    this.specialSuicide = images.getSpecialSuicide();
+    this.specialGhost = images.getSpecialGhost();
+    this.specialStar = images.getSpecialStar();
+    this.specialSacrifice = images.getSpecialSacrifice();
 
-    this.defendShell = sketch.loadImage("resources/images/defendShell.png");
-    this.defendFlock = sketch.loadImage("resources/images/defendFlock.png");
-    this.defendInvincible = sketch.loadImage("resources/images/defendInvincible.png"); 
-    this.defendHibernate = sketch.loadImage("resources/images/defendHibernate.png"); 
+    this.defendShell = images.getDefendShell();
+    this.defendFlock = images.getDefendFlock();
+    this.defendInvincible = images.getDefendInvincible();
+    this.defendHibernate = images.getDefendHibernate();
 
-    this.scoutRandom = sketch.loadImage("resources/images/scoutRandom.png");
-    this.scoutBee = sketch.loadImage("resources/images/scoutBee.png");
-    this.scoutAnt = sketch.loadImage("resources/images/scoutAnt.png");
-    this.scoutPSO = sketch.loadImage("resources/images/scoutPSO.png"); 
+    this.scoutRandom = images.getScoutRandom();
+    this.scoutBee = images.getScoutBee();
+    this.scoutAnt = images.getScoutAnt();
+    this.scoutPSO = images.getScoutPSO();
   }
 
   //=========================================================================//
