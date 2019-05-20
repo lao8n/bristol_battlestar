@@ -60,7 +60,7 @@ public class SwarmWars extends PApplet {
   GameOver gameOver;
 
   // Game screens 
-  GAMESCREEN currentScreen = GAMESCREEN.START; //GAMESCREEN.FSMUI;
+  GAMESCREEN currentScreen = GAMESCREEN.START;
   int frameNumber;
 
   // sound setup

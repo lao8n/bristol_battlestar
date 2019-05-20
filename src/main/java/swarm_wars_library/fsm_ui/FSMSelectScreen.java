@@ -24,6 +24,7 @@ public class FSMSelectScreen{
     private FSMOption1 fsmOption1;
     private FSMOption2 fsmOption2;
     private FSMOption3 fsmOption3;
+    private int chosenOption = 1;
 
     private boolean mousePressed = false;
 
@@ -32,7 +33,6 @@ public class FSMSelectScreen{
 
     // FSM Manager Methods
     private FSMManager fsmManager = FSMManager.getInstance();
-
 
     //=========================================================================//
     // Constructor                                                             //
@@ -129,7 +129,7 @@ public class FSMSelectScreen{
                 "Next >",
                 new Vector2D(this.sketch.width - 150, 30),
                 new Vector2D(100, 50),
-                105, 105, 105);
+                0, 0, 0, 80);
     }
 
     private void updateButtons() {
@@ -141,8 +141,7 @@ public class FSMSelectScreen{
         if (this.checkMousePressButton(new Vector2D(this.sketch.width - 150, 
                                        30),
                 new Vector2D(100, 50))) {
-            // this.start.changeColour();
-            this.exampleFSM(Map.getInstance().getPlayerId());
+            this.buildFSM(Map.getInstance().getPlayerId());
             this.currentScreen = GAMESCREEN.SWARMSELECT;
         }
     }
@@ -180,71 +179,36 @@ public class FSMSelectScreen{
     //=========================================================================//
     // FSM Manager methods                                                     //
     //=========================================================================//
-    public void exampleFSM(int playerId){
-        // Add states first
-        this.fsmManager.addFSMState(playerId, 1, FSMSTATE.DEFEND);
-        this.fsmManager.addFSMState(playerId, 2, FSMSTATE.SCOUT);
-        this.fsmManager.addFSMState(playerId, 3, FSMSTATE.SPECIAL);
-        this.fsmManager.addFSMState(playerId, 4, FSMSTATE.DEFEND);
-        this.fsmManager.addFSMState(playerId, 5, FSMSTATE.SCOUT);
-
-        // Then add transitions after
-        this.fsmManager.addTransition(
+    public void buildFSM(int playerId){
+        if(this.chosenOption == 1){
+            for(int i = 0; i < this.fsmOption1.getOrderFSMStates().size(); i++){
+                this.fsmManager.addFSMState(playerId, 
+                                            i + 1, 
+                                            this.fsmOption1.getOrderFSMStates()
+                                                           .get(i)); 
+            } 
+            this.fsmManager.addTransition(
                 playerId,
                 1,
                 2,
                 FSMVARIABLE.ENEMYDISTANCE,
                 FSMCOMPARISON.GREATERTHAN,
-                500);
-        this.fsmManager.addTransition(
-                playerId,
-                2,
-                1,
-                FSMVARIABLE.ENEMYDISTANCE,
-                FSMCOMPARISON.LESSTHAN,
                 300);
-        this.fsmManager.addTransition(
-                playerId,
-                3,
-                1,
-                FSMVARIABLE.ENEMYDISTANCE,
-                FSMCOMPARISON.LESSTHAN,
-                150);
-        this.fsmManager.addTransition(
+            this.fsmManager.addTransition(
                 playerId,
                 2,
                 3,
-                FSMVARIABLE.ENEMYDISTANCE,
-                FSMCOMPARISON.GREATERTHAN,
-                100);
-        this.fsmManager.addTransition(
-                playerId,
-                4,
-                2,
-                FSMVARIABLE.ENEMYDISTANCE,
+                FSMVARIABLE.ENEMYHEALTH,
                 FSMCOMPARISON.LESSTHAN,
-                200);
-        this.fsmManager.addTransition(
+                30);
+            this.fsmManager.addTransition(
                 playerId,
                 3,
-                5,
-                FSMVARIABLE.ENEMYDISTANCE,
-                FSMCOMPARISON.GREATERTHAN,
-                100);
-        this.fsmManager.addTransition(
-                playerId,
-                5,
-                3,
-                FSMVARIABLE.ENEMYDISTANCE,
-                FSMCOMPARISON.LESSTHAN,
-                200);
-        this.fsmManager.addTransition(
-                playerId, 
                 1,
-                4,
-                FSMVARIABLE.ENEMYDISTANCE,
-                FSMCOMPARISON.GREATERTHAN,
-                100);
+                FSMVARIABLE.PLAYERHEALTH,
+                FSMCOMPARISON.LESSTHAN,
+                30);       
+        }
     }
     
 }

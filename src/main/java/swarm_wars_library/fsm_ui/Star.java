@@ -113,19 +113,19 @@ public class Star {
 
     public void changeColourSwap(String label) {
         if (label == "Special") {
-            this.colourR = 119;
-            this.colourG = 192;
-            this.colourB = 246;
+            this.colourR = 252;
+            this.colourG = 74;
+            this.colourB = 85;
         }
         else if (label == "Defend") {
-            this.colourR = 181;
-            this.colourG = 170;
-            this.colourB = 235;
+            this.colourR = 65;
+            this.colourG = 136;
+            this.colourB = 65;
         }
         else  if (label == "Scout") {
-            this.colourR = 221;
-            this.colourG = 218;
-            this.colourB = 232;
+            this.colourR = 241;
+            this.colourG = 189;
+            this.colourB = 0;
         }
 
     }

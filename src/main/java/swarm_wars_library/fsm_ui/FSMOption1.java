@@ -1,5 +1,13 @@
 package swarm_wars_library.fsm_ui;
+
+import java.util.ArrayList;
 import processing.core.PApplet;
+import swarm_wars_library.game_screens.GAMESCREEN;
+import swarm_wars_library.fsm.FSMSTATE;
+import swarm_wars_library.fsm.FSMCOMPARISON;
+import swarm_wars_library.fsm.FSMManager;
+import swarm_wars_library.fsm.FSMSTATE;
+import swarm_wars_library.fsm.FSMVARIABLE;
 import swarm_wars_library.physics.Vector2D;
 
 
@@ -11,6 +19,7 @@ public class FSMOption1 {
     private FSMBackground FSM1;
     private FSMBackground information;
     private FSMBackground content;
+    private FSMBackground chooseOption1;
     private boolean showContent = false;
 
 
@@ -45,6 +54,9 @@ public class FSMOption1 {
     private boolean buttons[] = {false, false, false};
     private boolean mousePressed = false;
 
+    // Order
+    private ArrayList<FSMSTATE> orderFSMStates = new ArrayList<FSMSTATE>();
+
     //=========================================================================//
     // Constructor                                                             //
     //=========================================================================//
@@ -56,11 +68,13 @@ public class FSMOption1 {
         this.boxHeight = boxHeight;
         this.boxX = boxX;
         this.boxY = boxY;
+
         this.setupLocations();
         this.setupButtons();
         this.setupArrows();
         this.setupStars();
         this.setupLabels();
+        this.setOrderFSMStates();
     }
 
     //=========================================================================//
@@ -75,6 +89,25 @@ public class FSMOption1 {
     }
 
     //=========================================================================//
+    // FSM Order methods                                                       //
+    //=========================================================================//
+    public void setOrderFSMStates(){
+        this.orderFSMStates.add(0, FSMSTATE.DEFEND);
+        this.orderFSMStates.add(1, FSMSTATE.SCOUT);
+        this.orderFSMStates.add(2, FSMSTATE.SPECIAL);
+    }
+
+    public ArrayList<FSMSTATE> getOrderFSMStates(){
+        return this.orderFSMStates;
+    }
+
+    public void swapOrderFSMStates(int i, int j){
+        FSMSTATE temp = this.orderFSMStates.get(i - 1);
+        this.orderFSMStates.set(i - 1, this.orderFSMStates.get(j - 1));
+        this.orderFSMStates.set(j - 1, temp);
+    }
+
+    //=========================================================================//
     // Button methods                                                          //
     //=========================================================================//
     private void setupButtons() {
@@ -83,13 +116,13 @@ public class FSMOption1 {
                 "",
                 new Vector2D(boxX, boxY),
                 new Vector2D(boxWidth, boxHeight),
-                0, 0, 0);
+                0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
                 "Asyclical Finite State Machine",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
-                105, 105, 105);
+                0, 0, 0, 90);
 
         this.content = new FSMBackground(this.sketch,
                 "One of the most common finite state machine you would have encountered, is\n" +
@@ -97,13 +130,20 @@ public class FSMOption1 {
                         "under certain conditions. This finite state machine is cylical as it goes in\n" +
                         "a circle, always in the same direction.",
                 new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200),
-                105, 105, 105);
+                new Vector2D(boxWidth, 200),
+                0, 0, 0, 90);
+
+        this.chooseOption1 = new FSMBackground(this.sketch,
+            "SELECT ACYCLICAL FSM",
+            new Vector2D(boxX, boxY - 50 - 20),
+            new Vector2D(boxWidth, 50), 
+            0, 0, 0, 90);
     }
 
     private void updateButtons() {
         this.FSM1.update();
         this.information.update();
+        this.chooseOption1.update();
         if (this.showContent == true) {
             this.content.update();
         }
@@ -142,9 +182,21 @@ public class FSMOption1 {
     private void setupStars(){
         Vector2D dimensions = new Vector2D(25, 55);
         int nPoints = 5;
-        this.star1 = new Star(this.sketch, this.location1, dimensions, nPoints, 119, 192, 246);
-        this.star2 = new Star(this.sketch, this.location2, dimensions, nPoints, 181, 170, 235);
-        this.star3 = new Star(this.sketch, this.location3, dimensions, nPoints, 221, 218, 232);
+        this.star1 = new Star(this.sketch, 
+                            this.location1, 
+                            dimensions, 
+                            nPoints, 
+                            65, 136, 65);
+        this.star2 = new Star(this.sketch, 
+                            this.location2, 
+                            dimensions, 
+                            nPoints, 
+                            241, 189, 0);
+        this.star3 = new Star(this.sketch, 
+                            this.location3, 
+                            dimensions, 
+                            nPoints, 
+                            252, 74, 85);
     }
 
 
@@ -173,11 +225,11 @@ public class FSMOption1 {
         int labelColour = 0;
 
         //LABELS TO PUT ON STARS
-        this.label1 = new Label(this.sketch, labelColour, "Special",
+        this.label1 = new Label(this.sketch, labelColour, "Defend",
                 this.location1);
-        this.label2 = new Label(this.sketch, labelColour, "Defend",
+        this.label2 = new Label(this.sketch, labelColour, "Scout",
                 this.location2);
-        this.label3 = new Label(this.sketch, labelColour, "Scout",
+        this.label3 = new Label(this.sketch, labelColour, "Special",
                 this.location3);
 
     }
@@ -259,7 +311,7 @@ public class FSMOption1 {
     public void swapButton1() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label1.getLabelString();
-            this.star1.changeColour();
+            // this.star1.changeColour();
             buttons[0] = true;
         }
         else {
@@ -271,6 +323,7 @@ public class FSMOption1 {
                     this.star1.changeColourSwap(this.buttonToSwap);
                     buttons[1] = false;
                     this.buttonToSwap = null;
+                    this.swapOrderFSMStates(1, 2);
                 }
                 else if (buttons[2] == true) {
                     this.label3.changeLabel(this.label1.getLabelString());
@@ -279,6 +332,7 @@ public class FSMOption1 {
                     this.star1.changeColourSwap(this.buttonToSwap);
                     buttons[2] = false;
                     this.buttonToSwap = null;
+                    this.swapOrderFSMStates(1, 3);
                 }
             }
         }
@@ -287,7 +341,7 @@ public class FSMOption1 {
     public void swapButton2() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label2.getLabelString();
-            this.star2.changeColour();
+            // this.star2.changeColour();
             buttons[1] = true;
             System.out.println(this.buttonToSwap);
         }
@@ -300,6 +354,7 @@ public class FSMOption1 {
                     this.star2.changeColourSwap(this.buttonToSwap);
                     buttons[0] = false;
                     this.buttonToSwap = null;
+                    this.swapOrderFSMStates(2, 1);
                 }
                 else if (buttons[2] == true) {
                     this.label3.changeLabel(this.label2.getLabelString());
@@ -308,6 +363,7 @@ public class FSMOption1 {
                     this.star2.changeColourSwap(this.buttonToSwap);
                     buttons[2] = false;
                     this.buttonToSwap = null;
+                    this.swapOrderFSMStates(2, 3);
                 }
             }
         }
@@ -316,7 +372,7 @@ public class FSMOption1 {
     public void swapButton3() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label3.getLabelString();
-            this.star3.changeColour();
+            // this.star3.changeColour();
             buttons[2] = true;
         }
         else {
@@ -328,6 +384,7 @@ public class FSMOption1 {
                     this.star3.changeColourSwap(this.buttonToSwap);
                     buttons[0] = false;
                     this.buttonToSwap = null;
+                    this.swapOrderFSMStates(3, 1);
                 }
                 else if (buttons[1] == true) {
                     this.label2.changeLabel(this.label3.getLabelString());
@@ -336,6 +393,7 @@ public class FSMOption1 {
                     this.star3.changeColourSwap(this.buttonToSwap);
                     buttons[1] = false;
                     this.buttonToSwap = null;
+                    this.swapOrderFSMStates(3, 2);
                 }
             }
         }

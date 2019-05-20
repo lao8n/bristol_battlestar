@@ -10,6 +10,7 @@ public class FSMOption3 {
     private FSMBackground FSM3;
     private FSMBackground information;
     private FSMBackground content;
+    private FSMBackground chooseOption3;
     private boolean showContent = false;
 
 
@@ -116,25 +117,31 @@ public class FSMOption3 {
                 "",
                 new Vector2D(boxX, boxY),
                 new Vector2D(boxHeight, boxHeight),
-                0, 0, 0);
+                0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
                 "Cyclical Finite State machine",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
-                105, 105, 105);
+                0, 0, 0, 90);
         this.content = new FSMBackground(this.sketch,
                 "The number of states in a finite state machine does not necessarily define\n" +
                         "how you transition from one state to another. You can build and invent any transitions\n" +
                         "that you like. Here, the transitions are bidirectional and cyclical.",
                 new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200),
-                105, 105, 105);
+                new Vector2D(boxWidth, 200),
+                0, 0, 0, 90);
+        this.chooseOption3 = new FSMBackground(this.sketch,
+            "SELECT CYCLICAL FSM",
+            new Vector2D(boxX, boxY - 50 - 20),
+            new Vector2D(boxWidth, 50), 
+            0, 0, 0, 90);
     }
 
     private void updateButtons() {
         this.FSM3.update();
         this.information.update();
+        this.chooseOption3.update();
         if (this.showContent == true) {
             this.content.update();
         }
@@ -198,13 +205,27 @@ public class FSMOption3 {
     private void setupStars(){
         Vector2D dimensions = new Vector2D(20, 45);
         int nPoints = 5;
-        this.star1 = new Star(this.sketch, this.location1, dimensions, nPoints, 252, 74, 85);
-        this.star2 = new Star(this.sketch, this.location2, dimensions, nPoints, 65, 136, 65);
-        this.star3 = new Star(this.sketch, this.location3, dimensions, nPoints, 252, 74, 85);
-        this.star4 = new Star(this.sketch, this.location4, dimensions, nPoints, 241, 189, 0);
+        this.star1 = new Star(this.sketch, 
+                            this.location1, 
+                            dimensions, 
+                            nPoints, 
+                            252, 74, 85);
+        this.star2 = new Star(this.sketch, 
+                            this.location2, 
+                            dimensions, 
+                            nPoints, 
+                            65, 136, 65);
+        this.star3 = new Star(this.sketch, 
+                            this.location3, 
+                            dimensions, 
+                            nPoints, 
+                            252, 74, 85);
+        this.star4 = new Star(this.sketch, 
+                            this.location4, 
+                            dimensions, 
+                            nPoints, 
+                            241, 189, 0);
     }
-
-
 
     private void updateStars(){
         this.star1.update();
@@ -273,7 +294,7 @@ public class FSMOption3 {
     // Labels methods                                                          //
     //=========================================================================//
     private void setupLabels(){
-        int labelColour = 255;
+        int labelColour = 0;
 
         //LABELS TO PUT ON STARS
         this.label1 = new Label(this.sketch, labelColour, "Special",
@@ -316,11 +337,11 @@ public class FSMOption3 {
             this.swapButton4();
         }
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200)) == true && showContent == false) {
+                new Vector2D(this.boxWidth, 200)) == true && showContent == false) {
             this.showContent = true;
         }
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200)) == true && showContent == true) {
+                new Vector2D(this.boxWidth, 200)) == true && showContent == true) {
             this.showContent = false;
         }
 
@@ -368,7 +389,6 @@ public class FSMOption3 {
     public void swapButton1() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label1.getLabelString();
-            this.star1.changeColour();
             buttons[0] = true;
         }
         else {
@@ -404,7 +424,6 @@ public class FSMOption3 {
     public void swapButton2() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label2.getLabelString();
-            this.star2.changeColour();
             buttons[1] = true;
             System.out.println(this.buttonToSwap);
         }
@@ -441,7 +460,6 @@ public class FSMOption3 {
     public void swapButton3() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label3.getLabelString();
-            this.star3.changeColour();
             buttons[2] = true;
         }
         else {
@@ -477,7 +495,6 @@ public class FSMOption3 {
     public void swapButton4() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label3.getLabelString();
-            this.star3.changeColour();
             buttons[2] = true;
         }
         else {

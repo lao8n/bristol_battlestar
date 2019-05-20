@@ -13,15 +13,14 @@ public class FSMBackground {
     private int colourR;
     private int colourG;
     private int colourB;
-    private int colourR2 = 255;
-    private int colourG2 = 255;
-    private int colourB2 = 255;
+    private int alpha;
 
     //=========================================================================//
     // Button constructor                                                      //
     //=========================================================================//
     public FSMBackground(PApplet sketch, String labelB, Vector2D topLeftLocation,
-                  Vector2D buttonDimensions, int colourR, int colourG, int colourB) {
+                  Vector2D buttonDimensions, int colourR, int colourG, int colourB,
+                  int alpha) {
         this.sketch = sketch;
         this.label = labelB;
         this.topLeftLocation = topLeftLocation;
@@ -29,25 +28,25 @@ public class FSMBackground {
         this.colourR = colourR;
         this.colourG = colourG;
         this.colourB = colourB;
+        this.alpha = alpha;
     }
 
     //=========================================================================//
     // Button update                                                           //
     //=========================================================================//
     public void update(){
-        //glow effect
-        this.sketch.noStroke();
-        this.sketch.fill(this.colourR2, this.colourG2, this.colourB2);
-        this.sketch.rect((float) this.topLeftLocation.getX() - 4,
-                (float) this.topLeftLocation.getY() - 4,
-                (float) this.buttonDimensions.getX() + 8,
-                (float) this.buttonDimensions.getY() + 8,
-                0);
+        // //glow effect
+        // this.sketch.stroke(255);
+        // this.sketch.rect((float) this.topLeftLocation.getX() - 4,
+        //         (float) this.topLeftLocation.getY() - 4,
+        //         (float) this.buttonDimensions.getX() + 8,
+        //         (float) this.buttonDimensions.getY() + 8,
+        //         0);
 
 
         //inner colour
-        this.sketch.noStroke();
-        this.sketch.fill(this.colourR, this.colourG, this.colourB);
+        this.sketch.stroke(255);
+        this.sketch.fill(this.colourR, this.colourG, this.colourB, this.alpha);
         this.sketch.rect((float) this.topLeftLocation.getX(),
                 (float) this.topLeftLocation.getY(),
                 (float) this.buttonDimensions.getX(),

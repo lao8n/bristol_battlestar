@@ -1,7 +1,6 @@
 package swarm_wars_library.fsm_ui;
 import processing.core.PApplet;
 import swarm_wars_library.physics.Vector2D;
-import processing.core.PImage;
 
 
 public class FSMOption2 {
@@ -11,6 +10,7 @@ public class FSMOption2 {
     private FSMBackground FSM2;
     private FSMBackground information;
     private FSMBackground content;
+    private FSMBackground chooseOption2;
     private boolean showContent = false;
 
     //SIZING
@@ -38,11 +38,6 @@ public class FSMOption2 {
     private Arrow arrow3;
     private Arrow arrow4;
     private Arrow arrow5;
-    private Arrow arrow6;
-    private Arrow arrow7;
-    private Arrow arrow8;
-    private Arrow arrow9;
-    private Arrow arrow10;
 
     //FSM POSITIONS
     private Vector2D location1;
@@ -60,8 +55,8 @@ public class FSMOption2 {
     //=========================================================================//
     public FSMOption2(PApplet sketch, int boxWidth, int boxHeight, int boxX, 
         int boxY){
-        this.sketch = sketch;
 
+        this.sketch = sketch;
         this.boxWidth = boxWidth;
         this.boxHeight = boxHeight;
         this.boxX = boxX;
@@ -83,7 +78,7 @@ public class FSMOption2 {
         this.updateArrows();
         this.updateStars();
         this.updateLabels();
-        //this.updateMousePressButton();
+        this.updateMousePressButton();
     }
 
     //=========================================================================//
@@ -95,25 +90,31 @@ public class FSMOption2 {
                 "",
                 new Vector2D(boxX, boxY),
                 new Vector2D(boxHeight, boxHeight),
-                0, 0, 0);
+                0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
                 "Pyramid based Finite State Machine",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
-                105, 105, 105);
+                0, 0, 0, 90);
         this.content = new FSMBackground(this.sketch,
                 "Finite state machines can take any form and shape. The transitions can go\n" +
                         "in any direction. This pyramid style finite state machine is more of a \"freestyle\"\n" +
                         "one.",
                 new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200),
-                105, 105, 105);
+                new Vector2D(boxWidth, 200),
+                0, 0, 0, 90);
+        this.chooseOption2 = new FSMBackground(this.sketch,
+            "SELECT PYRAMID BASED FSM",
+            new Vector2D(boxX, boxY - 50 - 20),
+            new Vector2D(boxWidth, 50), 
+            0, 0, 0, 90);
     }
 
     private void updateButtons() {
         this.FSM2.update();
         this.information.update();
+        this.chooseOption2.update();
         if (this.showContent == true) {
             this.content.update();
         }
@@ -161,10 +162,26 @@ public class FSMOption2 {
     private void setupStars(){
         Vector2D dimensions = new Vector2D(20, 45);
         int nPoints = 5;
-        this.star1 = new Star(this.sketch, this.location1, dimensions, nPoints, 119, 192, 246);
-        this.star2 = new Star(this.sketch, this.location2, dimensions, nPoints, 119, 192, 246);
-        this.star3 = new Star(this.sketch, this.location3, dimensions, nPoints, 181, 170, 235);
-        this.star4 = new Star(this.sketch, this.location4, dimensions, nPoints, 221, 218, 232);
+        this.star1 = new Star(this.sketch, 
+                            this.location1, 
+                            dimensions, 
+                            nPoints, 
+                            252, 74, 85);
+        this.star2 = new Star(this.sketch, 
+                            this.location2, 
+                            dimensions, 
+                            nPoints, 
+                            252, 74, 85);
+        this.star3 = new Star(this.sketch, 
+                            this.location3, 
+                            dimensions, 
+                            nPoints, 
+                            241, 189, 0);
+        this.star4 = new Star(this.sketch, 
+                            this.location4, 
+                            dimensions, 
+                            nPoints, 
+                            65, 136, 65);
     }
 
 
@@ -193,7 +210,7 @@ public class FSMOption2 {
     // Labels methods                                                          //
     //=========================================================================//
     private void setupLabels(){
-        int labelColour = 255;
+        int labelColour = 0;
 
         //LABELS TO PUT ON STARS
         this.label1 = new Label(this.sketch, labelColour, "Special",
@@ -236,11 +253,11 @@ public class FSMOption2 {
             this.swapButton4();
         }
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200)) == true && showContent == false) {
+                new Vector2D(this.boxWidth, 200)) == true && showContent == false) {
             this.showContent = true;
         }
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(200, 200)) == true && showContent == true) {
+                new Vector2D(this.boxWidth, 200)) == true && showContent == true) {
             this.showContent = false;
         }
 
@@ -289,7 +306,6 @@ public class FSMOption2 {
     public void swapButton1() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label1.getLabelString();
-            this.star1.changeColour();
             buttons[0] = true;
         }
         else {
@@ -325,7 +341,6 @@ public class FSMOption2 {
     public void swapButton2() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label2.getLabelString();
-            this.star2.changeColour();
             buttons[1] = true;
             System.out.println(this.buttonToSwap);
         }
@@ -362,7 +377,6 @@ public class FSMOption2 {
     public void swapButton3() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label3.getLabelString();
-            this.star3.changeColour();
             buttons[2] = true;
         }
         else {
@@ -398,7 +412,6 @@ public class FSMOption2 {
     public void swapButton4() {
         if (this.buttonToSwap == null) {
             this.buttonToSwap = this.label3.getLabelString();
-            this.star3.changeColour();
             buttons[2] = true;
         }
         else {
