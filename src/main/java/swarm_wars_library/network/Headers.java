@@ -41,4 +41,12 @@ public class Headers {
     public static final String TRANSITIONS = "TR";
 
     public static final String SWARM_LOGIC = "SL";
+
+    public static final String HEALTH_PACKS = "HP";
+
+    public static final String HEALTH_PACK_ID = "HPI";
+
+    public static final String HEALTH_PACK_VERSION = "HPV";
+
+    public static final String HEALTH_PACK_LOCATION = "HPL";
 }

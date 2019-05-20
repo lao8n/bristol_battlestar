@@ -1,19 +1,24 @@
+package swarm_wars_library.entities;
+
 import swarm_wars_library.SwarmWars;
-import swarm_wars_library.entities.*;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.map.RandomGen;
-import swarm_wars_library.network.Constants;
-import swarm_wars_library.network.Headers;
-import swarm_wars_library.network.MessageHandlerMulti;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.sound.SoundMixer;
+
 public class HealthPack extends AbstractEntity implements ISound {
+
     private int addHealth = 20;
+
     private int healthPackId;
+
     private int healthPackVersion;
+
     private boolean playNetworkGame;
-    public HealthPack(int healthPackId, boolean playNetworkGame) {
+
+    public HealthPack(ENTITY tag, int healthPackId, boolean playNetworkGame) {
+        super(tag, Map.getInstance().getTurretScale());
         this.playNetworkGame = playNetworkGame;
         this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance().getMapWidth(),
                 RandomGen.getRand() * Map.getInstance().getMapHeight()));
@@ -22,6 +27,7 @@ public class HealthPack extends AbstractEntity implements ISound {
         this.setState(STATE.DEAD);
         this.healthPackId = healthPackId;
     }
+
     @Override
     public void update() {
         if (this.isState(STATE.DEAD)) {

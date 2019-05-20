@@ -48,6 +48,7 @@ public class ProtocolProcessor {
                 return;
             }
             if (updateTurret(m)) return;
+            if (updateHealthPack(m)) return;
             if (endGame(m)) return;
             createBuffer(m);
             saveToBuffer(m);
@@ -72,10 +73,14 @@ public class ProtocolProcessor {
             OtherFSMBuilder otherFSMBuilder = new OtherFSMBuilder();
             otherFSMBuilder.setOtherFSM(m);
             List<Double> locations = (ArrayList) m.get(Headers.TURRETS);
-            System.out.println("Initial locations: " + locations);
+            System.out.println("Initial turrets locations: " + locations);
+            List<Double> hpLocations = (ArrayList) m.get(Headers.HEALTH_PACKS);
             for(int i = 0; i < this.map.getNumTurrets(); i++){
                 this.map.storeTurretLocation(i, 
                                              new Vector2D(locations.get(2*i), locations.get(2*i+1)));
+            }
+            for (int i = 0; i < this.map.getNumHealthPack(); i++) {
+                this.map.storeHealthPackLocation(i, new Vector2D(locations.get(2*i), locations.get(2*i+1)));
             }
             return true;
         }
@@ -91,6 +96,20 @@ public class ProtocolProcessor {
                                             (Double) ((ArrayList) m.get(Headers.TURRET_LOCATION)).get(1)));
             this.map.storeTurretVersion((Integer) m.get(Headers.TURRET_ID), 
                                          (Integer) m.get(Headers.TURRET_VERSION));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean updateHealthPack(Map m) {
+        if (m.get(Headers.TYPE).equals(Constants.UPDATE_HEALTHPACK)) {
+            System.out.println(m.get(Headers.HEALTH_PACK_VERSION));
+            System.out.println(m.get(Headers.HEALTH_PACK_LOCATION));
+            this.map.storeHealthPackLocation((Integer) m.get(Headers.HEALTH_PACK_ID),
+                                            new Vector2D((Double) ((ArrayList) m.get(Headers.HEALTH_PACK_LOCATION)).get(0),
+                                                    (Double) ((ArrayList) m.get(Headers.HEALTH_PACK_LOCATION)).get(1)));
+            this.map.storeHealthPackVersion((Integer) m.get(Headers.HEALTH_PACK_ID),
+                                            (Integer) m.get(Headers.HEALTH_PACK_VERSION));
             return true;
         }
         return false;
