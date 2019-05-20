@@ -8,13 +8,15 @@ import swarm_wars_library.physics.Vector2D;
 
 public class FSMOption2 {
 
+
     private PApplet sketch;
 
     private FSMBackground FSM2;
     private FSMBackground information;
-    private FSMBackground content;
+   // private FSMBackground content;
     private FSMBackground chooseOption2;
-    private boolean showContent = false;
+   // private boolean showContent;
+    private boolean selected;
 
     //SIZING
     private int boxWidth;
@@ -120,17 +122,19 @@ public class FSMOption2 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "Pyramid based Finite State Machine",
+                "PYRAMID BASED FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
-        this.content = new FSMBackground(this.sketch,
-                "Finite state machines can take any form and shape. The transitions can go\n" +
-                        "in any direction. This pyramid style finite state machine is more of a \"freestyle\"\n" +
-                        "one.",
+        /*this.content = new FSMBackground(this.sketch,
+                "\nFinite state machines can take any form and shape.\n The transitions can go" +
+                        "in any direction.\n The essence of a finite state machine, is simply that\n"+
+                        "it has a limited number of fixed states.\n" +
+                        "This pyramid style finite state machine is more of a 'freestyle'\n" +
+                        "one. This one will never fail to surprise you.",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 200),
-                0, 0, 0, 90);
+                0, 0, 0, 90);*/
         this.chooseOption2 = new FSMBackground(this.sketch,
             "SELECT PYRAMID BASED FSM",
             new Vector2D(boxX, boxY - 50 - 20),
@@ -142,8 +146,11 @@ public class FSMOption2 {
         this.FSM2.update();
         this.information.update();
         this.chooseOption2.update();
-        if (this.showContent == true) {
-            this.content.update();
+        if (this.selected == true) {
+            this.chooseOption2.changeColour(255, 255, 255, 90);
+        }
+        if (this.selected == false) {
+            this.chooseOption2.changeColour(0, 0, 0, 90);
         }
     }
 
@@ -279,17 +286,30 @@ public class FSMOption2 {
         else if(this.checkMousePressStar(this.location4, 45) == true) {
             this.swapButton4();
         }
-        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(this.boxWidth, 200)) == true && showContent == false) {
-            this.showContent = true;
-        }
-        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
-                new Vector2D(this.boxWidth, 200)) == true && showContent == true) {
-            this.showContent = false;
-        }
-
+       else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
+                new Vector2D(this.boxWidth, 50)) == true) {
+               this.information = new FSMBackground(this.sketch,
+                       "PYRAMID BASED FINITE STATE MACHINE\n" +
+                               "\nFinite state machines can take any form and shape.\n The transitions can go" +
+                               "in any direction.\n The essence of a finite state machine, is simply that\n"+
+                               "it has a limited number of fixed states.\n" +
+                               "This pyramid style finite state machine is more of a 'freestyle'\n" +
+                               "one. This one will never fail to surprise you.",
+                       new Vector2D(boxX, boxY + boxHeight + 20),
+                       new Vector2D(boxWidth, 190),
+                       0, 0, 0, 90);
+           }
+       else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
+                   new Vector2D(this.boxWidth, 200)) == true) {
+               this.information = new FSMBackground(this.sketch,
+                       "PYRAMID BASED FINITE STATE MACHINE ->",
+                       new Vector2D(boxX, boxY + boxHeight + 20),
+                       new Vector2D(boxWidth, 50),
+                       0, 0, 0, 90);
+           }
 
     }
+
 
 
     private boolean checkMousePressStar(Vector2D location, int radius) {
@@ -481,6 +501,21 @@ public class FSMOption2 {
             }
         }
     }
-}
+    //=========================================================================//
+    // Getter & Setter methods for selected                                    //
+    //=========================================================================//
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+  }
+
+
+
 
 
