@@ -481,11 +481,12 @@ public class SwarmSelect{
                                                  this.dimStartButton.getY());
     this.renderSwarmExplanation = new TextExplanation(
       this.sketch,
-      "Welcome to the Swarm Algorithm selection screen!!\n" + 
-      "Use this screen to try out different swarm algorithms by clicking on " + 
-      "the icons below and see their behaviour in the preview screen.\n" + 
-      "Fill in your finite state machine by clicking on a coloured node and " + 
-      "then choosing a correspondingly coloured swarm algorithm.\n",
+      "Now that you’ve chosen your finite state machine, you can decide\n" +
+              "which versions of each algorithm you want your army to embody.\n"+
+              "There are three types of algorithms: defend, scout, and special.\n" +
+              "Click on one of the coloured states in the machine below, and then\n" +
+              "on a swarm algorithm of a matching colour, until your finite state\n" +
+              "machine has been filled. Then you can begin your journey...",
       this.locationSwarmExplanation,
       this.dimSwarmExplanation,
       0, 
@@ -513,19 +514,19 @@ public class SwarmSelect{
         return "The suicide algorithm is a dangerous strategy. Your bots leave " + 
                "the mothership and hunt down turrets to kill them. You may rack up the \n" +
                "points but you leave yourself extremely exposed to any potential " + 
-               "attackers.";
+               "attackers,\n and will lose any successfully attacking bots in the process";
       case SPECIALGHOST:
-        return "The Ghost algorithm will make sure that your mothership is protected " +
-                "at all times by having the bots surround it.\n" +
-                "Your mothership will become like a ghost to the reste of the game. Unfindable " +
-                "by the enemy but still there, ready to attack.";
+        return  "The Ghost algorithm will protect your mothership with a wide shell formation " +
+                "and bring up to 10 of your bots back from defeat to rejoin your army\n" +
+                "This would be most useful when your bots are running low and you need help";
       case SPECIALSTAR:
         return  "Left, right, up, down, left again. The special star alogithm will surprise your enemies " +
                 "who will not be able to follow your fast movements\n fatiguing them, we hope to exhausion. \n" +
                 "#gameover";
       case SPECIALSACRIFICE:
-        return "Sometimes, you to achieve the common good, sacrifices need to be made. With this algorithm, " +
-                "you will gain overall power by letting go of a little bit of it.";
+        return  "Sometimes, you to achieve the common good, sacrifices need to be made. With this algorithm, " +
+                "you will gain overall power by letting go of a little bit of it. \n" +
+                "Sacrifice some of your army to bring back the mothership some health";
       case DEFENDSHELL:
         return "What better defence is there than holding on tight?\n" +
                 "The Defend Shell algorithm will create a tight impenetrable shield around \n" +
@@ -544,15 +545,19 @@ public class SwarmSelect{
                 "defend yourself.";
       case DEFENDINVINCIBLE:
         return "Catch me if you can! With this algorithm, your enemy is going to have to get their " +
-                "heavy artillery out to get you.";
+                "heavy artillery out to get you.\n" +
+                 "For a short time period, every bullet will simply be absorbed by your bots and they"+
+                 "Wont take any of the damage!";
       case DEFENDHIBERNATE:
-        return "If you want to kill me, you first need to find me! With this algorithm, the enemy will " +
-                "need to work hard to reach you in your black hole of hibernation.\n";
+        return "In the Hibernate algorithm you can get some of your health back, but with a tradeoff:\n" +
+                "You’ll be forced to stay still and be an easy target for the enemy, while your health" +
+                "is recharged to 50% more than its current level.\n" +
+                "If you can find a good hiding place, this algorithm will really help you out.";
       case SCOUTRANDOM:
         return "In war, information is everything. Use this scout algorithm to search the map " + 
                "for enemies. \n" + 
-               "The bots randomly diffuse over the map like brownian motion. Given enough time " + 
-               "no hiding place is safe!";
+               "The bots randomly diffuse over the map like brownian motion. \nGiven enough time " +
+               "no hiding place is safe and they will come back to you with info so you can start the hunt!";
       case SCOUTBEE:
         return "Nothing is scarier than a swarm of angry bees! Use this algorithm to scout for " + 
                "turrets and find them before your enemy does.\n";

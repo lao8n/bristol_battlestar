@@ -176,7 +176,7 @@ public class StartScreen {
             // navigate to finite state machine UI screen
             Map.getInstance().setPlayerId(1);
             Map.getInstance().setEnemyId(2);
-            this.currentScreen = GAMESCREEN.FSMUI;
+            this.currentScreen = GAMESCREEN.RULES;
         }
 
         // multiplayer as player 1
@@ -185,7 +185,7 @@ public class StartScreen {
             Map.getInstance().setPlayerId(1);
             Map.getInstance().setEnemyId(2);
             twoPlayer = true;
-            this.currentScreen = GAMESCREEN.FSMUI;
+            this.currentScreen = GAMESCREEN.RULES;
         }
 
         // multiplayer as player 2
@@ -194,7 +194,7 @@ public class StartScreen {
             Map.getInstance().setPlayerId(2);
             Map.getInstance().setEnemyId(1);
             twoPlayer = true;
-            this.currentScreen = GAMESCREEN.FSMUI;
+            this.currentScreen = GAMESCREEN.RULES;
         }
     }
 

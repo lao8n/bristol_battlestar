@@ -14,6 +14,7 @@ import swarm_wars_library.entities.PlayerN;
 import swarm_wars_library.entities.Turret;
 import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.fsm_ui.FSMSelectScreen;
+import swarm_wars_library.fsm_ui.Rules;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.game_screens.GameOver;
 import swarm_wars_library.graphics.RenderLayers;
@@ -54,6 +55,7 @@ public class SwarmWars extends PApplet {
   Map map;
   RenderLayers renderLayers;
   SwarmSelect swarmSelect;
+  Rules rules;
   FSMSelectScreen fsmUI;
   StartScreen startScreen; 
   PlayBackgroundMusic playBackgroundMusic;
@@ -99,6 +101,9 @@ public class SwarmWars extends PApplet {
     switch(this.currentScreen){
       case START:
         this.startUpdate();
+        break;
+      case RULES:
+        this.rulesUpdate();
         break;
       case FSMUI:
         this.uiUpdate();
@@ -285,6 +290,7 @@ public class SwarmWars extends PApplet {
   public void uiSetup(){
     this.fsmUI = new FSMSelectScreen(this);
     this.startScreen = new StartScreen(this);
+    this.rules = new Rules(this);
     if (playNetworkGame) networkConnect();
   }
 
@@ -474,16 +480,27 @@ public class SwarmWars extends PApplet {
   //=========================================================================//
   public void startUpdate(){
     this.startScreen.update();
-    if(this.startScreen.getGameScreen() == GAMESCREEN.FSMUI){
+    if(this.startScreen.getGameScreen() == GAMESCREEN.RULES){
       if (this.startScreen.is2Player()){
         this.networkSetup();
       }
 
       this.currentScreen = this.startScreen.getGameScreen();
       //this.startScreen.resetCurrentScreen();
-      this.uiSetup();
+      // this.uiSetup();
       this.frameNumber = 1;
       //map.setGameEnded(false);
+    }
+  }
+
+  //=========================================================================//
+  // Rules update                                                            //
+  //=========================================================================//
+  public void rulesUpdate(){
+    this.rules.update();
+    if(this.rules.getGameScreen() == GAMESCREEN.FSMUI){
+      this.currentScreen = this.rules.getGameScreen();
+      // this.rules.resetGameScreen();
     }
   }
 
@@ -574,6 +591,9 @@ public class SwarmWars extends PApplet {
       case START:
         this.startScreen.listenMousePressed();
         break;
+      case RULES:
+        this.rules.listenMousePressed();
+        break;
       case FSMUI:
         this.fsmUI.listenMousePressed();
         break;
@@ -602,6 +622,9 @@ public class SwarmWars extends PApplet {
     switch(this.currentScreen){
       case START:
         this.startScreen.listenMouseReleased();
+        break;
+      case RULES:
+        this.rules.listenMouseReleased();
         break;
       case FSMUI:
         this.fsmUI.listenMouseReleased();
