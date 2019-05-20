@@ -29,6 +29,8 @@ public class FSMSelectScreen{
     private boolean mousePressed = false;
 
     private FSMBackground start;
+    private FSMBackground instructions;
+
 
     // Box dimensions
     private int boxWidthFSM1;
@@ -160,10 +162,18 @@ public class FSMSelectScreen{
                 new Vector2D(this.sketch.width - 150, 30),
                 new Vector2D(100, 50),
                 0, 0, 0, 80);
+        this.instructions = new FSMBackground(this.sketch,
+                "INSTRUCTIONS: \n\n Selected your chosen finite state machine by clicking on the" +
+                        "'Selected' button above it.\n You can chose the order of the states by clicking " +
+                "on the two stars you wish to swap around.",
+                new Vector2D(30, 30),
+                new Vector2D(800, 100),
+                0, 0, 0, 80);
     }
 
     private void updateButtons() {
         this.start.update();
+        this.instructions.update();
     }
 
 
@@ -171,6 +181,7 @@ public class FSMSelectScreen{
         if (this.checkMousePressButton(new Vector2D(this.sketch.width - 150, 
                                        30),
                 new Vector2D(100, 50))) {
+            this.start.changeColour(255, 255, 255, 80);
             this.buildFSM(Map.getInstance().getPlayerId());
             this.currentScreen = GAMESCREEN.SWARMSELECT;
         }
@@ -178,16 +189,46 @@ public class FSMSelectScreen{
             new Vector2D(this.boxXFSM1, this.boxYFSM1 - 50 - 20),
             new Vector2D(this.boxWidthFSM1, 50))){
             this.chosenOption = 1;
+            this.fsmOption1.setSelected(true);
+            if (this.fsmOption2.isSelected() == true) {
+                this.fsmOption2.setSelected(false);
+            }
+            if (this.fsmOption3.isSelected() == true) {
+                this.fsmOption3.setSelected(false);
+            }
         }
         else if(this.checkMousePressButton(
             new Vector2D(this.boxXFSM2, this.boxYFSM2 - 50 - 20),
             new Vector2D(this.boxWidthFSM2, 50))){
             this.chosenOption = 2;
+            this.fsmOption2.setSelected(true);
+            if (this.fsmOption1.isSelected() == true) {
+                this.fsmOption1.setSelected(false);
+            }
+            if (this.fsmOption3.isSelected() == true) {
+                this.fsmOption3.setSelected(false);
+            }
         }
         else if(this.checkMousePressButton(
             new Vector2D(this.boxXFSM3, this.boxYFSM3 - 50 - 20),
             new Vector2D(this.boxWidthFSM3, 50))){
             this.chosenOption = 3;
+            this.fsmOption3.setSelected(true);
+            if (this.fsmOption1.isSelected() == true) {
+                this.fsmOption1.setSelected(false);
+            }
+            if (this.fsmOption2.isSelected() == true) {
+                this.fsmOption2.setSelected(false);
+            }
+        }
+        else if (checkMousePressButton(new Vector2D(boxXFSM1, boxYFSM1 + boxHeightFSM1 + 20),
+                new Vector2D(boxWidthFSM1, 50)) == true) {
+            if (this.fsmOption1.isShowContent() == true) {
+                this.fsmOption1.setShowContent(false);
+            }
+            else {
+                this.fsmOption1.setShowContent(true);
+            }
         }
     }
 

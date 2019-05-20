@@ -512,17 +512,25 @@ public class SwarmSelect{
     switch(swarmAlgorithm){
       case SPECIALSUICIDE:
         return "The suicide algorithm is a dangerous strategy. Your bots leave " + 
-               "the mothership and hunt down turrets. You may rack up the \n" + 
+               "the mothership and hunt down turrets to kill them. You may rack up the \n" +
                "points but you leave yourself extremely exposed to any potential " + 
                "attackers.";
       case SPECIALGHOST:
-        return "";
+        return "The Ghost algorithm will make sure that your mothership is protected " +
+                "at all times by having the bots surround it.\n" +
+                "Your mothership will become like a ghost to the reste of the game. Unfindable " +
+                "by the enemy but still there, ready to attack.";
       case SPECIALSTAR:
-        return  "";
+        return  "Left, right, up, down, left again. The special star alogithm will surprise your enemies " +
+                "who will not be able to follow your fast movements\n fatiguing them, we hope to exhausion. \n" +
+                "#gameover";
       case SPECIALSACRIFICE:
-        return "";
+        return "Sometimes, you to achieve the common good, sacrifices need to be made. With this algorithm, " +
+                "you will gain overall power by letting go of a little bit of it.";
       case DEFENDSHELL:
-        return "";
+        return "What better defence is there than holding on tight?\n" +
+                "The Defend Shell algorithm will create a tight impenetrable shield around \n" +
+                "around your Mothership to make sure that no bullet can ever reach her";
       case DEFENDFLOCK:  
         return "Sometimes the best form of attack is defense. Flock behaviour is " + 
                 "a classic swarm algorithm. \n" + 
@@ -536,9 +544,11 @@ public class SwarmSelect{
                 "When combined with tracking of the mothership, flocks are a powerful way to " + 
                 "defend yourself.";
       case DEFENDINVINCIBLE:
-        return "";
+        return "Catch me if you can! With this algorithm, your enemy is going to have to get their " +
+                "heavy artillery out to get you.";
       case DEFENDHIBERNATE:
-        return "";
+        return "If you want to kill me, you first need to find me! With this algorithm, the enemy will " +
+                "need to work hard to reach you in your black hole of hibernation.\n";
       case SCOUTRANDOM:
         return "In war, information is everything. Use this scout algorithm to search the map " + 
                "for enemies. \n" + 
@@ -548,7 +558,8 @@ public class SwarmSelect{
         return "Nothing is scarier than a swarm of angry bees! Use this algorithm to scout for " + 
                "turrets and find them before your enemy does.\n";
       case SCOUTANT:
-        return "";
+        return "Small, quick, efficient! The ants will make sure their queen is brought back what she is own." +
+                "\n Now this is what we call team work.";
       case SCOUTPSO:
         return "";
       default:
