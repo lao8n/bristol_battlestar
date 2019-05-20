@@ -86,6 +86,7 @@ public class SwarmSelect{
   private Vector2D dimStartButton;
   private Vector2D locationStartButton;
   private TextButton renderStartButton;  
+  private boolean buttonActive = false;
 
   //=========================================================================//
   // Constructor                                                             //
@@ -193,14 +194,15 @@ public class SwarmSelect{
                                   this.dimStartButton)){
       // TODO: Send setup package
       // TODO: Get everything from FSMManger
-      this.currentScreen = GAMESCREEN.GAME;
-      if(SwarmWars.playNetworkGame) {
-        sendSetUp();
-        NetworkClientFunctions.sendStart(Map.getInstance().getPlayerId());
-        NetworkClientFunctions.awaitStart();
+      if (buttonActive){
+        this.currentScreen = GAMESCREEN.GAME;
+        if(SwarmWars.playNetworkGame) {
+          sendSetUp();
+          NetworkClientFunctions.sendStart(Map.getInstance().getPlayerId());
+          NetworkClientFunctions.awaitStart();
+        }
       }
     }
-    // 
   }
 
   private void sendSetUp() {
@@ -209,10 +211,10 @@ public class SwarmSelect{
 
     packToBeSent.put(Headers.PLAYER, myPlayId);
 
-    // 不同的FSMState对应的编号
+    //  Number of different FSM states
     java.util.Map<Integer, FSMSTATE> myStates = fsmManager.getFSMStates(myPlayId);
     java.util.Map<Integer, Integer> states = new HashMap<Integer, Integer>();
-    // <用户设定值，state在枚举类中的坐标>
+    // The FSM id number for each state
     for (Integer i : myStates.keySet()) {
       states.put(i, myStates.get(i).ordinal());
     }
@@ -221,13 +223,12 @@ public class SwarmSelect{
     HashMap<Integer, FSMStateTransition> myTransitions = fsmManager.getMapFSMStateTransition(myPlayId);
     List<java.util.Map<Integer, Object>> transitions = new ArrayList<java.util.Map<Integer, Object>>();
     java.util.Map<Integer, Integer> swarmAlgorithms = new HashMap<Integer, Integer>();
-    // 在i状态下要干啥
     for (int i : myTransitions.keySet()) {
       FSMStateTransition fst = myTransitions.get(i);
       List l = fst.getMyTransitions();
-      // 在此state下的swarmAlgorithm
+      // Swarm logic for each state
       swarmAlgorithms.put(i, fst.getSwarmAlgorithm().ordinal());
-      // 从i到j的转换的list
+      // Transition list from state i to j
       for (int j = 0; j < l.size(); j++) {
         Quartet q = (Quartet) l.get(j);
         java.util.Map<Integer, Object> transition = new HashMap<Integer, Object>();
@@ -331,6 +332,7 @@ public class SwarmSelect{
   }
 
   private void updateOptions(){
+    int algCount = 0; 
     for(int i = 0; i < this.renderOptionButtons.size(); i++){
       if(this.checkMousePressButton(
         this.renderOptionButtons.get(i).getTopLeftLocation(),
@@ -355,6 +357,9 @@ public class SwarmSelect{
         if(this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).get(j).getSwarmAlgorithm()
            == SWARMALGORITHM.valueOf(i)){
           selectedCheck = j;
+          if (i == 0 || i == 1 || i == 4 || i == 5 || i == 8 || i == 9){
+            algCount++; 
+          }
         }
       }
       this.renderOptionButtons.get(i)
@@ -365,6 +370,13 @@ public class SwarmSelect{
       this.renderOptionTexts.get(i).update();
     }
     this.renderFSMButton.update();
+
+    // activate button check
+    if (algCount == this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).size()){
+      this.updateActivateButton(true);
+    } else {
+      this.updateActivateButton(false);
+    }
   }
 
   //=========================================================================//
@@ -379,9 +391,23 @@ public class SwarmSelect{
   }
 
   //=========================================================================//
+  // Activate Button                                                         //
+  //=========================================================================//
+  private void updateActivateButton(boolean activate){
+    if (activate){
+      this.setupReadyButton();
+    } else {
+      this.setupStartButton();
+    }
+  }
+
+
+  //=========================================================================//
   // Start methods                                                           //
   //=========================================================================//
   private void setupStartButton(){
+    // setup button to be red (not clickable yet)
+    buttonActive = false;
     this.dimStartButton = new Vector2D(200, 60);
     this.locationStartButton = 
       new Vector2D(this.sketch.width - this.dimStartButton.getX() - 
@@ -389,12 +415,30 @@ public class SwarmSelect{
                    this.offsetMiniMap);
     this.renderStartButton = new TextButton(
       this.sketch, 
+      "STOP",
+      this.locationStartButton,
+      this.dimStartButton, 
+      127,
+      0,
+      0
+    );
+  }
+
+  private void setupReadyButton(){
+    buttonActive = true;
+    this.dimStartButton = new Vector2D(200, 60);
+    this.locationStartButton = 
+      new Vector2D(this.sketch.width - this.dimStartButton.getX() - 
+                    this.offsetMiniMap, 
+                    this.offsetMiniMap);
+    this.renderStartButton = new TextButton(
+      this.sketch, 
       "READY",
       this.locationStartButton,
       this.dimStartButton, 
-      177,
-      177,
-      177
+      40,
+      127,
+      0
     );
   }
 
