@@ -45,10 +45,14 @@ public class TextButton {
                      (float) this.dimensions.getY());
 
     this.sketch.fill(255);
-    this.sketch.text(this.label, 
-                    (float) this.topLeftLocation.getX() + 20, 
-                    (float) this.topLeftLocation.getY() + 
-                    (float) (this.dimensions.getY() / 2));
+    this.sketch.textAlign(CENTER, CENTER);
+    double textCenterX = this.topLeftLocation.getX() + this.dimensions.getX() / 2;
+    double textCenterY = this.topLeftLocation.getY() + this.dimensions.getY() / 2;
+
+//    this.sketch.textSize();
+    this.sketch.text(this.label,
+                    (float) textCenterX,
+                    (float) textCenterY);
   }
 
   public void setLabel(String label){
