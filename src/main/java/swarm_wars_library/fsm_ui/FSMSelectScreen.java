@@ -63,7 +63,7 @@ public class FSMSelectScreen{
     public FSMSelectScreen(PApplet sketch){
         this.sketch = sketch;
         this.currentScreen = GAMESCREEN.FSMUI;
-        PImage background = Images.getInstance().getBackground();
+        this.background = Images.getInstance().getBackground();
         this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
         this.setupButtons();
         this.setupOptions();

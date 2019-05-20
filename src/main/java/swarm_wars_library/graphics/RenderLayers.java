@@ -83,7 +83,7 @@ public class RenderLayers{
             , currentAlgoithmBoxTopLeftX
             , currentAlgoithmBoxTopLeftY
     );
-    
+
     this.renderPlus10 = new RenderPlus10(sketch);
 
     playerId = map.getPlayerId();

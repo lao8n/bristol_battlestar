@@ -10,8 +10,6 @@ import processing.core.PConstants;
 import java.util.concurrent.*;
 import swarm_wars_library.sound.SoundMixer;
 
-import swarm_wars_library.comms.CommsGlobal;
-
 public class GameOver {
 
     public static GameOver instance = new GameOver();
@@ -66,6 +64,7 @@ public class GameOver {
         this.gameOverLogo = images.getGameOverLogo();
         this.flames = images.getFlames();
         this.winnerLogo = images.getWinnerLogo();
+        this.shipLogo = images.getShipLogo();
 
         this.myScore = 0;
         this.enemyScore = 0;
@@ -196,7 +195,7 @@ public class GameOver {
         // draw gameover & ship logos
         this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
         this.sketch.imageMode(PConstants.CENTER);
-        this.sketch.image(this.brokenShipLogo, (this.sketch.width/2)*2, (this.sketch.height/4)*3);
+        this.sketch.image(this.brokenShipLogo, (this.sketch.width/4)*3, (this.sketch.height/4)*3);
 
         // draw fire
         this.sketch.imageMode(PConstants.CORNERS);
