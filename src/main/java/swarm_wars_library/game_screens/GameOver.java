@@ -53,7 +53,6 @@ public class GameOver {
 
     private int winningPlayer = 0;
     private Map map;
-    private boolean clean = false;
 
     private GameOver(){};
 
@@ -209,10 +208,7 @@ public class GameOver {
     // Sound methods                                                           //
     //=========================================================================//
     private void soundCleanup(){
-        if (!clean){
-            SoundMixer.stopThruster();
-            clean = true;
-        }
+        SoundMixer.stopThruster();
     }
 
     //=========================================================================//
