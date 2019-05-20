@@ -1,6 +1,5 @@
 package swarm_wars_library.graphics;
 
-import swarm_wars_library.Images;
 import swarm_wars_library.map.Map;
 import processing.core.PImage;
 import processing.core.PApplet;

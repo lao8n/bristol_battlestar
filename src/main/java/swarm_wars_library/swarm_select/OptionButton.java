@@ -6,7 +6,7 @@ import processing.core.PConstants;
 import processing.core.PImage;
 import static processing.core.PConstants.CENTER;
 
-import swarm_wars_library.Images;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_algorithms.SWARMALGORITHM;
 

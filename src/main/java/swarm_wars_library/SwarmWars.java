@@ -16,6 +16,7 @@ import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.fsm_ui.FSMSelectScreen;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.game_screens.GameOver;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.graphics.RenderLayers;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.comms.CommsChannel;
@@ -27,8 +28,7 @@ import swarm_wars_library.network.NetworkClientFunctions;
 import swarm_wars_library.sound.PlayBackgroundMusic;
 import swarm_wars_library.swarm_select.SwarmSelect;
 import swarm_wars_library.sound.SoundMixer; 
-import swarm_wars_library.game_screens.StartScreen; 
-import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.game_screens.StartScreen;
 
 public class SwarmWars extends PApplet {
 

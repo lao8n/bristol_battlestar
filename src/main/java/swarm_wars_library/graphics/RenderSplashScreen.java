@@ -3,7 +3,6 @@ package swarm_wars_library.graphics;
 import processing.core.PImage;
 import processing.core.PApplet;
 import processing.core.PConstants;
-import swarm_wars_library.Images;
 
 public class RenderSplashScreen{
 

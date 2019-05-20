@@ -3,11 +3,10 @@ package swarm_wars_library.fsm_ui;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-import swarm_wars_library.Images;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.game_screens.GAMESCREEN;
 import swarm_wars_library.fsm.FSMCOMPARISON;
 import swarm_wars_library.fsm.FSMManager;
-import swarm_wars_library.fsm.FSMSTATE;
 import swarm_wars_library.fsm.FSMVARIABLE;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;

@@ -1,6 +1,7 @@
 package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class RenderMiniMap{
 

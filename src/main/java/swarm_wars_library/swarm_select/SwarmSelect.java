@@ -13,7 +13,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
-import swarm_wars_library.Images;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.fsm.FSMCOMPARISON;

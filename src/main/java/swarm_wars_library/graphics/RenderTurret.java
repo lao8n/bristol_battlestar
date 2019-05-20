@@ -1,13 +1,11 @@
 package swarm_wars_library.graphics;
 
-import swarm_wars_library.Images;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import java.util.concurrent.*;
-import swarm_wars_library.sound.SoundMixer;
 
 public class RenderTurret extends AbstractRenderMapObject{
   private float scale = (float) Map.getInstance().getTurretScale();

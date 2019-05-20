@@ -2,7 +2,7 @@ package swarm_wars_library.game_screens;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-import swarm_wars_library.Images;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;

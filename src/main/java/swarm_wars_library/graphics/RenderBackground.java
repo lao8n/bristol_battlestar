@@ -2,7 +2,6 @@ package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-import swarm_wars_library.Images;
 
 import static processing.core.PConstants.CORNER;
 

@@ -1,4 +1,4 @@
-package swarm_wars_library;
+package swarm_wars_library.graphics;
 
 import processing.core.PApplet;
 import processing.core.PImage;
