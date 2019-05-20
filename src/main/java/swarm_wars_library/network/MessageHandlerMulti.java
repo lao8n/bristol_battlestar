@@ -123,8 +123,10 @@ public class MessageHandlerMulti{
                 tlogger.log("Case: START");
                 if (readyPlayers == Frames.size() && Frames.size() > 1){
                     ArrayList<Double> startingLocations = TurretLocations.getInstance().getStartLocations();
+                    ArrayList<Double> startingHealthPackLocations = TurretLocations.getInstance().getHealthPackStartLocations();
                     for (Map<String, Object> m : setupBuffer.values()) {
                         m.put(Headers.TURRETS, startingLocations);
+                        m.put(Headers.HEALTH_PACKS, startingHealthPackLocations);
                         serverBuffer.offer(m);
                     }
                     pack.put(Headers.RANDOM_SEED, (int) Math.round(Math.random()*Integer.MAX_VALUE));
@@ -150,6 +152,19 @@ public class MessageHandlerMulti{
                     serverBuffer.offer(m);
                 }
                 break;
+            case Constants.UPDATE_HEALTHPACK:
+                tlogger.log("Case: UPDATE_HEALTH_PACK");
+                int hpId = (Integer) pack.get(Headers.HEALTH_PACK_ID);
+                int hpVersion = (Integer) pack.get(Headers.HEALTH_PACK_VERSION);
+                if (TurretLocations.getInstance().updateHPLocation(hpId, hpVersion)) {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put(Headers.HEALTH_PACK_ID, hpId);
+                    m.put(Headers.TYPE, Constants.UPDATE_HEALTHPACK);
+                    m.put(Headers.HEALTH_PACK_VERSION, TurretLocations.getInstance().getHealthPackVersionWithId(hpId));
+                    m.put(Headers.HEALTH_PACK_LOCATION, TurretLocations.getInstance().getHealthPackLocationWithId(hpId));
+                    serverBuffer.offer(m);
+                }
+                break;
             case Constants.CONNECT:
                 tlogger.log("Case: CONNECT");
                 Frames.put((Integer)pack.get(Headers.PLAYER), 1);
@@ -158,9 +173,7 @@ public class MessageHandlerMulti{
                 tlogger.log("Case: END");
                 TurretLocations.getInstance().refreshTurrets();
                 Frames.remove((Integer)pack.get(Headers.PLAYER));
-                clientReceiveBuffer.remove((Integer)pack.get(Headers.PLAYER));
                 readyPlayers--;
-                pack.remove(Headers.PLAYER);
                 serverBuffer.offer(pack);
                 break;
         }

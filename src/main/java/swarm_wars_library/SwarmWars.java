@@ -6,12 +6,7 @@ import java.util.HashMap;
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.CollisionDetection;
-import swarm_wars_library.entities.AbstractEntity;
-import swarm_wars_library.entities.Bot;
-import swarm_wars_library.entities.ENTITY;
-import swarm_wars_library.entities.PlayerAI;
-import swarm_wars_library.entities.PlayerN;
-import swarm_wars_library.entities.Turret;
+import swarm_wars_library.entities.*;
 import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.fsm_ui.FSMSelectScreen;
 import swarm_wars_library.game_screens.GAMESCREEN;
@@ -182,6 +177,9 @@ public class SwarmWars extends PApplet {
     CommsGlobal.add("TURRET", new CommsChannel(map.getNumTurrets()));
     CommsGlobal.add("TURRET_BULLET", 
       new CommsChannel(map.getNumTurrets() * map.getNumBulletsPerMagazine()));
+
+    //add healthpack
+    CommsGlobal.add("HEALTHPACK", new CommsChannel(map.getNumHealthPack()));
   }
 
   //=========================================================================//
@@ -257,11 +255,16 @@ public class SwarmWars extends PApplet {
       this.gameObjectsTakeDamage.add(turret);
       this.gameObjectsDealDamage.addAll(turret.getBullets());
     }
-  }
 
-  //=========================================================================//
-  // Turret Setup                                                            //
-  //=========================================================================//
+    // healthpack setup
+    for(int i = 0; i < this.map.getNumHealthPack(); i++){
+      HealthPack healthPack = new HealthPack(ENTITY.HEALTHPACK, i, playNetworkGame);
+      if (playNetworkGame) {
+        healthPack.setLocation(0, this.map.getHealthPackLocations().get(i));
+      }
+      this.gameObjectsDealDamage.add(healthPack);
+    }
+  }
 
 
   //=========================================================================//

@@ -56,6 +56,7 @@ public class Map {
   // Number of Entities
   private int numBotsPerPlayer = 150;
   private int numTurrets = 3;
+  private int numHealthPack = 3;
 
   // Shooters
   private int shooterBulletTimer = 2;
@@ -75,6 +76,8 @@ public class Map {
   private Vector2D player2StartingLocation;
   private ArrayList<Vector2D> turretLocations;
   private ArrayList<Integer> turretVersions;
+  private ArrayList<Vector2D> healthPackLocations;
+  private ArrayList<Integer> healthPackVersions;
 
   private int playerId;
   private int enemyId;
@@ -93,7 +96,9 @@ public class Map {
       backgroundStars.add(i, v2d);
     }
     this.turretLocations = new ArrayList<Vector2D>();
+    this.healthPackLocations = new ArrayList<Vector2D>();
     this.initTurretsVersions();
+    this.initHealthPackVersions();
     this.generateStartingPositions();
   }
 
@@ -101,6 +106,13 @@ public class Map {
     turretVersions = new ArrayList<>();
     for (int i = 0; i < this.getNumTurrets(); i++) {
       turretVersions.add(0);
+    }
+  }
+
+  private void initHealthPackVersions() {
+    healthPackVersions = new ArrayList<>();
+    for (int i = 0; i < this.getNumHealthPack(); i++) {
+      healthPackVersions.add(0);
     }
   }
 
@@ -121,11 +133,27 @@ public class Map {
     }
   }
 
+  public void storeHealthPackLocation(int healthPackId, Vector2D location) {
+    if (healthPackVersions.get(healthPackId) == 0) {
+      this.healthPackLocations.add(healthPackId, location);
+    }else {
+      this.healthPackLocations.set(healthPackId, location);
+    }
+  }
+
   public void storeTurretVersion(int turretId, int turretVersion){
     if (turretVersion == 0) {
       this.turretVersions.add(turretId, turretVersion);
     }else {
       this.turretVersions.set(turretId, turretVersion);
+    }
+  }
+
+  public void storeHealthPackVersion(int healthPackId, int healthPackVersion){
+    if (healthPackVersion == 0) {
+      this.healthPackVersions.add(healthPackId, healthPackVersion);
+    }else {
+      this.healthPackVersions.set(healthPackId, healthPackVersion);
     }
   }
 
@@ -135,6 +163,14 @@ public class Map {
 
   public ArrayList<Integer> getTurretVersions(){
     return this.turretVersions;
+  }
+
+  public ArrayList<Vector2D> getHealthPackLocations() {
+    return healthPackLocations;
+  }
+
+  public ArrayList<Integer> getHealthPackVersions() {
+    return healthPackVersions;
   }
 
   //Get the only object available
@@ -182,6 +218,10 @@ public class Map {
 
   public int getNumTurrets(){
     return this.numTurrets;
+  }
+
+  public int getNumHealthPack() {
+    return this.numHealthPack;
   }
 
   public int getNumBulletsPerMagazine(){

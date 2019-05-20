@@ -58,6 +58,7 @@ public class RandomGen {
         return rand;
     }
 
+
     public static int getInt(int bound){
         int r = (int) Math.round(getRand() * bound);
         if (r == bound) r -= 1;
