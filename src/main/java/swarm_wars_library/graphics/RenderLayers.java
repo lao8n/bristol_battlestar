@@ -115,8 +115,8 @@ public class RenderLayers{
   private void renderEntitiesLayer(){
     this.renderPlayer1Bots();
     this.renderPlayer2Bots();
-    this.renderTurrets();
     this.renderTurretBullets();
+    this.renderTurrets();
     this.renderPlayer1Bullets();
     this.renderPlayer1Missiles();
     this.renderPlayer2Bullets();
@@ -313,7 +313,10 @@ public class RenderLayers{
                                                  .getLocation(),
                                       CommsGlobal.get(playerMe)
                                                  .getPacket(0)
-                                                 .getLocation());
+                                                 .getLocation(),
+                                      CommsGlobal.get("TURRET_BULLET")
+                                                  .getPacket(i)
+                                                  .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("TURRET_BULLET")
