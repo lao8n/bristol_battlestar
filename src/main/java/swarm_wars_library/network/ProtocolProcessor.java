@@ -75,12 +75,13 @@ public class ProtocolProcessor {
             List<Double> locations = (ArrayList) m.get(Headers.TURRETS);
             System.out.println("Initial turrets locations: " + locations);
             List<Double> hpLocations = (ArrayList) m.get(Headers.HEALTH_PACKS);
+            System.out.println("Initial health locations: " + hpLocations);
             for(int i = 0; i < this.map.getNumTurrets(); i++){
                 this.map.storeTurretLocation(i, 
                                              new Vector2D(locations.get(2*i), locations.get(2*i+1)));
             }
             for (int i = 0; i < this.map.getNumHealthPack(); i++) {
-                this.map.storeHealthPackLocation(i, new Vector2D(locations.get(2*i), locations.get(2*i+1)));
+                this.map.storeHealthPackLocation(i, new Vector2D(hpLocations.get(2*i), hpLocations.get(2*i+1)));
             }
             return true;
         }
@@ -119,6 +120,7 @@ public class ProtocolProcessor {
         if(m.get(Headers.TYPE).equals(Constants.END)) {
             System.out.println("Received game ended....");
             swarm_wars_library.map.Map.getInstance().setGameEnded(true);
+            MessageHandlerMulti.clientReceiveBuffer.remove((Integer)m.get(Headers.PLAYER));
             return true;
         }
         return false;

@@ -43,6 +43,7 @@ public class CommsPacket {
   }
 
   public int getHealth(){
+    if(this.health>100){this.health=100;}
     return this.health;
   }
   public void setHealth(int health){

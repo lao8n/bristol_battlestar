@@ -5,6 +5,7 @@ import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.map.RandomGen;
 import swarm_wars_library.physics.Vector2D;
+import swarm_wars_library.network.*;
 import swarm_wars_library.sound.SoundMixer;
 
 public class HealthPack extends AbstractEntity implements ISound {
@@ -20,8 +21,10 @@ public class HealthPack extends AbstractEntity implements ISound {
     public HealthPack(ENTITY tag, int healthPackId, boolean playNetworkGame) {
         super(tag, Map.getInstance().getTurretScale());
         this.playNetworkGame = playNetworkGame;
-        this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance().getMapWidth(),
-                RandomGen.getRand() * Map.getInstance().getMapHeight()));
+        if (!playNetworkGame) {
+            this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance().getMapWidth(),
+                    RandomGen.getRand() * Map.getInstance().getMapHeight()));
+        }
         this.updateCommsPacket();
         this.sendCommsPacket();
         this.setState(STATE.DEAD);
@@ -32,7 +35,8 @@ public class HealthPack extends AbstractEntity implements ISound {
     public void update() {
         if (this.isState(STATE.DEAD)) {
             if (SwarmWars.playNetworkGame) {
-                //???network ;
+                this.setLocation(Map.getInstance().getHealthPackVersions().get(this.healthPackId),
+                        Map.getInstance().getHealthPackLocations().get(this.healthPackId));
             } else {
                 this.setState(STATE.ALIVE);
                 this.setLocation(new Vector2D(RandomGen.getRand() * Map.getInstance().getMapWidth(),
@@ -64,26 +68,23 @@ public class HealthPack extends AbstractEntity implements ISound {
     //=========================================================================//
     @Override
     public void collidedWith(ENTITY tag){
-        this.setState(STATE.EXPLODE);
-        SoundMixer.playTurretExplosion();
-        if(tag.equals(ENTITY.PLAYER1)){
-            CommsGlobal.get("PLAYER1").getPacket(0).setHealth(CommsGlobal.get("PLAYER1")
-                    .getPacket(0).getHealth()+addHealth);
-            System.out.println("add health");
+
+       // SoundMixer.playTurretExplosion();
+        if(tag.equals(ENTITY.PLAYER1)||tag.equals(ENTITY.PLAYER2)){
+            this.setState(STATE.EXPLODE);
+            System.out.println("!!!!!!!!!!!!!!!!!!");
         }
-        if(tag.equals(ENTITY.PLAYER2)){
-            CommsGlobal.get("PLAYER2").getPacket(0).setHealth(CommsGlobal.get("PLAYER2")
-                    .getPacket(0).getHealth()+addHealth);
-        }
-        /*if (playNetworkGame) {
+        //System.out.println(tag);
+        if (playNetworkGame) {
             java.util.Map<String, Object> m = new java.util.HashMap<>();
-            m.put(Headers.TYPE, Constants.UPDATE_TURRET);
-            m.put(Headers.TURRET_ID, this.healthPackId);
-            m.put(Headers.TURRET_VERSION, this.healthPackVersion);
+            m.put(Headers.TYPE, Constants.UPDATE_HEALTHPACK);
+            m.put(Headers.HEALTH_PACK_ID, this.healthPackId);
+            m.put(Headers.HEALTH_PACK_VERSION, this.healthPackVersion);
             MessageHandlerMulti.putPackage(m);
-        }*/
+        }
         this.healthPackVersion++;
     }
+
     @Override
     public void updateSounds(){
         // TODO add conditional sound

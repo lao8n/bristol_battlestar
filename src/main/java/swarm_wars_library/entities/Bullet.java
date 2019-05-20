@@ -67,11 +67,14 @@ public class Bullet extends AbstractEntity{
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    this.setState(STATE.EXPLODE);
-    if(tag.equals(ENTITY.TURRET)){
-      CommsGlobal.get(Tag.getShooterTag(this.tag).toString())
-                 .getPacket(0)
-                 .addScore(10);
+    if(tag!=ENTITY.HEALTHPACK){
+      this.setState(STATE.EXPLODE);
+      if(tag.equals(ENTITY.TURRET)){
+        CommsGlobal.get(Tag.getShooterTag(this.tag).toString())
+                .getPacket(0)
+                .addScore(10);
+      }
     }
+
   }
 }

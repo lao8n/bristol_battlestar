@@ -87,6 +87,9 @@ public class PlayerN extends AbstractEntity implements IHealth, IInputShooter,
     if (tag == ENTITY.PLAYER2_MISSILE|| tag == ENTITY.PLAYER1_MISSILE) {
       this.takeDamage(30);
     }
+    if(tag==ENTITY.HEALTHPACK){
+      this.takeDamage(-20);
+    }
     else {
       this.takeDamage(5);
     }
