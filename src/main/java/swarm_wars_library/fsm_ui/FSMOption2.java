@@ -122,7 +122,7 @@ public class FSMOption2 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "PYRAMID-BASED FINITE STATE MACHINE ->",
+                "PYRAMID FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
@@ -136,7 +136,7 @@ public class FSMOption2 {
                 new Vector2D(boxWidth, 200),
                 0, 0, 0, 90);*/
         this.chooseOption2 = new FSMBackground(this.sketch,
-            "SELECT PYRAMID-BASED FSM",
+            "SELECT PYRAMID FSM",
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
@@ -289,7 +289,7 @@ public class FSMOption2 {
        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(this.boxWidth, 50)) == true) {
                this.information = new FSMBackground(this.sketch,
-                       "PYRAMID BASED FINITE STATE MACHINE\n\n" +
+                       "PYRAMID FINITE STATE MACHINE\n\n" +
                                 "The essence of a finite state machine (FSM), is simply\n"+
                                 "that it has a limited number of fixed states. FSMs can\n"+
                                 "have different shapes, especially when states have more\n"+
@@ -302,7 +302,7 @@ public class FSMOption2 {
        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                    new Vector2D(this.boxWidth, 200)) == true) {
                this.information = new FSMBackground(this.sketch,
-                       "PYRAMID-BASED FINITE STATE MACHINE ->",
+                       "PYRAMID FINITE STATE MACHINE ->",
                        new Vector2D(boxX, boxY + boxHeight + 20),
                        new Vector2D(boxWidth, 50),
                        0, 0, 0, 90);

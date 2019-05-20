@@ -189,8 +189,8 @@ public class GameOver {
         // draw gameover & ship logos
         this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
         this.sketch.imageMode(PConstants.CENTER);
-        this.sketch.image(this.shipLogo, (this.sketch.width/2)*2, (this.sketch.height/4)*3);
-        this.sketch.image(this.dummy, (this.sketch.width/2), (this.sketch.height/2));
+        this.sketch.image(this.dummy, this.sketch.width/2, (this.sketch.height/4));
+        this.sketch.image(this.shipLogo, (this.sketch.width/2), (this.sketch.height/3)*2, 1200, 400);
     }
 
     private void updateBackgroundLoser() {

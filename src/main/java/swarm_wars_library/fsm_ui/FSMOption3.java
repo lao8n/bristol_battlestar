@@ -369,7 +369,7 @@ public class FSMOption3 {
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(this.boxWidth, 50)) == true) {
                 this.information = new FSMBackground(this.sketch,
-                        "CYCLICAL FINITE STATE MACHINE\n\n" +
+                        "SQUARE FINITE STATE MACHINE\n\n" +
                                 "Finite state machines (FSM) can contain transitions in both\n"+
                                 "directions, as in this 4-state FSM. This allows for greater\n"+
                                 "flexibility in your strategy. Consider which swarm algorithms\n"+
@@ -382,13 +382,12 @@ public class FSMOption3 {
        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(this.boxWidth, 200)) == true) {
             this.information = new FSMBackground(this.sketch,
-                    "CYCLICAL FINITE STATE MACHINE ->",
+                    "SQAURE FINITE STATE MACHINE ->",
                     new Vector2D(boxX, boxY + boxHeight + 20),
                     new Vector2D(boxWidth, 50),
                     0, 0, 0, 90);
         }
     }
-
 
     private boolean checkMousePressStar(Vector2D location, int radius) {
         if(this.mousePressed){
@@ -415,7 +414,6 @@ public class FSMOption3 {
         return false;
     }
 
-
     public void listenMousePressed(){
         this.mousePressed = true;
     }
@@ -423,7 +421,6 @@ public class FSMOption3 {
     public void listenMouseReleased(){
         this.mousePressed = false;
     }
-
 
     //=========================================================================//
     // Swap methods                                                            //
