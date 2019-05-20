@@ -67,7 +67,7 @@ public class SwarmLogic {
         this.swarm_algo =
           new SpecialSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
                                           this.rb);
-        this.setState(swarm_algo.getstate());
+        this.setState(swarm_algo.getState());
         break;
       case SPECIALGHOST:
         this.swarm_algo =
