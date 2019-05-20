@@ -158,7 +158,6 @@ public class MessageHandlerMulti{
                 tlogger.log("Case: END");
                 TurretLocations.getInstance().refreshTurrets();
                 Frames.remove((Integer)pack.get(Headers.PLAYER));
-                clientReceiveBuffer.remove((Integer)pack.get(Headers.PLAYER));
                 readyPlayers--;
                 pack.remove(Headers.PLAYER);
                 serverBuffer.offer(pack);

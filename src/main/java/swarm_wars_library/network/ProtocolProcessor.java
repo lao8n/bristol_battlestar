@@ -48,8 +48,8 @@ public class ProtocolProcessor {
             if (m.get(Headers.PLAYER) != null && (Integer)m.get(Headers.PLAYER) == map.getPlayerId()){
                 return;
             }
-            if (updateTurret(m)) return;
             if (endGame(m)) return;
+            if (updateTurret(m)) return;
             createBuffer(m);
             saveToBuffer(m);
         }
@@ -105,9 +105,9 @@ public class ProtocolProcessor {
             if(m.containsKey(Headers.WINNERID)){
                 GameOver.getInstance().setWinningPlayer((Integer) m.get(Headers.WINNERID));
             } else { throw new Error("END package doesn't have winner Id"); }
-
             swarm_wars_library.map.Map.getInstance().setGameEnded(true);
             MessageHandlerMulti.gameStarted = false;
+            MessageHandlerMulti.clientReceiveBuffer.remove((Integer)m.get(Headers.PLAYER));
             return true;
         }
         return false;
