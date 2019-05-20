@@ -115,13 +115,13 @@ public class FSMOption1 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "ASYCLICAL FINITE STATE MACHINE ->",
+                "SIMPLE FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
 
         this.chooseOption1 = new FSMBackground(this.sketch,
-            "SELECT ACYCLICAL FSM",
+            "SELECT SIMPLE FSM",
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
@@ -252,11 +252,14 @@ public class FSMOption1 {
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50)) == true) {
                 this.information = new FSMBackground(this.sketch,
-                        "ASYCLICAL FINITE STATE MACHINE\n\n" +
-                                "One of the most common finite state machine you would have encountered\n, is " +
-                                "a traffic light. There are three states: red, orange and green\n. The lights change "+
-                                "under certain conditions\n. This finite state machine is acylical as it goes in\n" +
-                                "a circle, always in the same direction.",
+                        "SIMPLE FINITE STATE MACHINE\n\n" +
+                                "Finite state machines (FSMs) are everywhere - a common\n"+
+                                "example is a traffic light: it has three states: red, \n"+
+                                "amber and green. The lights may simply change states\n"+
+                                "with a timer. In our FSM, each state has exactly one\n"+
+                                "transition, which is triggered by events in the game,\n"+
+                                "such as enemy distance being too close or player health\n"+
+                                "falling below a certain value. Try it out!",
                         new Vector2D(boxX, boxY + boxHeight + 20),
                         new Vector2D(boxWidth, 190),
                         0, 0, 0, 90);
@@ -264,7 +267,7 @@ public class FSMOption1 {
         else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20 + 50),
                 new Vector2D(this.boxWidth, 200)) == true) {
             this.information = new FSMBackground(this.sketch,
-                    "ASYCLICAL FINITE STATE MACHINE ->",
+                    "SIMPLE FINITE STATE MACHINE ->",
                     new Vector2D(boxX, boxY + boxHeight + 20),
                     new Vector2D(boxWidth, 50),
                     0, 0, 0, 90);

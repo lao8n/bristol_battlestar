@@ -164,9 +164,9 @@ public class FSMSelectScreen{
                 new Vector2D(100, 50),
                 0, 0, 0, 80);
         this.instructions = new FSMBackground(this.sketch,
-                "INSTRUCTIONS: \n\n Selected your chosen finite state machine by clicking on the" +
+                "INSTRUCTIONS: \n\nSelected your chosen finite state machine by clicking on the" +
                         "'Selected' button above it.\n You can chose the order of the states by clicking " +
-                "on the two stars you wish to swap around.",
+                        "on the two stars you wish to swap around.",
                 new Vector2D(30, 30),
                 new Vector2D(800, 100),
                 0, 0, 0, 80);

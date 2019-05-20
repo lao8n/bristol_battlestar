@@ -8,9 +8,9 @@ import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_select.TextButton;
 import processing.core.PConstants;
 import java.util.concurrent.*;
+import swarm_wars_library.sound.SoundMixer;
 
 import swarm_wars_library.comms.CommsGlobal;
-
 
 public class GameOver {
 
@@ -24,6 +24,7 @@ public class GameOver {
     private PImage brokenShipLogo;
     private PImage flames;
     private PImage dummy;
+    private PImage shipLogo;
 
     // Game Screen
     private GAMESCREEN currentScreen;
@@ -54,6 +55,8 @@ public class GameOver {
 
     private Map map;
 
+    private boolean clean = false;
+
 
     private GameOver(){};
 
@@ -61,9 +64,10 @@ public class GameOver {
         this.sketch = sketch;
         background = sketch.loadImage("resources/images/background.png");
         brokenShipLogo = sketch.loadImage("resources/images/brokenShipLogo.png"); 
+        shipLogo = sketch.loadImage("resources/images/shipLogo.png");
         gameOverLogo = sketch.loadImage("resources/images/gameoverLogo.png");
         flames = sketch.loadImage("resources/images/gameOverFlameSingle.png");
-        dummy = sketch.loadImage("resources/images/dummy.png");
+        dummy = sketch.loadImage("resources/images/winnerLogo.png");
 
         this.myScore = 0;
         this.enemyScore = 0;
@@ -163,9 +167,7 @@ public class GameOver {
     // Background methods                                                      //
     //=========================================================================//
     private void updateBackground(){
-
-
-
+        soundCleanup();
         // draw background stars
         //this.sketch.background(13, 30, 40);
         this.sketch.imageMode(PConstants.CORNERS);
@@ -173,26 +175,22 @@ public class GameOver {
 
         if(this.getWinningPlayer() == map.getPlayerId()){
             // this player is winner
-            System.out.println("WINNER: This Player won...");
             this.updateBackgroundWinner();
         } else if(this.getWinningPlayer() == map.getEnemyId()){
             // this player lost
-            System.out.println("WINNER: Enemy won...");
             this.updateBackgroundLoser();
         } else {
-            System.out.println("WINNER: ERROR");
+            System.out.println("GameOver.java - WINNER: ERROR");
         }
 
     }
 
     private void updateBackgroundWinner() {
         // draw gameover & ship logos
-        //this.sketch.image(this.gameOverLogo, this.sketch.width/4, 20,(this.sketch.width/4)*3, (this.sketch.height/8)*3);
         this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
         this.sketch.imageMode(PConstants.CENTER);
+        this.sketch.image(this.shipLogo, (this.sketch.width/2)*2, (this.sketch.height/4)*3);
         this.sketch.image(this.dummy, (this.sketch.width/2), (this.sketch.height/2));
-
-
     }
 
     private void updateBackgroundLoser() {
@@ -208,6 +206,16 @@ public class GameOver {
                 this.sketch.width, this.sketch.height);
         currentSprite++;
         currentSprite %= totalSprites;
+    }
+
+    //=========================================================================//
+    // Sound methods                                                           //
+    //=========================================================================//
+    private void soundCleanup(){
+        if (!clean){
+            SoundMixer.stopThruster();
+            clean = true;
+        }
     }
 
     //=========================================================================//

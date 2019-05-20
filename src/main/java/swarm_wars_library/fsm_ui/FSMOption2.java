@@ -122,12 +122,12 @@ public class FSMOption2 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "PYRAMID BASED FINITE STATE MACHINE ->",
+                "PYRAMID-BASED FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
         /*this.content = new FSMBackground(this.sketch,
-                "\nFinite state machines can take any form and shape.\n The transitions can go" +
+                "\nFinite state machines can take many forms and shapes.\n The transitions can go " +
                         "in any direction.\n The essence of a finite state machine, is simply that\n"+
                         "it has a limited number of fixed states.\n" +
                         "This pyramid style finite state machine is more of a 'freestyle'\n" +
@@ -136,7 +136,7 @@ public class FSMOption2 {
                 new Vector2D(boxWidth, 200),
                 0, 0, 0, 90);*/
         this.chooseOption2 = new FSMBackground(this.sketch,
-            "SELECT PYRAMID BASED FSM",
+            "SELECT PYRAMID-BASED FSM",
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
@@ -289,12 +289,12 @@ public class FSMOption2 {
        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(this.boxWidth, 50)) == true) {
                this.information = new FSMBackground(this.sketch,
-                       "PYRAMID BASED FINITE STATE MACHINE\n" +
-                               "\nFinite state machines can take any form and shape.\n The transitions can go" +
-                               "in any direction.\n The essence of a finite state machine, is simply that\n"+
-                               "it has a limited number of fixed states.\n" +
-                               "This pyramid style finite state machine is more of a 'freestyle'\n" +
-                               "one. This one will never fail to surprise you.",
+                       "PYRAMID BASED FINITE STATE MACHINE\n\n" +
+                                "The essence of a finite state machine (FSM), is simply\n"+
+                                "that it has a limited number of fixed states. FSMs can\n"+
+                                "have different shapes, especially when states have more\n"+
+                                "than than one transition. This pyramid-style FSM is may\n"+
+                                "surprise you!",
                        new Vector2D(boxX, boxY + boxHeight + 20),
                        new Vector2D(boxWidth, 190),
                        0, 0, 0, 90);
@@ -302,7 +302,7 @@ public class FSMOption2 {
        else if (checkMousePressButton(new Vector2D(boxX, boxY + boxHeight + 20),
                    new Vector2D(this.boxWidth, 200)) == true) {
                this.information = new FSMBackground(this.sketch,
-                       "PYRAMID BASED FINITE STATE MACHINE ->",
+                       "PYRAMID-BASED FINITE STATE MACHINE ->",
                        new Vector2D(boxX, boxY + boxHeight + 20),
                        new Vector2D(boxWidth, 50),
                        0, 0, 0, 90);

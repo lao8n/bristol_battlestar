@@ -144,7 +144,7 @@ public class FSMOption3 {
                 0, 0, 0, 90);
 
         this.information = new FSMBackground(this.sketch,
-                "CYCLICAL FINITE STATE MACHINE ->",
+                "SQUARE FINITE STATE MACHINE ->",
                 new Vector2D(boxX, boxY + boxHeight + 20),
                 new Vector2D(boxWidth, 50),
                 0, 0, 0, 90);
@@ -156,7 +156,7 @@ public class FSMOption3 {
                 new Vector2D(boxWidth, 200),
                 0, 0, 0, 90); */
         this.chooseOption3 = new FSMBackground(this.sketch,
-            "SELECT CYCLICAL FSM",
+            "SELECT SQUARE FSM",
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
@@ -370,9 +370,11 @@ public class FSMOption3 {
                 new Vector2D(this.boxWidth, 50)) == true) {
                 this.information = new FSMBackground(this.sketch,
                         "CYCLICAL FINITE STATE MACHINE\n\n" +
-                                "The number of states in a finite state machine does not\n necessarily define " +
-                                "how you transition from one state to another\n. You can build and invent any transitions " +
-                                "that you like\n. Here, the transitions are bidirectional and cyclical.\n",
+                                "Finite state machines (FSM) can contain transitions in both\n"+
+                                "directions, as in this 4-state FSM. This allows for greater\n"+
+                                "flexibility in your strategy. Consider which swarm algorithms\n"+
+                                "complement each other - how you can maximize your swarm for\n"+
+                                "attacking, scouting and defence?",
                         new Vector2D(boxX, boxY + boxHeight + 20),
                         new Vector2D(boxWidth, 190),
                         0, 0, 0, 90);
