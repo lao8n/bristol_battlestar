@@ -52,4 +52,8 @@ public class Headers {
 
     public static final String HEALTH_PACK_LOCATION = "HPL";
 
+    public static final String PLAYER_HEALTH = "PH";
+
+    public static final String PLAYER_POINTS = "PP";
+
 }

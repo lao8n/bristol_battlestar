@@ -1,5 +1,6 @@
 package swarm_wars_library.entities;
 
+import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
@@ -67,14 +68,16 @@ public class Bullet extends AbstractEntity{
   //=========================================================================//
   @Override
   public void collidedWith(ENTITY tag){
-    if(tag!=ENTITY.HEALTHPACK){
-      this.setState(STATE.EXPLODE);
-      if(tag.equals(ENTITY.TURRET)){
-        CommsGlobal.get(Tag.getShooterTag(this.tag).toString())
-                .getPacket(0)
-                .addScore(10);
-      }
-    }
+    if(tag!=ENTITY.HEALTHPACK) return;
 
+    this.setState(STATE.EXPLODE);
+    if (SwarmWars.playNetworkGame && Map.getInstance().getPlayerId() == 2) {
+      return;
+    }
+    if (tag.equals(ENTITY.TURRET)) {
+      CommsGlobal.get(Tag.getShooterTag(this.tag).toString())
+              .getPacket(0)
+              .addScore(10);
+    }
   }
 }
