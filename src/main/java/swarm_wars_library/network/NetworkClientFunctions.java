@@ -128,10 +128,11 @@ public class NetworkClientFunctions {
 
     }
 
-    public static void sendEnd(int id) {
+    public static void sendEnd(int id, int winnerId) {
         Map m = new HashMap<String, Object>();
         m.put(Headers.TYPE, Constants.END);
         m.put(Headers.PLAYER, id);
+        m.put(Headers.WINNERID, winnerId);
         MessageHandlerMulti.putPackage(m);
         System.out.println("Player " + id + " Game ends");
     }

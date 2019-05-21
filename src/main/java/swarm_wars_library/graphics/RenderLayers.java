@@ -1,11 +1,8 @@
 package swarm_wars_library.graphics;
-
 import processing.core.PApplet;
-
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.STATE;
 import swarm_wars_library.map.Map;
-
 public class RenderLayers{
   private PApplet sketch;
   private Map map;
@@ -33,12 +30,16 @@ public class RenderLayers{
   private RenderMiniMapTurret renderMiniMapTurret;
   private RenderMiniMapBot renderMiniMapBot;
   private RenderMiniMapBot2 renderMiniMapBot2;
+  private RenderCurrentAlgorithm renderCurrentAlgorithm;
+  private RenderPlus10 renderPlus10;
+  private RenderHealthPack renderHealthPack;
   private int playerId;
   private int enemyId;
   private String playerMe;
   private String playerMeBot;
   private String playerEnemy;
   private String playerEnemyBot;
+  private boolean player2BotFlag = false;
 
   public RenderLayers(PApplet sketch){
     this.sketch = sketch;
@@ -61,23 +62,36 @@ public class RenderLayers{
     this.renderPlayer2Score = new RenderPlayer2Score(sketch);
     this.renderPlayer2NumM = new RenderPlayer2NumM(sketch);
     this.renderPlayer2Health = new RenderPlayer2Health(sketch);
-    this.renderMiniMap = new RenderMiniMap(sketch, 200, 20);
+
+    int miniMapWidth = 200;
+    int miniMapBorderOffset = 20;
+    this.renderMiniMap = new RenderMiniMap(sketch, miniMapWidth, miniMapBorderOffset);
     this.renderMiniMapPlayer1 = new RenderMiniMapPlayer1(sketch);
     this.renderMiniMapPlayer2 = new RenderMiniMapPlayer2(sketch);
     this.renderMiniMapTurret = new RenderMiniMapTurret(sketch);
     this.renderMiniMapBot = new RenderMiniMapBot(sketch);
     this.renderMiniMapBot2 = new RenderMiniMapBot2(sketch);
 
+    int currentAlgoithmBoxWidth = miniMapWidth / 2;
+    int currentAlgoithmBoxTopLeftX = sketch.width - miniMapBorderOffset - currentAlgoithmBoxWidth;
+    int currentAlgoithmBoxTopLeftY = sketch.height - miniMapWidth - currentAlgoithmBoxWidth - 2 * miniMapBorderOffset;
+    this.renderCurrentAlgorithm = new RenderCurrentAlgorithm(
+            sketch
+            , currentAlgoithmBoxWidth
+            , currentAlgoithmBoxTopLeftX
+            , currentAlgoithmBoxTopLeftY
+    );
 
+    this.renderPlus10 = new RenderPlus10(sketch);
+
+    this.renderHealthPack= new RenderHealthPack(sketch);
     playerId = map.getPlayerId();
     enemyId = map.getEnemyId();
     playerMe = "PLAYER" + Integer.toString(playerId);
     playerMeBot = playerMe + "_BOT";
     playerEnemy = "PLAYER" + Integer.toString(enemyId);
     playerEnemyBot = playerEnemy + "_BOT";
-
   }
-
   //=========================================================================//
   // Update method                                                           //
   //=========================================================================//
@@ -87,111 +101,123 @@ public class RenderLayers{
     this.renderDisplaysLayer();
     this.renderMiniMapEntitiesLayer();
   }
-
   //=========================================================================//
   // Render Background Layer                                                 //
   //=========================================================================//
   private void renderBackgroundLayer(){
     // Render background
     this.renderBackground.update(CommsGlobal.get(playerMe)
-                                            .getPacket(0)
-                                            .getLocation(),
-                                 CommsGlobal.get(playerMe)
-                                            .getPacket(0)
-                                            .getLocation());
+                    .getPacket(0)
+                    .getLocation(),
+            CommsGlobal.get(playerMe)
+                    .getPacket(0)
+                    .getLocation());
     // Render Stars
     for (int i = 0; i < this.map.getMapStars().size(); i++){
       this.renderStar.update(this.map.getMapStars().get(i),
-                             CommsGlobal.get(playerMe)
-                                        .getPacket(0)
-                                        .getLocation());
+              CommsGlobal.get(playerMe)
+                      .getPacket(0)
+                      .getLocation());
     }
   }
-
   //=========================================================================//
   // Render Entities Layer                                                   //
   //=========================================================================//
   private void renderEntitiesLayer(){
+    this.renderHealthPack();
     this.renderPlayer1Bots();
     this.renderPlayer2Bots();
-    this.renderTurrets();
     this.renderTurretBullets();
+    this.renderTurrets();
     this.renderPlayer1Bullets();
     this.renderPlayer1Missiles();
     this.renderPlayer2Bullets();
     this.renderPlayer2Missiles();
     this.renderPlayer1();
     this.renderPlayer2();
+    this.renderPlus10Bonus();
   }
 
+  //=========================================================================//
+  // Render Plus 10                                                          //
+  //=========================================================================//
+  private void renderPlus10Bonus(){
+      this.renderPlus10.renderMapObject();
+  }
   //=========================================================================//
   // Render Player1 Bots Layer                                               //
   //=========================================================================//
   private void renderPlayer1Bots(){
     for (int i = 0; i < CommsGlobal.get("PLAYER1_BOT")
-                                   .getNumberOfReceivers(); i++){
+            .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("PLAYER1_BOT")
                     .getPacket(i)
                     .getState()
-                    .equals(STATE.ALIVE)){
+                    .equals(STATE.ALIVE) ||
+         CommsGlobal.get("PLAYER1_BOT")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.SUICIDE)){
         this.renderPlayer1Bot.update(CommsGlobal.get("PLAYER1_BOT")
-                                                .getPacket(i)
-                                                .getLocation(),
-                                      CommsGlobal.get(playerMe)
-                                                .getPacket(0)
-                                                .getLocation());
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER1_BOT")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-          this.renderPlayer1Bot.updateExplosion(CommsGlobal.get("PLAYER1_BOT")
-                                                          .getPacket(i)
-                                                          .getLocation(),
-                                              CommsGlobal.get(playerMe)
-                                                          .getPacket(0)
-                                                          .getLocation(),
-                                              5);
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderPlayer1Bot.updateExplosion(CommsGlobal.get("PLAYER1_BOT")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                5);
       }
     }
   }
-
   //=========================================================================//
   // Render Player2 Bots Layer                                               //
   //=========================================================================//
   private void renderPlayer2Bots(){
     for (int i = 0; i < CommsGlobal.get("PLAYER2_BOT")
-                                   .getNumberOfReceivers(); i++){
+            .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("PLAYER2_BOT")
                     .getPacket(i)
                     .getState()
-                    .equals(STATE.ALIVE)){
+                    .equals(STATE.ALIVE) ||
+         CommsGlobal.get("PLAYER2_BOT")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.SUICIDE)){
         this.renderPlayer2Bot.update(CommsGlobal.get("PLAYER2_BOT")
-                                                .getPacket(i)
-                                                .getLocation(),
-                                      CommsGlobal.get(playerMe)
-                                                .getPacket(0)
-                                                .getLocation());
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER2_BOT")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-          this.renderPlayer2Bot.updateExplosion(CommsGlobal.get("PLAYER2_BOT")
-                                                            .getPacket(i)
-                                                            .getLocation(),
-                                                CommsGlobal.get(playerMe)
-                                                            .getPacket(0)
-                                                            .getLocation(),
-                                                5);
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderPlayer2Bot.updateExplosion(CommsGlobal.get("PLAYER2_BOT")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                5);
       }
     }
   }
-
   //=========================================================================//
   // Render Turrets Layer                                                    //
   //=========================================================================//
@@ -199,223 +225,256 @@ public class RenderLayers{
     for (int i = 0; i < CommsGlobal.get("TURRET").getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("TURRET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
         this.renderTurret.update(CommsGlobal.get("TURRET")
-                                           .getPacket(i)
-                                           .getLocation(),
-                                CommsGlobal.get(playerMe)
-                                           .getPacket(0)
-                                           .getLocation());
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation());
       }
       // Render explosions
       if(CommsGlobal.get("TURRET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-          this.renderTurret.updateExplosion(CommsGlobal.get("TURRET")
-                                                      .getPacket(i)
-                                                      .getLocation(),
-                                           CommsGlobal.get(playerMe)
-                                                      .getPacket(0)
-                                                      .getLocation(),
-                                           5);
-          this.renderTurret.updateVoid(CommsGlobal.get("TURRET")
-                                                 .getPacket(i)
-                                                 .getLocation(),
-                                       CommsGlobal.get(playerMe)
-                                                 .getPacket(0)
-                                                 .getLocation());
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderTurret.updateExplosion(CommsGlobal.get("TURRET")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                5);
+        this.renderTurret.updateVoid(CommsGlobal.get("TURRET")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation());
       }
     }
   }
-
+  //=========================================================================//
+  // Render HealthPack Layer                                                    //
+  //=========================================================================//
+  private void renderHealthPack(){
+    for (int i = 0; i < CommsGlobal.get("HEALTHPACK").getNumberOfReceivers(); i++){
+      //System.out.println(CommsGlobal.get("HEALTHPACK")
+      //        .getPackets().size());
+      // Render entity if alive
+      if(CommsGlobal.get("HEALTHPACK")
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
+        this.renderHealthPack.update(CommsGlobal.get("HEALTHPACK")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation());
+      }
+      // Render explosions
+      if(CommsGlobal.get("HEALTHPACK")
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderHealthPack.updateExplosion(CommsGlobal.get("HEALTHPACK")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                5);
+        /*this.renderHealthPack.updateVoid(CommsGlobal.get("HEALTHPACK")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation());*/
+      }
+    }
+  }
   //=========================================================================//
   // Render Player1                                                          //
   //=========================================================================//
   private void renderPlayer1(){
     // Render entity if alive
     if(CommsGlobal.get("PLAYER1")
-                  .getPacket(0)
-                  .getState()
-                  .equals(STATE.ALIVE)){
+            .getPacket(0)
+            .getState()
+            .equals(STATE.ALIVE)){
       this.renderPlayer1.update(CommsGlobal.get("PLAYER1")
-                                            .getPacket(0)
-                                            .getLocation(),
-                                CommsGlobal.get(playerMe)
-                                            .getPacket(0)
-                                            .getLocation());
+                      .getPacket(0)
+                      .getLocation(),
+              CommsGlobal.get(playerMe)
+                      .getPacket(0)
+                      .getLocation());
     }
-
     // Render explosions
     if(CommsGlobal.get("PLAYER1")
-                  .getPacket(0)
-                  .getState()
-                  .equals(STATE.EXPLODE)){
+            .getPacket(0)
+            .getState()
+            .equals(STATE.EXPLODE)){
       this.renderPlayer1.updateExplosion(CommsGlobal.get("PLAYER1")
-                                                    .getPacket(0)
-                                                    .getLocation(),
-                                          CommsGlobal.get(playerMe)
-                                                    .getPacket(0)
-                                                    .getLocation(),
-                                          5);
+                      .getPacket(0)
+                      .getLocation(),
+              CommsGlobal.get(playerMe)
+                      .getPacket(0)
+                      .getLocation(),
+              5);
     }
   }
-
   //=========================================================================//
   // Render Player2                                                          //
   //=========================================================================//
   private void renderPlayer2(){
     // Render entity if alive
     if(CommsGlobal.get("PLAYER2")
-                  .getPacket(0)
-                  .getState()
-                  .equals(STATE.ALIVE)){
+            .getPacket(0)
+            .getState()
+            .equals(STATE.ALIVE)){
       this.renderPlayer2.update(CommsGlobal.get("PLAYER2")
-                                            .getPacket(0)
-                                            .getLocation(),
-                                CommsGlobal.get(playerMe)
-                                            .getPacket(0)
-                                            .getLocation());
-      }
-
+                      .getPacket(0)
+                      .getLocation(),
+              CommsGlobal.get(playerMe)
+                      .getPacket(0)
+                      .getLocation());
+    }
     // Render explosions
     if(CommsGlobal.get("PLAYER2")
-                  .getPacket(0)
-                  .getState()
-                  .equals(STATE.EXPLODE)){
+            .getPacket(0)
+            .getState()
+            .equals(STATE.EXPLODE)){
       this.renderPlayer2.updateExplosion(CommsGlobal.get("PLAYER2")
-                                                    .getPacket(0)
-                                                    .getLocation(),
-                                          CommsGlobal.get(playerMe)
-                                                    .getPacket(0)
-                                                    .getLocation(),
-                                          5);
-      }
+                      .getPacket(0)
+                      .getLocation(),
+              CommsGlobal.get(playerMe)
+                      .getPacket(0)
+                      .getLocation(),
+              5);
+    }
   }
-
-
   //=========================================================================//
   // Render Turret Bullets Layer                                             //
   //=========================================================================//
   private void renderTurretBullets(){
     for (int i = 0; i < CommsGlobal.get("TURRET_BULLET")
-                                   .getNumberOfReceivers(); i++){
+            .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("TURRET_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
         this.renderTurretBullet.update(CommsGlobal.get("TURRET_BULLET")
                                                  .getPacket(i)
                                                  .getLocation(),
                                       CommsGlobal.get(playerMe)
                                                  .getPacket(0)
-                                                 .getLocation());
+                                                 .getLocation(),
+                                      CommsGlobal.get("TURRET_BULLET")
+                                                  .getPacket(i)
+                                                  .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("TURRET_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
         this.renderTurretBullet.updateExplosion(CommsGlobal.get("TURRET_BULLET")
-                                                          .getPacket(i)
-                                                          .getLocation(),
-                                                CommsGlobal.get(playerMe)
-                                                          .getPacket(0)
-                                                          .getLocation(),
-                                                3);
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                3);
       }
     }
   }
-  
+
   //=========================================================================//
   // Render Player1 Bullets Layer                                            //
   //=========================================================================//
   private void renderPlayer1Bullets(){
     for (int i = 0; i < CommsGlobal.get("PLAYER1_BULLET")
-                                   .getNumberOfReceivers(); i++){
+            .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("PLAYER1_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
         this.renderPlayer1Bullet.update(CommsGlobal.get("PLAYER1_BULLET")
-                                                    .getPacket(i)
-                                                    .getLocation(),
-                                          CommsGlobal.get(playerMe)
-                                                    .getPacket(0)
-                                                    .getLocation(),
-                                          CommsGlobal.get("PLAYER1_BULLET")
-                                                    .getPacket(i)
-                                                    .getHeading());
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                CommsGlobal.get("PLAYER1_BULLET")
+                        .getPacket(i)
+                        .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER1_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-          this.renderPlayer1Bullet.updateExplosion(CommsGlobal.get(
-                                                      "PLAYER1_BULLET")
-                                                              .getPacket(i)
-                                                              .getLocation(),
-                                                    CommsGlobal.get(playerMe)
-                                                              .getPacket(0)
-                                                              .getLocation(),
-                                                    7);
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderPlayer1Bullet.updateExplosion(CommsGlobal.get(
+                "PLAYER1_BULLET")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                7);
       }
     }
   }
-
   //=========================================================================//
   // Render Player2 Bullets Layer                                            //
   //=========================================================================//
   private void renderPlayer2Bullets(){
     for (int i = 0; i < CommsGlobal.get("PLAYER2_BULLET")
-                                   .getNumberOfReceivers(); i++){
+            .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("PLAYER2_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
         this.renderPlayer2Bullet.update(CommsGlobal.get("PLAYER2_BULLET")
-                                                  .getPacket(i)
-                                                  .getLocation(),
-                                        CommsGlobal.get(playerMe)
-                                                  .getPacket(0)
-                                                  .getLocation(),
-                                        CommsGlobal.get("PLAYER2_BULLET")
-                                                  .getPacket(i)
-                                                  .getHeading());
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                CommsGlobal.get("PLAYER2_BULLET")
+                        .getPacket(i)
+                        .getHeading());
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER2_BULLET")
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.EXPLODE)){
-          this.renderPlayer2Bullet.updateExplosion(CommsGlobal.get(
-                                                    "PLAYER2_BULLET")
-                                                             .getPacket(i)
-                                                             .getLocation(),
-                                                  CommsGlobal.get(playerMe)
-                                                             .getPacket(0)
-                                                             .getLocation(),
-                                                  7);
+              .getPacket(i)
+              .getState()
+              .equals(STATE.EXPLODE)){
+        this.renderPlayer2Bullet.updateExplosion(CommsGlobal.get(
+                "PLAYER2_BULLET")
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerMe)
+                        .getPacket(0)
+                        .getLocation(),
+                7);
       }
     }
   }
-
- //=========================================================================//
+  //=========================================================================//
   // Render Player1 Missile Layer                                            //
   //=========================================================================//
   private void renderPlayer1Missiles(){
     for (int i = 0; i < CommsGlobal.get("PLAYER1_MISSILE")
             .getNumberOfReceivers(); i++){
       // Render entity if alive
-     //System.out.println("***************** state " +CommsGlobal.get("PLAYER2_MISSILE").getPackets().size() );
-
-
+      //System.out.println("***************** state " +CommsGlobal.get("PLAYER2_MISSILE").getPackets().size() );
       if(CommsGlobal.get("PLAYER1_MISSILE")
               .getPacket(i)
               .getState()
@@ -429,7 +488,7 @@ public class RenderLayers{
                 CommsGlobal.get("PLAYER1_MISSILE")
                         .getPacket(i)
                         .getHeading()
-               );
+        );
       }
       // Render explosions
       if(CommsGlobal.get("PLAYER1_MISSILE")
@@ -447,7 +506,6 @@ public class RenderLayers{
       }
     }
   }
-
   //=========================================================================//
   // Render Player2 Missile Layer                                            //
   //=========================================================================//
@@ -487,120 +545,124 @@ public class RenderLayers{
       }
     }
   }
-
   //=========================================================================//
   // Render Displays Layer                                                   //
   //=========================================================================//
   private void renderDisplaysLayer(){
     // Render player1 score
     this.renderPlayer1Score.update(CommsGlobal.get("PLAYER1")
-                                             .getPacket(0)
-                                             .getScore());
+            .getPacket(0)
+            .getScore());
     //Render player1 missile number
     this.renderPlayer1NumM.update(CommsGlobal.get("PLAYER1").getPacket(0).getMissileNum());
     //Render player2 missile number
     this.renderPlayer2NumM.update(CommsGlobal.get("PLAYER2").getPacket(0).getMissileNum());
-
     // Render player2 score
     this.renderPlayer2Score.update(CommsGlobal.get("PLAYER2")
-                                             .getPacket(0)
-                                             .getScore());
-                                            
-    this.renderPlayer2NumM.update(CommsGlobal.get("PLAYER2").getPacket(0).getMissileNum());
+            .getPacket(0)
+            .getScore());
 
+    this.renderPlayer2NumM.update(CommsGlobal.get("PLAYER2").getPacket(0).getMissileNum());
     // Render player1 health bar
     this.renderPlayer1Health.update(CommsGlobal.get("PLAYER1")
-                                              .getPacket(0)
-                                              .getHealth());
-
+            .getPacket(0)
+            .getHealth());
     // Render player2 health bar
     this.renderPlayer2Health.update(CommsGlobal.get("PLAYER2")
-                                                .getPacket(0)
-                                                .getHealth());
-
+            .getPacket(0)
+            .getHealth());
     // Render (empty) mini map
     this.renderMiniMap.update();
-  }
 
+    // Render current swarm algorithm
+    this.renderCurrentAlgorithm.update();
+  }
   //=========================================================================//
   // Render Mini Map Entities Layer                                          //
   //=========================================================================//
   private void renderMiniMapEntitiesLayer(){
-
     boolean turretFlag = false;
     boolean player2Flag = false;
 
-
-    // Render Player 2 Bots
-    for (int i = 0; i < CommsGlobal.get(playerEnemyBot)
-                                   .getNumberOfReceivers(); i++){
-      // Render entity if alive
-      if(CommsGlobal.get(playerEnemyBot)
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){ 
-        //this.setMiniMapBotColor(2);
-        this.renderMiniMapBot2.update(CommsGlobal.get(playerEnemyBot)
-                                                .getPacket(i)
-                                                .getLocation());
-      }
-    }
-
     // Render Player 1 Bots
     for (int i = 0; i < CommsGlobal.get(playerMeBot)
-                                   .getNumberOfReceivers(); i++){
+            .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get(playerMeBot)
-                    .getPacket(i)
-                    .getState()
-                    .equals(STATE.ALIVE)){
+              .getPacket(i)
+              .getState()
+              .equals(STATE.ALIVE)){
         this.setMiniMapBotColor(this.playerId);
         this.renderMiniMapBot.update(CommsGlobal.get(playerMeBot)
                                                 .getPacket(i)
                                                 .getLocation());
+
+        // render player 2 bots in line of sight of bots
+        for (int k = 0; k < CommsGlobal.get(playerEnemyBot)
+                              .getNumberOfReceivers(); k++){
+            player2BotFlag = this.renderMiniMapBot.checkInLineOfSight(
+              CommsGlobal.get(playerMeBot)
+                        .getPacket(i)
+                        .getLocation(),
+              CommsGlobal.get("PLAYER2_BOT")
+                        .getPacket(k)
+                        .getLocation(),        
+              this.renderMiniMapBot.botMapLineOfSight);
+            if (player2BotFlag){
+              // Render entity if alive
+              if(CommsGlobal.get(playerEnemyBot)
+                            .getPacket(i)
+                            .getState()
+                            .equals(STATE.ALIVE)){ 
+                setMiniMapBotColor(2);
+                this.renderMiniMapBot2.update(CommsGlobal.get(playerEnemyBot)
+                          .getPacket(i)
+                          .getLocation());
+              }
+            }
+        }
+
         // Render any turrets in line of sight of bots
         for (int j = 0; j < CommsGlobal.get("TURRET")
-                                      .getNumberOfReceivers(); j++){
+                .getNumberOfReceivers(); j++){
           turretFlag = this.renderMiniMapBot.checkInLineOfSight(
-            CommsGlobal.get(playerMeBot)
-                      .getPacket(i)
-                      .getLocation(),
-            CommsGlobal.get("TURRET")
-                      .getPacket(j)
-                      .getLocation(),        
-            this.renderMiniMapBot.botMapLineOfSight);
-
+                  CommsGlobal.get(playerMeBot)
+                          .getPacket(i)
+                          .getLocation(),
+                  CommsGlobal.get("TURRET")
+                          .getPacket(j)
+                          .getLocation(),
+                  this.renderMiniMapBot.botMapLineOfSight);
           if(turretFlag){
             this.renderMiniMapTurret.update(CommsGlobal.get("TURRET")
-                                                      .getPacket(j)
-                                                      .getLocation());
+                    .getPacket(j)
+                    .getLocation());
             break;
           }
         }
         // Render any Players in line of sight of bots
         player2Flag = this.renderMiniMapBot.checkInLineOfSight(
-          CommsGlobal.get(playerMeBot)
-                     .getPacket(i)
-                     .getLocation(),
-          CommsGlobal.get(playerEnemy)
-                     .getPacket(0)
-                     .getLocation(),
-          this.renderMiniMapBot.botMapLineOfSight);
+                CommsGlobal.get(playerMeBot)
+                        .getPacket(i)
+                        .getLocation(),
+                CommsGlobal.get(playerEnemy)
+                        .getPacket(0)
+                        .getLocation(),
+                this.renderMiniMapBot.botMapLineOfSight);
         if(player2Flag){
           this.setMiniMapPlayerColor(this.enemyId);
           this.renderMiniMapPlayer2.update(CommsGlobal.get(playerEnemy)
-                                                      .getPacket(0)
-                                                      .getLocation());
+                  .getPacket(0)
+                  .getLocation());
         }
       }
     }
     // Render Player1
     this.setMiniMapPlayerColor(this.playerId);
     this.renderMiniMapPlayer1.update(CommsGlobal.get(playerMe)
-                                              .getPacket(0)
-                                              .getLocation());
+            .getPacket(0)
+            .getLocation());
   }
-
   private void setMiniMapBotColor(int id) {
     if(id == 1) {
       this.sketch.fill(0, 101, 255);
@@ -608,7 +670,6 @@ public class RenderLayers{
       this.sketch.fill(255, 22, 65);
     }
   }
-
   private void setMiniMapPlayerColor(int id) {
     if(id == 1) {
       this.sketch.fill(0, 150, 255);
@@ -616,5 +677,4 @@ public class RenderLayers{
       this.sketch.fill(255, 22, 65);
     }
   }
-
 }

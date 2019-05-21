@@ -13,6 +13,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.SwarmWars;
 import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.fsm.FSMCOMPARISON;
@@ -86,6 +87,7 @@ public class SwarmSelect{
   private Vector2D dimStartButton;
   private Vector2D locationStartButton;
   private TextButton renderStartButton;  
+  private boolean buttonActive = false;
 
   //=========================================================================//
   // Constructor                                                             //
@@ -94,7 +96,7 @@ public class SwarmSelect{
     this.sketch = sketch;
     this.dimMiniMap = (int) (this.sketch.height / 2.5);
     this.currentScreen = GAMESCREEN.SWARMSELECT;
-    PImage background = sketch.loadImage("resources/images/background.png");
+    PImage background = Images.getInstance().getBackground();
     this.backgroundImage = background.get(0, 0, sketch.width, sketch.height);
     this.sketch.strokeWeight(1);
     this.setupUIMiniMap();
@@ -193,14 +195,15 @@ public class SwarmSelect{
                                   this.dimStartButton)){
       // TODO: Send setup package
       // TODO: Get everything from FSMManger
-      this.currentScreen = GAMESCREEN.GAME;
-      if(SwarmWars.playNetworkGame) {
-        sendSetUp();
-        NetworkClientFunctions.sendStart(Map.getInstance().getPlayerId());
-        NetworkClientFunctions.awaitStart();
+      if (buttonActive){
+        this.currentScreen = GAMESCREEN.GAME;
+        if(SwarmWars.playNetworkGame) {
+          sendSetUp();
+          NetworkClientFunctions.sendStart(Map.getInstance().getPlayerId());
+          NetworkClientFunctions.awaitStart();
+        }
       }
     }
-    // 
   }
 
   private void sendSetUp() {
@@ -209,10 +212,10 @@ public class SwarmSelect{
 
     packToBeSent.put(Headers.PLAYER, myPlayId);
 
-    // 不同的FSMState对应的编号
+    //  Number of different FSM states
     java.util.Map<Integer, FSMSTATE> myStates = fsmManager.getFSMStates(myPlayId);
     java.util.Map<Integer, Integer> states = new HashMap<Integer, Integer>();
-    // <用户设定值，state在枚举类中的坐标>
+    // The FSM id number for each state
     for (Integer i : myStates.keySet()) {
       states.put(i, myStates.get(i).ordinal());
     }
@@ -221,13 +224,12 @@ public class SwarmSelect{
     HashMap<Integer, FSMStateTransition> myTransitions = fsmManager.getMapFSMStateTransition(myPlayId);
     List<java.util.Map<Integer, Object>> transitions = new ArrayList<java.util.Map<Integer, Object>>();
     java.util.Map<Integer, Integer> swarmAlgorithms = new HashMap<Integer, Integer>();
-    // 在i状态下要干啥
     for (int i : myTransitions.keySet()) {
       FSMStateTransition fst = myTransitions.get(i);
       List l = fst.getMyTransitions();
-      // 在此state下的swarmAlgorithm
+      // Swarm logic for each state
       swarmAlgorithms.put(i, fst.getSwarmAlgorithm().ordinal());
-      // 从i到j的转换的list
+      // Transition list from state i to j
       for (int j = 0; j < l.size(); j++) {
         Quartet q = (Quartet) l.get(j);
         java.util.Map<Integer, Object> transition = new HashMap<Integer, Object>();
@@ -331,6 +333,7 @@ public class SwarmSelect{
   }
 
   private void updateOptions(){
+    int algCount = 0; 
     for(int i = 0; i < this.renderOptionButtons.size(); i++){
       if(this.checkMousePressButton(
         this.renderOptionButtons.get(i).getTopLeftLocation(),
@@ -355,6 +358,9 @@ public class SwarmSelect{
         if(this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).get(j).getSwarmAlgorithm()
            == SWARMALGORITHM.valueOf(i)){
           selectedCheck = j;
+          if (i == 0 || i == 1 || i == 4 || i == 5 || i == 8 || i == 9){
+            algCount++; 
+          }
         }
       }
       this.renderOptionButtons.get(i)
@@ -365,6 +371,13 @@ public class SwarmSelect{
       this.renderOptionTexts.get(i).update();
     }
     this.renderFSMButton.update();
+
+    // activate button check
+    if (algCount == this.fsmManager.getMapFSMStateTransition(Map.getInstance().getPlayerId()).size()){
+      this.updateActivateButton(true);
+    } else {
+      this.updateActivateButton(false);
+    }
   }
 
   //=========================================================================//
@@ -379,9 +392,23 @@ public class SwarmSelect{
   }
 
   //=========================================================================//
+  // Activate Button                                                         //
+  //=========================================================================//
+  private void updateActivateButton(boolean activate){
+    if (activate){
+      this.setupReadyButton();
+    } else {
+      this.setupStartButton();
+    }
+  }
+
+
+  //=========================================================================//
   // Start methods                                                           //
   //=========================================================================//
   private void setupStartButton(){
+    // setup button to be red (not clickable yet)
+    buttonActive = false;
     this.dimStartButton = new Vector2D(200, 60);
     this.locationStartButton = 
       new Vector2D(this.sketch.width - this.dimStartButton.getX() - 
@@ -389,12 +416,30 @@ public class SwarmSelect{
                    this.offsetMiniMap);
     this.renderStartButton = new TextButton(
       this.sketch, 
+      "STOP",
+      this.locationStartButton,
+      this.dimStartButton, 
+      127,
+      0,
+      0
+    );
+  }
+
+  private void setupReadyButton(){
+    buttonActive = true;
+    this.dimStartButton = new Vector2D(200, 60);
+    this.locationStartButton = 
+      new Vector2D(this.sketch.width - this.dimStartButton.getX() - 
+                    this.offsetMiniMap, 
+                    this.offsetMiniMap);
+    this.renderStartButton = new TextButton(
+      this.sketch, 
       "READY",
       this.locationStartButton,
       this.dimStartButton, 
-      177,
-      177,
-      177
+      40,
+      127,
+      0
     );
   }
 
@@ -437,11 +482,12 @@ public class SwarmSelect{
                                                  this.dimStartButton.getY());
     this.renderSwarmExplanation = new TextExplanation(
       this.sketch,
-      "Welcome to the Swarm Algorithm selection screen!!\n" + 
-      "Use this screen to try out different swarm algorithms by clicking on " + 
-      "the icons below and see their behaviour in the preview screen.\n" + 
-      "Fill in your finite state machine by clicking on a coloured node and " + 
-      "then choosing a correspondingly coloured swarm algorithm.\n",
+      "Now that you’ve chosen your finite state machine, you can decide\n" +
+              "which versions of each algorithm you want your army to embody.\n"+
+              "There are three types of algorithms: defend, scout, and special.\n" +
+              "Click on one of the coloured states in the machine below, and then\n" +
+              "on a swarm algorithm of a matching colour, until your finite state\n" +
+              "machine has been filled. Then you can begin your journey...",
       this.locationSwarmExplanation,
       this.dimSwarmExplanation,
       0, 
@@ -467,17 +513,25 @@ public class SwarmSelect{
     switch(swarmAlgorithm){
       case SPECIALSUICIDE:
         return "The suicide algorithm is a dangerous strategy. Your bots leave " + 
-               "the mothership and hunt down turrets. You may rack up the \n" + 
+               "the mothership and hunt down turrets to kill them. You may rack up the \n" +
                "points but you leave yourself extremely exposed to any potential " + 
-               "attackers.";
+               "attackers,\n and will lose any successfully attacking bots in the process";
       case SPECIALGHOST:
-        return "";
+        return  "The Ghost algorithm will protect your mothership with a wide shell formation " +
+                "and bring up to 10 of your bots back from defeat to rejoin your army\n" +
+                "This would be most useful when your bots are running low and you need help";
       case SPECIALSTAR:
-        return  "";
+        return  "Left, right, up, down, left again. The special star alogithm will surprise your enemies " +
+                "who will not be able to follow your fast movements\n fatiguing them, we hope to exhausion. \n" +
+                "#gameover";
       case SPECIALSACRIFICE:
-        return "";
+        return  "Sometimes, you to achieve the common good, sacrifices need to be made. With this algorithm, " +
+                "you will gain overall power by letting go of a little bit of it. \n" +
+                "Sacrifice some of your army to bring back the mothership some health";
       case DEFENDSHELL:
-        return "";
+        return "What better defence is there than holding on tight?\n" +
+                "The Defend Shell algorithm will create a tight impenetrable shield around \n" +
+                "around your Mothership to make sure that no bullet can ever reach her";
       case DEFENDFLOCK:  
         return "Sometimes the best form of attack is defense. Flock behaviour is " + 
                 "a classic swarm algorithm. \n" + 
@@ -491,19 +545,26 @@ public class SwarmSelect{
                 "When combined with tracking of the mothership, flocks are a powerful way to " + 
                 "defend yourself.";
       case DEFENDINVINCIBLE:
-        return "";
+        return "Catch me if you can! With this algorithm, your enemy is going to have to get their " +
+                "heavy artillery out to get you.\n" +
+                 "For a short time period, every bullet will simply be absorbed by your bots and they"+
+                 "Wont take any of the damage!";
       case DEFENDHIBERNATE:
-        return "";
+        return "In the Hibernate algorithm you can get some of your health back, but with a tradeoff:\n" +
+                "You’ll be forced to stay still and be an easy target for the enemy, while your health" +
+                "is recharged to 50% more than its current level.\n" +
+                "If you can find a good hiding place, this algorithm will really help you out.";
       case SCOUTRANDOM:
         return "In war, information is everything. Use this scout algorithm to search the map " + 
                "for enemies. \n" + 
-               "The bots randomly diffuse over the map like brownian motion. Given enough time " + 
-               "no hiding place is safe!";
+               "The bots randomly diffuse over the map like brownian motion. \nGiven enough time " +
+               "no hiding place is safe and they will come back to you with info so you can start the hunt!";
       case SCOUTBEE:
         return "Nothing is scarier than a swarm of angry bees! Use this algorithm to scout for " + 
                "turrets and find them before your enemy does.\n";
       case SCOUTANT:
-        return "";
+        return "Small, quick, efficient! The ants will make sure their queen is brought back what she is own." +
+                "\n Now this is what we call team work.";
       case SCOUTPSO:
         return "";
       default:

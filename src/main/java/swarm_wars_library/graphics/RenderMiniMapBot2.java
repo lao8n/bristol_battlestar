@@ -20,7 +20,7 @@ public class RenderMiniMapBot2 extends AbstractRenderMiniMapObject{
   public void renderMiniMapObject(){
 
     this.sketch.noStroke();
-    this.sketch.fill(255, 22, 65, 60);
+    this.sketch.fill(255, 22, 65, 20); // 60
     this.sketch.ellipseMode(2);
     this.sketch.ellipse(
       this.sketch.width - this.miniMapDim - this.miniMapOffset

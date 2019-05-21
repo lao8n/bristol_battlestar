@@ -1,5 +1,6 @@
 package swarm_wars_library.engine;
 
+import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.entities.STATE;
@@ -58,16 +59,16 @@ public class SwarmLogic {
           new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform, 
                                      this.rb);
         break;
-      case SCOUTANT:
-        this.swarm_algo =
-                new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform,
-                        this.rb);
-        break;
+      // case SCOUTANT:
+      //   this.swarm_algo =
+      //           new ScoutBeeSwarmAlgorithm(this.tag, this.id, this.transform,
+      //                   this.rb);
+      //   break;
       case SPECIALSUICIDE:
         this.swarm_algo =
           new SpecialSuicideSwarmAlgorithm(this.tag, this.id, this.transform,
                                           this.rb);
-        this.setState(swarm_algo.getstate());
+        this.setState(swarm_algo.getState());
         break;
       case SPECIALGHOST:
         this.swarm_algo =
@@ -95,6 +96,9 @@ public class SwarmLogic {
     if(transitionsFlag){
       if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm(playerId)){
         this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm(playerId));
+        if(this.lastSwarmAlgorithm == SWARMALGORITHM.SPECIALSUICIDE){
+          this.setState(swarm_algo.getState());
+        }
       }
       this.swarm_algo.applySwarmAlgorithm();
       this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm(playerId);
@@ -122,4 +126,8 @@ public class SwarmLogic {
   public STATE getState() { return this.state; }
 
   public void setState(STATE state) { this.state = state; }
+
+  public SWARMALGORITHM getSwarmAlgorithm() {
+    return lastSwarmAlgorithm;
+  }
 }

@@ -2,17 +2,17 @@ package swarm_wars_library.game_screens;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-import swarm_wars_library.SwarmWars;
+import swarm_wars_library.graphics.Images;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
 import swarm_wars_library.swarm_select.TextButton;
 import processing.core.PConstants;
 import java.util.concurrent.*;
-
-import swarm_wars_library.comms.CommsGlobal;
-
+import swarm_wars_library.sound.SoundMixer;
 
 public class GameOver {
+
+    public static GameOver instance = new GameOver();
 
     // Processing
     private PApplet sketch;
@@ -21,6 +21,10 @@ public class GameOver {
     private PImage gameOverLogo;
     private PImage brokenShipLogo;
     private PImage flames;
+    private PImage winnerLogo;
+    private PImage shipLogo;
+
+    private Images images = Images.getInstance();
 
     // Game Screen
     private GAMESCREEN currentScreen;
@@ -37,7 +41,7 @@ public class GameOver {
     // Mouse
     private boolean mousePressed = false;
 
-    // animated sprite infor
+    // animated sprite info
     private PImage[] sprites;
     private final int spriteX = 4;
     private final int spriteY = 1;
@@ -47,19 +51,26 @@ public class GameOver {
     private int spriteH;
     private int index = 0;
 
-    public GameOver(PApplet sketch) {
+    private int winningPlayer = 0;
+    private Map map;
+
+    private GameOver(){};
+
+    public void setup(PApplet sketch) {
         this.sketch = sketch;
-        background = sketch.loadImage("resources/images/background.png");
-        brokenShipLogo = sketch.loadImage("resources/images/brokenShipLogo.png"); 
-        gameOverLogo = sketch.loadImage("resources/images/gameoverLogo.png");
-        flames = sketch.loadImage("resources/images/gameOverFlameSingle.png");
+        this.background = images.getBackground();
+        this.brokenShipLogo = images.getBrokenShipLogo();
+        this.gameOverLogo = images.getGameOverLogo();
+        this.flames = images.getFlames();
+        this.winnerLogo = images.getWinnerLogo();
+        this.shipLogo = images.getShipLogo();
 
         this.myScore = 0;
         this.enemyScore = 0;
 
         this.setupReplayButton();
 
-        // animated sprite setp
+        // animated sprite setup
         sprites = new PImage[totalSprites];
         spriteW = flames.width/spriteX;;
         spriteH = flames.height/spriteY;
@@ -71,16 +82,23 @@ public class GameOver {
                 index++;
             }
         }
+
+        map = Map.getInstance();
     }
 
     public void update() {
+        if(sketch == null) throw new Error("GameOver screen not setup with sketch");
         this.updateBackground();
         this.updateMousePressButton();
         this.updateReplayButton();
     }
 
+    public static GameOver getInstance() {
+        return instance;
+    }
+
     //=========================================================================//
-    //                                                                         //
+    // Button methods                                                          //
     //=========================================================================//
 
     private void setupReplayButton() {
@@ -145,26 +163,57 @@ public class GameOver {
     // Background methods                                                      //
     //=========================================================================//
     private void updateBackground(){
+        soundCleanup();
+        // draw background stars
         //this.sketch.background(13, 30, 40);
         this.sketch.imageMode(PConstants.CORNERS);
-
-        // draw background stars
         this.sketch.image(background, 0, 0, this.sketch.width, this.sketch.height);
 
-        // draw gameover & ship logos
-        //this.sketch.image(this.gameOverLogo, this.sketch.width/4, 20,(this.sketch.width/4)*3, (this.sketch.height/8)*3);
-        this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
+        if(this.getWinningPlayer() == map.getPlayerId()){
+            // this player is winner
+            this.updateBackgroundWinner();
+        } else if(this.getWinningPlayer() == map.getEnemyId()){
+            // this player lost
+            this.updateBackgroundLoser();
+        } else {
+            System.out.println("GameOver.java - WINNER: ERROR");
+        }
+    }
 
+    private void updateBackgroundWinner() {
+        // draw gameover & ship logos
+        this.sketch.imageMode(PConstants.CORNERS);
+        this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
         this.sketch.imageMode(PConstants.CENTER);
-        this.sketch.image(this.brokenShipLogo, (this.sketch.width/3)*2, (this.sketch.height/4)*3);
-        
+        this.sketch.image(this.winnerLogo, this.sketch.width/2, (this.sketch.height/4));
+        this.sketch.image(this.shipLogo, (this.sketch.width/2), (this.sketch.height/3)*2, 1200, 400);
+    }
+
+    private void updateBackgroundLoser() {
+        this.sketch.imageMode(PConstants.CORNERS);
+        // draw gameover & ship logos
+        this.sketch.image(this.gameOverLogo, 0, 0, this.sketch.width, this.sketch.height);
+        this.sketch.imageMode(PConstants.CENTER);
+        this.sketch.image(this.brokenShipLogo, (this.sketch.width/4)*3, (this.sketch.height/4)*3);
+
         // draw fire
         this.sketch.imageMode(PConstants.CORNERS);
         this.sketch.image(this.sprites[currentSprite], 0, this.sketch.height/3,
-            this.sketch.width, this.sketch.height);
+                this.sketch.width, this.sketch.height);
         currentSprite++;
         currentSprite %= totalSprites;
     }
+
+    //=========================================================================//
+    // Sound methods                                                           //
+    //=========================================================================//
+    private void soundCleanup(){
+        SoundMixer.stopThruster();
+    }
+
+    //=========================================================================//
+    // Data methods                                                            //
+    //=========================================================================//
 
     public GAMESCREEN getGameScreen() {
         return currentScreen;
@@ -174,4 +223,12 @@ public class GameOver {
         this.currentScreen = GAMESCREEN.GAMEOVER;
     }
 
+
+    public int getWinningPlayer() {
+        return winningPlayer;
+    }
+
+    public void setWinningPlayer(int winningPlayer) {
+        this.winningPlayer = winningPlayer;
+    }
 }

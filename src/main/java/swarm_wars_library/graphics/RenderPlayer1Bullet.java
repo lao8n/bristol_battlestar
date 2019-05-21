@@ -1,19 +1,16 @@
 package swarm_wars_library.graphics;
 
-import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.map.Map;
 import swarm_wars_library.physics.Vector2D;
-import swarm_wars_library.sound.SoundMixer;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import java.util.concurrent.*;
-import java.util.ArrayList;
 
 public class RenderPlayer1Bullet extends AbstractRenderMapObject{
 
   private float scale = (float) Map.getInstance().getBulletScale();
-  private PImage bulletSprite = this.sketch.loadImage("resources/images/bulletSprite.png");
+  private PImage bulletSprite = Images.getInstance().getBulletSprite();
   private double heading=0;
 
   // animated sprite infor
