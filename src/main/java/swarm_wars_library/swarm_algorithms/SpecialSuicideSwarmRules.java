@@ -48,39 +48,17 @@ public class SpecialSuicideSwarmRules extends AbstractSwarmRules {
       this.separateV2D.add(diff);
       this.separateNeighbourhoodCount++;
     }
-    // Hunt target and explode
-    if (this.ruleId % 1 == 0) {
-      Vector2D locationTarget =
-              CommsGlobal.get(ENTITY.TURRET.toString())
-                      .getPacket(0)
-                      .getLocation();
-      Vector2D target = Vector2D.sub(locationTarget,
-              ruleTransform.getLocation());
-      separateV2D = this.findOrbit(target);
-      separateV2D = this.checkStopDistance(target);
-    }
-  }
+    // // Hunt target and explode
+    // Vector2D locationTarget =
+    //         CommsGlobal.get(ENTITY.TURRET.toString())
+    //                     .getPacket(0)
+    //                     .getLocation();
+    // Vector2D target = Vector2D.sub(locationTarget,
+    //         this.ruleTransform.getLocation());
+    // target.normalise();
+    // target.mult(this.ruleRb.getMaxSpeed());
+    // target.limit(this.ruleRb.getMaxForce());
 
-  private Vector2D checkStopDistance(Vector2D desired) {
-    double dist = desired.mag();
-    desired.normalise();
-    if (dist > this.stopDistance) {
-      desired.mult(ruleRb.getMaxSpeed());
-    }
-    else {
-      double mappedSpeed = dist * ruleRb.getMaxSpeed() / (this.stopDistance);
-      desired.mult(mappedSpeed);
-    }
-    return desired;
-  }
-
-  private Vector2D findOrbit(Vector2D desired) {
-    Vector2D orbitTarget = new Vector2D(desired.getX(), desired.getY());
-    orbitTarget.normalise();
-    orbitTarget.mult(this.orbitDistance);
-    desired.sub(orbitTarget);
-
-    return desired;
   }
 
   //=========================================================================//

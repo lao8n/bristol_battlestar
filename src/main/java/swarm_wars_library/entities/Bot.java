@@ -47,7 +47,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
     if(swarmLogic.getState().equals(STATE.SUICIDE)){
       this.state = swarmLogic.getState();
     }
-    if(this.isState(STATE.ALIVE)){
+    if(this.isState(STATE.ALIVE) || this.isState(STATE.SUICIDE)){
       this.updateBot();
     }
     // Comms & explode last
@@ -60,7 +60,7 @@ public class Bot extends AbstractEntity implements ISwarm, ISound{
   // Bot method                                                              //
   //=========================================================================//
   public void updateBot(){
-    if(this.isState(STATE.ALIVE)){
+    if(this.isState(STATE.ALIVE) || this.isState(STATE.SUICIDE)){
       this.updateSwarm();
     }
   }

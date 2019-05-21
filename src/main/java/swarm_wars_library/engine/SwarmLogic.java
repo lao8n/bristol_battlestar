@@ -96,6 +96,9 @@ public class SwarmLogic {
     if(transitionsFlag){
       if(this.lastSwarmAlgorithm != this.fsmManager.getSwarmAlgorithm(playerId)){
         this.selectSwarmAlgorithm(fsmManager.getSwarmAlgorithm(playerId));
+        if(this.lastSwarmAlgorithm == SWARMALGORITHM.SPECIALSUICIDE){
+          this.setState(swarm_algo.getState());
+        }
       }
       this.swarm_algo.applySwarmAlgorithm();
       this.lastSwarmAlgorithm = fsmManager.getSwarmAlgorithm(playerId);

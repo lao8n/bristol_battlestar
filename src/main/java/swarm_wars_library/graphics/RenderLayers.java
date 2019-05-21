@@ -152,9 +152,13 @@ public class RenderLayers{
             .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("PLAYER1_BOT")
-              .getPacket(i)
-              .getState()
-              .equals(STATE.ALIVE)){
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.ALIVE) ||
+         CommsGlobal.get("PLAYER1_BOT")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.SUICIDE)){
         this.renderPlayer1Bot.update(CommsGlobal.get("PLAYER1_BOT")
                         .getPacket(i)
                         .getLocation(),
@@ -185,9 +189,13 @@ public class RenderLayers{
             .getNumberOfReceivers(); i++){
       // Render entity if alive
       if(CommsGlobal.get("PLAYER2_BOT")
-              .getPacket(i)
-              .getState()
-              .equals(STATE.ALIVE)){
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.ALIVE) ||
+         CommsGlobal.get("PLAYER2_BOT")
+                    .getPacket(i)
+                    .getState()
+                    .equals(STATE.SUICIDE)){
         this.renderPlayer2Bot.update(CommsGlobal.get("PLAYER2_BOT")
                         .getPacket(i)
                         .getLocation(),
