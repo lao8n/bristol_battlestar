@@ -31,4 +31,6 @@ public class Constants {
     public static final int END = 4;
 
     public static final int UPDATE_TURRET = 5;
+
+    public static final int UPDATE_HEALTHPACK = 6;
 }

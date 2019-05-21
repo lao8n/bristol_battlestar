@@ -1,6 +1,10 @@
 package swarm_wars_library.engine;
 
+import swarm_wars_library.SwarmWars;
+import swarm_wars_library.comms.CommsGlobal;
 import swarm_wars_library.entities.ENTITY;
+
+import java.util.Map;
 
 public class Health {
 
@@ -28,6 +32,10 @@ public class Health {
 
   public int getCurrentHealth(){
     return currentHealth;
+  }
+
+  public void setHealth(int health){
+    this.currentHealth = health;
   }
 
   public int getMaxHealth(){

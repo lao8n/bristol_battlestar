@@ -178,6 +178,11 @@ public class PlayerAI extends AbstractEntity implements IHealth, IAIMovement,
     this.health.takeDamage(damage);
   }
 
+  @Override
+  public void setHealth(int health){
+    this.health.setHealth(health);
+  }
+
   //=========================================================================//
   // Score methods                                                           //
   //=========================================================================//

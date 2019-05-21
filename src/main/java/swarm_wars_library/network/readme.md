@@ -1,45 +1,161 @@
-# Game Server Usage
+# Game Server
 
-This guide will give the simplest guide on how to integrate network module with game logic
-
-## Protocol details
-
-Whole protocol works as following:
+## Network basic
+The basic computer network has seven layers (OSI model)
 
 ```
-Client_A             Server            Client_B
-   |    1.CONNECT      |                  |
-   | ----------------> |                  |
-   |    2.SETUP        |                  |
-   | ----------------> |    3. CONNECT    |
-   |                   | <--------------- |
-   |    4. START       |                  |
-   | ----------------> |    5. SETUP      |
-   |                   | <--------------- |
-   |    6. START       |                  |
-   | ----------------> |                  |
-   |    7. START(SEED) |  7. START(SEED)  |
-   | <---------------- | ---------------> |
-   |    7. SETUP       |     7. SETUP     |
-   |                   |                  |
-   |   8. OPERATION    |  8. OPERATION    |
-   | ----------------> | <--------------- |
-   |   9. OPERATION    |  9. OPERATION    |
-   | <---------------- | ---------------> |
-   |                   |                  |
-   |     10. END       |                  |
-   | ----------------> |                  |
-   |                   |     11. END      |
-   |                   | <--------------- |
-   |                   |                  |
-   -                   -                  -
+****************
+* Application  * -> HTTP, FTP, SMTP, Self-defined
+****************
+* Presentation * -> HTML, JPEG, TIFF
+****************
+*    Session   * -> RPC, SQL, AppleTalk
+****************
+*   Transport  * -> TCP, UDP
+**************** 
+*    Network   * -> IP
+****************
+*   Data-link  * -> IEEE 802.3
+****************
+*   Physical   * -> V.35, V.24, Ethernet
+****************
 ```
 
-* **CONNECT**: Inform the server that the client is connected, client enters *CONNECTED* state
-* **SETUP**: Gives the server client swarms logic, server stores this package for further use, client enters *SETUP* state
-* **START**: Any of the lobby member can send this package to try to start the game, if and only if all **CONNECTED** clients have sent SETUP package and the player number is larger than 1
-* **OPERATION**: Contains the operation input from player
-* **END**: When client detects win/lose result
+We designed our protocol on Application layer, and used TCP on Transport layer.
+
+## Java Network IO
+What we used: NIO - Non-block I/O
+Why: There are two I/O mode in Java, Block I/O and Non-block I/O
+Normal I/O creates one thread once a new I/O request comes in, for example
+
+```java
+public final class ServerNormal {
+	// Default port
+	private static int DEFAULT_PORT = 12345;
+	public static void main(String[] args) throws IOException{
+		if(server != null) return;
+		try{
+			server = new ServerSocket(port);
+			System.out.println("Server started, port：" + port);
+			while(true){
+			// Blocked, wait for new connections
+				Socket socket = server.accept();
+				new Thread(new Runnable() {
+				    @Override
+				    public void run() {
+				        // Do something
+				        // Every time we create a new thread
+				        // Many resource is cost
+				    }
+				}).start();
+			}
+		}finally{
+			System.out.println("Server Shut Down");
+		}
+	}
+}
+```
+
+However Non-block I/O has a different way to handle connections
+
+Think this as the time when you wait for paying in Tesco. You have a pay request, waiting in line. Now one staff comes to you, saying "Cashier 8 please".
+
+In this case, you are the client, waiting for the staff (selector) to allocate you an idle worker (cashier). If there is no idle worker, the staff will tell you now you can go somewhere else, like to buy more things or chat with you friend for a little bit, instead of let you wait there for a free worker.
+
+The worker is always there, if this situation is in traditional block I/O, this will be, you have a pay request, the manager comes to you, saying "ok now wait, let me hire a staff who can finish your payment" (Starts a new thread). After a long waiting, you finally finished your payment, then the manager fires the one they just hired!
+
+This is a simplified example. But in practice, there will be acceptor works in an infinite loop listening to allocated port. Once a request comes, acceptor will give this request to a dispatcher, dispatcher registers this request to an available worker (most of the time we create a thread pool for workers).
+All read/write is buffer-oriented, and the channel is bidirectional. 
+
+![NIO_Example](https://oscimg.oschina.net/oscnet/fa1e0aedc8e9d3a96f69daa6383dd9b24df.jpg)
+
+## Netty & Protocol
+Even though Non-block I/O has powerful ability to handle hundreds of thousands of connection at a time, the native APIs provided by Java is very hard to use. That is the reason why Netty was born.
+Netty encapsulate all Non-block APIs, provides a pipeline work style. This is the way how we designed our network framework
+
+```
+
++----------------------------------------------------------+
+|              Server Logic - Application Layer            |
+|           **************************************         |
+|       Client_A             Server            Client_B    |
+|           |    1.CONNECT      |                  |       |
+|           | ----------------> |                  |       |
+|           |    2.SETUP        |                  |       |
+|           | ----------------> |    3. CONNECT    |       |
+|           |                   | <--------------- |       |
+|           |    4. START       |                  |       |
+|           | ----------------> |    5. SETUP      |       |
+|           |                   | <--------------- |       |
+|           |    6. START       |                  |       |
+|           | ----------------> |                  |       |
+|           |    7. START(SEED) |  7. START(SEED)  |       |
+|           | <---------------- | ---------------> |       |
+|           |                   |                  |       |
+|           |    7. SETUP       |     7. SETUP     |       |
+|           |  Turret Locations | Turret Locations |       |
+|           | <---------------- | ---------------> |       |
+|           |                   |                  |       |
+|           |   8. OPERATION    |  8. OPERATION    |       |
+|           | ----------------> | <--------------- |       |
+|           |  9. Update_Turret |                  |       |
+|           | ----------------> | 9. Update_Turret |       |
+|           | <---------------- | ---------------> |       |
+|           |                   |                  |       |
+|           |   10. OPERATION   |  10. OPERATION   |       |
+|           | <---------------- | ---------------> |       |
+|           |                   |                  |       |
+|           |     11. END       |                  |       |
+|           | ----------------> |                  |       |
+|           |                   |     11. END      |       |
+|           |                   | ---------------> |       |
+|           |                   |                  |       |
+|           -                   -                  -       |
+|             /|\                            |             |
++--------------+-----------------------------+-------------+
+               |                             |              
++--------------+--------------+              |
+|      Protocol Processor     |              |
++--------------+--------------+              |
+              /|\                            |              
++--------------+-----------------------------+-------------+
+|              |        ChannelPipeline      |             |
+|              |                             |             |
+|   **************************               |             |
+|   * ProtocolProcessHandler *               |             |
+|   **************************               |             |
+|             /|\                            |             |
+|              |                            \|/            |
+|   **************************  ************************** |
+|   *       JSON Decoder     *  *      JSON Encoder      * |
+|   **************************  ************************** |
+|             /|\                            |             |
+|              |                             |             |
+|   **************************               |             |
+|   *  LineBasedFrameDecoder *               |             |
+|   **************************               |             |
+|             /|\                            |             |
++--------------+-----------------------------+-------------+
+               |                            \|/  
+               |                +------------+-------------+
+               |                |    *******************   |
+               |                |    *      Queue      *   |
+               |                |    *[ Server Buffer ]*   |
+               |                |    *******************   |
+               |                |            |             |   
+               |                |           \|/            |                     
+               |                |    *******************   |
+               |                |    *    HashMap      *   |
+               |                |    * [ Channel Map ] *   |            
+               |                |    *******************   |
+               |                +------------+-------------+
+               |                             |
++--------------+-----------------------------+-------------+
+|              |                            \|/            |
+|       [ Socket Read ]               [ Socket Write ]     |
+|                       Transport Layer                    |
++----------------------------------------------------------+
+```
 
 1. Client A sends a CONNECT package to server
 2. Client A has set up all swarm logic and is ready for playing
@@ -47,172 +163,38 @@ Client_A             Server            Client_B
 4. Client A tries to start the game, however, client B is not ready, the game fails to start
 5. Client B has set up all swarm logic and is ready for playing
 6. Client A tries to start the game again
-7. Server detects all conditions met, game starts, telling all clients the game could be started, also sends all swarm logic with TYPE: SETUP
+7. Server detects all conditions met, game starts, telling all clients the game could be started, also sends all swarm logic with TYPE: SETUP, in this package there is also all turrets starting locations and a random seed to keep everything synchronized
 8. Client A and B sends operation input (Game is running)
-9. Server broadcasts all operation
-10. Client A detects win/lose
-11. Client B detects win/lose
+9. Client A killed a turret, the server generate a new location to both sides
+10. Server broadcasts all operation
+11. Client A detects win/lose / Client B detects win/lose
 
-## How to start server
-```java
-new Thread(new Runnable() {
-            public void run() {
-                try{
-                    GameServer.run();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+## How we keep data synchronized
+
+**Frame**: Server maintains a frame count variable, each operation package is tagged with a frame before the package is broadcasted. One player always waits for the other side in order to be in the same frame
+
+**Locations**: Turrets locations are generated by the server, players starting locations are generated some way by using the same random seed 
+
+## Package Design
+
+1. Information firstly is put in a HashMap with various Header - Message pair.
+2. This HashMap is converted into a JSON string
+3. Then a length is added to the head, ends with a new line sign 
+
+```
++---------------------------------------------------------------------------+
+|                           Game Protocol Object                            |
+|   +----------+--------------------------------------------------+-------+ |
+|   |          |           "JSON-lized" Format String             |       | |
+|   |          |  +--------------------------------------------+  |       | |  
+|   |  Length  |  |                Package Map                 |  |  /n   | |
+|   |          |  |     < Headers , Constants/Information >    |  |       | |
+|   |          |  +--------------------------------------------+  |       | |
+|   +----------+--------------------------------------------------+-------+ |
++---+----------+--------------------------------------------------+---------+
+
+
 ```
 
-This code will initialize all required resources
-
-## How to start client
-**STEP 1** Let the player enter his/her id (This makes the game not a really online game, because two players have to agree on two different number)
-
-```java
-System.out.println("Enter your id");
-Scanner scanner = new Scanner(System.in);
-int id = scanner.nextInt();
-```
-
-**STEP 2** Start the client in a new thread, let the game thread wait until client starts successfully by using CountDownLatch
-
-```java
-new Thread(new Runnable() {
-            public void run() {
-                try {
-                    GameClient.run();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        
-GameClient.countDownLatch.await();
-```
-
-**STEP 3** How to send and receive packages
-
-```java
-while(times < 5) {
-            System.out.println("***************");
-            System.out.println("Round " + times + " begins");
-
-            // Clean the whole buffer
-            MessageHandlerMulti.refreshClientReceiveBuffer();
-
-            // First sends a CONNECT package to server
-            // CONNECT means the player is connected to the server, now setting up swarms
-            m.put(Headers.TYPE, Constants.CONNECT);
-            m.put(Headers.PLAYER, id);
-            MessageHandlerMulti.putPackage(m);
-            System.out.println("Sent CONNECT");
-            Thread.sleep(interval);
-
-            // Then sends a SETUP package to server
-            // SETUP means the swarms logic is ready, and is prepared to play the game
-            m = new HashMap();
-            m.put(Headers.TYPE, Constants.SETUP);
-            m.put(Headers.PLAYER, id);
-            MessageHandlerMulti.putPackage(m);
-            System.out.println("Sent SETUP");
-            Thread.sleep(interval);
-
-            // If this is player 0, try to start the game
-            // If the game is started successfully
-            // The server will broadcast a START package
-            // In this package there is a random seed generated by the server
-            while (!MessageHandlerMulti.gameStarted && id == 0) {
-                m = new HashMap();
-                m.put(Headers.TYPE, Constants.START);
-                MessageHandlerMulti.putPackage(m);
-                System.out.println("Tried to send START, but game not ready");
-                Thread.sleep(interval);
-            }
-
-            Map rev = null;
-
-            // Then keeps sending OPERATION package to server
-            while (!MessageHandlerMulti.gameStarted) {
-                System.out.println("Game not started yet");
-                Thread.sleep(interval);
-            }
-
-            while (frame < 20) {
-                m = new HashMap<String, Object>();
-                m.put(Headers.TYPE, Constants.OPERATION);
-                m.put(Headers.PLAYER, id);
-                m.put(Headers.W, 0);
-                m.put(Headers.A, 1);
-                MessageHandlerMulti.putPackage(m);
-                while (rev == null) {
-                    System.out.println("Player " + id + " trying to get package with frame number " + frame);
-                    rev = MessageHandlerMulti.getPackage(Math.abs(id - 1), frame);
-                    if (rev == null) {
-                        System.out.println("Did not get wanted package, try again, main game waiting");
-                    }
-                    Thread.sleep(interval);
-                }
-                rev = null;
-                frame++;
-                Thread.sleep(interval);
-            }
-
-            m = new HashMap<String, Object>();
-            m.put(Headers.TYPE, Constants.END);
-            m.put(Headers.PLAYER, id);
-            MessageHandlerMulti.putPackage(m);
-            System.out.println("Player " + id + " Game ends");
-
-            times++;
-            frame = 0;
-            Thread.sleep(1000);
-        }
-```
-
-The code above simulated a game in five rounds following these steps
-
-1. Refresh the receiving buffer at the very beginning of each round
-
-2. Send a CONNECT package to the server
-
-3. After setting up swarm logic, send a SETUP package to the server
-4. Player 0 tries to start the game while player 1 waiting to be started
-5. Send OPERATION package of local frame `n` (HOWEVER, you do not need to tag the package with your local frame count, the server will do the tagging. What you SHALL do is to keep tracking your own frame and try to get the same frame package from the receiving buffer)
-6. When trying to fetch a package from the opposite player, if the wanted package yet arrived, the game thread will wait
-7. Game is set to have 20 frames till the end, if reached, send an END package to the server
-8. Start another round
-
-## How the server works
-
-* Basically, the whole process is based on Netty. Therefore, we skip the Netty part.
-
-* The server overall maintains a buffer of received packages by using a `Queue`
-
-* When the server receives a CONNECT package, the player count is increased by 1
-
-* When the server receives a SETUP package, it will store the package somewhere, and the ready player count is increased by 1, SETUP package has a frame tag 0
-
-* If a START package arrives, and the ready player count is the same as player count, the server broadcasts a message to all clients saying that the game is ok to start
-
-* The server will broadcast all OPERATION packages (tagged with frame)
-
-* All process is in synchronized mode, i.e. one player is lagged means all player wait (Therefore it's better to do *Operation Prediction* in game)
-
-* When server receives an END package, it will delete the frame count of the player who sent the END package
-
-## How the client works
-
-* Basically, the client maintains two buffers, receiving buffer and sending buffer
-
-* All packages received will be stored in the receiving buffer
-
-* A *Sending* thread will keep watching the sending buffer, tries its best to send all packages there (interval is decided by `Constants.ClientSleep`)
-
-* The client will automatically create receiving buffer of other players once receives a package with a new id, i.e. no existing buffer for this id
-
-* The client will not create the receiving buffer of its own (You have to find your way to do this, currently I am using a visible static field *id*, the code is in `ProtocolProcessor.java`)
 
 

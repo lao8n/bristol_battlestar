@@ -25,7 +25,7 @@ public class CommsChannel {
   public CommsPacket getPacket(int i) {
     //System.out.println("i"+i);
    // System.out.println("current"+currentPackets.size());
-   // System.out.println("future"+futurePackets.size());
+    //System.out.println("future"+futurePackets.size());
     if(i >= currentPackets.size()) throw new Error ("Getting packet out of range of CommsChannel..");
     // {
     //System.out.println(currentPackets.size());

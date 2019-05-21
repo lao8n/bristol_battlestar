@@ -6,12 +6,7 @@ import java.util.HashMap;
 import processing.core.PApplet;
 
 import swarm_wars_library.engine.CollisionDetection;
-import swarm_wars_library.entities.AbstractEntity;
-import swarm_wars_library.entities.Bot;
-import swarm_wars_library.entities.ENTITY;
-import swarm_wars_library.entities.PlayerAI;
-import swarm_wars_library.entities.PlayerN;
-import swarm_wars_library.entities.Turret;
+import swarm_wars_library.entities.*;
 import swarm_wars_library.fsm.OtherFSMBuilder;
 import swarm_wars_library.fsm_ui.FSMSelectScreen;
 import swarm_wars_library.game_screens.GAMESCREEN;
@@ -182,6 +177,9 @@ public class SwarmWars extends PApplet {
     CommsGlobal.add("TURRET", new CommsChannel(map.getNumTurrets()));
     CommsGlobal.add("TURRET_BULLET", 
       new CommsChannel(map.getNumTurrets() * map.getNumBulletsPerMagazine()));
+
+    //add healthpack
+    CommsGlobal.add("HEALTHPACK", new CommsChannel(map.getNumHealthPack()));
   }
 
   //=========================================================================//
@@ -257,11 +255,16 @@ public class SwarmWars extends PApplet {
       this.gameObjectsTakeDamage.add(turret);
       this.gameObjectsDealDamage.addAll(turret.getBullets());
     }
-  }
 
-  //=========================================================================//
-  // Turret Setup                                                            //
-  //=========================================================================//
+    // healthpack setup
+    for(int i = 0; i < this.map.getNumHealthPack(); i++){
+      HealthPack healthPack = new HealthPack(ENTITY.HEALTHPACK, i, playNetworkGame);
+      if (playNetworkGame) {
+        healthPack.setLocation(0, this.map.getHealthPackLocations().get(i));
+      }
+      this.gameObjectsDealDamage.add(healthPack);
+    }
+  }
 
 
   //=========================================================================//
@@ -368,6 +371,16 @@ public class SwarmWars extends PApplet {
     m.put(Headers.MOUSE_Y, playerMe.getInputMouseY());
     m.put(Headers.MOUSE_LEFT, playerMe.getInputMouseLeft());
     m.put(Headers.MOUSE_RIGHT, playerMe.getInputMouseRight());
+    if(Map.getInstance().getPlayerId() == 1){
+      ArrayList<Integer> health = new ArrayList<>();
+      health.add(playerMe.getHealth());
+      health.add(playerEnemy.getHealth());
+      m.put(Headers.PLAYER_HEALTH, health);
+      ArrayList<Integer> points = new ArrayList<>();
+      points.add(playerMe.getScore());
+      points.add(playerEnemy.getScore());
+      m.put(Headers.PLAYER_POINTS, points);
+    }
     NetworkClientFunctions.sendOperation(id, frameNumber, m);
   }
 
@@ -399,6 +412,28 @@ public class SwarmWars extends PApplet {
     if(messageIn.containsKey(Headers.MOUSE_RIGHT)) 
       playerEnemy.setInputMouseRight((Integer) 
       messageIn.get(Headers.MOUSE_RIGHT));
+    if(messageIn.containsKey(Headers.PLAYER_HEALTH)) {
+      // Get the content
+      ArrayList<Integer> health = (ArrayList<Integer>) 
+        messageIn.get(Headers.PLAYER_HEALTH);
+      int player1_health = (Integer) health.get(0);
+      int player2_health = (Integer) health.get(1);
+      if(Map.getInstance().getPlayerId() == 2){
+         this.playerMe.setHealth(player2_health);
+         this.playerEnemy.setHealth(player1_health);
+      }
+    }
+    if(messageIn.containsKey(Headers.PLAYER_POINTS)) {
+      // Get the content
+      ArrayList<Integer> points = (ArrayList<Integer>) 
+        messageIn.get(Headers.PLAYER_POINTS);
+      int player1_points = (Integer) points.get(0);
+      int player2_points = (Integer) points.get(1);
+      if(Map.getInstance().getPlayerId() == 2){
+        CommsGlobal.get("PLAYER1").getPacket(0).setScore(player1_points);
+        CommsGlobal.get("PLAYER2").getPacket(0).setScore(player2_points);
+      }
+    }
   }
 
   //=========================================================================//
