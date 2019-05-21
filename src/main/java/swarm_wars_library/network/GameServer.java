@@ -17,7 +17,7 @@ public class GameServer {
 
     private static final int port = 10000;
 
-    private static final String IP = "127.0.0.1";
+    private static final String IP = "0.0.0.0";
 
     private static Logger logger = Logger.getInstance();
 
