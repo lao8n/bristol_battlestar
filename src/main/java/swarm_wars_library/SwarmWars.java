@@ -529,10 +529,9 @@ public class SwarmWars extends PApplet {
       }
 
       this.currentScreen = this.startScreen.getGameScreen();
-      //this.startScreen.resetCurrentScreen();
-      // this.uiSetup();
+      this.uiSetup();
       this.frameNumber = 1;
-      //map.setGameEnded(false);
+      map.setGameEnded(false);
     }
   }
 
