@@ -13,6 +13,7 @@ public class FSMBackground {
     private int colourG;
     private int colourB;
     private int alpha;
+    private boolean setTextSize;
 
     //=========================================================================//
     // Button constructor                                                      //
@@ -59,6 +60,12 @@ public class FSMBackground {
                         (float) this.buttonDimensions.getX() / 2,
                 (float) this.topLeftLocation.getY() +
                         (float) this.buttonDimensions.getY() / 2);
+        // if (this.setTextSize == true) {
+        //    this.sketch.textSize(20);
+        // }
+        // else  {
+        //     this.sketch.textSize(12);
+        // }
     }
 
 
@@ -92,4 +99,8 @@ public class FSMBackground {
     public void changeLabel(String label) {
         this.label = label;
     }
+
+    // public void setSetTextSize(boolean setTextSize) {
+    //     this.setTextSize = setTextSize;
+    // }
 }

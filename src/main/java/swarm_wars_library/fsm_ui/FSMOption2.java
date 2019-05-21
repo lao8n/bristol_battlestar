@@ -17,6 +17,11 @@ public class FSMOption2 {
     private FSMBackground chooseOption2;
    // private boolean showContent;
     private boolean selected;
+    private Button transition1;
+    private Button transition2;
+    private Button transition3;
+    private Button transition4;
+    private Button transition5;
 
     //SIZING
     private int boxWidth;
@@ -71,8 +76,8 @@ public class FSMOption2 {
         this.boxY = boxY;
 
         this.setupLocations();
-        this.setupButtons();
         this.setupArrows();
+        this.setupButtons();
         this.setupStars();
         this.setupLabels();
         this.setOrderFSMStates();
@@ -82,8 +87,8 @@ public class FSMOption2 {
     // Update method                                                           //
     //=========================================================================//
     public void update(){
-        this.updateButtons();
         this.updateArrows();
+        this.updateButtons();
         this.updateStars();
         this.updateLabels();
         this.updateMousePressButton();
@@ -140,6 +145,41 @@ public class FSMOption2 {
             new Vector2D(boxX, boxY - 50 - 20),
             new Vector2D(boxWidth, 50), 
             0, 0, 0, 90);
+
+
+        //transitions
+        Vector2D transitionDimensions = new Vector2D(70, 50);
+        Vector2D transitionDimensions2 = new Vector2D(150, 30);
+        this.transition1  = new Button (
+                this.sketch,
+                "Enemy distance less than 200 stars",
+                Vector2D.add(this.getMidPoint(this.location1, this.location4),
+                        new Vector2D(-75, -15)),
+                transitionDimensions2);
+        this.transition2  = new Button (
+                this.sketch,
+                "Enemy health\nless than\n70 points",
+                Vector2D.add(this.getMidPoint(this.location4, this.location2),
+                        new Vector2D(-50, 37)),
+                transitionDimensions);
+        this.transition3  = new Button (
+                this.sketch,
+                "Enemy distance\ngreater than\n200 stars",
+                Vector2D.add(this.getMidPoint(this.location4, this.location3),
+                        new Vector2D(-5, -27)),
+                transitionDimensions);
+        this.transition4  = new Button (
+                this.sketch,
+                "Enemy distance\ngreater than\n400 stars",
+                Vector2D.add(this.getMidPoint(this.location2, this.location3),
+                        new Vector2D(-30, -27)),
+                transitionDimensions);
+        this.transition5  = new Button (
+                this.sketch,
+                "Your health\nless than\n90 points",
+                Vector2D.add(this.getMidPoint(this.location3, this.location1),
+                        new Vector2D(-50, -25)),
+                transitionDimensions);
     }
 
     private void updateButtons() {
@@ -152,6 +192,18 @@ public class FSMOption2 {
         if (this.selected == false) {
             this.chooseOption2.changeColour(0, 0, 0, 90);
         }
+        this.sketch.textSize(8);
+        this.transition1.update();
+        this.transition2.update();
+        this.transition3.update();
+        this.transition4.update();
+        this.transition5.update();
+        this.sketch.textSize(13);
+    }
+
+    private Vector2D getMidPoint(Vector2D location1, Vector2D location2){
+        return new Vector2D((location1.getX() + location2.getX()) / 2,
+                (location1.getY() + location2.getY()) / 2);
     }
 
     //=========================================================================//
@@ -194,7 +246,7 @@ public class FSMOption2 {
     // Star methods                                                            //
     //=========================================================================//
     private void setupStars(){
-        Vector2D dimensions = new Vector2D(20, 45);
+        Vector2D dimensions = new Vector2D(25, 55);
         int nPoints = 5;
         this.star1 = new Star(this.sketch, 
                             this.location1, 
@@ -231,13 +283,13 @@ public class FSMOption2 {
     //=========================================================================//
     private void setupLocations(){
         this.location1 = new Vector2D(boxWidth/2+boxX,
-                boxHeight/2+boxY);
-        this.location2 = new Vector2D(boxWidth/4+boxX,
-            boxHeight/4*3+boxY);
-        this.location3 = new Vector2D(boxWidth/4*3+boxX,
-                boxHeight/4*3+boxY);
+                boxHeight/2+boxY-15);
+        this.location2 = new Vector2D(boxWidth/4+boxX-20,
+            boxHeight/4*3+boxY+35);
+        this.location3 = new Vector2D(boxWidth/4*3+boxX+20,
+                boxHeight/4*3+boxY+35);
         this.location4 = new Vector2D(boxWidth/2+boxX,
-                boxHeight/4+boxY-30);
+                boxHeight/4+boxY-40);
     }
 
     //=========================================================================//
